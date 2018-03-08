@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Browse f1 = new Browse();
-        getFragmentManager().beginTransaction().replace(R.id.content_main, f1).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, f1).commit();
     }
 
     @Override
