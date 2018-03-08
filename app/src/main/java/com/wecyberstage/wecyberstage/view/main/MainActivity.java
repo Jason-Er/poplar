@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view;
+package com.wecyberstage.wecyberstage.view.main;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
