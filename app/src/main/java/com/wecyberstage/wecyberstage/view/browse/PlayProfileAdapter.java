@@ -24,7 +24,7 @@ public class PlayProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private List<PlayInfo> dataset;
 
-    public View.OnClickListener onClickCallBack = null;
+    public View.OnClickListener onItemClickCallBack = null;
 
     class PlayProfileCardViewHolder extends RecyclerView.ViewHolder {
 
@@ -54,7 +54,7 @@ public class PlayProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         PlayProfileCardViewHolder vh = (PlayProfileCardViewHolder) holder;
         PlayInfo playInfo = dataset.get(position);
-        ((PlayProfileCardView) vh.cardView).onClickCallBack = onClickCallBack;
+        ((PlayProfileCardView) vh.cardView).onClickCallBack = onItemClickCallBack;
         ((PlayProfileCardView) vh.cardView).playInfo = playInfo;
         vh.brief.setText(playInfo.briefIntro);
         vh.title.setText(playInfo.name);

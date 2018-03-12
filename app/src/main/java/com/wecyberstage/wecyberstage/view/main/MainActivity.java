@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.main;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,10 +18,18 @@ import android.view.MenuItem;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import javax.inject.Inject;
 
-    String TAG = "MainActivity";
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+
+public class MainActivity extends AppCompatActivity
+        implements HasSupportFragmentInjector, NavigationView.OnNavigationItemSelectedListener {
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +85,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_item_account) {
-            Log.i(TAG, "Click on menu menu_item_account");
+
             return true;
         }
 
@@ -106,5 +115,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
+        return dispatchingAndroidInjector;
     }
 }
