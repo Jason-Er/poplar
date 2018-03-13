@@ -2,7 +2,6 @@ package com.wecyberstage.wecyberstage.view.browse;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,13 +13,12 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.Injectable;
-import com.wecyberstage.wecyberstage.viewmodel.browse.BrowseViewModel;
+import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.support.AndroidSupportInjection;
 
 /**
  * Created by mike on 2018/3/5.

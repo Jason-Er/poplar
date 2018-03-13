@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.viewmodel.browse;
+package com.wecyberstage.wecyberstage.viewmodel;
 
 import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;

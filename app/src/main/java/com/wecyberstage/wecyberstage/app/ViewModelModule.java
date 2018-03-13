@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 
 import com.wecyberstage.wecyberstage.util.label.ViewModelKey;
 import com.wecyberstage.wecyberstage.viewmodel.ViewModelFactory;
-import com.wecyberstage.wecyberstage.viewmodel.browse.BrowseViewModel;
+import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
 import dagger.Binds;
 import dagger.Module;
