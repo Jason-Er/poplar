@@ -1,9 +1,6 @@
 package com.wecyberstage.wecyberstage.viewmodel;
 
-import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
 import com.wecyberstage.wecyberstage.model.PlayInfo;
@@ -12,7 +9,6 @@ import com.wecyberstage.wecyberstage.util.helper.PlayInfoLiveData;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,6 +28,6 @@ public class BrowseViewModel extends ViewModel {
     }
 
     public void setRequestPage(PageRequest pageable) {
-        ((PlayInfoLiveData)playInfoLiveData).pudatePage(pageable);
+        ((PlayInfoLiveData)playInfoLiveData).setRequestPage(pageable);
     }
 }

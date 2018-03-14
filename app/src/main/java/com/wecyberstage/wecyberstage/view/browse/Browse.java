@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.browse;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -13,8 +14,12 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.Injectable;
+import com.wecyberstage.wecyberstage.model.PlayInfo;
 import com.wecyberstage.wecyberstage.util.helper.PageRequest;
+import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -64,6 +69,23 @@ public class Browse extends Fragment implements Injectable {
         super.onActivityCreated(savedInstanceState);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowseViewModel.class);
         viewModel.setRequestPage(new PageRequest(0,15,""));
+        viewModel.playInfoLiveData.observe(this, new Observer<Resource<List<PlayInfo>>>(){
+            @Override
+            public void onChanged(@Nullable Resource<List<PlayInfo>> resource) {
+                switch (resource.status) {
+                    case SUCCESS:
+                        Timber.d("SUCCESS");
+                        ((PlayProfileAdapter)adapter).setDataset(resource.data);
+                        break;
+                    case ERROR:
+
+                        break;
+                    case LOADING:
+
+                        break;
+                }
+            }
+        });
     }
 
 }
