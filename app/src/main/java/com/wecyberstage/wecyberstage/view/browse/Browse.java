@@ -13,12 +13,14 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.Injectable;
+import com.wecyberstage.wecyberstage.util.helper.PageRequest;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created by mike on 2018/3/5.
@@ -50,7 +52,7 @@ public class Browse extends Fragment implements Injectable {
         ((PlayProfileAdapter) adapter).onItemClickCallBack = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Timber.d("navigate to somewhere");
             }
         };
 
@@ -61,6 +63,7 @@ public class Browse extends Fragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowseViewModel.class);
+        viewModel.setRequestPage(new PageRequest(0,15,""));
     }
 
 }
