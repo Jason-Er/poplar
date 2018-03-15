@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+    @Inject
+    NavigationController navigationController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +57,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Browse f1 = new Browse();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, f1).commit();
+        if (savedInstanceState == null) {
+            navigationController.navigateToBrowse();
+        }
     }
 
     @Override

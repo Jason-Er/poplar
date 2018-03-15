@@ -14,10 +14,21 @@ import com.wecyberstage.wecyberstage.R;
  */
 
 public class Participate extends Fragment {
+
+    private static final String ID_KEY = "id";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_participate, container,false);
         return view;
+    }
+
+    public static Participate create(long playId) {
+        Participate fragment = new Participate();
+        Bundle args = new Bundle();
+        args.putLong(ID_KEY, playId);
+        fragment.setArguments(args);
+        return fragment;
     }
 }

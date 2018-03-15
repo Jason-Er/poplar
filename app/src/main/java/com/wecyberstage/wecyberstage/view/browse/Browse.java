@@ -17,6 +17,7 @@ import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.PlayInfo;
 import com.wecyberstage.wecyberstage.util.helper.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
+import com.wecyberstage.wecyberstage.view.main.NavigationController;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
 import java.util.List;
@@ -41,6 +42,8 @@ public class Browse extends Fragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    @Inject
+    NavigationController navigationController;
 
     @Nullable
     @Override
@@ -58,6 +61,7 @@ public class Browse extends Fragment implements Injectable {
             @Override
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
+                navigationController.navigateToParticipate(((PlayProfileCardView)v).playInfo.playId);
             }
         };
 
