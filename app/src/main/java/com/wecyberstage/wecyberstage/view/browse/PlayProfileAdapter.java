@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.PlayInfo;
 
@@ -58,6 +59,7 @@ public class PlayProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ((PlayProfileCardView) vh.cardView).playInfo = playInfo;
         vh.brief.setText(playInfo.briefIntro);
         vh.title.setText(playInfo.name);
+        Glide.with(vh.cardView.getContext()).load(playInfo.posterURL).into(vh.poster);
     }
 
     @Override
