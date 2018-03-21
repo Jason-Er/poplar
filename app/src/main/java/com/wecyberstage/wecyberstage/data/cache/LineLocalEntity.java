@@ -7,8 +7,9 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
- * Created by ej on 10/16/2017.
+ * Created by mike on 2018/3/15.
  */
+
 @Entity(tableName = "line_local",
         foreignKeys = {
                 @ForeignKey(entity = LineEntity.class, parentColumns = "id", childColumns = "line_id"),
@@ -23,7 +24,6 @@ public class LineLocalEntity {
 
     @ColumnInfo(name = "audio_url")
     public String audioURL;
-
     @ColumnInfo(name = "line_id")
     public long lineId;
     @ColumnInfo(name = "user_id")
