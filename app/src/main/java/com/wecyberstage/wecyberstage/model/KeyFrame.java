@@ -1,10 +1,9 @@
 package com.wecyberstage.wecyberstage.model;
 
 import android.graphics.Point;
-import android.media.Image;
+import android.graphics.Rect;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by mike on 2018/3/15.
@@ -12,28 +11,43 @@ import java.util.Map;
 
 public class KeyFrame {
 
-    public static class LinePosition {
+    public static class LineInfo {
         public Point point;
         public Line line;
 
-        public LinePosition(Point point, Line line) {
+        public LineInfo(Point point, Line line) {
             this.point = point;
             this.line = line;
         }
     }
 
-    public static class RolePosition {
+    public static class PropInfo {
         public Point point;
-        public Role role;
+        public Prop prop;
 
-        public RolePosition(Point point, Role role) {
+        public PropInfo(Point point, Prop prop) {
             this.point = point;
-            this.role = role;
+            this.prop = prop;
         }
     }
 
-    public Image background;
-    public List<LinePosition> linePositions;
-    public List<RolePosition> rolePositions;
+    public static class RoleInfo {
+        public Point point;
+        public Role role;
+        public Rect roleViewRect;
+        public int selectedFigureGraphOrdinal;
+
+        public RoleInfo(Point point, Role role, Rect roleViewRect, int selectedFigureGraphOrdinal) {
+            this.point = point;
+            this.role = role;
+            this.roleViewRect = roleViewRect;
+            this.selectedFigureGraphOrdinal = selectedFigureGraphOrdinal;
+        }
+    }
+
+    public String settingURL;
+    public List<LineInfo> lineInfoList;
+    public List<RoleInfo> roleInfoList;
+    public List<PropInfo> propInfoList;
 }
 

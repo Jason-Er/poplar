@@ -61,7 +61,7 @@ public class Browse extends Fragment implements Injectable {
             @Override
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
-                navigationController.navigateToParticipate(((PlayProfileCardView)v).playInfo.playId);
+                navigationController.navigateToParticipate(((PlayProfileCardView)v).playInfo.id);
             }
         };
 
