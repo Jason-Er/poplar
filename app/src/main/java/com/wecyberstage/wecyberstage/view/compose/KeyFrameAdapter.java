@@ -87,12 +87,15 @@ public class KeyFrameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.keyframe = keyframe;
         dataset = new ArrayList<>();
         dataset.add(new ItemViewInfo(KeyFrameCardViewType.STAGE, keyframe.settingURL));
+        if( keyframe.roleInfoList != null)
         for (KeyFrame.RoleInfo roleInfo : keyframe.roleInfoList) {
             dataset.add(new ItemViewInfo(KeyFrameCardViewType.ROLE, roleInfo));
         }
+        if( keyframe.propInfoList != null)
         for (KeyFrame.PropInfo propInfo : keyframe.propInfoList) {
             dataset.add(new ItemViewInfo(KeyFrameCardViewType.PROP, propInfo));
         }
+        if( keyframe.lineInfoList != null)
         for (KeyFrame.LineInfo lineInfo : keyframe.lineInfoList) {
             dataset.add(new ItemViewInfo(KeyFrameCardViewType.LINE, lineInfo));
         }
@@ -120,6 +123,9 @@ public class KeyFrameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 vh = new LineViewHolder(v);
                 break;
             case PROP:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.card_prop, parent, false);
+                vh = new PropViewHolder(v);
                 break;
         }
 

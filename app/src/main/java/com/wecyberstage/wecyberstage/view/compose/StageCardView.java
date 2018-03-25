@@ -2,9 +2,6 @@ package com.wecyberstage.wecyberstage.view.compose;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.opengl.Matrix;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 
@@ -79,49 +76,4 @@ public class StageCardView extends CardView {
         this.stageVertices = stageVertices;
     }
 
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        // TODO: 8/30/2017 need be removed later
-        super.onDraw(canvas);
-        Paint paint = new Paint();
-        float[] VPMatrix = {1.6875f,
-                0.0f,
-                0.0f,
-                0.0f,
-                0.0f,
-                0.23138356f,
-                1.2185816f,
-                0.99702126f,
-                0.0f,
-                2.9910638f,
-                -0.094267376f,
-                -0.07712785f,
-                0.0f,
-                -8.262117f,
-                13.207706f,
-                16.26085f};
-
-        float[] stageVerticesTrans = new float[stageVertices.length];
-        for(int i=0; i< stageVertices.length/4; i++) {
-            Matrix.multiplyMV(stageVerticesTrans, i*4, VPMatrix, 0, stageVertices, i*4);
-            stageVerticesTrans[i*4] /= stageVerticesTrans[i*4 + 3];
-            stageVerticesTrans[i*4 + 1] /= stageVerticesTrans[i*4 + 3];
-            stageVerticesTrans[i*4 + 2] /= stageVerticesTrans[i*4 + 3];
-        }
-        int[] stageViewPoints = new int[stageVertices.length/2];
-        for(int i=0; i<stageViewPoints.length/2; i++) {
-            stageViewPoints[i * 2] = (int)((stageVerticesTrans[i * 4]+ 1) * (canvas.getWidth() / 2));
-            stageViewPoints[i * 2 + 1] = (int)(-(stageVerticesTrans[i * 4 + 1]  + 1) * (canvas.getHeight() / 2) + canvas.getHeight());
-        }
-        for(int i=0; i<stageViewPoints.length/2; i++) {
-            canvas.drawLine(stageViewPoints[i%(stageViewPoints.length/2)*2], stageViewPoints[i%(stageViewPoints.length/2)*2+1],
-                    stageViewPoints[(i+1)%(stageViewPoints.length/2)*2], stageViewPoints[(i+1)%(stageViewPoints.length/2)*2+1], paint);
-        }
-
-        /*
-        canvas.drawLine(0, 0, canvas.getWidth() - 1, canvas.getHeight() - 1, paint);
-        canvas.drawLine(canvas.getWidth() - 1, 0, 0, canvas.getHeight() - 1, paint);
-        */
-    }
 }

@@ -34,7 +34,6 @@ public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
         layoutItemView(recycler);
     }
 
-    private Rect stageViewRect = new Rect();
     private void layoutItemView(RecyclerView.Recycler recycler) {
         for(int i=0; i< getItemCount(); i++) {
             View view = recycler.getViewForPosition(i);
@@ -42,42 +41,44 @@ public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
             switch (KeyFrameCardViewType.values()[viewType]) {
                 case STAGE:
                     addView(view);
-                    stageViewRect = layoutStageItemView(view);
+                    layoutStage(view);
                     break;
                 case ROLE:
+                    /*
                     Rect roleRect = ((RoleCardView) view).roleInfo.roleViewRect;
                     addView(view);
-                    layoutRoleItemView(view, roleRect);
+                    layoutRole(view, roleRect);
+                    */
+                    break;
+                case PROP:
                     break;
                 case LINE:
+                    /*
                     addView(view);
-                    layoutLineItemView(view);
+                    layoutLine(view);
+                    */
                     break;
             }
         }
     }
 
-    private Rect layoutStageItemView(View view) {
-
+    private void layoutStage(View view) {
         measureChildWithMargins(view, 0, 0);
 
         int width = getDecoratedMeasuredWidth(view);
         int height = getDecoratedMeasuredHeight(view);
-
         int parentWidth = ((View)view.getParent()).getWidth();
         int parentHeight = ((View)view.getParent()).getHeight();
 
         layoutDecorated(view, (parentWidth-width)/2, (parentHeight-height)/2, (parentWidth+width)/2, (parentHeight+height)/2);
-
-        return new Rect(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
     }
 
-    private void layoutRoleItemView(View view, Rect roleView) {
+    private void layoutRole(View view, Rect roleView) {
         measureChildWithMargins(view, 0, 0);
         layoutDecorated(view, roleView.left, roleView.top, roleView.right, roleView.bottom);
     }
 
-    private void layoutLineItemView(View view) {
+    private void layoutLine(View view) {
 
     }
 }

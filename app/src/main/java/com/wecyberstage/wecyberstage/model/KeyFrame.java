@@ -24,10 +24,12 @@ public class KeyFrame {
     public static class PropInfo {
         public Point point;
         public Prop prop;
+        public Rect propViewRect;
 
-        public PropInfo(Point point, Prop prop) {
+        public PropInfo(Point point, Prop prop, Rect propViewRect) {
             this.point = point;
             this.prop = prop;
+            this.propViewRect = propViewRect;
         }
     }
 
