@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 
@@ -23,7 +24,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class Participate extends Fragment {
+public class Participate extends Fragment implements Injectable {
 
     private static final String ID_KEY = "id";
 

@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.main;
 
 import com.wecyberstage.wecyberstage.view.browse.Browse;
+import com.wecyberstage.wecyberstage.view.compose.Participate;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -13,4 +14,6 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class FragmentBuildersModule {
     @ContributesAndroidInjector
     abstract Browse contributeBrowseFragment();
+    @ContributesAndroidInjector
+    abstract Participate contributeParticipateFragment();
 }
