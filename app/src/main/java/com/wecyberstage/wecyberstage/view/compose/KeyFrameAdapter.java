@@ -32,9 +32,9 @@ public class KeyFrameAdapter extends ListDelegationAdapter {
     public void setKeyframe(@NonNull KeyFrame keyframe) {
         items = new ArrayList<>();
         items.add(keyframe.stageInfo);
+        items.addAll(keyframe.roleInfoList);
         /*
         items.addAll(keyframe.propInfoList);
-        items.addAll(keyframe.roleInfoList);
         items.addAll(keyframe.lineInfoList);
         */
         notifyDataSetChanged();
