@@ -11,6 +11,7 @@ import com.wecyberstage.wecyberstage.model.Prop;
 import com.wecyberstage.wecyberstage.model.Role;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -39,18 +40,18 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> {
     public void setPlayId(long playId) {
 
         KeyFrame keyFrame = new KeyFrame();
-        keyFrame.settingURL = null;
 
         keyFrame.roleInfoList = new ArrayList<>();
         keyFrame.lineInfoList = new ArrayList<>();
         keyFrame.propInfoList = new ArrayList<>();
+        keyFrame.stageInfo = new KeyFrame.StageInfo();
 
         Role role = new Role();
         role.firstName = "jason";
         role.lastName = "E";
         Line line = new Line();
         line.dialogue = "Hello world!";
-        Point point = new Point(0,0);
+        Point point = new Point(200,200);
         Rect roleViewRect = new Rect(0,0,40,40);
 
         Prop prop = new Prop();
@@ -63,7 +64,7 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> {
         keyFrame.roleInfoList.add(roleInfo);
         keyFrame.lineInfoList.add(lineInfo);
         keyFrame.propInfoList.add(propInfo);
-        keyFrame.settingURL = "http://pic28.photophoto.cn/20130727/0035035114302168_b.jpg";
+        keyFrame.stageInfo.settingURL = "http://pic28.photophoto.cn/20130727/0035035114302168_b.jpg";
 
         setValue(keyFrame);
     }

@@ -47,7 +47,11 @@ public class KeyFrame {
         }
     }
 
-    public String settingURL;
+    public static class StageInfo {
+        public String settingURL;
+    }
+
+    public StageInfo stageInfo;
     public List<LineInfo> lineInfoList;
     public List<RoleInfo> roleInfoList;
     public List<PropInfo> propInfoList;

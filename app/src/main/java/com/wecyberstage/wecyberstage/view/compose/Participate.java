@@ -30,7 +30,10 @@ public class Participate extends Fragment implements Injectable {
 
     private ParticipateViewModel viewModel;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+
+    @Inject
+    KeyFrameAdapter adapter;
+
     private RecyclerView.LayoutManager layoutManager;
 
     @Inject
@@ -43,7 +46,6 @@ public class Participate extends Fragment implements Injectable {
         recyclerView.setHasFixedSize(true);
         layoutManager = new KeyFrameLayoutManager();
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new KeyFrameAdapter();
         recyclerView.setAdapter(adapter);
         return recyclerView;
     }

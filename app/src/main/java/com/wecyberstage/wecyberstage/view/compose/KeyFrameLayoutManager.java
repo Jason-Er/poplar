@@ -1,8 +1,11 @@
 package com.wecyberstage.wecyberstage.view.compose;
 
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import timber.log.Timber;
 
 /**
  * Created by mike on 2018/3/17.
@@ -44,11 +47,10 @@ public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
                     layoutStage(view);
                     break;
                 case ROLE:
-                    /*
                     Rect roleRect = ((RoleCardView) view).roleInfo.roleViewRect;
+                    Point point = ((RoleCardView) view).roleInfo.point;
                     addView(view);
-                    layoutRole(view, roleRect);
-                    */
+                    layoutRole(view, roleRect, point);
                     break;
                 case PROP:
                     break;
@@ -73,9 +75,14 @@ public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
         layoutDecorated(view, (parentWidth-width)/2, (parentHeight-height)/2, (parentWidth+width)/2, (parentHeight+height)/2);
     }
 
-    private void layoutRole(View view, Rect roleView) {
+    private void layoutRole(View view, Rect roleView, Point point) {
+        Timber.d("layoutRole roleView: " + roleView);
         measureChildWithMargins(view, 0, 0);
-        layoutDecorated(view, roleView.left, roleView.top, roleView.right, roleView.bottom);
+        layoutDecorated(view, point.x + roleView.left, point.y + roleView.top, point.x + roleView.right, point.y + roleView.bottom);
+    }
+
+    private void layoutProp(View view, Rect propView, Point point) {
+
     }
 
     private void layoutLine(View view) {
