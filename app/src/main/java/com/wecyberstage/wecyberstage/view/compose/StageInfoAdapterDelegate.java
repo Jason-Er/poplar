@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.compose;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +28,11 @@ public class StageInfoAdapterDelegate extends AdapterDelegateClass implements Ad
     class StageViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.card_stage_image)
         ImageView background;
-        StageCardView view;
+        CardView view;
 
         public StageViewHolder(View v) {
             super(v);
-            view = (StageCardView)v;
+            view = (CardView)v;
             ButterKnife.bind(this, v);
         }
     }

@@ -42,7 +42,7 @@ public class Participate extends Fragment implements Injectable {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        recyclerView = (RecyclerView) inflater.inflate(R.layout.frag_recycler, container,false);
+        recyclerView = (RecyclerView) inflater.inflate(R.layout.frag_participate, container,false);
         recyclerView.setHasFixedSize(true);
         layoutManager = new KeyFrameLayoutManager();
         recyclerView.setLayoutManager(layoutManager);

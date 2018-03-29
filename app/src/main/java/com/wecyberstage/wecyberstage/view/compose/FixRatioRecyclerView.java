@@ -2,30 +2,25 @@ package com.wecyberstage.wecyberstage.view.compose;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.CardView;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import com.wecyberstage.wecyberstage.R;
 
-/**
- * Created by mike on 2018/3/17.
- */
-
-public class StageCardView extends CardView {
-
+public class FixRatioRecyclerView extends RecyclerView {
     private float ratio;
-    private float[] stageVertices;
-
-    public StageCardView(Context context) {
+    public FixRatioRecyclerView(@NonNull Context context) {
         super(context);
     }
 
-    public StageCardView(Context context, AttributeSet attrs) {
+    public FixRatioRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public StageCardView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FixRatioRecyclerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -33,10 +28,10 @@ public class StageCardView extends CardView {
     private void init(Context context, AttributeSet attrs) {
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
-                R.styleable.StageCardView,
+                R.styleable.FixRatio,
                 0, 0);
         try {
-            ratio = a.getFloat(R.styleable.StageCardView_ratio, 0);
+            ratio = a.getFloat(R.styleable.FixRatio_ratio, 0);
         } finally {
             a.recycle();
         }
@@ -67,13 +62,4 @@ public class StageCardView extends CardView {
                 MeasureSpec.makeMeasureSpec(finalWidth, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(finalHeight, MeasureSpec.EXACTLY));
     }
-
-    public float[] getStageVertices() {
-        return stageVertices;
-    }
-
-    public void setStageVertices(float[] stageVertices) {
-        this.stageVertices = stageVertices;
-    }
-
 }
