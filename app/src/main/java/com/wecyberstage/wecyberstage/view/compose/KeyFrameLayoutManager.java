@@ -5,13 +5,31 @@ import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.wecyberstage.wecyberstage.view.common.LayoutDelegatesManager;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import timber.log.Timber;
 
 /**
  * Created by mike on 2018/3/17.
  */
 
+@Singleton
 public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
+
+    protected LayoutDelegatesManager layoutDelegatesManager;
+
+    @Inject
+    public KeyFrameLayoutManager(LayoutDelegatesManager layoutDelegatesManager) {
+        this.layoutDelegatesManager = layoutDelegatesManager;
+        layoutDelegatesManager
+                .addDelegate(new StageInfoLayoutDelegate(KeyFrameCardViewType.STAGE.ordinal()))
+                .addDelegate(new RoleInfoLayoutDelegate(KeyFrameCardViewType.ROLE.ordinal()))
+                .addDelegate(new PropInfoLayoutDelegate(KeyFrameCardViewType.PROP.ordinal()))
+                .addDelegate(new LineInfoLayoutDelegate(KeyFrameCardViewType.LINE.ordinal()));
+    }
 
     @Override
     public RecyclerView.LayoutParams generateDefaultLayoutParams() {
@@ -34,7 +52,9 @@ public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
         detachAndScrapAttachedViews(recycler);
 
         // layout according to position
-        layoutItemView(recycler);
+        layoutDelegatesManager.layoutItemView(this, recycler);
+
+        // layoutItemView(recycler);
     }
 
     private void layoutItemView(RecyclerView.Recycler recycler) {

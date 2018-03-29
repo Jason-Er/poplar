@@ -1,5 +1,5 @@
 package com.wecyberstage.wecyberstage.view.common;
 
-public class AdapterDelegateClass {
+public class ViewTypeDelegateClass {
     protected int viewType;
 }

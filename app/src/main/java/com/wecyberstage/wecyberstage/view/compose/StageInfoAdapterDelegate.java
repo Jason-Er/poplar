@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
-import com.wecyberstage.wecyberstage.view.common.AdapterDelegateClass;
+import com.wecyberstage.wecyberstage.view.common.ViewTypeDelegateClass;
 import com.wecyberstage.wecyberstage.view.common.AdapterDelegateInterface;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StageInfoAdapterDelegate extends AdapterDelegateClass implements AdapterDelegateInterface<List<Object>> {
+public class StageInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
     public StageInfoAdapterDelegate(int viewType) {
         this.viewType = viewType;

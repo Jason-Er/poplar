@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
-import com.wecyberstage.wecyberstage.view.common.AdapterDelegateClass;
+import com.wecyberstage.wecyberstage.view.common.ViewTypeDelegateClass;
 import com.wecyberstage.wecyberstage.view.common.AdapterDelegateInterface;
 
 import java.util.List;
 
-public class RoleInfoAdapterDelegate extends AdapterDelegateClass implements AdapterDelegateInterface<List<Object>> {
+public class RoleInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
     public RoleInfoAdapterDelegate(int viewType) {
         this.viewType = viewType;

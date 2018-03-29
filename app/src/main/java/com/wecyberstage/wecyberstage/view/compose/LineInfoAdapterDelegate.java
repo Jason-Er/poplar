@@ -4,10 +4,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.wecyberstage.wecyberstage.view.common.AdapterDelegateClass;
+import com.wecyberstage.wecyberstage.view.common.ViewTypeDelegateClass;
 import com.wecyberstage.wecyberstage.view.common.AdapterDelegateInterface;
 
-public class LineInfoAdapterDelegate extends AdapterDelegateClass implements AdapterDelegateInterface {
+public class LineInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface {
 
     public LineInfoAdapterDelegate(int viewType) {
         this.viewType = viewType;
