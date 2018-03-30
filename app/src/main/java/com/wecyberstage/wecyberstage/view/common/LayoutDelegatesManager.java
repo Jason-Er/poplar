@@ -20,16 +20,17 @@ public class LayoutDelegatesManager {
     }
 
     public void layoutItemView(RecyclerView.LayoutManager layoutManager, RecyclerView.Recycler recycler) {
-        for(int i=0; i< layoutManager.getItemCount(); i++) {
+        for(int i=0; i < layoutManager.getItemCount(); i++ ) {
             View view = recycler.getViewForPosition(i);
             int viewType = layoutManager.getItemViewType(view);
+            layoutManager.addView(view);
             LayoutDelegateInterface delegate = (LayoutDelegateInterface) delegates.get(viewType);
             if (delegate != null) {
-                delegate.layout(view);
-                return;
+                delegate.layout(layoutManager, view);
+            } else {
+                throw new IllegalArgumentException("No delegate found");
             }
         }
-        throw new IllegalArgumentException("No delegate found");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.compose;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.wecyberstage.wecyberstage.view.common.LayoutDelegateInterface;
@@ -17,7 +18,7 @@ public class LineInfoLayoutDelegate extends ViewTypeDelegateClass implements Lay
     }
 
     @Override
-    public void layout(View view) {
+    public void layout(RecyclerView.LayoutManager layoutManager, View view) {
 
     }
 }

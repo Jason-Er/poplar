@@ -34,7 +34,8 @@ public class Participate extends Fragment implements Injectable {
     @Inject
     KeyFrameAdapter adapter;
 
-    private RecyclerView.LayoutManager layoutManager;
+    @Inject
+    KeyFrameLayoutManager layoutManager;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -44,7 +45,6 @@ public class Participate extends Fragment implements Injectable {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(R.layout.frag_participate, container,false);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new KeyFrameLayoutManager();
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return recyclerView;

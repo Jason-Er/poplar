@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.compose;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.wecyberstage.wecyberstage.view.common.LayoutDelegateInterface;
@@ -17,7 +18,10 @@ public class StageInfoLayoutDelegate extends ViewTypeDelegateClass implements La
     }
 
     @Override
-    public void layout(View view) {
-
+    public void layout(RecyclerView.LayoutManager layoutManager, View view) {
+        layoutManager.measureChildWithMargins(view, 0, 0);
+        int width = layoutManager.getDecoratedMeasuredWidth(view);
+        int height = layoutManager.getDecoratedMeasuredHeight(view);
+        layoutManager.layoutDecorated(view, 0, 0, width, height);
     }
 }

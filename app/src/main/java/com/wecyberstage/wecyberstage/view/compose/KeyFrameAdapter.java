@@ -16,7 +16,6 @@ import javax.inject.Singleton;
  * Created by mike on 2018/3/17.
  */
 
-@Singleton
 public class KeyFrameAdapter extends ListDelegationAdapter {
 
     @Inject
