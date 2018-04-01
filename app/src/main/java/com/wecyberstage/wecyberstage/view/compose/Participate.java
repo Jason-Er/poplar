@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
+import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.util.label.PerActivity;
+import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 
 import java.util.MissingResourceException;
@@ -33,10 +36,10 @@ public class Participate extends Fragment implements Injectable {
 
     @Inject
     KeyFrameAdapter adapter;
-
     @Inject
     KeyFrameLayoutManager layoutManager;
-
+    @Inject
+    UICommon uiCommon;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -53,6 +56,8 @@ public class Participate extends Fragment implements Injectable {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        uiCommon.toImmersive();
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ParticipateViewModel.class);
         Bundle args = getArguments();
         if (args != null && args.containsKey(ID_KEY)) {
@@ -69,6 +74,13 @@ public class Participate extends Fragment implements Injectable {
                 }
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        uiCommon.outImmersive();
+        ((MainActivity)getActivity()).getSupportActionBar().show();
     }
 
     public static Participate create(long playId) {

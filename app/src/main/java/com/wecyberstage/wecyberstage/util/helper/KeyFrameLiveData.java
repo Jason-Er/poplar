@@ -51,7 +51,7 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> {
         Line line = new Line();
         line.dialogue = "Hello world!";
         PointF point = new PointF(200,200);
-        RectF roleViewRect = new RectF(0.2f,0.2f,0.4f,0.4f);
+        RectF roleViewRect = new RectF(0.2f,0.2f,0.4f,0.6f);
 
         Prop prop = new Prop();
         RectF propViewRect = new RectF(0,0,40,40);
