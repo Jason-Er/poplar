@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
-import com.wecyberstage.wecyberstage.view.common.ViewTypeDelegateClass;
-import com.wecyberstage.wecyberstage.view.common.AdapterDelegateInterface;
+import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
+import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 
 import java.util.List;
 

@@ -3,8 +3,8 @@ package com.wecyberstage.wecyberstage.view.compose;
 import android.support.annotation.NonNull;
 
 import com.wecyberstage.wecyberstage.model.KeyFrame;
-import com.wecyberstage.wecyberstage.view.common.AdapterDelegatesManager;
-import com.wecyberstage.wecyberstage.view.common.ListDelegationAdapter;
+import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
+import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,8 @@
-package com.wecyberstage.wecyberstage.view.common;
+package com.wecyberstage.wecyberstage.view.recycler;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-
-import java.util.List;
 
 /**
  * Created by mike on 2018/3/26.

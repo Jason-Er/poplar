@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.common;
+package com.wecyberstage.wecyberstage.view.recycler;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,7 +6,6 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by mike on 2018/3/26.

@@ -4,9 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.wecyberstage.wecyberstage.view.common.AdapterDelegatesManager;
-import com.wecyberstage.wecyberstage.view.compose.KeyFrameAdapter;
-
 import javax.inject.Singleton;
 
 import dagger.Module;

@@ -2,7 +2,7 @@ package com.wecyberstage.wecyberstage.view.compose;
 
 import android.support.v7.widget.RecyclerView;
 
-import com.wecyberstage.wecyberstage.view.common.LayoutDelegatesManager;
+import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegatesManager;
 
 import javax.inject.Inject;
 

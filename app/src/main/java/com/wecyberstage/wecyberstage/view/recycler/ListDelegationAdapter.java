@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.common;
+package com.wecyberstage.wecyberstage.view.recycler;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
