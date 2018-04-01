@@ -31,6 +31,7 @@ public class Participate extends Fragment implements Injectable {
 
     private static final String ID_KEY = "id";
 
+    private View bottomBar;
     private ParticipateViewModel viewModel;
     private RecyclerView recyclerView;
 
@@ -46,6 +47,8 @@ public class Participate extends Fragment implements Injectable {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        bottomBar = inflater.inflate(R.layout.bottom_bar, container,false);
+        container.addView(bottomBar);
         recyclerView = (RecyclerView) inflater.inflate(R.layout.frag_participate, container,false);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -81,6 +84,13 @@ public class Participate extends Fragment implements Injectable {
         super.onStop();
         uiCommon.outImmersive();
         ((MainActivity)getActivity()).getSupportActionBar().show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((ViewGroup)(bottomBar.getParent())).removeView(bottomBar);
+        bottomBar = null;
     }
 
     public static Participate create(long playId) {
