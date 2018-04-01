@@ -1,7 +1,10 @@
 package com.wecyberstage.wecyberstage.model;
 
+import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.RectF;
 
 import java.util.List;
 
@@ -12,35 +15,31 @@ import java.util.List;
 public class KeyFrame {
 
     public static class LineInfo {
-        public Point point;
+        public PointF point;
         public Line line;
 
-        public LineInfo(Point point, Line line) {
+        public LineInfo(PointF point, Line line) {
             this.point = point;
             this.line = line;
         }
     }
 
     public static class PropInfo {
-        public Point point;
         public Prop prop;
-        public Rect propViewRect;
+        public RectF propViewRect;
 
-        public PropInfo(Point point, Prop prop, Rect propViewRect) {
-            this.point = point;
+        public PropInfo(Prop prop, RectF propViewRect) {
             this.prop = prop;
             this.propViewRect = propViewRect;
         }
     }
 
     public static class RoleInfo {
-        public Point point;
         public Role role;
-        public Rect roleViewRect;
+        public RectF roleViewRect;
         public int selectedFigureGraphOrdinal;
 
-        public RoleInfo(Point point, Role role, Rect roleViewRect, int selectedFigureGraphOrdinal) {
-            this.point = point;
+        public RoleInfo(Role role, RectF roleViewRect, int selectedFigureGraphOrdinal) {
             this.role = role;
             this.roleViewRect = roleViewRect;
             this.selectedFigureGraphOrdinal = selectedFigureGraphOrdinal;

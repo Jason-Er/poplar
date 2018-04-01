@@ -1,16 +1,10 @@
 package com.wecyberstage.wecyberstage.view.compose;
 
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.wecyberstage.wecyberstage.view.common.LayoutDelegatesManager;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import timber.log.Timber;
 
 /**
  * Created by mike on 2018/3/17.

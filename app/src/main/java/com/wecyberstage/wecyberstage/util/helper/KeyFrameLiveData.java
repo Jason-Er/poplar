@@ -1,8 +1,8 @@
 package com.wecyberstage.wecyberstage.util.helper;
 
 import android.arch.lifecycle.LiveData;
-import android.graphics.Point;
-import android.graphics.Rect;
+import android.graphics.PointF;
+import android.graphics.RectF;
 
 import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
@@ -11,7 +11,6 @@ import com.wecyberstage.wecyberstage.model.Prop;
 import com.wecyberstage.wecyberstage.model.Role;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -51,15 +50,15 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> {
         role.lastName = "E";
         Line line = new Line();
         line.dialogue = "Hello world!";
-        Point point = new Point(200,200);
-        Rect roleViewRect = new Rect(0,0,40,40);
+        PointF point = new PointF(200,200);
+        RectF roleViewRect = new RectF(0.2f,0.2f,0.4f,0.4f);
 
         Prop prop = new Prop();
-        Rect propViewRect = new Rect(0,0,40,40);
+        RectF propViewRect = new RectF(0,0,40,40);
 
-        KeyFrame.RoleInfo roleInfo = new KeyFrame.RoleInfo(point, role, roleViewRect,0);
+        KeyFrame.RoleInfo roleInfo = new KeyFrame.RoleInfo(role, roleViewRect,0);
         KeyFrame.LineInfo lineInfo = new KeyFrame.LineInfo(point, line);
-        KeyFrame.PropInfo propInfo = new KeyFrame.PropInfo(point, prop, propViewRect);
+        KeyFrame.PropInfo propInfo = new KeyFrame.PropInfo(prop, propViewRect);
 
         keyFrame.roleInfoList.add(roleInfo);
         keyFrame.lineInfoList.add(lineInfo);

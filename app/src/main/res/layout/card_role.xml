@@ -2,15 +2,16 @@
 <com.wecyberstage.wecyberstage.view.compose.RoleCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_role"
-    android:layout_gravity="center"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     app:cardCornerRadius="4dp">
 
     <ImageView
         android:id="@+id/card_role_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/ic_launcher"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_directions"
+        android:background="@drawable/ic_launcher_background"
+        android:contentDescription="@string/hello" />
 
 </com.wecyberstage.wecyberstage.view.compose.RoleCardView>

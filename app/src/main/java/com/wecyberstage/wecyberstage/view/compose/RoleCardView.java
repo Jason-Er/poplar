@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.compose;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
+import android.view.View;
 
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 
@@ -28,8 +29,9 @@ public class RoleCardView extends CardView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int parentHeight = ((View)getParent()).getHeight();
         super.onMeasure(
-                MeasureSpec.makeMeasureSpec(roleInfo.roleViewRect.width(), MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(roleInfo.roleViewRect.height(), MeasureSpec.EXACTLY));
+                MeasureSpec.makeMeasureSpec((int)(roleInfo.roleViewRect.width() * parentHeight), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec((int)(roleInfo.roleViewRect.height() * parentHeight), MeasureSpec.EXACTLY));
     }
 }
