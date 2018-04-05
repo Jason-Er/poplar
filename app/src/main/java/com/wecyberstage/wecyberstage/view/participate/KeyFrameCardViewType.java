@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.compose;
+package com.wecyberstage.wecyberstage.view.participate;
 
 /**
  * Created by mike on 2018/3/17.

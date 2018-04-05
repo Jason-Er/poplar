@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.compose;
+package com.wecyberstage.wecyberstage.view.participate;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;

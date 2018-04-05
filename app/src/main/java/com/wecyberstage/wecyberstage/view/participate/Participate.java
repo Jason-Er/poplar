@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.compose;
+package com.wecyberstage.wecyberstage.view.participate;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
@@ -15,7 +15,6 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
-import com.wecyberstage.wecyberstage.util.label.PerActivity;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 
@@ -29,11 +28,12 @@ import javax.inject.Inject;
 
 public class Participate extends Fragment implements Injectable {
 
-    private static final String ID_KEY = "id";
+    private static final String PLAY_ID_KEY = "play_id";
+    private static final String SCENE_ID_KEY = "scene_id";
 
     private View bottomBar;
     private ParticipateViewModel viewModel;
-    private RecyclerView recyclerView;
+    // private RecyclerView recyclerView;
 
     @Inject
     KeyFrameAdapter adapter;
@@ -49,11 +49,11 @@ public class Participate extends Fragment implements Injectable {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         bottomBar = inflater.inflate(R.layout.bottom_bar, container,false);
         container.addView(bottomBar);
-        recyclerView = (RecyclerView) inflater.inflate(R.layout.frag_participate, container,false);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        return recyclerView;
+        RecyclerView view = (RecyclerView) inflater.inflate(R.layout.frag_participate, container,false);
+        view.setHasFixedSize(true);
+        view.setLayoutManager(layoutManager);
+        view.setAdapter(adapter);
+        return view;
     }
 
     @Override
@@ -63,11 +63,11 @@ public class Participate extends Fragment implements Injectable {
         uiCommon.toImmersive();
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ParticipateViewModel.class);
         Bundle args = getArguments();
-        if (args != null && args.containsKey(ID_KEY)) {
-            viewModel.setPlayId( args.getLong(ID_KEY) );
+        if (args != null && args.containsKey(PLAY_ID_KEY) && args.containsKey(SCENE_ID_KEY)) {
+            viewModel.setPlayAndSceneId( args.getLong(PLAY_ID_KEY), args.getLong(SCENE_ID_KEY) );
         } else {
             // TODO: 11/14/2017 throw exception or show custom dialog
-            throw new MissingResourceException("ParticipateFragment key: "+ ID_KEY + " should not be NULL","Bundle",ID_KEY);
+            throw new MissingResourceException("ParticipateFragment key: "+ PLAY_ID_KEY + " should not be NULL","Bundle", PLAY_ID_KEY);
         }
         viewModel.keyFrameLiveData.observe(this, new Observer<KeyFrame>() {
             @Override
@@ -93,10 +93,11 @@ public class Participate extends Fragment implements Injectable {
         bottomBar = null;
     }
 
-    public static Participate create(long playId) {
+    public static Participate create(long playId, long sceneId) {
         Participate fragment = new Participate();
         Bundle args = new Bundle();
-        args.putLong(ID_KEY, playId);
+        args.putLong(PLAY_ID_KEY, playId);
+        args.putLong(SCENE_ID_KEY, sceneId);
         fragment.setArguments(args);
         return fragment;
     }

@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.compose;
+package com.wecyberstage.wecyberstage.view.participate;
 
 import android.content.Context;
 import android.content.res.TypedArray;

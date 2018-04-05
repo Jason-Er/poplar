@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.compose;
+package com.wecyberstage.wecyberstage.view.participate;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 
-public class PropInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface {
+public class LineInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface {
 
-    public PropInfoAdapterDelegate(int viewType) {
+    public LineInfoAdapterDelegate(int viewType) {
         this.viewType = viewType;
     }
 
