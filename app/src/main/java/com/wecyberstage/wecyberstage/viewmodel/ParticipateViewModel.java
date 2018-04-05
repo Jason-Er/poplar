@@ -21,8 +21,8 @@ public class ParticipateViewModel extends ViewModel {
         this.keyFrameLiveData = keyFrameLiveData;
     }
 
-    public void setPlayId(long playId) {
-        ((KeyFrameLiveData) keyFrameLiveData).setPlayId(playId);
+    public void setPlayAndSceneId(long playId, long sceneId) {
+        ((KeyFrameLiveData) keyFrameLiveData).setPlayAndSceneId(playId, sceneId);
     }
 
 }

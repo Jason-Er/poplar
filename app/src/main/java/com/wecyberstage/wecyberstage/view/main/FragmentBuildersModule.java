@@ -1,7 +1,7 @@
 package com.wecyberstage.wecyberstage.view.main;
 
 import com.wecyberstage.wecyberstage.view.browse.Browse;
-import com.wecyberstage.wecyberstage.view.compose.Participate;
+import com.wecyberstage.wecyberstage.view.participate.Participate;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

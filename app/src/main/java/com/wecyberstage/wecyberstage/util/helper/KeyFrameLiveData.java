@@ -36,7 +36,7 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> {
         super.onInactive();
     }
 
-    public void setPlayId(long playId) {
+    public void setPlayAndSceneId(long playId, long sceneId) {
 
         KeyFrame keyFrame = new KeyFrame();
 

@@ -4,7 +4,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
-import com.wecyberstage.wecyberstage.view.compose.Participate;
+import com.wecyberstage.wecyberstage.view.participate.Participate;
 
 import javax.inject.Inject;
 
@@ -30,7 +30,7 @@ public class NavigationController {
 
     public void navigateToParticipate(long playId) {
         String tag = "playId" + "/" + playId;
-        Participate participate = Participate.create(playId);
+        Participate participate = Participate.create(playId, 1L);
         fragmentManager.beginTransaction()
                 .replace(containerId, participate, tag)
                 .addToBackStack(null)
