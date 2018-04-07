@@ -1,5 +1,7 @@
 package com.wecyberstage.wecyberstage.view.main;
 
+import com.wecyberstage.wecyberstage.util.label.PerActivity;
+
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
@@ -8,6 +10,7 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class MainActivityModule {
+    @PerActivity
     @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract MainActivity contributeMainActivity();
 }

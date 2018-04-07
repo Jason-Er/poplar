@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.main;
 import android.support.v4.app.FragmentManager;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.util.label.PerActivity;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.participate.Participate;
 
@@ -12,9 +13,11 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/15.
  */
 
+@PerActivity
 public class NavigationController {
     private final int containerId;
     private final FragmentManager fragmentManager;
+
     @Inject
     public NavigationController(MainActivity mainActivity) {
         this.containerId = R.id.content_main;
@@ -22,9 +25,9 @@ public class NavigationController {
     }
 
     public void navigateToBrowse() {
-        Browse searchFragment = new Browse();
+        Browse browse = new Browse();
         fragmentManager.beginTransaction()
-                .replace(containerId, searchFragment)
+                .replace(containerId, browse)
                 .commitAllowingStateLoss();
     }
 
