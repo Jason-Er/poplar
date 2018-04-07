@@ -31,7 +31,7 @@ import javax.inject.Named;
  * Created by mike on 2018/3/5.
  */
 
-public class Participate extends Fragment implements Injectable, TouchListenerInterface {
+public class Participate extends Fragment implements Injectable {
 
     private static final String PLAY_ID_KEY = "play_id";
     private static final String SCENE_ID_KEY = "scene_id";
@@ -60,7 +60,12 @@ public class Participate extends Fragment implements Injectable, TouchListenerIn
         view.setHasFixedSize(true);
         view.setLayoutManager(layoutManager);
         view.setAdapter(adapter);
-        ((BaseRecyclerView)view).touchListenerInterface = this;
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
         return view;
     }
 
@@ -85,7 +90,6 @@ public class Participate extends Fragment implements Injectable, TouchListenerIn
                 }
             }
         });
-        // gestureDetector = new GestureDetector(getActivity(), participateGestureDetectorListener);
     }
 
     @Override
@@ -111,8 +115,4 @@ public class Participate extends Fragment implements Injectable, TouchListenerIn
         return fragment;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
-    }
 }
