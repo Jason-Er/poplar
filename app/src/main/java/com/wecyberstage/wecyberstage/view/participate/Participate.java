@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,24 +18,26 @@ import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
+import com.wecyberstage.wecyberstage.view.main.TouchListenerInterface;
+import com.wecyberstage.wecyberstage.view.recycler.BaseRecyclerView;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 
 import java.util.MissingResourceException;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by mike on 2018/3/5.
  */
 
-public class Participate extends Fragment implements Injectable {
+public class Participate extends Fragment implements Injectable, TouchListenerInterface {
 
     private static final String PLAY_ID_KEY = "play_id";
     private static final String SCENE_ID_KEY = "scene_id";
 
     private View bottomBar;
     private ParticipateViewModel viewModel;
-    // private RecyclerView recyclerView;
 
     @Inject
     KeyFrameAdapter adapter;
@@ -43,6 +47,9 @@ public class Participate extends Fragment implements Injectable {
     UICommon uiCommon;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    @Inject
+    @Named("participate")
+    GestureDetector gestureDetector;
 
     @Nullable
     @Override
@@ -53,6 +60,7 @@ public class Participate extends Fragment implements Injectable {
         view.setHasFixedSize(true);
         view.setLayoutManager(layoutManager);
         view.setAdapter(adapter);
+        ((BaseRecyclerView)view).touchListenerInterface = this;
         return view;
     }
 
@@ -77,6 +85,7 @@ public class Participate extends Fragment implements Injectable {
                 }
             }
         });
+        // gestureDetector = new GestureDetector(getActivity(), participateGestureDetectorListener);
     }
 
     @Override
@@ -100,5 +109,10 @@ public class Participate extends Fragment implements Injectable {
         args.putLong(SCENE_ID_KEY, sceneId);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
     }
 }

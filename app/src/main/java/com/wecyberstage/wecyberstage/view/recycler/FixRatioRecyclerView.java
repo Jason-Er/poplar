@@ -1,15 +1,14 @@
-package com.wecyberstage.wecyberstage.view.participate;
+package com.wecyberstage.wecyberstage.view.recycler;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import com.wecyberstage.wecyberstage.R;
 
-public class FixRatioRecyclerView extends RecyclerView {
+public class FixRatioRecyclerView extends BaseRecyclerView {
     private float ratio;
     public FixRatioRecyclerView(@NonNull Context context) {
         super(context);
