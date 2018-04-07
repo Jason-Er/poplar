@@ -18,7 +18,6 @@ import com.wecyberstage.wecyberstage.model.PlayInfo;
 import com.wecyberstage.wecyberstage.util.helper.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.main.NavigationController;
-import com.wecyberstage.wecyberstage.view.main.TouchListenerInterface;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
 import java.util.List;

@@ -18,8 +18,6 @@ import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
-import com.wecyberstage.wecyberstage.view.main.TouchListenerInterface;
-import com.wecyberstage.wecyberstage.view.recycler.BaseRecyclerView;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 
 import java.util.MissingResourceException;
