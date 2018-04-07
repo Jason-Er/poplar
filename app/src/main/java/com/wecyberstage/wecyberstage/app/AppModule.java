@@ -27,11 +27,4 @@ class AppModule {
         return application.getSharedPreferences("demo-prefs", Context.MODE_PRIVATE);
     }
 
-    /*
-    @Provides
-    @Singleton
-    KeyFrameAdapter provideKeyFrameAdapter(AdapterDelegatesManager delegates) {
-        return new KeyFrameAdapter(delegates);
-    }
-    */
 }
