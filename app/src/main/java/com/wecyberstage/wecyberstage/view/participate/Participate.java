@@ -17,6 +17,7 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.util.label.PerActivity;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 
@@ -29,6 +30,7 @@ import javax.inject.Named;
  * Created by mike on 2018/3/5.
  */
 
+@PerActivity
 public class Participate extends Fragment implements Injectable {
 
     private static final String PLAY_ID_KEY = "play_id";
@@ -45,25 +47,20 @@ public class Participate extends Fragment implements Injectable {
     UICommon uiCommon;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    @Inject
-    @Named("participate")
-    GestureDetector gestureDetector;
 
+    @Inject
+    public Participate() {
+
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        bottomBar = inflater.inflate(R.layout.bottom_bar, container,false);
+        bottomBar = inflater.inflate(R.layout.footer_main, container,false);
         container.addView(bottomBar);
         RecyclerView view = (RecyclerView) inflater.inflate(R.layout.frag_participate, container,false);
         view.setHasFixedSize(true);
         view.setLayoutManager(layoutManager);
         view.setAdapter(adapter);
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
         return view;
     }
 

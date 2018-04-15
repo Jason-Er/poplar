@@ -11,6 +11,6 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class MainActivityModule {
     @PerActivity
-    @ContributesAndroidInjector(modules = {FragmentBuildersModule.class, FragmentModule.class})
+    @ContributesAndroidInjector(modules = {FragmentBuildersModule.class})
     abstract MainActivity contributeMainActivity();
 }

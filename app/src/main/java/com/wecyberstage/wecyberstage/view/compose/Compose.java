@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.util.label.PerActivity;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
@@ -25,6 +26,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
+@PerActivity
 public class Compose extends Fragment {
 
     private static final String PLAY_ID_KEY = "play_id";
@@ -42,10 +44,15 @@ public class Compose extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
+    @Inject
+    public Compose() {
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        bottomBar = inflater.inflate(R.layout.bottom_bar, container,false);
+        bottomBar = inflater.inflate(R.layout.footer_main, container,false);
         container.addView(bottomBar);
         RecyclerView view = (RecyclerView) inflater.inflate(R.layout.frag_recycler, container,false);
         view.setHasFixedSize(true);

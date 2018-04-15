@@ -1,8 +1,13 @@
 package com.wecyberstage.wecyberstage.view.main;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
@@ -17,10 +22,23 @@ import android.view.MenuItem;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
+import com.wecyberstage.wecyberstage.view.compose.Compose;
+import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
+import com.wecyberstage.wecyberstage.view.participate.Participate;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjector;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
@@ -29,24 +47,45 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
-    @Inject
-    NavigationController navigationController;
+
+    private Handler autoHideHandler = new Handler();
+    private Runnable autoHideRunnable=new Runnable() {
+        @Override
+        public void run() {
+            queueLock.lock();
+            if(findViewById(R.id.header_main).getVisibility() == View.VISIBLE) {
+                moveOutHeaderAndFooter(findViewById(R.id.header_main), findViewById(R.id.footer_main));
+            }
+        }
+    };
+    private final Lock queueLock=new ReentrantLock();
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.header_main)
+    View header;
+    @BindView(R.id.footer_main)
+    View footer;
+    @BindView(R.id.content_main)
+    CustomViewPager viewPager;
+    CustomFragmentPagerAdapter adapter ;
+    List<Fragment> browseFragmentList = new ArrayList<>();
+    List<Fragment> composeFragmentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        browseFragmentList.add(new Browse());
+        composeFragmentList.add(new Participate());
+        composeFragmentList.add(new Compose());
+
+        EventBus.getDefault().register(this);
+        adapter = new CustomFragmentPagerAdapter( getSupportFragmentManager() );
+        viewPager.setAdapter(adapter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -58,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
-            navigationController.navigateToBrowse();
+            navigateToBrowse();
         }
     }
 
@@ -95,6 +134,19 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    @Override
+    protected void onResume() {
+        super.onResume();
+        autoHideHandler.postDelayed(autoHideRunnable, 3000);
+    }
+    */
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -124,4 +176,83 @@ public class MainActivity extends AppCompatActivity
     public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseEventBus(MessageEvent messageEvent) {
+        Log.i("Main onResponseEventBus", messageEvent.getMessage());
+        queueLock.lock();
+        if(header.getVisibility() == View.VISIBLE) {
+            moveOutHeaderAndFooter(header, footer);
+        } else {
+            moveInHeaderAndFooter(header, footer);
+        }
+    }
+
+    public void moveOutHeaderAndFooter(final View header, final View footer) {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+                ObjectAnimator.ofFloat(header, "alpha", 0.0f),
+                ObjectAnimator.ofFloat(header, "translationY", -header.getHeight()),
+                ObjectAnimator.ofFloat(footer, "alpha", 0.0f),
+                ObjectAnimator.ofFloat(footer, "translationY", footer.getHeight())
+        );
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                header.setVisibility(View.GONE);
+                footer.setVisibility(View.GONE);
+                queueLock.unlock();
+            }
+        });
+        set.setDuration(300).start();
+    }
+
+    public void moveInHeaderAndFooter(final View header, final View footer) {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+                ObjectAnimator.ofFloat(header, "alpha", 1.0f),
+                ObjectAnimator.ofFloat(header, "translationY", 0),
+                ObjectAnimator.ofFloat(footer, "alpha", 1.0f),
+                ObjectAnimator.ofFloat(footer, "translationY", 0)
+        );
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                header.setVisibility(View.VISIBLE);
+                footer.setVisibility(View.VISIBLE);
+                queueLock.unlock();
+                autoHideHandler.postDelayed(autoHideRunnable, 3000);
+            }
+        });
+        set.setDuration(300).start();
+    }
+
+    //region navigation methods
+    public void navigateToBrowse() {
+        enlargeViewPager(false);
+        adapter.setDataSet(browseFragmentList);
+        viewPager.setCurrentItem(0);
+        footer.setVisibility(View.GONE);
+    }
+
+    public void navigateToParticipate(long playId) {
+        enlargeViewPager(true);
+        adapter.setDataSet(composeFragmentList);
+        viewPager.setCurrentItem(0);
+    }
+    // endregion
+
+    public void enlargeViewPager(boolean isEnlarge) {
+        CoordinatorLayout.LayoutParams params =
+                (CoordinatorLayout.LayoutParams) viewPager.getLayoutParams();
+        if(isEnlarge) {
+            params.setBehavior(null);
+        } else {
+            AppBarLayout.ScrollingViewBehavior behavior = new AppBarLayout.ScrollingViewBehavior();
+            params.setBehavior(behavior);
+        }
+    }
+
 }

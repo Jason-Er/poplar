@@ -17,7 +17,8 @@ import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.PlayInfo;
 import com.wecyberstage.wecyberstage.util.helper.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
-import com.wecyberstage.wecyberstage.view.main.NavigationController;
+import com.wecyberstage.wecyberstage.util.label.PerActivity;
+import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
 import java.util.List;
@@ -32,6 +33,7 @@ import timber.log.Timber;
  * Created by mike on 2018/3/5.
  */
 
+@PerActivity
 public class Browse extends Fragment implements Injectable {
 
     @BindView(R.id.frag_browse)
@@ -42,9 +44,11 @@ public class Browse extends Fragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    @Inject
-    NavigationController navigationController;
 
+    @Inject
+    public Browse() {
+
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class Browse extends Fragment implements Injectable {
             @Override
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
-                navigationController.navigateToParticipate(((PlayProfileCardView)v).playInfo.id);
+                ((MainActivity)getActivity()).navigateToParticipate(((PlayProfileCardView)v).playInfo.id);
             }
         };
 
