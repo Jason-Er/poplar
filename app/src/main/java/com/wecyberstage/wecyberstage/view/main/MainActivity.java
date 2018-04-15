@@ -24,6 +24,7 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.compose.Compose;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
+import com.wecyberstage.wecyberstage.view.helper.PlayInterface;
 import com.wecyberstage.wecyberstage.view.participate.Participate;
 
 import org.greenrobot.eventbus.EventBus;
@@ -239,6 +240,9 @@ public class MainActivity extends AppCompatActivity
 
     public void navigateToParticipate(long playId) {
         enlargeViewPager(true);
+        for(Fragment fragment: composeFragmentList) {
+            ((PlayInterface) fragment).setPlayAndSceneId(playId, 1L);
+        }
         adapter.setDataSet(composeFragmentList);
         viewPager.setCurrentItem(0);
     }
