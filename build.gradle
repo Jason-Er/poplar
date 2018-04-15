@@ -32,4 +32,5 @@ ext {
     dagger_version = '2.11'
     timber_version = '4.5.1'
     glide_version = '3.8.0'
+    eventbus_version = '3.1.1'
 }

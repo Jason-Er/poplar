@@ -56,4 +56,5 @@ dependencies {
 
     compile "com.github.bumptech.glide:glide:$glide_version"
 
+    implementation "org.greenrobot:eventbus:$eventbus_version"
 }
