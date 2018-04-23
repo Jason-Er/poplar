@@ -33,4 +33,5 @@ ext {
     timber_version = '4.5.1'
     glide_version = '3.8.0'
     eventbus_version = '3.1.1'
+    dynamic_animation_version = '27.1.1'
 }
