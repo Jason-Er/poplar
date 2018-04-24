@@ -12,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.util.label.PerActivity;
+import com.wecyberstage.wecyberstage.view.helper.PlayInterface;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
@@ -25,12 +28,11 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class Compose extends Fragment {
+public class Compose extends Fragment implements Injectable, PlayInterface {
 
     private static final String PLAY_ID_KEY = "play_id";
     private static final String SCENE_ID_KEY = "scene_id";
 
-    private View bottomBar;
     private ComposeViewModel viewModel;
 
     @Inject
@@ -45,8 +47,6 @@ public class Compose extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        bottomBar = inflater.inflate(R.layout.bottom_bar, container,false);
-        container.addView(bottomBar);
         RecyclerView view = (RecyclerView) inflater.inflate(R.layout.frag_recycler, container,false);
         view.setHasFixedSize(true);
         view.setLayoutManager(layoutManager);
@@ -87,16 +87,13 @@ public class Compose extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((ViewGroup)(bottomBar.getParent())).removeView(bottomBar);
-        bottomBar = null;
     }
 
-    public static Compose create(long playId, long sceneId) {
-        Compose fragment = new Compose();
+    @Override
+    public void setPlayAndSceneId(long playId, long sceneId) {
         Bundle args = new Bundle();
         args.putLong(PLAY_ID_KEY, playId);
         args.putLong(SCENE_ID_KEY, sceneId);
-        fragment.setArguments(args);
-        return fragment;
+        setArguments(args);
     }
 }

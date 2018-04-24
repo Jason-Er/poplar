@@ -17,6 +17,8 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.util.label.PerActivity;
+import com.wecyberstage.wecyberstage.view.helper.PlayInterface;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 
@@ -29,12 +31,11 @@ import javax.inject.Named;
  * Created by mike on 2018/3/5.
  */
 
-public class Participate extends Fragment implements Injectable {
+public class Participate extends Fragment implements Injectable, PlayInterface {
 
     private static final String PLAY_ID_KEY = "play_id";
     private static final String SCENE_ID_KEY = "scene_id";
 
-    private View bottomBar;
     private ParticipateViewModel viewModel;
 
     @Inject
@@ -45,25 +46,14 @@ public class Participate extends Fragment implements Injectable {
     UICommon uiCommon;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    @Inject
-    @Named("participate")
-    GestureDetector gestureDetector;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        bottomBar = inflater.inflate(R.layout.bottom_bar, container,false);
-        container.addView(bottomBar);
         RecyclerView view = (RecyclerView) inflater.inflate(R.layout.frag_participate, container,false);
         view.setHasFixedSize(true);
         view.setLayoutManager(layoutManager);
         view.setAdapter(adapter);
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
         return view;
     }
 
@@ -100,17 +90,13 @@ public class Participate extends Fragment implements Injectable {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ((ViewGroup)(bottomBar.getParent())).removeView(bottomBar);
-        bottomBar = null;
     }
 
-    public static Participate create(long playId, long sceneId) {
-        Participate fragment = new Participate();
+    @Override
+    public void setPlayAndSceneId(long playId, long sceneId) {
         Bundle args = new Bundle();
         args.putLong(PLAY_ID_KEY, playId);
         args.putLong(SCENE_ID_KEY, sceneId);
-        fragment.setArguments(args);
-        return fragment;
+        setArguments(args);
     }
-
 }

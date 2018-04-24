@@ -11,7 +11,7 @@ import javax.inject.Inject;
 public class ComposeScriptAdapter extends ListDelegationAdapter {
 
     @Inject
-    public ComposeScriptAdapter(AdapterDelegatesManager delegates) {
+    public ComposeScriptAdapter(AdapterDelegatesManager<String> delegates) {
         super(delegates);
     }
 
