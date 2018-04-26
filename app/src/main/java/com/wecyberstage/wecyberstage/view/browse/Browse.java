@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -17,7 +17,9 @@ import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.PlayInfo;
 import com.wecyberstage.wecyberstage.util.helper.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
-import com.wecyberstage.wecyberstage.util.label.PerActivity;
+import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.helper.CustomViewInterface;
+import com.wecyberstage.wecyberstage.view.helper.ViewOnTouch;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
@@ -25,59 +27,42 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
 /**
  * Created by mike on 2018/3/5.
  */
 
-@PerActivity
-public class Browse extends Fragment implements Injectable {
-
-    @BindView(R.id.frag_browse)
-    View browseRecycler;
+public class Browse extends CustomView implements CustomViewInterface {
 
     private BrowseViewModel viewModel;
     private RecyclerView.Adapter adapter;
 
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
-
-    @Inject
-    public Browse() {
-
-    }
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_browse, container, false);
-        ButterKnife.bind(this, view);
+    public void onCreate(final AppCompatActivity activity, ViewModelProvider.Factory viewModelFactory, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        LayoutInflater inflater = activity.getLayoutInflater();
+        view = inflater.inflate(R.layout.frag_recycler, container, false);
+        viewOnTouch = new ViewOnTouch(view);
+        view.setOnTouchListener(viewOnTouch);
 
         int spanCount = 2;
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
-        ((RecyclerView)browseRecycler).setLayoutManager(layoutManager);
+        ((RecyclerView)view).setLayoutManager(layoutManager);
         adapter = new PlayProfileAdapter();
-        ((RecyclerView)browseRecycler).setAdapter(adapter);
+        ((RecyclerView)view).setAdapter(adapter);
 
         ((PlayProfileAdapter) adapter).onItemClickCallBack = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
-                ((MainActivity)getActivity()).navigateToParticipate(((PlayProfileCardView)v).playInfo.id);
+                ((MainActivity)activity).navigateToParticipate(((PlayProfileCardView)v).playInfo.id);
             }
         };
 
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(BrowseViewModel.class);
+        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(BrowseViewModel.class);
         viewModel.setRequestPage(new PageRequest(0,15,""));
-        viewModel.playInfoLiveData.observe(this, new Observer<Resource<List<PlayInfo>>>(){
+        viewModel.playInfoLiveData.observe(activity, new Observer<Resource<List<PlayInfo>>>(){
             @Override
             public void onChanged(@Nullable Resource<List<PlayInfo>> resource) {
                 switch (resource.status) {
@@ -95,5 +80,4 @@ public class Browse extends Fragment implements Injectable {
             }
         });
     }
-
 }

@@ -13,10 +13,14 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class FragmentBuildersModule {
+
+    /*
     @ContributesAndroidInjector
     abstract Browse contributeBrowseFragment();
     @ContributesAndroidInjector
     abstract Participate contributeParticipateFragment();
     @ContributesAndroidInjector
     abstract Compose contributeComposeFragment();
+    */
+
 }

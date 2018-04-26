@@ -4,10 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
@@ -19,20 +18,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
-import com.wecyberstage.wecyberstage.view.compose.Compose;
+import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideControl;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
-import com.wecyberstage.wecyberstage.view.helper.PlayInterface;
-import com.wecyberstage.wecyberstage.view.participate.Participate;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -40,14 +36,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.DispatchingAndroidInjector;
+import dagger.android.AndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
 public class MainActivity extends AppCompatActivity
         implements HasSupportFragmentInjector, NavigationView.OnNavigationItemSelectedListener {
-
-    @Inject
-    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     private Handler autoHideHandler = new Handler();
     private Runnable autoHideRunnable=new Runnable() {
@@ -67,11 +60,13 @@ public class MainActivity extends AppCompatActivity
     View header;
     @BindView(R.id.footer_main)
     View footer;
-    @BindView(R.id.content_main)
-    CustomViewPager viewPager;
-    CustomFragmentPagerAdapter adapter ;
-    List<Fragment> browseFragmentList = new ArrayList<>();
-    List<Fragment> composeFragmentList = new ArrayList<>();
+    @BindView(R.id.app_main)
+    ViewGroup appMain;
+
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
+
+    CustomViewSlideControl customViewSlideControl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +75,7 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        browseFragmentList.add(new Browse());
-        composeFragmentList.add(new Participate());
-        composeFragmentList.add(new Compose());
-
         EventBus.getDefault().register(this);
-        adapter = new CustomFragmentPagerAdapter( getSupportFragmentManager() );
-        viewPager.setAdapter(adapter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -94,8 +83,13 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Browse browse = new Browse();
+        browse.onCreate(this, viewModelFactory, appMain, savedInstanceState);
+        customViewSlideControl = new CustomViewSlideControl(appMain);
+        customViewSlideControl.addBrowseView(browse, 1);
 
         if (savedInstanceState == null) {
             navigateToBrowse();
@@ -104,7 +98,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -173,11 +167,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
-        return dispatchingAndroidInjector;
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseEventBus(MessageEvent messageEvent) {
         Log.i("Main onResponseEventBus", messageEvent.getMessage());
@@ -232,31 +221,20 @@ public class MainActivity extends AppCompatActivity
 
     //region navigation methods
     public void navigateToBrowse() {
-        enlargeViewPager(false);
-        adapter.setDataSet(browseFragmentList);
-        viewPager.setCurrentItem(0);
-        footer.setVisibility(View.GONE);
+
     }
 
     public void navigateToParticipate(long playId) {
-        enlargeViewPager(true);
-        for(Fragment fragment: composeFragmentList) {
-            ((PlayInterface) fragment).setPlayAndSceneId(playId, 1L);
-        }
-        adapter.setDataSet(composeFragmentList);
-        viewPager.setCurrentItem(0);
+
     }
     // endregion
 
     public void enlargeViewPager(boolean isEnlarge) {
-        CoordinatorLayout.LayoutParams params =
-                (CoordinatorLayout.LayoutParams) viewPager.getLayoutParams();
-        if(isEnlarge) {
-            params.setBehavior(null);
-        } else {
-            AppBarLayout.ScrollingViewBehavior behavior = new AppBarLayout.ScrollingViewBehavior();
-            params.setBehavior(behavior);
-        }
+
     }
 
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return null;
+    }
 }

@@ -2,6 +2,7 @@ package com.wecyberstage.wecyberstage.app;
 
 import android.app.Application;
 
+import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.main.MainActivityModule;
 
 import javax.inject.Singleton;
