@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.app.DaggerAppComponent;
 import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
@@ -50,6 +51,7 @@ public class Participate extends Fragment implements Injectable, PlayInterface {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
         RecyclerView view = (RecyclerView) inflater.inflate(R.layout.frag_participate, container,false);
         view.setHasFixedSize(true);
         view.setLayoutManager(layoutManager);

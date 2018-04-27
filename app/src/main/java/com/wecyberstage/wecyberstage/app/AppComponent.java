@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.app;
 import android.app.Application;
 
 import com.wecyberstage.wecyberstage.view.browse.Browse;
+import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.main.MainActivityModule;
 
 import javax.inject.Singleton;
@@ -30,5 +31,5 @@ public interface AppComponent {
     }
 
     void inject(WeCyberStageApp app);
-
+    void inject(Browse customView);
 }

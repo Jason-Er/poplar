@@ -19,9 +19,10 @@ public class AppInjector {
     private AppInjector() {
     }
 
-    public static void init(WeCyberStageApp app) {
-        DaggerAppComponent.builder().application(app)
-                .build().inject(app);
+    public static AppComponent init(WeCyberStageApp app) {
+        AppComponent daggerAppComponent = DaggerAppComponent.builder().application(app)
+                .build();
+        daggerAppComponent.inject(app);
         app
                 .registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
                     @Override
@@ -59,6 +60,7 @@ public class AppInjector {
 
                     }
                 });
+        return daggerAppComponent;
     }
 
     private static void handleActivity(Activity activity) {

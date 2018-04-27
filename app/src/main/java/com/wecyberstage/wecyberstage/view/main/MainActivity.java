@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Browse browse = new Browse();
-        browse.onCreate(this, viewModelFactory, appMain, savedInstanceState);
+        browse.onCreate(this, appMain, savedInstanceState);
         customViewSlideControl = new CustomViewSlideControl(appMain);
         customViewSlideControl.addBrowseView(browse, 1);
 

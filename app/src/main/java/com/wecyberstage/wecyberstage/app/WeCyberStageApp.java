@@ -19,13 +19,19 @@ public class WeCyberStageApp extends Application implements HasActivityInjector 
     @Inject
     DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;
 
+    AppComponent appComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-        AppInjector.init(this);
+        appComponent = AppInjector.init(this);
+    }
+
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 
     @Override
