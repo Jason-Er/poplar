@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.app.Injectable;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.PlayInfo;
 import com.wecyberstage.wecyberstage.util.helper.PageRequest;
@@ -21,7 +20,6 @@ import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewOnTouch;
-import com.wecyberstage.wecyberstage.view.main.DaggerMainActivityComponent;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
@@ -29,7 +27,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
 /**
@@ -45,14 +42,13 @@ public class Browse extends CustomView implements CustomViewInterface {
     ViewModelProvider.Factory viewModelFactory;
 
     @Override
-    public void onCreate(final AppCompatActivity activity, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(final AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_recycler, container, false);
         viewOnTouch = new ViewOnTouch(view);
         view.setOnTouchListener(viewOnTouch);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
-        // DaggerMainActivityComponent.create().inject(this);
 
         int spanCount = 2;
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);

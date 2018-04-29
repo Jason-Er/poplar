@@ -5,6 +5,7 @@ import android.support.animation.FlingAnimation;
 import android.support.animation.SpringAnimation;
 import android.support.animation.SpringForce;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,10 +14,11 @@ import java.util.List;
 
 public class CustomViewSlideControl {
 
+    public enum ViewType {
+        BROWSE, PARTICIPANT, COMPOSE
+    }
     ViewGroup container;
-    List<CustomView> composeViewAndMoves = new ArrayList<>();
-    List<CustomView> accountViewAndMoves = new ArrayList<>();
-    List<CustomView> browseViewAndMoves = new ArrayList<>();
+    SparseArray viewArray;
 
     float pixelPerSecondX;
     float pixelPerSecondY;
@@ -26,6 +28,7 @@ public class CustomViewSlideControl {
         springForce.setDampingRatio(SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY).setStiffness(SpringForce.STIFFNESS_MEDIUM);
         pixelPerSecondX = 3600f;
         pixelPerSecondY = 5300f;
+        viewArray = new SparseArray();
     }
 
     public void intViewsPosition() {
@@ -33,19 +36,15 @@ public class CustomViewSlideControl {
         composeViewAndMoves.get(0).view.setX(0);
         composeViewAndMoves.get(1).view.setX(composeViewAndMoves.get(0).view.getWidth());
         */
-
-        currentView = browseViewAndMoves.get(0).view;
-        // browseViewAndMoves.get(0).view.setX(0);
-
-        for(CustomView viewAndMove: composeViewAndMoves) {
-            viewAndMove.view.setTranslationY(viewAndMove.view.getHeight());
+        // offset all views
+        for(int i = 0, nsize = viewArray.size(); i < nsize; i++) {
+            CustomView customView = (CustomView) viewArray.valueAt(i);
+            customView.view.setTranslationY(customView.view.getHeight());
         }
+        currentView = ((CustomView) viewArray.get(ViewType.BROWSE.ordinal())).view;
+        currentView.setTranslationY(0);
 
-        for(CustomView viewAndMove: accountViewAndMoves) {
-            viewAndMove.view.setTranslationY(-viewAndMove.view.getHeight());
-        }
-
-
+        /*
         composeViewAndMoves.get(0).viewOnTouch.setFollow(composeViewAndMoves.get(1).view);
         composeViewAndMoves.get(1).viewOnTouch.setFollow(composeViewAndMoves.get(0).view);
         composeViewAndMoves.get(0).viewOnTouch.setHorizontalMinMax(-composeViewAndMoves.get(0).view.getWidth(), 0);
@@ -53,21 +52,11 @@ public class CustomViewSlideControl {
 
         composeViewAndMoves.get(0).viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
         composeViewAndMoves.get(1).viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
-
+        */
     }
 
-    public void addComposeView(CustomView customView, int index) {
-        composeViewAndMoves.add(customView);
-        container.addView(customView.view, index);
-    }
-
-    public void addAccountView(CustomView customView, int index) {
-        accountViewAndMoves.add(customView);
-        container.addView(customView.view, index);
-    }
-
-    public void addBrowseView(CustomView customView, int index) {
-        browseViewAndMoves.add(customView);
+    public void addView(ViewType type, CustomView customView, int index) {
+        viewArray.put(type.ordinal(), customView);
         container.addView(customView.view, index);
     }
 
@@ -124,15 +113,17 @@ public class CustomViewSlideControl {
 
     }
 
+    /*
     public void slideToAccount() {
         View followView = accountViewAndMoves.get(0).view;
         followView.setTranslationY(-followView.getHeight());
         slideView(currentView, followView, 1);
         currentView = followView;
     }
+    */
 
-    public void slideToCompose() {
-        View followView = composeViewAndMoves.get(0).view;
+    public void navigateToView(ViewType type) {
+        View followView = ((CustomView) viewArray.get(type.ordinal())).view;
         followView.setTranslationY(followView.getHeight());
         slideView(currentView, followView, -1);
         currentView = followView;

@@ -24,6 +24,7 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideControl;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
+import com.wecyberstage.wecyberstage.view.participate.Participate;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,6 +69,9 @@ public class MainActivity extends AppCompatActivity
 
     CustomViewSlideControl customViewSlideControl;
 
+    Browse browse;
+    Participate participate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,14 +90,27 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Browse browse = new Browse();
-        browse.onCreate(this, appMain, savedInstanceState);
+        // region all views
+        browse = new Browse();
+        browse.onCreate(this, appMain);
+
+        participate = new Participate();
+        participate.onCreate(this, appMain);
+
         customViewSlideControl = new CustomViewSlideControl(appMain);
-        customViewSlideControl.addBrowseView(browse, 1);
+        customViewSlideControl.addView(CustomViewSlideControl.ViewType.BROWSE, browse, 1);
+        customViewSlideControl.addView(CustomViewSlideControl.ViewType.PARTICIPANT, participate, 1);
+        // endregion
 
         if (savedInstanceState == null) {
             navigateToBrowse();
         }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        customViewSlideControl.intViewsPosition();
     }
 
     @Override
@@ -225,7 +242,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void navigateToParticipate(long playId) {
-
+        participate.setPlayAndSceneId(playId, 1L);
+        customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.PARTICIPANT);
     }
     // endregion
 

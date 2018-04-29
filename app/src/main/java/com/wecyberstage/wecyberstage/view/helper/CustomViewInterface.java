@@ -7,5 +7,5 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 
 public interface CustomViewInterface {
-    void onCreate(AppCompatActivity activity, @Nullable ViewGroup container, Bundle savedInstanceState);
+    void onCreate(AppCompatActivity activity, @Nullable ViewGroup container);
 }

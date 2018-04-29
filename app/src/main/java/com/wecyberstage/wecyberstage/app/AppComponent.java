@@ -5,6 +5,7 @@ import android.app.Application;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.main.MainActivityModule;
+import com.wecyberstage.wecyberstage.view.participate.Participate;
 
 import javax.inject.Singleton;
 
@@ -32,4 +33,5 @@ public interface AppComponent {
 
     void inject(WeCyberStageApp app);
     void inject(Browse customView);
+    void inject(Participate participate);
 }
