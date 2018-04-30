@@ -39,10 +39,10 @@ public class CustomViewSlideControl {
         // offset all views
         for(int i = 0, nsize = viewArray.size(); i < nsize; i++) {
             CustomView customView = (CustomView) viewArray.valueAt(i);
-            customView.view.setTranslationY(customView.view.getHeight());
+            customView.view.setVisibility(View.INVISIBLE);
         }
         currentView = ((CustomView) viewArray.get(ViewType.BROWSE.ordinal())).view;
-        currentView.setTranslationY(0);
+        currentView.setVisibility(View.VISIBLE);
 
         /*
         composeViewAndMoves.get(0).viewOnTouch.setFollow(composeViewAndMoves.get(1).view);
@@ -67,6 +67,12 @@ public class CustomViewSlideControl {
 
     void slideView(final View currentView, final View followView, final int index) {
 
+        followView.setVisibility(View.VISIBLE);
+        if(index == -1) {
+            followView.setTranslationY(-followView.getHeight());
+        } else {
+            followView.setTranslationY(followView.getHeight());
+        }
         springAnimationY = new SpringAnimation(currentView, DynamicAnimation.ROTATION_Y)
                 .setSpring(springForce)
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
@@ -88,6 +94,7 @@ public class CustomViewSlideControl {
                     @Override
                     public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
                         Log.i("fling End", " value: " + value + " velocity: " + velocity);
+                        currentView.setVisibility(View.INVISIBLE);
                         springAnimationY.setStartVelocity(velocity)
                                 .setStartValue(value)
                                 .animateToFinalPosition(value);
@@ -112,15 +119,6 @@ public class CustomViewSlideControl {
         flingAnimationY.start();
 
     }
-
-    /*
-    public void slideToAccount() {
-        View followView = accountViewAndMoves.get(0).view;
-        followView.setTranslationY(-followView.getHeight());
-        slideView(currentView, followView, 1);
-        currentView = followView;
-    }
-    */
 
     public void navigateToView(ViewType type) {
         View followView = ((CustomView) viewArray.get(type.ordinal())).view;

@@ -207,8 +207,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                header.setVisibility(View.GONE);
-                footer.setVisibility(View.GONE);
+                header.setVisibility(View.INVISIBLE);
+                footer.setVisibility(View.INVISIBLE);
                 queueLock.unlock();
             }
         });
