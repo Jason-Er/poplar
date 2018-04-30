@@ -4,6 +4,8 @@ import android.support.animation.DynamicAnimation;
 import android.support.animation.FlingAnimation;
 import android.support.animation.SpringAnimation;
 import android.support.animation.SpringForce;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -23,7 +25,10 @@ public class CustomViewSlideControl {
     float pixelPerSecondX;
     float pixelPerSecondY;
 
-    public CustomViewSlideControl(ViewGroup container) {
+    private AppCompatActivity activity;
+
+    public CustomViewSlideControl(AppCompatActivity activity, ViewGroup container) {
+        this.activity = activity;
         this.container = container;
         springForce.setDampingRatio(SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY).setStiffness(SpringForce.STIFFNESS_MEDIUM);
         pixelPerSecondX = 3600f;
@@ -32,11 +37,7 @@ public class CustomViewSlideControl {
     }
 
     public void intViewsPosition() {
-        /*
-        composeViewAndMoves.get(0).view.setX(0);
-        composeViewAndMoves.get(1).view.setX(composeViewAndMoves.get(0).view.getWidth());
-        */
-        // offset all views
+
         for(int i = 0, nsize = viewArray.size(); i < nsize; i++) {
             CustomView customView = (CustomView) viewArray.valueAt(i);
             customView.view.setVisibility(View.INVISIBLE);
@@ -44,18 +45,18 @@ public class CustomViewSlideControl {
         currentView = ((CustomView) viewArray.get(ViewType.BROWSE.ordinal())).view;
         currentView.setVisibility(View.VISIBLE);
 
-        /*
-        composeViewAndMoves.get(0).viewOnTouch.setFollow(composeViewAndMoves.get(1).view);
-        composeViewAndMoves.get(1).viewOnTouch.setFollow(composeViewAndMoves.get(0).view);
-        composeViewAndMoves.get(0).viewOnTouch.setHorizontalMinMax(-composeViewAndMoves.get(0).view.getWidth(), 0);
-        composeViewAndMoves.get(1).viewOnTouch.setHorizontalMinMax(0, composeViewAndMoves.get(1).view.getWidth());
+        CustomView participate = (CustomView) viewArray.get(ViewType.PARTICIPANT.ordinal());
+        CustomView compose = (CustomView) viewArray.get(ViewType.COMPOSE.ordinal());
+        participate.viewOnTouch.setFollow(compose.view);
+        compose.viewOnTouch.setFollow(participate.view);
+        participate.viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
+        compose.viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
 
-        composeViewAndMoves.get(0).viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
-        composeViewAndMoves.get(1).viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
-        */
     }
 
     public void addView(ViewType type, CustomView customView, int index) {
+        CustomViewInterface customViewInterface = (CustomViewInterface) customView;
+        customViewInterface.onCreate(activity, container);
         viewArray.put(type.ordinal(), customView);
         container.addView(customView.view, index);
     }

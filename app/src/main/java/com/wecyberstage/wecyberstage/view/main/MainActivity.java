@@ -21,7 +21,9 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
+import com.wecyberstage.wecyberstage.view.compose.Compose;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideControl;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
 import com.wecyberstage.wecyberstage.view.participate.Participate;
@@ -66,11 +68,14 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    @Inject
+    UICommon uiCommon;
 
     CustomViewSlideControl customViewSlideControl;
 
     Browse browse;
     Participate participate;
+    Compose compose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +97,14 @@ public class MainActivity extends AppCompatActivity
 
         // region all views
         browse = new Browse();
-        browse.onCreate(this, appMain);
-
         participate = new Participate();
-        participate.onCreate(this, appMain);
+        compose = new Compose();
 
-        customViewSlideControl = new CustomViewSlideControl(appMain);
+        customViewSlideControl = new CustomViewSlideControl(this, appMain);
         customViewSlideControl.addView(CustomViewSlideControl.ViewType.BROWSE, browse, 1);
         customViewSlideControl.addView(CustomViewSlideControl.ViewType.PARTICIPANT, participate, 1);
+        customViewSlideControl.addView(CustomViewSlideControl.ViewType.COMPOSE, compose, 1);
+
         // endregion
 
         if (savedInstanceState == null) {
@@ -238,10 +243,14 @@ public class MainActivity extends AppCompatActivity
 
     //region navigation methods
     public void navigateToBrowse() {
+        uiCommon.outImmersive();
+        getSupportActionBar().show();
 
     }
 
     public void navigateToParticipate(long playId) {
+        getSupportActionBar().hide();
+        uiCommon.toImmersive();
         participate.setPlayAndSceneId(playId, 1L);
         customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.PARTICIPANT);
     }
