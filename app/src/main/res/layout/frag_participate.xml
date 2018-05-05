@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.wecyberstage.wecyberstage.view.recycler.FixRatioRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    app:ratio="1.78" >
+    android:layout_height="match_parent">
+    <com.wecyberstage.wecyberstage.view.recycler.FixRatioRecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/frag_participate"
+        app:ratio="1.78" >
 
-</com.wecyberstage.wecyberstage.view.recycler.FixRatioRecyclerView>
+    </com.wecyberstage.wecyberstage.view.recycler.FixRatioRecyclerView>
+</RelativeLayout>

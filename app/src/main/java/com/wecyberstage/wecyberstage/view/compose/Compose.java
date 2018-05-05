@@ -82,7 +82,7 @@ public class Compose extends CustomView implements CustomViewInterface, PlayInte
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         this.activity = activity;
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.frag_participate, container,false);
+        view = inflater.inflate(R.layout.frag_recycler, container,false);
         viewOnTouch = new ViewOnTouch(view);
         view.setOnTouchListener(viewOnTouch);
 

@@ -1,11 +1,13 @@
 package com.wecyberstage.wecyberstage.view.helper;
 
+import android.graphics.Rect;
 import android.support.animation.DynamicAnimation;
 import android.support.animation.FlingAnimation;
 import android.support.animation.SpringAnimation;
 import android.support.animation.SpringForce;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -24,6 +26,7 @@ public class CustomViewSlideControl {
 
     float pixelPerSecondX;
     float pixelPerSecondY;
+    DisplayMetrics dm;
 
     private AppCompatActivity activity;
 
@@ -40,17 +43,25 @@ public class CustomViewSlideControl {
 
         for(int i = 0, nsize = viewArray.size(); i < nsize; i++) {
             CustomView customView = (CustomView) viewArray.valueAt(i);
-            customView.view.setVisibility(View.INVISIBLE);
+            // customView.view.setVisibility(View.INVISIBLE);
+            customView.view.setTranslationY(customView.view.getHeight());
+            Log.i("intViewsPosition", "view.getHeight(): "+ customView.view.getHeight());
         }
         currentView = ((CustomView) viewArray.get(ViewType.BROWSE.ordinal())).view;
-        currentView.setVisibility(View.VISIBLE);
+        // currentView.setVisibility(View.VISIBLE);
+        currentView.setTranslationY(0);
 
+        dm = activity.getResources().getDisplayMetrics();
+        pixelPerSecondX = calcInitVelocity( currentView.getWidth(), 700);
+        pixelPerSecondY = calcInitVelocity( currentView.getHeight(), 700);
+        /*
         CustomView participate = (CustomView) viewArray.get(ViewType.PARTICIPANT.ordinal());
         CustomView compose = (CustomView) viewArray.get(ViewType.COMPOSE.ordinal());
         participate.viewOnTouch.setFollow(compose.view);
         compose.viewOnTouch.setFollow(participate.view);
         participate.viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
         compose.viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
+        */
 
     }
 
@@ -68,7 +79,12 @@ public class CustomViewSlideControl {
 
     void slideView(final View currentView, final View followView, final int index) {
 
+        Rect rect = new Rect();
+        currentView.getGlobalVisibleRect(rect);
+        Log.i("slideView", "Rect (" + rect.left + "," + rect.top + ")");
+
         followView.setVisibility(View.VISIBLE);
+        Log.i("slideView", "followView.getHeight(): "+followView.getHeight());
         if(index == -1) {
             followView.setTranslationY(-followView.getHeight());
         } else {
@@ -80,12 +96,14 @@ public class CustomViewSlideControl {
                     @Override
                     public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
                         Log.i("onAnimationEnd", " currentView X: " + currentView.getX() + " currentView Y: " + currentView.getY());
+                        Log.i("onAnimationEnd", " followView X: " + followView.getX() + " followView Y: " + followView.getY());
                     }
                 })
                 .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
                     @Override
                     public void onAnimationUpdate(DynamicAnimation animation, float value, float velocity) {
                         followView.setTranslationY(value + followView.getHeight() * (-index));
+                        Log.i("spring", " value: " + value + " getHeight: " + followView.getHeight() + " setY()" + value + followView.getHeight() * (-index));
                     }
                 });
 
@@ -113,6 +131,8 @@ public class CustomViewSlideControl {
             flingAnimationY.setMinValue(0)
                     .setMaxValue(currentView.getHeight());
         } else if (index == -1) {
+            Log.i("slideView", "dm.heightPixels: " + dm.heightPixels + " currentView.getHeight(): " + currentView.getHeight());
+
             flingAnimationY.setMinValue(-currentView.getHeight())
                     .setMaxValue(0);
         }
@@ -128,4 +148,20 @@ public class CustomViewSlideControl {
         currentView = followView;
     }
 
+    private float calcInitVelocity(float span, float deltaT) {
+        float friction = 1.1f * -4.2f;
+        return (float)( ( span * friction ) / ( Math.exp(friction * deltaT / 1000f ) -1f) );
+
+        /*
+        mVelocity = 100f;
+
+		deltaT = (float) (Math.log(mVelocity / velocity) / mFriction * 1000f);
+		System.out.println("time: " + deltaT);
+
+		mValue = 768f;
+		velocity = (float)( ( mValue * mFriction ) / ( Math.exp(mFriction * deltaT / 1000f ) -1f) );
+
+		System.out.println("velocity: " + velocity);
+        */
+    }
 }

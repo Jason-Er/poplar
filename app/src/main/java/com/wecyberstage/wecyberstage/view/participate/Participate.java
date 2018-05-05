@@ -22,6 +22,9 @@ import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by mike on 2018/3/5.
  */
@@ -79,6 +82,7 @@ public class Participate extends CustomView implements CustomViewInterface, Play
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
+
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         this.activity = activity;
@@ -89,9 +93,10 @@ public class Participate extends CustomView implements CustomViewInterface, Play
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
-        ((RecyclerView)view).setHasFixedSize(true);
-        ((RecyclerView)view).setLayoutManager(layoutManager);
-        ((RecyclerView)view).setAdapter(adapter);
+        RecyclerView recyclerView = view.findViewById(R.id.frag_participate);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ParticipateViewModel.class);
         ParticipateInfo participateInfo = activity.getIntent().getParcelableExtra(PARTICIPATE_INFO_KEY);

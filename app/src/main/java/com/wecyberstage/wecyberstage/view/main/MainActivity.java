@@ -7,6 +7,8 @@ import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
+        uiCommon.toImmersive();
         EventBus.getDefault().register(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -243,22 +246,30 @@ public class MainActivity extends AppCompatActivity
 
     //region navigation methods
     public void navigateToBrowse() {
-        uiCommon.outImmersive();
         getSupportActionBar().show();
 
     }
 
     public void navigateToParticipate(long playId) {
         getSupportActionBar().hide();
-        uiCommon.toImmersive();
         participate.setPlayAndSceneId(playId, 1L);
         customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.PARTICIPANT);
     }
     // endregion
 
-    public void enlargeViewPager(boolean isEnlarge) {
+    /*
+    public void enlargeContentView(boolean isEnlarge) {
+        CoordinatorLayout.LayoutParams params =
+                (CoordinatorLayout.LayoutParams) viewPager.getLayoutParams();
+        if(isEnlarge) {
+            params.setBehavior(null);
+        } else {
+            AppBarLayout.ScrollingViewBehavior behavior = new AppBarLayout.ScrollingViewBehavior();
+            params.setBehavior(behavior);
+        }
 
     }
+    */
 
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
