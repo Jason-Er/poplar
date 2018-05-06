@@ -12,6 +12,9 @@ import org.greenrobot.eventbus.EventBus;
 
 public class CustomViewBehavior<V extends View> extends CoordinatorLayout.Behavior<V> {
 
+    private int verticalMinDistance = 20;
+    private int minVelocity         = 0;
+
     GestureDetector gestureDetector;
     public CustomViewBehavior() {
     }
@@ -48,15 +51,28 @@ public class CustomViewBehavior<V extends View> extends CoordinatorLayout.Behavi
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.i("CustomViewBehavior ", "onFling" + " velocityX: " + velocityX);
-            MessageEvent messageEvent = new MessageEvent("onFling");
+            String message = "";
+            if( Math.abs(velocityX) >= Math.abs(velocityY) ) {
+                if (e1.getX() - e2.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
+                    message = "TO_LEFT";
+                } else if (e2.getX() - e1.getX() > verticalMinDistance && Math.abs(velocityX) > minVelocity) {
+                    message = "TO_RIGHT";
+                }
+            } else {
+                if (e1.getY() - e2.getY() > verticalMinDistance && Math.abs(velocityY) > minVelocity) {
+                    message = "TO_UP";
+                } else if (e2.getY() - e1.getY() > verticalMinDistance && Math.abs(velocityY) > minVelocity) {
+                    message = "TO_DOWN";
+                }
+            }
+            MessageEvent messageEvent = new MessageEvent(message);
             EventBus.getDefault().post(messageEvent);
             return true;
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            MessageEvent messageEvent = new MessageEvent("onSingleTapUp");
+            MessageEvent messageEvent = new MessageEvent("CLICK");
             EventBus.getDefault().post(messageEvent);
             return super.onSingleTapUp(e);
         }

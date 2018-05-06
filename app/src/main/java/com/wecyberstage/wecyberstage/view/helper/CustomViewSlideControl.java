@@ -69,9 +69,8 @@ public class CustomViewSlideControl {
     }
 
     public void addView(ViewType type, CustomView customView, int index) {
-        CustomViewInterface customViewInterface = (CustomViewInterface) customView;
-        customViewInterface.onCreate(activity, container);
-        viewArray.put(type.ordinal(), customView);
+        customView.onCreate(activity, container);
+        viewArray.put(type.ordinal(),customView);
         container.addView(customView.view, index);
     }
 

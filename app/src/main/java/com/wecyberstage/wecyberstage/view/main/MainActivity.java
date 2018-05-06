@@ -196,10 +196,26 @@ public class MainActivity extends AppCompatActivity
     public void onResponseEventBus(MessageEvent messageEvent) {
         Log.i("Main onResponseEventBus", messageEvent.getMessage());
         queueLock.lock();
-        if(header.getVisibility() == View.VISIBLE) {
-            moveOutHeaderAndFooter(header, footer);
-        } else {
-            moveInHeaderAndFooter(header, footer);
+        switch (messageEvent.getMessage()) {
+            case "TO_LEFT":
+                Log.i("main", "TO_LEFT");
+                break;
+            case "TO_RIGHT":
+                Log.i("main", "TO_RIGHT");
+                break;
+            case "TO_UP":
+                Log.i("main", "TO_UP");
+                break;
+            case "TO_DOWN":
+                Log.i("main", "TO_DOWN");
+                break;
+            case "CLICK":
+                if(header.getVisibility() == View.VISIBLE) {
+                    moveOutHeaderAndFooter(header, footer);
+                } else {
+                    moveInHeaderAndFooter(header, footer);
+                }
+                break;
         }
     }
 

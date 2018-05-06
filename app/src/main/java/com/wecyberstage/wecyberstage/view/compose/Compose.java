@@ -26,7 +26,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class Compose extends CustomView implements CustomViewInterface, PlayInterface {
+public class Compose extends CustomView implements PlayInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -83,8 +83,6 @@ public class Compose extends CustomView implements CustomViewInterface, PlayInte
         this.activity = activity;
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_recycler, container,false);
-        viewOnTouch = new ViewOnTouch(view);
-        view.setOnTouchListener(viewOnTouch);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 

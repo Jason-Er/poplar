@@ -3,7 +3,6 @@ package com.wecyberstage.wecyberstage.view.browse;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +17,6 @@ import com.wecyberstage.wecyberstage.model.PlayInfo;
 import com.wecyberstage.wecyberstage.util.helper.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
-import com.wecyberstage.wecyberstage.view.helper.CustomViewInterface;
-import com.wecyberstage.wecyberstage.view.helper.ViewOnTouch;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
@@ -33,7 +30,7 @@ import timber.log.Timber;
  * Created by mike on 2018/3/5.
  */
 
-public class Browse extends CustomView implements CustomViewInterface {
+public class Browse extends CustomView {
 
     private BrowseViewModel viewModel;
     private RecyclerView.Adapter adapter;
@@ -45,8 +42,6 @@ public class Browse extends CustomView implements CustomViewInterface {
     public void onCreate(final AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_recycler, container, false);
-        viewOnTouch = new ViewOnTouch(view);
-        view.setOnTouchListener(viewOnTouch);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 

@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * Created by mike on 2018/3/5.
  */
 
-public class Participate extends CustomView implements CustomViewInterface, PlayInterface {
+public class Participate extends CustomView implements PlayInterface {
 
     private static final String PARTICIPATE_INFO_KEY = "participate_info";
 
@@ -88,8 +88,6 @@ public class Participate extends CustomView implements CustomViewInterface, Play
         this.activity = activity;
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_participate, container,false);
-        viewOnTouch = new ViewOnTouch(view);
-        view.setOnTouchListener(viewOnTouch);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
