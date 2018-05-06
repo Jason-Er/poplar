@@ -18,6 +18,9 @@ import java.util.List;
 
 public class CustomViewSlideControl {
 
+    public enum Direction {
+        TO_UP, TO_RIGHT, TO_DOWN, TO_LEFT
+    }
     public enum ViewType {
         BROWSE, PARTICIPANT, COMPOSE
     }
@@ -43,13 +46,13 @@ public class CustomViewSlideControl {
 
         for(int i = 0, nsize = viewArray.size(); i < nsize; i++) {
             CustomView customView = (CustomView) viewArray.valueAt(i);
-            // customView.view.setVisibility(View.INVISIBLE);
-            customView.view.setTranslationY(customView.view.getHeight());
+            customView.view.setVisibility(View.INVISIBLE);
+            // customView.view.setTranslationY(customView.view.getHeight());
             Log.i("intViewsPosition", "view.getHeight(): "+ customView.view.getHeight());
         }
         currentView = ((CustomView) viewArray.get(ViewType.BROWSE.ordinal())).view;
-        // currentView.setVisibility(View.VISIBLE);
-        currentView.setTranslationY(0);
+        currentView.setVisibility(View.VISIBLE);
+        // currentView.setTranslationY(0);
 
         dm = activity.getResources().getDisplayMetrics();
         pixelPerSecondX = calcInitVelocity( currentView.getWidth(), 700);
@@ -72,12 +75,10 @@ public class CustomViewSlideControl {
         container.addView(customView.view, index);
     }
 
-    FlingAnimation flingAnimationY;
-    SpringAnimation springAnimationY;
     View currentView;
     SpringForce springForce = new SpringForce();
 
-    void slideView(final View currentView, final View followView, final int index) {
+    void slideView(final View currentView, final View followView, Direction direction) {
 
         Rect rect = new Rect();
         currentView.getGlobalVisibleRect(rect);
@@ -85,12 +86,34 @@ public class CustomViewSlideControl {
 
         followView.setVisibility(View.VISIBLE);
         Log.i("slideView", "followView.getHeight(): "+followView.getHeight());
-        if(index == -1) {
-            followView.setTranslationY(-followView.getHeight());
-        } else {
-            followView.setTranslationY(followView.getHeight());
+        switch (direction) {
+            case TO_UP:
+                followView.setTranslationY(followView.getHeight());
+                SlideVertical(currentView, followView, -1);
+                break;
+            case TO_RIGHT:
+                followView.setTranslationX(-followView.getWidth());
+                SlideHorizontal(currentView, followView, 1);
+                break;
+            case TO_DOWN:
+                followView.setTranslationY(-followView.getHeight());
+                SlideVertical(currentView, followView, 1);
+                break;
+            case TO_LEFT:
+                followView.setTranslationX(followView.getWidth());
+                SlideHorizontal(currentView, followView, -1);
+                break;
         }
-        springAnimationY = new SpringAnimation(currentView, DynamicAnimation.ROTATION_Y)
+    }
+
+    /**
+     *
+     * @param currentView
+     * @param followView
+     * @param index index: -1 left; 1 right
+     */
+    private void SlideHorizontal(final View currentView, final View followView, final int index) {
+        final SpringAnimation springAnimationX = new SpringAnimation(currentView, DynamicAnimation.ROTATION_X)
                 .setSpring(springForce)
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
                     @Override
@@ -107,7 +130,63 @@ public class CustomViewSlideControl {
                     }
                 });
 
-        flingAnimationY = new FlingAnimation(currentView, DynamicAnimation.TRANSLATION_Y)
+        FlingAnimation flingAnimationX = new FlingAnimation(currentView, DynamicAnimation.TRANSLATION_X)
+                .setFriction(1.1f)
+                .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
+                    @Override
+                    public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+                        Log.i("fling End", " value: " + value + " velocity: " + velocity);
+                        currentView.setVisibility(View.INVISIBLE);
+                        springAnimationX.setStartVelocity(velocity)
+                                .setStartValue(value)
+                                .animateToFinalPosition(value);
+                    }
+                })
+                .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(DynamicAnimation animation, float value, float velocity) {
+                        Log.i("fling Update", " value: " + value + " velocity: " + velocity);
+                        followView.setTranslationY(value + followView.getHeight() * (-index));
+                    }
+                });
+
+        if(index == 1) {
+            flingAnimationX.setMinValue(0)
+                    .setMaxValue(currentView.getWidth());
+        } else if (index == -1) {
+            Log.i("slideView", "dm.heightPixels: " + dm.heightPixels + " currentView.getHeight(): " + currentView.getHeight());
+
+            flingAnimationX.setMinValue(-currentView.getWidth())
+                    .setMaxValue(0);
+        }
+        flingAnimationX.setStartVelocity(pixelPerSecondX * index);
+        flingAnimationX.start();
+    }
+    /**
+     *
+     * @param currentView
+     * @param followView
+     * @param index index: -1 up; 1 down
+     */
+    private void SlideVertical(final View currentView, final View followView, final int index) {
+        final SpringAnimation springAnimationY = new SpringAnimation(currentView, DynamicAnimation.ROTATION_Y)
+                .setSpring(springForce)
+                .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
+                    @Override
+                    public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+                        Log.i("onAnimationEnd", " currentView X: " + currentView.getX() + " currentView Y: " + currentView.getY());
+                        Log.i("onAnimationEnd", " followView X: " + followView.getX() + " followView Y: " + followView.getY());
+                    }
+                })
+                .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(DynamicAnimation animation, float value, float velocity) {
+                        followView.setTranslationY(value + followView.getHeight() * (-index));
+                        Log.i("spring", " value: " + value + " getHeight: " + followView.getHeight() + " setY()" + value + followView.getHeight() * (-index));
+                    }
+                });
+
+        FlingAnimation flingAnimationY = new FlingAnimation(currentView, DynamicAnimation.TRANSLATION_Y)
                 .setFriction(1.1f)
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
                     @Override
@@ -138,13 +217,12 @@ public class CustomViewSlideControl {
         }
         flingAnimationY.setStartVelocity(pixelPerSecondY * index);
         flingAnimationY.start();
-
     }
 
     public void navigateToView(ViewType type) {
         View followView = ((CustomView) viewArray.get(type.ordinal())).view;
         followView.setTranslationY(followView.getHeight());
-        slideView(currentView, followView, -1);
+        slideView(currentView, followView, Direction.TO_UP);
         currentView = followView;
     }
 
