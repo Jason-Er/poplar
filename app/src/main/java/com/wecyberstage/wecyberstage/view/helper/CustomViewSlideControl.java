@@ -33,7 +33,6 @@ public class CustomViewSlideControl {
 
     float pixelPerSecondX;
     float pixelPerSecondY;
-//    DisplayMetrics dm;
     private AppCompatActivity activity;
 
     public CustomViewSlideControl(AppCompatActivity activity, ViewGroup container) {
@@ -239,10 +238,10 @@ public class CustomViewSlideControl {
         }
     }
 
-    public void navigateToView(ViewType type) {
+    public void navigateToView(ViewType type, Direction direction) {
         View followView = ((CustomView) viewArray.get(type.ordinal())).view;
         followView.setTranslationY(followView.getHeight());
-        slideView(currentView, followView, Direction.TO_UP);
+        slideView(currentView, followView, direction);
         currentView = followView;
         currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(type.ordinal());
     }

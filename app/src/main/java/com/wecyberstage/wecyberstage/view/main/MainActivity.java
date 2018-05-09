@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity
     public void navigateToParticipate(long playId) {
         getSupportActionBar().hide();
         participate.setPlayState(new PlayState(playId, 1L, 0L));
-        customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.PARTICIPANT);
+        customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.PARTICIPANT, CustomViewSlideControl.Direction.TO_UP);
     }
     // endregion
 
