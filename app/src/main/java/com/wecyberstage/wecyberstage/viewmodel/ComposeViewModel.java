@@ -5,10 +5,12 @@ import android.arch.lifecycle.ViewModel;
 
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.util.helper.ComposeScriptLiveData;
+import com.wecyberstage.wecyberstage.view.helper.PlayState;
+import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 
 import javax.inject.Inject;
 
-public class ComposeViewModel extends ViewModel {
+public class ComposeViewModel extends ViewModel implements PlayStateInterface {
 
     public final LiveData<ComposeScript> scriptLiveData;
 
@@ -17,8 +19,13 @@ public class ComposeViewModel extends ViewModel {
         this.scriptLiveData = scriptLiveData;
     }
 
-    public void setPlayAndSceneId(long playId, long sceneId) {
-        ((ComposeScriptLiveData) scriptLiveData).setPlayAndSceneId(playId, sceneId);
+    @Override
+    public void setPlayState(PlayState playState) {
+        ((ComposeScriptLiveData) scriptLiveData).setPlayState(playState);
     }
 
+    @Override
+    public PlayState getPlayState() {
+        return ((ComposeScriptLiveData) scriptLiveData).getPlayState();
+    }
 }

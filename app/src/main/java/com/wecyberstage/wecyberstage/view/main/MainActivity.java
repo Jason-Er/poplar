@@ -28,6 +28,7 @@ import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.compose.Compose;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideControl;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
+import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.participate.Participate;
 
 import org.greenrobot.eventbus.EventBus;
@@ -198,16 +199,16 @@ public class MainActivity extends AppCompatActivity
         queueLock.lock();
         switch (messageEvent.getMessage()) {
             case "TO_LEFT":
-                Log.i("main", "TO_LEFT");
+                customViewSlideControl.flingResponse(CustomViewSlideControl.Direction.TO_LEFT);
                 break;
             case "TO_RIGHT":
-                Log.i("main", "TO_RIGHT");
+                customViewSlideControl.flingResponse(CustomViewSlideControl.Direction.TO_RIGHT);
                 break;
             case "TO_UP":
-                Log.i("main", "TO_UP");
+                customViewSlideControl.flingResponse(CustomViewSlideControl.Direction.TO_UP);
                 break;
             case "TO_DOWN":
-                Log.i("main", "TO_DOWN");
+                customViewSlideControl.flingResponse(CustomViewSlideControl.Direction.TO_DOWN);
                 break;
             case "CLICK":
                 if(header.getVisibility() == View.VISIBLE) {
@@ -268,7 +269,7 @@ public class MainActivity extends AppCompatActivity
 
     public void navigateToParticipate(long playId) {
         getSupportActionBar().hide();
-        participate.setPlayAndSceneId(playId, 1L);
+        participate.setPlayState(new PlayState(playId, 1L, 0L));
         customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.PARTICIPANT);
     }
     // endregion

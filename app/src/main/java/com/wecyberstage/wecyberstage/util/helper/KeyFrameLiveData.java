@@ -3,12 +3,16 @@ package com.wecyberstage.wecyberstage.util.helper;
 import android.arch.lifecycle.LiveData;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.ArrayMap;
 
 import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.model.Line;
+import com.wecyberstage.wecyberstage.model.Play;
 import com.wecyberstage.wecyberstage.model.Prop;
 import com.wecyberstage.wecyberstage.model.Role;
+import com.wecyberstage.wecyberstage.view.helper.PlayState;
+import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 
 import java.util.ArrayList;
 
@@ -20,7 +24,8 @@ import javax.inject.Singleton;
  */
 
 @Singleton
-public class KeyFrameLiveData extends LiveData<KeyFrame> {
+public class KeyFrameLiveData extends LiveData<KeyFrame> implements PlayStateInterface {
+    PlayState playState;
     @Inject
     public KeyFrameLiveData(PlayRepository repository) {
 
@@ -36,8 +41,9 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> {
         super.onInactive();
     }
 
-    public void setPlayAndSceneId(long playId, long sceneId) {
-
+    @Override
+    public void setPlayState(PlayState playState) {
+        this.playState = playState;
         KeyFrame keyFrame = new KeyFrame();
 
         keyFrame.roleInfoList = new ArrayList<>();
@@ -66,5 +72,10 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> {
         keyFrame.stageInfo.settingURL = "http://pic28.photophoto.cn/20130727/0035035114302168_b.jpg";
 
         setValue(keyFrame);
+    }
+
+    @Override
+    public PlayState getPlayState() {
+        return playState;
     }
 }

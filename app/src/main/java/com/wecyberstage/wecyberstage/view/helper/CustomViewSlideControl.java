@@ -26,11 +26,14 @@ public class CustomViewSlideControl {
     }
     ViewGroup container;
     SparseArray viewArray;
+    SparseArray flingResponseArray;
+
+    View currentView;
+    FlingResponseInterface currentFlingResponse;
 
     float pixelPerSecondX;
     float pixelPerSecondY;
-    DisplayMetrics dm;
-
+//    DisplayMetrics dm;
     private AppCompatActivity activity;
 
     public CustomViewSlideControl(AppCompatActivity activity, ViewGroup container) {
@@ -40,6 +43,7 @@ public class CustomViewSlideControl {
         pixelPerSecondX = 3600f;
         pixelPerSecondY = 5300f;
         viewArray = new SparseArray();
+        flingResponseArray = new SparseArray();
     }
 
     public void intViewsPosition() {
@@ -47,34 +51,34 @@ public class CustomViewSlideControl {
         for(int i = 0, nsize = viewArray.size(); i < nsize; i++) {
             CustomView customView = (CustomView) viewArray.valueAt(i);
             customView.view.setVisibility(View.INVISIBLE);
-            // customView.view.setTranslationY(customView.view.getHeight());
             Log.i("intViewsPosition", "view.getHeight(): "+ customView.view.getHeight());
         }
         currentView = ((CustomView) viewArray.get(ViewType.BROWSE.ordinal())).view;
         currentView.setVisibility(View.VISIBLE);
-        // currentView.setTranslationY(0);
 
-        dm = activity.getResources().getDisplayMetrics();
         pixelPerSecondX = calcInitVelocity( currentView.getWidth(), 700);
         pixelPerSecondY = calcInitVelocity( currentView.getHeight(), 700);
-        /*
-        CustomView participate = (CustomView) viewArray.get(ViewType.PARTICIPANT.ordinal());
-        CustomView compose = (CustomView) viewArray.get(ViewType.COMPOSE.ordinal());
-        participate.viewOnTouch.setFollow(compose.view);
-        compose.viewOnTouch.setFollow(participate.view);
-        participate.viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
-        compose.viewOnTouch.setPixelPerSecondX(pixelPerSecondX);
-        */
 
     }
 
     public void addView(ViewType type, CustomView customView, int index) {
         customView.onCreate(activity, container);
         viewArray.put(type.ordinal(),customView);
+        switch (type) {
+            case BROWSE:
+                flingResponseArray.put(type.ordinal(), new FlingResponseBrowse(this));
+                break;
+            case PARTICIPANT:
+                flingResponseArray.put(type.ordinal(), new FlingResponseParticipate(this));
+                break;
+            case COMPOSE:
+                flingResponseArray.put(type.ordinal(), new FlingResponseBrowse(this));
+                break;
+        }
         container.addView(customView.view, index);
     }
 
-    View currentView;
+
     SpringForce springForce = new SpringForce();
 
     void slideView(final View currentView, final View followView, Direction direction) {
@@ -153,7 +157,7 @@ public class CustomViewSlideControl {
             flingAnimationX.setMinValue(0)
                     .setMaxValue(currentView.getWidth());
         } else if (index == -1) {
-            Log.i("slideView", "dm.heightPixels: " + dm.heightPixels + " currentView.getHeight(): " + currentView.getHeight());
+//            Log.i("slideView", "dm.heightPixels: " + dm.heightPixels + " currentView.getHeight(): " + currentView.getHeight());
 
             flingAnimationX.setMinValue(-currentView.getWidth())
                     .setMaxValue(0);
@@ -209,7 +213,7 @@ public class CustomViewSlideControl {
             flingAnimationY.setMinValue(0)
                     .setMaxValue(currentView.getHeight());
         } else if (index == -1) {
-            Log.i("slideView", "dm.heightPixels: " + dm.heightPixels + " currentView.getHeight(): " + currentView.getHeight());
+//            Log.i("slideView", "dm.heightPixels: " + dm.heightPixels + " currentView.getHeight(): " + currentView.getHeight());
 
             flingAnimationY.setMinValue(-currentView.getHeight())
                     .setMaxValue(0);
@@ -218,11 +222,29 @@ public class CustomViewSlideControl {
         flingAnimationY.start();
     }
 
+    public void flingResponse(Direction direction) {
+        switch (direction) {
+            case TO_UP:
+                currentFlingResponse.toUp();
+                break;
+            case TO_RIGHT:
+                currentFlingResponse.toRight();
+                break;
+            case TO_DOWN:
+                currentFlingResponse.toDown();
+                break;
+            case TO_LEFT:
+                currentFlingResponse.toLeft();
+                break;
+        }
+    }
+
     public void navigateToView(ViewType type) {
         View followView = ((CustomView) viewArray.get(type.ordinal())).view;
         followView.setTranslationY(followView.getHeight());
         slideView(currentView, followView, Direction.TO_UP);
         currentView = followView;
+        currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(type.ordinal());
     }
 
     private float calcInitVelocity(float span, float deltaT) {
