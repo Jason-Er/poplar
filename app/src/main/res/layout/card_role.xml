@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.wecyberstage.wecyberstage.view.participate.RoleCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.wecyberstage.wecyberstage.view.composeZ.RoleCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_role"
     android:layout_width="match_parent"
@@ -14,4 +14,4 @@
         android:background="@drawable/ic_launcher_background"
         android:contentDescription="@string/hello" />
 
-</com.wecyberstage.wecyberstage.view.participate.RoleCardView>
+</com.wecyberstage.wecyberstage.view.composeZ.RoleCardView>

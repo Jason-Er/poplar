@@ -1,14 +1,11 @@
-package com.wecyberstage.wecyberstage.view.compose;
+package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -26,7 +23,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class Compose extends CustomView implements PlayStateInterface {
+public class ComposeX extends CustomView implements PlayStateInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -34,9 +31,9 @@ public class Compose extends CustomView implements PlayStateInterface {
     private AppCompatActivity activity;
 
     @Inject
-    ComposeScriptAdapter adapter;
+    ComposeXScriptAdapter adapter;
     @Inject
-    ComposeScriptLayoutManager layoutManager;
+    ComposeXScriptLayoutManager layoutManager;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 

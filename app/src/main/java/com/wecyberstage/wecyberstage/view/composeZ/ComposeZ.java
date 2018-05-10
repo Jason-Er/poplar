@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.participate;
+package com.wecyberstage.wecyberstage.view.composeZ;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
@@ -23,7 +23,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class Participate extends CustomView implements PlayStateInterface {
+public class ComposeZ extends CustomView implements PlayStateInterface {
 
     private static final String PARTICIPATE_INFO_KEY = "participate_info";
 

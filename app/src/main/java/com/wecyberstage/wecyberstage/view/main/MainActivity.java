@@ -7,8 +7,6 @@ import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
@@ -25,11 +23,11 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
-import com.wecyberstage.wecyberstage.view.compose.Compose;
+import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
+import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideControl;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
-import com.wecyberstage.wecyberstage.view.participate.Participate;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -77,8 +75,8 @@ public class MainActivity extends AppCompatActivity
     CustomViewSlideControl customViewSlideControl;
 
     Browse browse;
-    Participate participate;
-    Compose compose;
+    ComposeZ participate;
+    ComposeX compose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +99,8 @@ public class MainActivity extends AppCompatActivity
 
         // region all views
         browse = new Browse();
-        participate = new Participate();
-        compose = new Compose();
+        participate = new ComposeZ();
+        compose = new ComposeX();
 
         customViewSlideControl = new CustomViewSlideControl(this, appMain);
         customViewSlideControl.addView(CustomViewSlideControl.ViewType.BROWSE, browse, 1);

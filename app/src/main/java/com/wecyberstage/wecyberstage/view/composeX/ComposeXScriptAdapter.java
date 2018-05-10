@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.compose;
+package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.support.annotation.NonNull;
 
@@ -8,14 +8,15 @@ import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
 import javax.inject.Inject;
 
-public class ComposeScriptAdapter extends ListDelegationAdapter {
+public class ComposeXScriptAdapter extends ListDelegationAdapter {
 
     @Inject
-    public ComposeScriptAdapter(AdapterDelegatesManager<String> delegates) {
+    public ComposeXScriptAdapter(AdapterDelegatesManager<String> delegates) {
         super(delegates);
     }
 
     public void setComposeScript(@NonNull ComposeScript script) {
 
     }
+
 }

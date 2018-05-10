@@ -2,8 +2,8 @@ package com.wecyberstage.wecyberstage.view.helper;
 
 import android.util.Log;
 
-import com.wecyberstage.wecyberstage.view.compose.Compose;
-import com.wecyberstage.wecyberstage.view.participate.Participate;
+import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
+import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 
 public class FlingResponseParticipate implements FlingResponseInterface {
 
@@ -15,8 +15,8 @@ public class FlingResponseParticipate implements FlingResponseInterface {
     @Override
     public void toLeft() {
         Log.i("flingParticipate", "toLeft");
-        Participate participate = (Participate) control.viewArray.get(CustomViewSlideControl.ViewType.PARTICIPANT.ordinal());
-        Compose compose = (Compose) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE.ordinal());
+        ComposeZ participate = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.PARTICIPANT.ordinal());
+        ComposeX compose = (ComposeX) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE.ordinal());
         compose.setPlayState(participate.getPlayState());
         control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE, CustomViewSlideControl.Direction.TO_LEFT);
         control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideControl.ViewType.COMPOSE.ordinal());

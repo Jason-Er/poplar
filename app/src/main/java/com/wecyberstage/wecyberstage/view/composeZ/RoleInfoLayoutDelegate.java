@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.participate;
+package com.wecyberstage.wecyberstage.view.composeZ;
 
 import android.graphics.RectF;
 import android.support.v7.widget.RecyclerView;

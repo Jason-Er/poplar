@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.compose;
+package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;

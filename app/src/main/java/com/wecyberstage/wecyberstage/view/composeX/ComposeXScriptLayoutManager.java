@@ -1,12 +1,12 @@
-package com.wecyberstage.wecyberstage.view.compose;
+package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.support.v7.widget.RecyclerView;
 
 import javax.inject.Inject;
 
-public class ComposeScriptLayoutManager extends RecyclerView.LayoutManager {
+public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
     @Inject
-    public ComposeScriptLayoutManager() {
+    public ComposeXScriptLayoutManager() {
         
     }
     @Override

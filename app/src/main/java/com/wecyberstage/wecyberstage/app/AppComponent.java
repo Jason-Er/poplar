@@ -3,10 +3,9 @@ package com.wecyberstage.wecyberstage.app;
 import android.app.Application;
 
 import com.wecyberstage.wecyberstage.view.browse.Browse;
-import com.wecyberstage.wecyberstage.view.compose.Compose;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.main.MainActivityModule;
-import com.wecyberstage.wecyberstage.view.participate.Participate;
+import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 
 import javax.inject.Singleton;
 
@@ -34,6 +33,6 @@ public interface AppComponent {
 
     void inject(WeCyberStageApp app);
     void inject(Browse browse);
-    void inject(Participate participate);
-    void inject(Compose compose);
+    void inject(ComposeZ participate);
+    void inject(ComposeX compose);
 }
