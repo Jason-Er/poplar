@@ -7,15 +7,10 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 
-public class PropInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface {
+class PropInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface {
 
     public PropInfoAdapterDelegate(int viewType) {
-        this.viewType = viewType;
-    }
-
-    @Override
-    public int getItemViewType() {
-        return viewType;
+        super(viewType);
     }
 
     @Override

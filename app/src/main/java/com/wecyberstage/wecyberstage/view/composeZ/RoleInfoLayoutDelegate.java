@@ -9,15 +9,10 @@ import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
 import timber.log.Timber;
 
-public class RoleInfoLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface {
+class RoleInfoLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface {
 
     public RoleInfoLayoutDelegate(int viewType) {
-        this.viewType = viewType;
-    }
-
-    @Override
-    public int getItemViewType() {
-        return viewType;
+        super(viewType);
     }
 
     @Override

@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity
     CustomViewSlideControl customViewSlideControl;
 
     Browse browse;
-    ComposeZ participate;
-    ComposeX compose;
+    ComposeZ composeZ;
+    ComposeX composeX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,13 +99,13 @@ public class MainActivity extends AppCompatActivity
 
         // region all views
         browse = new Browse();
-        participate = new ComposeZ();
-        compose = new ComposeX();
+        composeZ = new ComposeZ();
+        composeX = new ComposeX();
 
         customViewSlideControl = new CustomViewSlideControl(this, appMain);
         customViewSlideControl.addView(CustomViewSlideControl.ViewType.BROWSE, browse, 1);
-        customViewSlideControl.addView(CustomViewSlideControl.ViewType.PARTICIPANT, participate, 1);
-        customViewSlideControl.addView(CustomViewSlideControl.ViewType.COMPOSE, compose, 1);
+        customViewSlideControl.addView(CustomViewSlideControl.ViewType.COMPOSE_Z, composeZ, 1);
+        customViewSlideControl.addView(CustomViewSlideControl.ViewType.COMPOSE_X, composeX, 1);
 
         // endregion
 
@@ -262,13 +262,12 @@ public class MainActivity extends AppCompatActivity
     //region navigation methods
     public void navigateToBrowse() {
         getSupportActionBar().show();
-
     }
 
     public void navigateToParticipate(long playId) {
         getSupportActionBar().hide();
-        participate.setPlayState(new PlayState(playId, 1L, 0L));
-        customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.PARTICIPANT, CustomViewSlideControl.Direction.TO_UP);
+        composeZ.setPlayState(new PlayState(playId, 1L, 0L));
+        customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_Z, CustomViewSlideControl.Direction.TO_UP);
     }
     // endregion
 

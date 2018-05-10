@@ -19,7 +19,7 @@ public class AdapterDelegatesManager<T> {
     public AdapterDelegatesManager() {
     }
 
-    public AdapterDelegatesManager<T> addDelegate(@NonNull AdapterDelegateInterface<T> delegate) {
+    public AdapterDelegatesManager<T> addDelegate(@NonNull ViewTypeDelegateClass delegate) {
         delegates.put(delegate.getItemViewType(), delegate);
         return this;
     }

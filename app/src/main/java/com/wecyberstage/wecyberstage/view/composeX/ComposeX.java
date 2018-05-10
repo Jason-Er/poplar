@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -46,7 +47,8 @@ public class ComposeX extends CustomView implements PlayStateInterface {
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
         ((RecyclerView)view).setHasFixedSize(true);
-        ((RecyclerView)view).setLayoutManager(layoutManager);
+        ((RecyclerView)view).setLayoutManager(new LinearLayoutManager(activity));
+//        ((RecyclerView)view).setLayoutManager(layoutManager);
         ((RecyclerView)view).setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);

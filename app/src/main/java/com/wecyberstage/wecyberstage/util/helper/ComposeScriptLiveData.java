@@ -20,6 +20,8 @@ public class ComposeScriptLiveData extends LiveData<ComposeScript> implements Pl
     @Override
     public void setPlayState(PlayState playState) {
         this.playState = playState;
+        ComposeScript composeScript = new ComposeScript();
+        setValue(composeScript);
     }
 
     @Override

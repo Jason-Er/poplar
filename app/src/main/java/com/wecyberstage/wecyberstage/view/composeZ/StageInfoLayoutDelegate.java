@@ -6,15 +6,10 @@ import android.view.View;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
-public class StageInfoLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface {
+class StageInfoLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface {
 
     public StageInfoLayoutDelegate(int viewType) {
-        this.viewType = viewType;
-    }
-
-    @Override
-    public int getItemViewType() {
-        return viewType;
+        super(viewType);
     }
 
     @Override

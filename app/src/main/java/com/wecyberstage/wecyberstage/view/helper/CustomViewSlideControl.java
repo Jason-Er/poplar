@@ -5,16 +5,11 @@ import android.support.animation.DynamicAnimation;
 import android.support.animation.FlingAnimation;
 import android.support.animation.SpringAnimation;
 import android.support.animation.SpringForce;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CustomViewSlideControl {
 
@@ -22,7 +17,7 @@ public class CustomViewSlideControl {
         TO_UP, TO_RIGHT, TO_DOWN, TO_LEFT
     }
     public enum ViewType {
-        BROWSE, PARTICIPANT, COMPOSE
+        BROWSE, COMPOSE_Z, COMPOSE_X
     }
     ViewGroup container;
     SparseArray viewArray;
@@ -67,10 +62,10 @@ public class CustomViewSlideControl {
             case BROWSE:
                 flingResponseArray.put(type.ordinal(), new FlingResponseBrowse(this));
                 break;
-            case PARTICIPANT:
+            case COMPOSE_Z:
                 flingResponseArray.put(type.ordinal(), new FlingResponseParticipate(this));
                 break;
-            case COMPOSE:
+            case COMPOSE_X:
                 flingResponseArray.put(type.ordinal(), new FlingResponseBrowse(this));
                 break;
         }

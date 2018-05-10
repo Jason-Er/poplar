@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.composeZ;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,23 +14,16 @@ import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 
 import java.util.List;
 
-public class RoleInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class RoleInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
     public RoleInfoAdapterDelegate(int viewType) {
-        this.viewType = viewType;
+        super(viewType);
     }
 
     class RoleViewHolder extends RecyclerView.ViewHolder {
-        RoleCardView view;
         public RoleViewHolder(View v) {
             super(v);
-            view = (RoleCardView)v;
         }
-    }
-
-    @Override
-    public int getItemViewType() {
-        return viewType;
     }
 
     @Override
@@ -48,6 +42,6 @@ public class RoleInfoAdapterDelegate extends ViewTypeDelegateClass implements Ad
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
         KeyFrame.RoleInfo role = (KeyFrame.RoleInfo) items.get(position);
-        ((RoleViewHolder) holder).view.roleInfo = role;
+        ((RoleCardView) holder.itemView).roleInfo = role;
     }
 }

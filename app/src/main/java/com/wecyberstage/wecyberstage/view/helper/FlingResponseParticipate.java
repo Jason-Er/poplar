@@ -15,12 +15,12 @@ public class FlingResponseParticipate implements FlingResponseInterface {
     @Override
     public void toLeft() {
         Log.i("flingParticipate", "toLeft");
-        ComposeZ participate = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.PARTICIPANT.ordinal());
-        ComposeX compose = (ComposeX) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE.ordinal());
+        ComposeZ participate = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
+        ComposeX compose = (ComposeX) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal());
         compose.setPlayState(participate.getPlayState());
-        control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE, CustomViewSlideControl.Direction.TO_LEFT);
-        control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideControl.ViewType.COMPOSE.ordinal());
-        control.currentView = ((CustomView) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE.ordinal())).view;
+        control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_X, CustomViewSlideControl.Direction.TO_LEFT);
+        control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal());
+        control.currentView = ((CustomView) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal())).view;
     }
 
     @Override
