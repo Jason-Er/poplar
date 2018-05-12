@@ -64,10 +64,10 @@ public class CustomViewSlideControl {
                 flingResponseArray.put(type.ordinal(), new FlingResponseBrowse(this));
                 break;
             case COMPOSE_Z:
-                flingResponseArray.put(type.ordinal(), new FlingResponseParticipate(this));
+                flingResponseArray.put(type.ordinal(), new FlingResponseComposeZ(this));
                 break;
             case COMPOSE_X:
-                flingResponseArray.put(type.ordinal(), new FlingResponseBrowse(this));
+                flingResponseArray.put(type.ordinal(), new FlingResponseComposeX(this));
                 break;
         }
         container.addView(customView.view, index);

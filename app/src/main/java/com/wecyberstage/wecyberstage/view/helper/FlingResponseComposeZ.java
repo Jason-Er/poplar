@@ -5,10 +5,10 @@ import android.util.Log;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 
-public class FlingResponseParticipate implements FlingResponseInterface {
+public class FlingResponseComposeZ implements FlingResponseInterface {
 
     CustomViewSlideControl control;
-    public FlingResponseParticipate(CustomViewSlideControl control) {
+    public FlingResponseComposeZ(CustomViewSlideControl control) {
         this.control = control;
     }
 
