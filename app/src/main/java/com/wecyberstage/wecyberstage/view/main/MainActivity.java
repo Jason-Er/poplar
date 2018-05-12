@@ -264,10 +264,16 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().show();
     }
 
-    public void navigateToParticipate(long playId) {
+    public void navigateToComposeZ(long playId) {
         getSupportActionBar().hide();
         composeZ.setPlayState(new PlayState(playId, 1L, 0L));
         customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_Z, CustomViewSlideControl.Direction.TO_UP);
+    }
+
+    public void navigateToComposeX(long playId) {
+        getSupportActionBar().hide();
+        composeX.setPlayState(new PlayState(playId, 1L, 0L));
+        customViewSlideControl.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_X, CustomViewSlideControl.Direction.TO_UP);
     }
     // endregion
 

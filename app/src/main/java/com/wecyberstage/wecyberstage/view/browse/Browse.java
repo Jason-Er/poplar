@@ -55,7 +55,7 @@ public class Browse extends CustomView {
             @Override
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
-                ((MainActivity)activity).navigateToParticipate(((PlayProfileCardView)v).playInfo.id);
+                ((MainActivity)activity).navigateToComposeZ(((PlayProfileCardView)v).playInfo.id);
             }
         };
 
