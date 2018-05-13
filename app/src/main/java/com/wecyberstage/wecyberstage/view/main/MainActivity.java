@@ -24,6 +24,7 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
+import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideControl;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
@@ -75,8 +76,10 @@ public class MainActivity extends AppCompatActivity
     CustomViewSlideControl customViewSlideControl;
 
     Browse browse;
-    ComposeZ composeZ;
     ComposeX composeX;
+    ComposeY composeY;
+    ComposeZ composeZ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,13 +102,15 @@ public class MainActivity extends AppCompatActivity
 
         // region all views
         browse = new Browse();
-        composeZ = new ComposeZ();
         composeX = new ComposeX();
+        composeY = new ComposeY();
+        composeZ = new ComposeZ();
 
         customViewSlideControl = new CustomViewSlideControl(this, appMain);
         customViewSlideControl.addView(CustomViewSlideControl.ViewType.BROWSE, browse, 1);
-        customViewSlideControl.addView(CustomViewSlideControl.ViewType.COMPOSE_Z, composeZ, 1);
         customViewSlideControl.addView(CustomViewSlideControl.ViewType.COMPOSE_X, composeX, 1);
+        customViewSlideControl.addView(CustomViewSlideControl.ViewType.COMPOSE_Y, composeY, 1);
+        customViewSlideControl.addView(CustomViewSlideControl.ViewType.COMPOSE_Z, composeZ, 1);
 
         // endregion
 

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
+import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
 import com.wecyberstage.wecyberstage.view.main.MainActivityModule;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 
@@ -33,6 +34,8 @@ public interface AppComponent {
 
     void inject(WeCyberStageApp app);
     void inject(Browse browse);
-    void inject(ComposeZ participate);
-    void inject(ComposeX compose);
+    void inject(ComposeX composeX);
+    void inject(ComposeY composeY);
+    void inject(ComposeZ composeZ);
+
 }

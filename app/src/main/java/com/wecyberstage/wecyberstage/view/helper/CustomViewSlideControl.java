@@ -17,7 +17,7 @@ public class CustomViewSlideControl {
         TO_UP, TO_RIGHT, TO_DOWN, TO_LEFT
     }
     public enum ViewType {
-        BROWSE, COMPOSE_Z, COMPOSE_X
+        BROWSE, COMPOSE_X, COMPOSE_Y, COMPOSE_Z
     }
     ViewGroup container;
     SparseArray viewArray;
@@ -48,7 +48,6 @@ public class CustomViewSlideControl {
             Log.i("intViewsPosition", "view.getHeight(): "+ customView.view.getHeight());
         }
         currentView = ((CustomView) viewArray.get(ViewType.BROWSE.ordinal())).view;
-//        currentView = ((CustomView) viewArray.get(ViewType.COMPOSE_X.ordinal())).view;
         currentView.setVisibility(View.VISIBLE);
 
         pixelPerSecondX = calcInitVelocity( currentView.getWidth(), 700);

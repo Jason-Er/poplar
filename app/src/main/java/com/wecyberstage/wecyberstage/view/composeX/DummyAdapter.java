@@ -17,7 +17,7 @@ public class DummyAdapter extends RecyclerView.Adapter<DummyAdapter.DummyViewHol
 
     List<String> stringList = new ArrayList<>();
     public DummyAdapter(Context context) {
-        stringList.addAll(Arrays.asList(context.getResources().getStringArray(R.array.languages)));
+        stringList.addAll(Arrays.asList(context.getResources().getStringArray(R.array.dummy_items)));
     }
 
     @Override

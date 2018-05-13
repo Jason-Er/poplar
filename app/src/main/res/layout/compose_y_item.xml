@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycler_item_container"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+        <ImageView
+            android:id="@+id/recycler_item_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@android:drawable/sym_def_app_icon" />
+        <EditText
+            android:id="@+id/recycler_item_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal|center"
+            android:text="Hello world"
+            android:focusedByDefault="false"
+            android:backgroundTint="@android:color/transparent"
+            />
+
+        <ImageView
+            android:id="@+id/recycler_item_handle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|right"
+            android:scaleType="center"
+            android:src="@android:drawable/sym_action_call" />
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
