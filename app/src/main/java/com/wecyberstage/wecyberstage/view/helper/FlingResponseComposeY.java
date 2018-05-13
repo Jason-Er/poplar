@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.helper;
 import android.util.Log;
 
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
+import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 
 public class FlingResponseComposeY implements FlingResponseInterface {
@@ -14,10 +15,10 @@ public class FlingResponseComposeY implements FlingResponseInterface {
     @Override
     public void toLeft() {
         Log.i("flingCompose", "toRight");
-        ComposeZ participate = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
-        ComposeX compose = (ComposeX) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal());
-        participate.setPlayState(compose.getPlayState());
-        control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_Z, CustomViewSlideControl.Direction.TO_RIGHT);
+        ComposeY composeY = (ComposeY) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Y.ordinal());
+        ComposeZ composeZ = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
+        composeY.setPlayState(composeZ.getPlayState());
+        control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_Z, CustomViewSlideControl.Direction.TO_LEFT);
         control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
         control.currentView = ((CustomView) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal())).view;
     }
