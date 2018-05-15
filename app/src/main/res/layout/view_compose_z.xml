@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    app:layout_behavior=".view.helper.CustomViewBehavior">
+    android:id="@+id/view_compose_z" >
     <com.wecyberstage.wecyberstage.view.recycler.FixRatioRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

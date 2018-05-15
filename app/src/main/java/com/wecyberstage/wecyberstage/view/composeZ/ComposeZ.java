@@ -41,7 +41,7 @@ public class ComposeZ extends CustomView implements PlayStateInterface {
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         this.activity = activity;
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.frag_participate, container,false);
+        view = inflater.inflate(R.layout.view_compose_z, container,false);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 

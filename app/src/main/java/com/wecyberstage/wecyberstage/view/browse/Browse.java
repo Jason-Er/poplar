@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -17,6 +18,7 @@ import com.wecyberstage.wecyberstage.model.PlayInfo;
 import com.wecyberstage.wecyberstage.util.helper.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
@@ -41,7 +43,11 @@ public class Browse extends CustomView {
     @Override
     public void onCreate(final AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.frag_recycler, container, false);
+        view = inflater.inflate(R.layout.view_recycler, container, false);
+        CustomViewBehavior behavior = new CustomViewBehavior(activity, null);
+        CoordinatorLayout.LayoutParams params =
+                (CoordinatorLayout.LayoutParams) view.getLayoutParams();
+        params.setBehavior(behavior);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 

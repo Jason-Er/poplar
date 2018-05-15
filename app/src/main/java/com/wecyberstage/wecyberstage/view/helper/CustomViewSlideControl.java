@@ -44,7 +44,7 @@ public class CustomViewSlideControl {
 
         for(int i = 0, nsize = viewArray.size(); i < nsize; i++) {
             CustomView customView = (CustomView) viewArray.valueAt(i);
-            customView.view.setVisibility(View.INVISIBLE);
+            customView.view.setVisibility(View.GONE);
             Log.i("intViewsPosition", "view.getHeight(): "+ customView.view.getHeight());
         }
         currentView = ((CustomView) viewArray.get(ViewType.BROWSE.ordinal())).view;
@@ -120,15 +120,12 @@ public class CustomViewSlideControl {
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
                     @Override
                     public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
-                        Log.i("onAnimationEnd", " currentView X: " + currentView.getX() + " currentView Y: " + currentView.getY());
-                        Log.i("onAnimationEnd", " followView X: " + followView.getX() + " followView Y: " + followView.getY());
                     }
                 })
                 .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
                     @Override
                     public void onAnimationUpdate(DynamicAnimation animation, float value, float velocity) {
                         followView.setTranslationX(value + followView.getWidth() * (-index));
-                        Log.i("spring", " value: " + value + " getHeight: " + followView.getHeight() + " setY()" + value + followView.getHeight() * (-index));
                     }
                 });
 
@@ -137,8 +134,7 @@ public class CustomViewSlideControl {
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
                     @Override
                     public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
-                        Log.i("fling End", " value: " + value + " velocity: " + velocity);
-                        currentView.setVisibility(View.INVISIBLE);
+                        currentView.setVisibility(View.GONE);
                         springAnimationX.setStartVelocity(velocity)
                                 .setStartValue(value)
                                 .animateToFinalPosition(value);
@@ -148,7 +144,6 @@ public class CustomViewSlideControl {
                 .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
                     @Override
                     public void onAnimationUpdate(DynamicAnimation animation, float value, float velocity) {
-                        Log.i("fling Update", " value: " + value + " velocity: " + velocity);
                         followView.setTranslationX(value + followView.getWidth() * (-index));
                     }
                 });
@@ -157,8 +152,6 @@ public class CustomViewSlideControl {
             flingAnimationX.setMinValue(0)
                     .setMaxValue(currentView.getWidth());
         } else if (index == -1) {
-//            Log.i("slideView", "dm.heightPixels: " + dm.heightPixels + " currentView.getHeight(): " + currentView.getHeight());
-
             flingAnimationX.setMinValue(-currentView.getWidth())
                     .setMaxValue(0);
         }
@@ -177,15 +170,12 @@ public class CustomViewSlideControl {
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
                     @Override
                     public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
-                        Log.i("onAnimationEnd", " currentView X: " + currentView.getX() + " currentView Y: " + currentView.getY());
-                        Log.i("onAnimationEnd", " followView X: " + followView.getX() + " followView Y: " + followView.getY());
                     }
                 })
                 .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
                     @Override
                     public void onAnimationUpdate(DynamicAnimation animation, float value, float velocity) {
                         followView.setTranslationY(value + followView.getHeight() * (-index));
-                        Log.i("spring", " value: " + value + " getHeight: " + followView.getHeight() + " setY()" + value + followView.getHeight() * (-index));
                     }
                 });
 
@@ -204,7 +194,6 @@ public class CustomViewSlideControl {
                 .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
                     @Override
                     public void onAnimationUpdate(DynamicAnimation animation, float value, float velocity) {
-                        Log.i("fling Update", " value: " + value + " velocity: " + velocity);
                         followView.setTranslationY(value + followView.getHeight() * (-index));
                     }
                 });
@@ -213,8 +202,6 @@ public class CustomViewSlideControl {
             flingAnimationY.setMinValue(0)
                     .setMaxValue(currentView.getHeight());
         } else if (index == -1) {
-//            Log.i("slideView", "dm.heightPixels: " + dm.heightPixels + " currentView.getHeight(): " + currentView.getHeight());
-
             flingAnimationY.setMinValue(-currentView.getHeight())
                     .setMaxValue(0);
         }

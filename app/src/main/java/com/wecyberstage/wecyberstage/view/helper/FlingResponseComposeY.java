@@ -17,7 +17,7 @@ public class FlingResponseComposeY implements FlingResponseInterface {
         Log.i("flingCompose", "toRight");
         ComposeY composeY = (ComposeY) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Y.ordinal());
         ComposeZ composeZ = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
-        composeY.setPlayState(composeZ.getPlayState());
+        composeZ.setPlayState(composeY.getPlayState());
         control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_Z, CustomViewSlideControl.Direction.TO_LEFT);
         control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
         control.currentView = ((CustomView) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal())).view;
@@ -26,12 +26,12 @@ public class FlingResponseComposeY implements FlingResponseInterface {
     @Override
     public void toRight() {
         Log.i("flingCompose", "toRight");
-        ComposeZ participate = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
-        ComposeX compose = (ComposeX) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal());
-        participate.setPlayState(compose.getPlayState());
-        control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_Z, CustomViewSlideControl.Direction.TO_RIGHT);
-        control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
-        control.currentView = ((CustomView) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal())).view;
+        ComposeY composeY = (ComposeY) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Y.ordinal());
+        ComposeX composeX = (ComposeX) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal());
+        composeX.setPlayState(composeY.getPlayState());
+        control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_X, CustomViewSlideControl.Direction.TO_RIGHT);
+        control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal());
+        control.currentView = ((CustomView) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal())).view;
     }
 
     @Override

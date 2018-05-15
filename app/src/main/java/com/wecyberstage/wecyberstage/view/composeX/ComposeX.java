@@ -42,7 +42,7 @@ public class ComposeX extends CustomView implements PlayStateInterface {
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         this.activity = activity;
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.frag_recycler, container,false);
+        view = inflater.inflate(R.layout.view_recycler, container,false);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 

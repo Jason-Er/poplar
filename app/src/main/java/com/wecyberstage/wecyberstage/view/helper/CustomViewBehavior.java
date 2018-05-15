@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.helper;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -14,13 +15,29 @@ public class CustomViewBehavior<V extends View> extends CoordinatorLayout.Behavi
 
     private int verticalMinDistance = 20;
     private int minVelocity         = 0;
-
+    private int id;
     GestureDetector gestureDetector;
     public CustomViewBehavior() {
     }
 
     public CustomViewBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
+        /*
+        int[] attrsArray = new int[] {
+                android.R.attr.id, // 0
+                android.R.attr.background, // 1
+                android.R.attr.layout_width, // 2
+                android.R.attr.layout_height // 3
+        };
+        TypedArray ta = context.obtainStyledAttributes(attrs, attrsArray);
+        */
+        // id = ta.getResourceId(0 /* index of attribute in attrsArray */, View.NO_ID);
+        /*
+        Drawable background = ta.getDrawable(1);
+        int layout_width = ta.getDimensionPixelSize(2, ViewGroup.LayoutParams.MATCH_PARENT);
+        int layout_height = ta.getDimensionPixelSize(3, ViewGroup.LayoutParams.MATCH_PARENT);
+        ta.recycle();
+        */
         gestureDetector = new GestureDetector(context, mGestureListener);
     }
 
@@ -66,6 +83,7 @@ public class CustomViewBehavior<V extends View> extends CoordinatorLayout.Behavi
                 }
             }
             MessageEvent messageEvent = new MessageEvent(message);
+            Log.i("CustomViewBehavior","this:"+this+" Message: " + message);
             EventBus.getDefault().post(messageEvent);
             return true;
         }
