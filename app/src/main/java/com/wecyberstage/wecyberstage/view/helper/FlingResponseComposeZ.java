@@ -15,7 +15,7 @@ public class FlingResponseComposeZ implements FlingResponseInterface {
 
     @Override
     public void toLeft() {
-        Log.i("flingComposeX", "toLeft");
+        Log.i("flingComposeZ", "toLeft");
         ComposeZ composeZ = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
         ComposeX composeX = (ComposeX) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal());
         composeX.setPlayState(composeZ.getPlayState());
@@ -26,7 +26,7 @@ public class FlingResponseComposeZ implements FlingResponseInterface {
 
     @Override
     public void toRight() {
-        Log.i("flingComposeY", "toRight");
+        Log.i("flingComposeZ", "toRight");
         ComposeZ composeZ = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
         ComposeY composeY = (ComposeY) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Y.ordinal());
         composeY.setPlayState(composeZ.getPlayState());
