@@ -47,10 +47,10 @@ public class ComposeX extends CustomView implements PlayStateInterface {
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
         ((RecyclerView)view).setHasFixedSize(true);
-        ((RecyclerView)view).setLayoutManager(new LinearLayoutManager(activity));
-//        ((RecyclerView)view).setLayoutManager(layoutManager);
-        ((RecyclerView)view).setAdapter(new DummyAdapter(activity));
-//        ((RecyclerView)view).setAdapter(adapter);
+//        ((RecyclerView)view).setLayoutManager(new LinearLayoutManager(activity));
+        ((RecyclerView)view).setLayoutManager(layoutManager);
+//        ((RecyclerView)view).setAdapter(new DummyAdapter(activity));
+        ((RecyclerView)view).setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
         PlayState playState = activity.getIntent().getParcelableExtra(COMPOSE_INFO_KEY);

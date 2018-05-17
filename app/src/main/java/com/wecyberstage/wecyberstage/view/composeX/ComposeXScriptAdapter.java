@@ -16,14 +16,14 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter {
     public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates) {
         super(delegates);
         delegatesManager
-                .addDelegate(new LineInfoAdapterDelegate(ComposeXCardViewType.AVATAR_LINE.ordinal()));
+                .addDelegate(new AvatarLineAdapterDelegate(ComposeXCardViewType.AVATAR_LINE.ordinal()))
+                .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
     }
 
     public void setComposeScript(@NonNull ComposeScript script) {
         items = new ArrayList<>();
-        // TODO: 2018/5/10  need further refactoring
-        items.add("Hello");
-        items.add("world");
+        items.add(new TimeLine());
+        items.addAll(script.lineList);
         notifyDataSetChanged();
     }
 

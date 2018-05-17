@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -18,9 +19,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class LineInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
-    public LineInfoAdapterDelegate(int viewType) {
+    public AvatarLineAdapterDelegate(int viewType) {
         super(viewType);
     }
 
@@ -38,13 +39,13 @@ class LineInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
 
     @Override
     public boolean isForViewType(@NonNull List<Object> items, int position) {
-        return items.get(position) instanceof String;
+        return items.get(position) instanceof ComposeScript.Line;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        Log.i("LineInfoAdapterDelegate", "onCreateViewHolder");
+        Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.compose_x_card_line, parent, false);
         return new LineViewHolder(v);
@@ -52,7 +53,7 @@ class LineInfoAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
-        Log.i("LineInfoAdapterDelegate", "onBindViewHolder");
+        Log.i("ComposeX", "onBindViewHolder");
         String text = (String) items.get(position);
         LineViewHolder vh = (LineViewHolder) holder;
         vh.text.setText(text);
