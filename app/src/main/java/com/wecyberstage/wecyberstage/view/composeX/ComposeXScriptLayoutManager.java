@@ -124,13 +124,16 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
                 detachView((View) viewCache.valueAt(i));
             }
         }
+
+        SparseArray viewsMaxHeight = new SparseArray();
         List<Object> dataSet = adapter.getDataSet();
-        View view;
+
         int mDecoratedChildWidth, mDecoratedChildHeight;
         for(int i = 0; i < getItemCount(); i++) {
             switch ( ComposeXCardViewType.values()[adapter.getItemViewType(i)] ) {
-                case TIME_LINE:
-                    if( getChildCount() == 0 ) {
+                case TIME_LINE: {
+                    View view;
+                    if (getChildCount() == 0) {
                         view = recycler.getViewForPosition(i);
                         addView(view);
                         timeLineView = (TimeLineView) view;
@@ -141,36 +144,72 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
                     mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
                     mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
                     layoutDecorated(view, 0, 0, mDecoratedChildWidth, mDecoratedChildHeight);
-                    Log.i("fillVisibleChildren","mDecoratedChildWidth: "+mDecoratedChildWidth+" mDecoratedChildHeight: "+mDecoratedChildHeight);
+                    Log.i("fillVisibleChildren", "mDecoratedChildWidth: " + mDecoratedChildWidth + " mDecoratedChildHeight: " + mDecoratedChildHeight);
                     break;
-                case AVATAR_LINE:
+                }
+                case AVATAR_LINE: {
                     ComposeScript.Avatar_Line avatarLine = (ComposeScript.Avatar_Line) dataSet.get(i);
-                    if(isVisible(avatarLine.getLine().startTime, avatarLine.getLine().duration)) {
-                        view = (View) viewCache.get(i);
-                        if( view != null ) {
+                    if (isVisible(avatarLine.getLine().startTime, avatarLine.getLine().duration)) {
+                        View view = (View) viewCache.get(i);
+                        if (view != null) {
                             attachView(view);
                             viewCache.remove(i);
                         } else {
                             view = recycler.getViewForPosition(i);
                             addView(view);
-                            measureChildWithMargins(view, 0, 0);
-                            mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
-                            mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
-
-                            if (i % 2 == 0) {
-                                layoutDecorated(view, (i-1) * 3 * getHorizontalSpace() / 10 - leftOffset, topOffset,
-                                        (i-1) * 3 * getHorizontalSpace() / 10 + mDecoratedChildWidth - leftOffset,
-                                        topOffset + mDecoratedChildHeight);
-                            } else {
-                                layoutDecorated(view, (i-1) * 3 * getHorizontalSpace() / 10 - leftOffset, topOffset + mDecoratedChildHeight,
-                                        (i-1) * 3 * getHorizontalSpace() / 10 + mDecoratedChildWidth - leftOffset,
-                                        topOffset + mDecoratedChildHeight + mDecoratedChildHeight);
-                            }
                         }
+                        // TODO: 2018/5/19 widthUsed need calculate further
+                        measureChildWithMargins(view, 0, 0);
+                        mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
+                        mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
+
+                        if (viewsMaxHeight.get((int) avatarLine.getLine().roleId) != null) {
+                            int height = (int) viewsMaxHeight.get((int) avatarLine.getLine().roleId);
+                            if (height < mDecoratedChildHeight) {
+                                viewsMaxHeight.setValueAt((int) avatarLine.getLine().roleId, mDecoratedChildHeight);
+                            }
+                        } else {
+                            viewsMaxHeight.put((int) avatarLine.getLine().roleId, mDecoratedChildHeight);
+                        }
+
+                        /*
+                        if (i % 2 == 0) {
+                            layoutDecorated(view, (i - 1) * 3 * getHorizontalSpace() / 10 - leftOffset, topOffset,
+                                    (i - 1) * 3 * getHorizontalSpace() / 10 + mDecoratedChildWidth - leftOffset,
+                                    topOffset + mDecoratedChildHeight);
+                        } else {
+                            layoutDecorated(view, (i - 1) * 3 * getHorizontalSpace() / 10 - leftOffset, topOffset + mDecoratedChildHeight,
+                                    (i - 1) * 3 * getHorizontalSpace() / 10 + mDecoratedChildWidth - leftOffset,
+                                    topOffset + mDecoratedChildHeight + mDecoratedChildHeight);
+                        }
+                        */
                     }
                     break;
+                }
             }
         }
+
+        int totalHeight = 0;
+        for(int i = 0, size = viewsMaxHeight.size(); i < size; i++) {
+            totalHeight += (int) viewsMaxHeight.valueAt(i);
+            viewsMaxHeight.setValueAt(i, totalHeight);
+        }
+        topOffset = (totalHeight - getVerticalSpace())/2;
+        Log.i("fillVisibleChildren","topOffset"+topOffset+" totalHeight: "+totalHeight);
+        for(int i = 1; i < getChildCount(); i++) {
+            View view = getChildAt(i);
+            int position = ((AvatarLineCardView) view).getPosition();
+            ComposeScript.Avatar_Line avatarLine = (ComposeScript.Avatar_Line) dataSet.get(position);
+
+            mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
+            mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
+
+            layoutDecorated(view, (int) ( avatarLine.getLine().startTime / TIME_SPAN * getHorizontalSpace()) - leftOffset,
+                    (int) viewsMaxHeight.get((int) avatarLine.getLine().roleId) - topOffset - mDecoratedChildHeight,
+                    (int) ( avatarLine.getLine().startTime / TIME_SPAN * getHorizontalSpace()) + mDecoratedChildWidth - leftOffset,
+                    (int) viewsMaxHeight.get((int) avatarLine.getLine().roleId) - topOffset);
+        }
+
 
         for (int i=0; i < viewCache.size(); i++) {
             recycler.recycleView((View) viewCache.valueAt(i));
