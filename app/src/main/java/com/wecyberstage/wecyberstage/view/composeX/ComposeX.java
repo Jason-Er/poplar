@@ -30,11 +30,10 @@ public class ComposeX extends CustomView implements PlayStateInterface {
 
     private ComposeViewModel viewModel;
     private AppCompatActivity activity;
+    private ComposeXScriptLayoutManager layoutManager;
 
     @Inject
     ComposeXScriptAdapter adapter;
-    @Inject
-    ComposeXScriptLayoutManager layoutManager;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -46,10 +45,9 @@ public class ComposeX extends CustomView implements PlayStateInterface {
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
+        layoutManager = new ComposeXScriptLayoutManager(adapter);
         ((RecyclerView)view).setHasFixedSize(true);
-//        ((RecyclerView)view).setLayoutManager(new LinearLayoutManager(activity));
         ((RecyclerView)view).setLayoutManager(layoutManager);
-//        ((RecyclerView)view).setAdapter(new DummyAdapter(activity));
         ((RecyclerView)view).setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);

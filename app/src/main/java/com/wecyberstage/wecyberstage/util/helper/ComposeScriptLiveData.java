@@ -20,7 +20,13 @@ public class ComposeScriptLiveData extends LiveData<ComposeScript> implements Pl
     @Override
     public void setPlayState(PlayState playState) {
         this.playState = playState;
-        ComposeScript composeScript = new ComposeScript();
+        ComposeScript composeScript = new ComposeScript(playState.getPlayId(), playState.getSceneId());
+        for(int i = 0; i< 12; i++) {
+            ComposeScript.Avatar avatar = new ComposeScript.Avatar(i%3, 0, "http://www.f1188.com/upload/20180107205142.jpg");
+            ComposeScript.Line line = new ComposeScript.Line(i%3, "Hello " + i, 3f * i, 1);
+            ComposeScript.Avatar_Line avatarLine = new ComposeScript.Avatar_Line(avatar, line);
+            composeScript.avatarLines.add(avatarLine);
+        }
         setValue(composeScript);
     }
 

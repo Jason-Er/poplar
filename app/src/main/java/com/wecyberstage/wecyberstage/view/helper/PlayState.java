@@ -5,11 +5,11 @@ import android.os.Parcelable;
 import android.util.ArrayMap;
 
 public class PlayState implements Parcelable {
-    long playId;
-    long sceneId;
-    long startTime; // Millisecond
+    private long playId;
+    private long sceneId;
+    private float startTime; // Millisecond
 
-    public PlayState(long playId, long sceneId, long startTime) {
+    public PlayState(long playId, long sceneId, float startTime) {
         this.playId = playId;
         this.sceneId = sceneId;
         this.startTime = startTime;
@@ -18,7 +18,7 @@ public class PlayState implements Parcelable {
     protected PlayState(Parcel in) {
         playId = in.readLong();
         sceneId = in.readLong();
-        startTime = in.readLong();
+        startTime = in.readFloat();
     }
 
     public static final Creator<PlayState> CREATOR = new Creator<PlayState>() {
@@ -42,8 +42,31 @@ public class PlayState implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(playId);
         dest.writeLong(sceneId);
-        dest.writeLong(startTime);
+        dest.writeFloat(startTime);
     }
 
+    public long getPlayId() {
+        return playId;
+    }
+
+    public void setPlayId(long playId) {
+        this.playId = playId;
+    }
+
+    public long getSceneId() {
+        return sceneId;
+    }
+
+    public void setSceneId(long sceneId) {
+        this.sceneId = sceneId;
+    }
+
+    public float getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(float startTime) {
+        this.startTime = startTime;
+    }
 }
 

@@ -45,7 +45,7 @@ public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
         detachAndScrapAttachedViews(recycler);
 
         // layout according to position
-        layoutDelegatesManager.layoutItemView(this, recycler);
+        layoutDelegatesManager.onLayoutChildren(this, recycler);
     }
 
 }

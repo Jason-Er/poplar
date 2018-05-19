@@ -25,13 +25,13 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
         super(viewType);
     }
 
-    class LineViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.compose_x_avatar)
+    class AvatarLineViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.line_avatar)
         ImageView avatar;
-        @BindView(R.id.compose_x_line)
-        TextView text;
+        @BindView(R.id.line_dialogue)
+        TextView dialogue;
 
-        public LineViewHolder(View v) {
+        public AvatarLineViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
@@ -39,7 +39,7 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
 
     @Override
     public boolean isForViewType(@NonNull List<Object> items, int position) {
-        return items.get(position) instanceof ComposeScript.Line;
+        return items.get(position) instanceof ComposeScript.Avatar_Line;
     }
 
     @NonNull
@@ -47,15 +47,14 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.compose_x_card_line, parent, false);
-        return new LineViewHolder(v);
+                .inflate(R.layout.avatar_line_card_view, parent, false);
+        return new AvatarLineViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
         Log.i("ComposeX", "onBindViewHolder");
-        String text = (String) items.get(position);
-        LineViewHolder vh = (LineViewHolder) holder;
-        vh.text.setText(text);
+        ((AvatarLineViewHolder) holder).dialogue.setText(((ComposeScript.Avatar_Line) items.get(position)).getLine().dialogue);
+        ((AvatarLineCardView)holder.itemView).setPosition(position);
     }
 }

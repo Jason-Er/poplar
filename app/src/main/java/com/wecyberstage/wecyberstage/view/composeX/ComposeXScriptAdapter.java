@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.composeX;
 import android.support.annotation.NonNull;
 
 import com.wecyberstage.wecyberstage.model.ComposeScript;
+import com.wecyberstage.wecyberstage.util.label.PerActivity;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -21,9 +22,9 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter {
     }
 
     public void setComposeScript(@NonNull ComposeScript script) {
-        items = new ArrayList<>();
-        items.add(new TimeLine());
-        items.addAll(script.lineList);
+        dataSet = new ArrayList<>();
+        dataSet.add(new TimeLine());
+        dataSet.addAll(script.avatarLines);
         notifyDataSetChanged();
     }
 

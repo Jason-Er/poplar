@@ -19,7 +19,7 @@ public class LayoutDelegatesManager {
         return this;
     }
 
-    public void layoutItemView(RecyclerView.LayoutManager layoutManager, RecyclerView.Recycler recycler) {
+    public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, RecyclerView.Recycler recycler) {
         for(int i=0; i < layoutManager.getItemCount(); i++ ) {
             View view = recycler.getViewForPosition(i);
             int viewType = layoutManager.getItemViewType(view);
