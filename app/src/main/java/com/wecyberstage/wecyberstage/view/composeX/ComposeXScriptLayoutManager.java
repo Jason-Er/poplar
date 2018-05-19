@@ -63,12 +63,20 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
 
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        int sumTime = getItemCount() * 3 / 10 * getHorizontalSpace();
+        int totalLength;
+        List<Object> dataSet = adapter.getDataSet();
+        if (dataSet.size() > 1) {
+            ComposeScript.Avatar_Line avatarLine = (ComposeScript.Avatar_Line) dataSet.get(dataSet.size() -1);
+            int tempLength = (int) ((avatarLine.getLine().startTime + avatarLine.getLine().duration) / TIME_SPAN * getHorizontalSpace());
+            totalLength = tempLength > getHorizontalSpace() ? tempLength : getHorizontalSpace();
+        } else {
+            totalLength = getHorizontalSpace();
+        }
         int deltaX = 0;
         int deltaReturn = 0;
         int temp = leftOffset + dx;
 
-        if(temp >= 0 && temp <= sumTime - getHorizontalSpace()) {
+        if(temp >= 0 && temp <= totalLength - getHorizontalSpace()) {
             deltaX = dx;
             deltaReturn = dx;
             leftOffset += dx;
@@ -76,10 +84,10 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
             deltaX = -leftOffset;
             deltaReturn = -(leftOffset + dx);
             leftOffset = 0;
-        } else if( temp > sumTime - getHorizontalSpace() ) {
-            deltaX = sumTime - getHorizontalSpace() - leftOffset;
-            deltaReturn = -(temp - sumTime + getHorizontalSpace());
-            leftOffset = sumTime - getHorizontalSpace();
+        } else if( temp > totalLength - getHorizontalSpace() ) {
+            deltaX = totalLength - getHorizontalSpace() - leftOffset;
+            deltaReturn = -(temp - totalLength + getHorizontalSpace());
+            leftOffset = totalLength - getHorizontalSpace();
         }
         beginTime = leftOffset * TIME_SPAN / getHorizontalSpace();
         timeLineView.setLeftOffset(leftOffset);
