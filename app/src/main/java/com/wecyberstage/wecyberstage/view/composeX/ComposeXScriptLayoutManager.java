@@ -171,18 +171,6 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
                         } else {
                             viewsMaxHeight.put((int) avatarLine.getLine().roleId, mDecoratedChildHeight);
                         }
-
-                        /*
-                        if (i % 2 == 0) {
-                            layoutDecorated(view, (i - 1) * 3 * getHorizontalSpace() / 10 - leftOffset, topOffset,
-                                    (i - 1) * 3 * getHorizontalSpace() / 10 + mDecoratedChildWidth - leftOffset,
-                                    topOffset + mDecoratedChildHeight);
-                        } else {
-                            layoutDecorated(view, (i - 1) * 3 * getHorizontalSpace() / 10 - leftOffset, topOffset + mDecoratedChildHeight,
-                                    (i - 1) * 3 * getHorizontalSpace() / 10 + mDecoratedChildWidth - leftOffset,
-                                    topOffset + mDecoratedChildHeight + mDecoratedChildHeight);
-                        }
-                        */
                     }
                     break;
                 }

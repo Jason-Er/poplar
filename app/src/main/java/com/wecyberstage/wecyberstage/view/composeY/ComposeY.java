@@ -33,6 +33,8 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     ItemTouchHelper itemTouchHelper;
 
     @Inject
+    ComposeYScriptAdapter adapter;
+    @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     @Override
@@ -43,17 +45,18 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
-        final ComposeYScriptAdapter adapter = new ComposeYScriptAdapter(activity, this);
+        // final ComposeYScriptAdapter adapter = new ComposeYScriptAdapter(activity, this);
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(new LinearLayoutManager(activity));
         ((RecyclerView)view).setAdapter(adapter);
         DividerItemDecoration decoration = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
         ((RecyclerView)view).addItemDecoration(decoration);
 
+        /*
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView( (RecyclerView) view);
-
+        */
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
         PlayState playState = activity.getIntent().getParcelableExtra(COMPOSE_INFO_KEY);
         if(playState != null) {
