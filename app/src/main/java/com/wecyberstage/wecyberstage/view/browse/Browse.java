@@ -19,6 +19,9 @@ import com.wecyberstage.wecyberstage.util.helper.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
+import com.wecyberstage.wecyberstage.view.helper.PlayState;
+import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
@@ -32,13 +35,18 @@ import timber.log.Timber;
  * Created by mike on 2018/3/5.
  */
 
-public class Browse extends CustomView {
+public class Browse extends CustomView implements PlayStateInterface {
 
     private BrowseViewModel viewModel;
     private RecyclerView.Adapter adapter;
+    private PlayState playState; // which contains the play is clicked
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
+    public Browse(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
+        super(activity, container, viewType);
+    }
 
     @Override
     public void onCreate(final AppCompatActivity activity, @Nullable ViewGroup container) {
@@ -61,6 +69,7 @@ public class Browse extends CustomView {
             @Override
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
+                playState = new PlayState(((PlayProfileCardView)v).playInfo.id, 1L, 0f);
                 ((MainActivity)activity).navigateToComposeZ(((PlayProfileCardView)v).playInfo.id);
             }
         };
@@ -84,5 +93,15 @@ public class Browse extends CustomView {
                 }
             }
         });
+    }
+
+    @Override
+    public void setPlayState(PlayState playState) {
+        this.playState = playState;
+    }
+
+    @Override
+    public PlayState getPlayState() {
+        return playState;
     }
 }

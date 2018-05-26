@@ -2,9 +2,9 @@ package com.wecyberstage.wecyberstage.view.helper;
 
 public class FlingResponseBrowse implements FlingResponseInterface {
 
-    CustomViewSlideControl control;
-    public FlingResponseBrowse(CustomViewSlideControl control) {
-        this.control = control;
+    CustomViewSlideInterface slideViewInterface;
+    public FlingResponseBrowse(CustomViewSlideInterface slideViewInterface) {
+        this.slideViewInterface = slideViewInterface;
     }
     @Override
     public void toLeft() {

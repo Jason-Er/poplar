@@ -1,112 +1,15 @@
 package com.wecyberstage.wecyberstage.view.helper;
 
-import android.graphics.Rect;
 import android.support.animation.DynamicAnimation;
 import android.support.animation.FlingAnimation;
 import android.support.animation.SpringAnimation;
 import android.support.animation.SpringForce;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
-import android.view.ViewGroup;
 
-public class CustomViewSlideControl {
+public class CustomViewSlideHelper {
 
-    public enum Direction {
-        TO_UP, TO_RIGHT, TO_DOWN, TO_LEFT
-    }
-    public enum ViewType {
-        BROWSE, COMPOSE_X, COMPOSE_Y, COMPOSE_Z
-    }
-    ViewGroup container;
-    SparseArray viewArray;
-    SparseArray flingResponseArray;
-
-    View currentView;
-    FlingResponseInterface currentFlingResponse;
-
-    float pixelPerSecondX;
-    float pixelPerSecondY;
-    private AppCompatActivity activity;
-
-    public CustomViewSlideControl(AppCompatActivity activity, ViewGroup container) {
-        this.activity = activity;
-        this.container = container;
-        springForce.setDampingRatio(SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY).setStiffness(SpringForce.STIFFNESS_MEDIUM);
-        pixelPerSecondX = 3600f;
-        pixelPerSecondY = 5300f;
-        viewArray = new SparseArray();
-        flingResponseArray = new SparseArray();
-    }
-
-    public void intViewsPosition() {
-
-        for(int i = 0, nsize = viewArray.size(); i < nsize; i++) {
-            CustomView customView = (CustomView) viewArray.valueAt(i);
-            customView.view.setVisibility(View.GONE);
-            Log.i("intViewsPosition", "view.getHeight(): "+ customView.view.getHeight());
-        }
-        currentView = ((CustomView) viewArray.get(ViewType.BROWSE.ordinal())).view;
-        currentView.setVisibility(View.VISIBLE);
-
-        pixelPerSecondX = calcInitVelocity( currentView.getWidth(), 700);
-        pixelPerSecondY = calcInitVelocity( currentView.getHeight(), 700);
-
-    }
-
-    public void addView(ViewType type, CustomView customView, int index) {
-        customView.onCreate(activity, container);
-        viewArray.put(type.ordinal(),customView);
-        switch (type) {
-            case BROWSE:
-                flingResponseArray.put(type.ordinal(), new FlingResponseBrowse(this));
-                break;
-            case COMPOSE_X:
-                flingResponseArray.put(type.ordinal(), new FlingResponseComposeX(this));
-                break;
-            case COMPOSE_Y:
-                flingResponseArray.put(type.ordinal(), new FlingResponseComposeY(this));
-                break;
-            case COMPOSE_Z:
-                flingResponseArray.put(type.ordinal(), new FlingResponseComposeZ(this));
-                break;
-        }
-        container.addView(customView.view, index);
-    }
-
-
-    SpringForce springForce = new SpringForce();
-
-    void slideView(final View currentView, final View followView, Direction direction) {
-
-        Rect rect = new Rect();
-        currentView.getGlobalVisibleRect(rect);
-        Log.i("slideView", "Rect (" + rect.left + "," + rect.top + ")");
-
-        followView.setVisibility(View.VISIBLE);
-        Log.i("slideView", "followView.getHeight(): "+followView.getHeight());
-        switch (direction) {
-            case TO_UP:
-                followView.setTranslationY(followView.getHeight());
-                SlideVertical(currentView, followView, -1);
-                break;
-            case TO_RIGHT:
-                Log.i("Slide", "To right +++++");
-                followView.setTranslationX(-followView.getWidth());
-                SlideHorizontal(currentView, followView, 1);
-                break;
-            case TO_DOWN:
-                followView.setTranslationY(-followView.getHeight());
-                SlideVertical(currentView, followView, 1);
-                break;
-            case TO_LEFT:
-                Log.i("Slide", "To left +++++");
-                followView.setTranslationX(followView.getWidth());
-                SlideHorizontal(currentView, followView, -1);
-                break;
-        }
-    }
+    private static SpringForce springForce = new SpringForce();
 
     /**
      *
@@ -114,7 +17,8 @@ public class CustomViewSlideControl {
      * @param followView
      * @param index index: -1 left; 1 right
      */
-    private void SlideHorizontal(final View currentView, final View followView, final int index) {
+    public static void SlideHorizontal(final View currentView, final View followView, final int index) {
+        float pixelPerSecondX = calcInitVelocity( currentView.getWidth(), 700);
         final SpringAnimation springAnimationX = new SpringAnimation(currentView, DynamicAnimation.ROTATION_X)
                 .setSpring(springForce)
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
@@ -164,7 +68,8 @@ public class CustomViewSlideControl {
      * @param followView
      * @param index index: -1 up; 1 down
      */
-    private void SlideVertical(final View currentView, final View followView, final int index) {
+    public static void SlideVertical(final View currentView, final View followView, final int index) {
+        float pixelPerSecondY = calcInitVelocity( currentView.getHeight(), 700);
         final SpringAnimation springAnimationY = new SpringAnimation(currentView, DynamicAnimation.ROTATION_Y)
                 .setSpring(springForce)
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
@@ -209,31 +114,7 @@ public class CustomViewSlideControl {
         flingAnimationY.start();
     }
 
-    public void flingResponse(Direction direction) {
-        switch (direction) {
-            case TO_UP:
-                currentFlingResponse.toUp();
-                break;
-            case TO_RIGHT:
-                currentFlingResponse.toRight();
-                break;
-            case TO_DOWN:
-                currentFlingResponse.toDown();
-                break;
-            case TO_LEFT:
-                currentFlingResponse.toLeft();
-                break;
-        }
-    }
-
-    public void navigateToView(ViewType type, Direction direction) {
-        View followView = ((CustomView) viewArray.get(type.ordinal())).view;
-        slideView(currentView, followView, direction);
-        currentView = followView;
-        currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(type.ordinal());
-    }
-
-    private float calcInitVelocity(float span, float deltaT) {
+    private static float calcInitVelocity(float span, float deltaT) {
         float friction = 1.1f * -4.2f;
         return (float)( ( span * friction ) / ( Math.exp(friction * deltaT / 1000f ) -1f) );
 

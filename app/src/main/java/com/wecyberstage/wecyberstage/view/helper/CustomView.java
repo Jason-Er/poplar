@@ -6,12 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public abstract class CustomView {
-    public View view;
-    public CustomView() {
 
+    protected View view;
+    protected ViewType viewType;
+    protected CustomView(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
+        onCreate(activity, container);
+        this.viewType = viewType;
     }
-    public CustomView(View view) {
-        this.view = view;
+    protected abstract void onCreate(AppCompatActivity activity, @Nullable ViewGroup container);
+
+    public View getView() {
+        return view;
     }
-    public abstract void onCreate(AppCompatActivity activity, @Nullable ViewGroup container);
+    public ViewType getViewType() {
+        return viewType;
+    }
 }

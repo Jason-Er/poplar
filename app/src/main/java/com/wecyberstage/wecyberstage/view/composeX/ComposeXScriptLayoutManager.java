@@ -65,7 +65,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
         int totalLength;
         List<Object> dataSet = adapter.getDataSet();
-        if (dataSet.size() > 1) {
+        if (dataSet != null && dataSet.size() > 1) {
             ComposeScript.Avatar_Line avatarLine = (ComposeScript.Avatar_Line) dataSet.get(dataSet.size() -1);
             int tempLength = (int) ((avatarLine.getLine().startTime + avatarLine.getLine().duration) / TIME_SPAN * getHorizontalSpace());
             totalLength = tempLength > getHorizontalSpace() ? tempLength : getHorizontalSpace();

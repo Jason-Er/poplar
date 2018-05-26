@@ -8,31 +8,21 @@ import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 
 public class FlingResponseComposeZ implements FlingResponseInterface {
 
-    CustomViewSlideControl control;
-    public FlingResponseComposeZ(CustomViewSlideControl control) {
-        this.control = control;
+    CustomViewSlideInterface slideViewInterface;
+    public FlingResponseComposeZ(CustomViewSlideInterface slideViewInterface) {
+        this.slideViewInterface = slideViewInterface;
     }
 
     @Override
     public void toLeft() {
         Log.i("flingComposeZ", "toLeft");
-        ComposeZ composeZ = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
-        ComposeX composeX = (ComposeX) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal());
-        composeX.setPlayState(composeZ.getPlayState());
-        control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_X, CustomViewSlideControl.Direction.TO_LEFT);
-        control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal());
-        control.currentView = ((CustomView) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_X.ordinal())).view;
+        slideViewInterface.slideView(ViewType.COMPOSE_Z, ViewType.COMPOSE_X, Direction.TO_LEFT);
     }
 
     @Override
     public void toRight() {
         Log.i("flingComposeZ", "toRight");
-        ComposeZ composeZ = (ComposeZ) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Z.ordinal());
-        ComposeY composeY = (ComposeY) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Y.ordinal());
-        composeY.setPlayState(composeZ.getPlayState());
-        control.navigateToView(CustomViewSlideControl.ViewType.COMPOSE_Y, CustomViewSlideControl.Direction.TO_RIGHT);
-        control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideControl.ViewType.COMPOSE_Y.ordinal());
-        control.currentView = ((CustomView) control.viewArray.get(CustomViewSlideControl.ViewType.COMPOSE_Y.ordinal())).view;
+        slideViewInterface.slideView(ViewType.COMPOSE_Z, ViewType.COMPOSE_Y, Direction.TO_RIGHT);
     }
 
     @Override

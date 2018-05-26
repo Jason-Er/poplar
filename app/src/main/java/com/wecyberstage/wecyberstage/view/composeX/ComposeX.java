@@ -16,6 +16,7 @@ import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
 import javax.inject.Inject;
@@ -36,6 +37,10 @@ public class ComposeX extends CustomView implements PlayStateInterface {
     ComposeXScriptAdapter adapter;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
+    public ComposeX(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
+        super(activity, container, viewType);
+    }
 
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
