@@ -45,6 +45,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -144,10 +147,21 @@ public class MainActivity extends AppCompatActivity
         composeX.getView().setVisibility(View.INVISIBLE);
         composeY.getView().setVisibility(View.INVISIBLE);
         composeZ.getView().setVisibility(View.INVISIBLE);
+
+        navigationStack = new Stack<>();
         // endregion
 
         if (savedInstanceState == null) {
             navigateToBrowse();
+        } else {
+            String navigationState = savedInstanceState.getString(NAVIGATION_INFO_KEY);
+            List<String> stringList = Arrays.asList(navigationState.split(";"));
+            navigationStack = new Stack<>();
+            for(String str: stringList) {
+                Log.i("onCreate","stack will push: "+str);
+                navigationStack.push(str);
+            }
+            // TODO: 2018/5/26 according stack navigate to top item
         }
     }
 
@@ -189,13 +203,27 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /*
     @Override
-    protected void onResume() {
-        super.onResume();
-        autoHideHandler.postDelayed(autoHideRunnable, 3000);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        List<String> stringList =  new ArrayList<>(navigationStack);
+        String navigationState = "";
+        for(String str: stringList) {
+            navigationState += str + ";";
+        }
+        if(navigationState.length() > 1) {
+            navigationState = navigationState.substring(0,navigationState.length() - 1);
+        }
+        outState.putString(NAVIGATION_INFO_KEY, navigationState);
     }
-    */
+
+    /*
+        @Override
+        protected void onResume() {
+            super.onResume();
+            autoHideHandler.postDelayed(autoHideRunnable, 3000);
+        }
+        */
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
@@ -300,9 +328,8 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().show();
     }
 
-    public void navigateToComposeZ(long playId) {
+    public void navigateToComposeZ() {
         getSupportActionBar().hide();
-        // composeZ.setPlayState(new PlayState(playId, 1L, 0L));
         slideView(ViewType.BROWSE, ViewType.COMPOSE_Z, Direction.TO_UP);
         currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(ViewType.COMPOSE_Z.ordinal());
     }
@@ -373,11 +400,6 @@ public class MainActivity extends AppCompatActivity
         ((PlayStateInterface)toCustomView).setPlayState(((PlayStateInterface)fromCustomView).getPlayState());
         slideView(fromCustomView, toCustomView, direction);
         currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(to.ordinal());
-        // TODO: 2018/5/24 save navagation track
-        /*
-        control.navigateToView(CustomViewSlideHelper.ViewType.COMPOSE_Z, CustomViewSlideHelper.Direction.TO_LEFT);
-        control.currentFlingResponse = (FlingResponseInterface) control.flingResponseArray.get(CustomViewSlideHelper.ViewType.COMPOSE_Z.ordinal());
-        control.currentView = ((CustomView) control.viewArray.get(CustomViewSlideHelper.ViewType.COMPOSE_Z.ordinal())).view;
-        */
+        navigationStack.push(from.name() + ":" + to.name());
     }
 }
