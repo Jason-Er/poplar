@@ -374,6 +374,7 @@ public class MainActivity extends AppCompatActivity
         CustomView customView = getCustomView(viewType);
         View view = customView.getView();
         view.setVisibility(View.VISIBLE);
+        currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(viewType.ordinal());
     }
 
     @Override
