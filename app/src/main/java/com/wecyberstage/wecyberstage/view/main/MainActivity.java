@@ -62,6 +62,9 @@ import dagger.android.support.HasSupportFragmentInjector;
 public class MainActivity extends AppCompatActivity
         implements HasSupportFragmentInjector, NavigationView.OnNavigationItemSelectedListener, CustomViewSlideInterface {
 
+    private final String NAVIGATION_SEMICOLON = ";";
+    private final String NAVIGATION_COLON = ":";
+
     private Handler autoHideHandler = new Handler();
     private Runnable autoHideRunnable=new Runnable() {
         @Override
@@ -144,6 +147,7 @@ public class MainActivity extends AppCompatActivity
         appMain.addView(composeY.getView(), 1);
         appMain.addView(composeZ.getView(), 1);
 
+        browse.getView().setVisibility(View.INVISIBLE);
         composeX.getView().setVisibility(View.INVISIBLE);
         composeY.getView().setVisibility(View.INVISIBLE);
         composeZ.getView().setVisibility(View.INVISIBLE);
@@ -152,16 +156,17 @@ public class MainActivity extends AppCompatActivity
         // endregion
 
         if (savedInstanceState == null) {
-            navigateToBrowse();
+            restoreToView(ViewType.BROWSE);
         } else {
             String navigationState = savedInstanceState.getString(NAVIGATION_INFO_KEY);
-            List<String> stringList = Arrays.asList(navigationState.split(";"));
+            List<String> stringList = Arrays.asList(navigationState.split(NAVIGATION_SEMICOLON));
             navigationStack = new Stack<>();
             for(String str: stringList) {
                 Log.i("onCreate","stack will push: "+str);
                 navigationStack.push(str);
             }
-            // TODO: 2018/5/26 according stack navigate to top item
+            String item = navigationStack.peek();
+            restoreToView(ViewType.valueOf(item.split(NAVIGATION_COLON)[1]));
         }
     }
 
@@ -363,6 +368,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public CustomView getCustomView(ViewType viewType) {
         return (CustomView) viewArray.get(viewType.ordinal());
+    }
+
+    private void restoreToView(ViewType viewType) {
+        CustomView customView = getCustomView(viewType);
+        View view = customView.getView();
+        view.setVisibility(View.VISIBLE);
     }
 
     @Override
