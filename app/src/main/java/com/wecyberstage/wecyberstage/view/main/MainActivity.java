@@ -181,8 +181,15 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(navigationStack.size() > 0) {
+                String item = navigationStack.pop();
+                slideView(ViewType.valueOf(item.split(NAVIGATION_COLON)[1]), ViewType.valueOf(item.split(NAVIGATION_COLON)[0]), oppositeDirection(Direction.valueOf(item.split(NAVIGATION_COLON)[2])), false);
+            } else {
+                // TODO: 2018/6/13 double click quit
+                super.onBackPressed();
+            }
         }
+
     }
 
     @Override
@@ -405,13 +412,38 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private Direction oppositeDirection(Direction direction) {
+        Direction directionL = Direction.TO_LEFT;
+        switch (direction){
+            case TO_UP:
+                directionL = Direction.TO_DOWN;
+                break;
+            case TO_RIGHT:
+                directionL = Direction.TO_LEFT;
+                break;
+            case TO_DOWN:
+                directionL = Direction.TO_UP;
+                break;
+            case TO_LEFT:
+                directionL = Direction.TO_RIGHT;
+                break;
+        }
+        return directionL;
+    }
+
     @Override
     public void slideView(ViewType from, ViewType to, Direction direction) {
+        slideView(from, to, direction, true);
+    }
+
+    public void slideView(ViewType from, ViewType to, Direction direction, boolean saveTrack) {
         CustomView fromCustomView = getCustomView(from);
         CustomView toCustomView = getCustomView(to);
         ((PlayStateInterface)toCustomView).setPlayState(((PlayStateInterface)fromCustomView).getPlayState());
         slideView(fromCustomView, toCustomView, direction);
         currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(to.ordinal());
-        navigationStack.push(from.name() + ":" + to.name());
+        if(saveTrack) {
+            navigationStack.push(from.name() + NAVIGATION_COLON + to.name() + NAVIGATION_COLON + direction.name());
+        }
     }
 }
