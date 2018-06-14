@@ -38,11 +38,13 @@ public class CustomViewSlideHelper {
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
                     @Override
                     public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
-                        currentView.setVisibility(View.GONE);
+                        currentView.setVisibility(View.INVISIBLE);
+                        /*
                         springAnimationX.setStartVelocity(velocity)
                                 .setStartValue(value)
                                 .animateToFinalPosition(value);
                         Log.i("fling end", "followView x:" + followView.getX() + " y: "+ followView.getY());
+                        */
                     }
                 })
                 .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
@@ -75,6 +77,7 @@ public class CustomViewSlideHelper {
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
                     @Override
                     public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+                        Log.i("fling End", " currentView matrix: " + currentView.getMatrix().toString() );
                     }
                 })
                 .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
@@ -90,10 +93,13 @@ public class CustomViewSlideHelper {
                     @Override
                     public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
                         Log.i("fling End", " value: " + value + " velocity: " + velocity);
+                        Log.i("fling End", " currentView matrix: " + currentView.getMatrix().toString() );
                         currentView.setVisibility(View.INVISIBLE);
+                        /*
                         springAnimationY.setStartVelocity(velocity)
                                 .setStartValue(value)
                                 .animateToFinalPosition(value);
+                                */
                     }
                 })
                 .addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() {
