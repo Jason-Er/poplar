@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.wecyberstage.wecyberstage.util.label.ViewModelKey;
+import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 import com.wecyberstage.wecyberstage.viewmodel.ViewModelFactory;
@@ -19,6 +20,11 @@ import dagger.multibindings.IntoMap;
 
 @Module
 abstract class ViewModelModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AccountViewModel.class)
+    abstract ViewModel bindAccountViewModel(AccountViewModel accountViewModel);
 
     @Binds
     @IntoMap

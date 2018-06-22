@@ -1,23 +1,24 @@
 package com.wecyberstage.wecyberstage.view.account;
 
-import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 
-import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.helper.ViewType;
 
 /**
  * Created by mike on 2018/3/5.
  */
 
-public class Profile extends Fragment {
-    @Nullable
+public class Profile extends CustomView {
+
+    protected Profile(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
+        super(activity, container, viewType);
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_profile, container,false);
-        return view;
+    protected void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
+
     }
 }

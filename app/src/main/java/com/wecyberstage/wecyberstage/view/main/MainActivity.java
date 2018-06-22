@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.view.account.SignIn;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
@@ -35,6 +36,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeX;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeY;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeZ;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
+import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity
     // region navigation
     private Stack<String> navigationStack;
     private static final String NAVIGATION_INFO_KEY = "navigation_info";
-    private View currentView;
+    private CustomView currentView;
     private FlingResponseInterface currentFlingResponse;
 
     private SparseArray viewArray;
@@ -104,6 +106,8 @@ public class MainActivity extends AppCompatActivity
     ComposeX composeX;
     ComposeY composeY;
     ComposeZ composeZ;
+    SignIn signIn;
+
     // endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,31 +133,52 @@ public class MainActivity extends AppCompatActivity
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z);
+        signIn = new SignIn(this, appMain, ViewType.SIGN_IN);
 
         viewArray = new SparseArray();
         viewArray.put(ViewType.BROWSE.ordinal(), browse);
         viewArray.put(ViewType.COMPOSE_X.ordinal(), composeX);
         viewArray.put(ViewType.COMPOSE_Y.ordinal(), composeY);
         viewArray.put(ViewType.COMPOSE_Z.ordinal(), composeZ);
+        viewArray.put(ViewType.SIGN_IN.ordinal(), signIn);
 
         flingResponseArray = new SparseArray();
         flingResponseArray.put(ViewType.BROWSE.ordinal(), new FlingResponseBrowse(this));
         flingResponseArray.put(ViewType.COMPOSE_X.ordinal(), new FlingResponseComposeX(this));
         flingResponseArray.put(ViewType.COMPOSE_Y.ordinal(), new FlingResponseComposeY(this));
         flingResponseArray.put(ViewType.COMPOSE_Z.ordinal(), new FlingResponseComposeZ(this));
+        flingResponseArray.put(ViewType.SIGN_IN.ordinal(), new FlingResponseSignIn(this));
 
         appMain.addView(browse.getView(), 1);
         appMain.addView(composeX.getView(), 1);
         appMain.addView(composeY.getView(), 1);
         appMain.addView(composeZ.getView(), 1);
+        appMain.addView(signIn.getView(), 1);
 
         browse.getView().setVisibility(View.INVISIBLE);
         composeX.getView().setVisibility(View.INVISIBLE);
         composeY.getView().setVisibility(View.INVISIBLE);
         composeZ.getView().setVisibility(View.INVISIBLE);
+        signIn.getView().setVisibility(View.INVISIBLE);
 
         navigationStack = new Stack<>();
         // endregion
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int menuItemId = item.getItemId();
+                switch (menuItemId) {
+                    case R.id.menu_item_account:
+                        Log.i("onMenuItemClick","menu_item_account");
+                        slideView(currentView, signIn, Direction.TO_DOWN);
+                        break;
+                }
+                return false;
+            }
+        });
 
         if (savedInstanceState == null) {
             restoreToView(ViewType.BROWSE);
@@ -382,6 +407,7 @@ public class MainActivity extends AppCompatActivity
         View view = customView.getView();
         view.setVisibility(View.VISIBLE);
         currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(viewType.ordinal());
+        this.currentView = customView;
     }
 
     @Override
@@ -410,6 +436,7 @@ public class MainActivity extends AppCompatActivity
                 CustomViewSlideHelper.SlideHorizontal(currentView, followView, -1);
                 break;
         }
+        this.currentView = to;
     }
 
     private Direction oppositeDirection(Direction direction) {
