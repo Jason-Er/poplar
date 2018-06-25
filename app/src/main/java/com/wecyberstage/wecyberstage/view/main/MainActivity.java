@@ -129,38 +129,13 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // region all views
-        browse = new Browse(this, appMain, ViewType.BROWSE);
-        composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
-        composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y);
-        composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z);
-        signIn = new SignIn(this, appMain, ViewType.SIGN_IN);
-
         viewArray = new SparseArray();
-        viewArray.put(ViewType.BROWSE.ordinal(), browse);
-        viewArray.put(ViewType.COMPOSE_X.ordinal(), composeX);
-        viewArray.put(ViewType.COMPOSE_Y.ordinal(), composeY);
-        viewArray.put(ViewType.COMPOSE_Z.ordinal(), composeZ);
-        viewArray.put(ViewType.SIGN_IN.ordinal(), signIn);
-
         flingResponseArray = new SparseArray();
-        flingResponseArray.put(ViewType.BROWSE.ordinal(), new FlingResponseBrowse(this));
-        flingResponseArray.put(ViewType.COMPOSE_X.ordinal(), new FlingResponseComposeX(this));
-        flingResponseArray.put(ViewType.COMPOSE_Y.ordinal(), new FlingResponseComposeY(this));
-        flingResponseArray.put(ViewType.COMPOSE_Z.ordinal(), new FlingResponseComposeZ(this));
-        flingResponseArray.put(ViewType.SIGN_IN.ordinal(), new FlingResponseSignIn(this));
-
-        appMain.addView(browse.getView(), 1);
-        appMain.addView(composeX.getView(), 1);
-        appMain.addView(composeY.getView(), 1);
-        appMain.addView(composeZ.getView(), 1);
-        appMain.addView(signIn.getView(), 1);
-
-        browse.getView().setVisibility(View.INVISIBLE);
-        composeX.getView().setVisibility(View.INVISIBLE);
-        composeY.getView().setVisibility(View.INVISIBLE);
-        composeZ.getView().setVisibility(View.INVISIBLE);
-        signIn.getView().setVisibility(View.INVISIBLE);
-
+        addCustomView(new Browse(this, appMain, ViewType.BROWSE), new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
+        addCustomView(new ComposeX(this, appMain, ViewType.COMPOSE_X), new FlingResponseComposeX(this), appMain, viewArray, flingResponseArray);
+        addCustomView(new ComposeY(this, appMain, ViewType.COMPOSE_Y), new FlingResponseComposeY(this), appMain, viewArray, flingResponseArray);
+        addCustomView(new ComposeZ(this, appMain, ViewType.COMPOSE_Z), new FlingResponseComposeZ(this), appMain, viewArray, flingResponseArray);
+        addCustomView(new SignIn(this, appMain, ViewType.SIGN_IN), new FlingResponseSignIn(this), appMain, viewArray, flingResponseArray);
         navigationStack = new Stack<>();
         // endregion
 
@@ -193,6 +168,13 @@ public class MainActivity extends AppCompatActivity
             String item = navigationStack.peek();
             restoreToView(ViewType.valueOf(item.split(NAVIGATION_COLON)[1]));
         }
+    }
+
+    private void addCustomView(CustomView customView, FlingResponseInterface flingResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
+        viewArray.put(customView.getViewType().ordinal(), customView);
+        flingResponseArray.put(customView.getViewType().ordinal(), flingResponseInterface);
+        viewGroup.addView(customView.getView(), 1);
+        customView.getView().setVisibility(View.INVISIBLE);
     }
 
     @Override
