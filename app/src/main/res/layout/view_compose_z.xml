@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:id="@+id/view_compose_z" >
+    <com.wecyberstage.wecyberstage.view.recycler.FixRatioRecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:id="@+id/frag_participate"
+        app:ratio="1.78" >
+    </com.wecyberstage.wecyberstage.view.recycler.FixRatioRecyclerView>
+</android.support.design.widget.CoordinatorLayout>

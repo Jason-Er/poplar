@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wecyberstage.wecyberstage.view.main.PlayerControlBar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/player_control_bar_size"
+    android:layout_alignParentBottom="true"
+    android:layout_gravity="bottom"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="horizontal"
+    android:id="@+id/footer_main"
+    android:elevation="4dp" >
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/btn_player_control_pre"
+        android:contentDescription="@string/bottom_bar_pre"
+        android:background="@drawable/onclick_press_color"
+        android:src="@drawable/ic_skip_previous"/>
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/btn_player_control_play"
+        android:contentDescription="@string/bottom_bar_play"
+        android:background="@drawable/onclick_press_color"
+        android:src="@drawable/ic_play_arrow"/>
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/btn_player_control_next"
+        android:contentDescription="@string/bottom_bar_next"
+        android:background="@drawable/onclick_press_color"
+        android:src="@drawable/ic_skip_next"/>
+
+</com.wecyberstage.wecyberstage.view.main.PlayerControlBar>
