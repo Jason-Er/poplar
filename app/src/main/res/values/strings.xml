@@ -10,4 +10,6 @@
     <string name="bottom_bar_pre">pre</string>
     <string name="bottom_bar_play">play</string>
     <string name="bottom_bar_next">next</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_in">Sign in</string>
 </resources>

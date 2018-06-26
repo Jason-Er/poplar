@@ -9,7 +9,6 @@ import android.view.ViewGroup;
  */
 
 public interface AdapterDelegateInterface<T> {
-    int getItemViewType();
     boolean isForViewType(@NonNull T items, int position);
     @NonNull
     RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent);

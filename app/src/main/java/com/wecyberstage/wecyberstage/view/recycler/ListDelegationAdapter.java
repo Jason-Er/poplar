@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 public class ListDelegationAdapter extends RecyclerView.Adapter {
 
-    protected List<Object> items;
+    protected List<Object> dataSet;
     protected AdapterDelegatesManager delegatesManager;
 
     @Inject
@@ -23,7 +23,7 @@ public class ListDelegationAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return delegatesManager.getItemViewType(items, position);
+        return delegatesManager.getItemViewType(dataSet, position);
     }
 
     @Override
@@ -33,11 +33,19 @@ public class ListDelegationAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        delegatesManager.onBindViewHolder(items, position, holder);
+        delegatesManager.onBindViewHolder(dataSet, position, holder);
     }
 
     @Override
     public int getItemCount() {
-        return items == null? 0 : items.size();
+        return dataSet == null? 0 : dataSet.size();
+    }
+
+    public List<Object> getDataSet() {
+        return dataSet;
+    }
+
+    public void setDataSet(List<Object> dataSet) {
+        this.dataSet = dataSet;
     }
 }

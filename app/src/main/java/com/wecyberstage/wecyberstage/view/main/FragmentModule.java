@@ -10,7 +10,7 @@ import dagger.Provides;
 @Module
 public class FragmentModule {
     @Provides
-    @Named("participate")
+    @Named("composeZ")
     public GestureDetector providePresenter(MainActivity activity){
         return null;
     }

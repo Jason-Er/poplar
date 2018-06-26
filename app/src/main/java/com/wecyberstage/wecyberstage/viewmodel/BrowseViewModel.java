@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.wecyberstage.wecyberstage.model.PlayInfo;
-import com.wecyberstage.wecyberstage.util.helper.PageRequest;
+import com.wecyberstage.wecyberstage.data.dto.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.PlayInfoLiveData;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 
