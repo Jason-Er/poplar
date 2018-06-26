@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.util.helper;
+package com.wecyberstage.wecyberstage.data.dto;
 
 /**
  * Created by mike on 2018/3/13.

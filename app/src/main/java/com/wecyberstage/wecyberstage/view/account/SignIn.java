@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.account;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -19,16 +20,22 @@ import android.widget.ImageView;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
+import com.wecyberstage.wecyberstage.data.dto.UserRequest;
+import com.wecyberstage.wecyberstage.model.User;
+import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 /**
  * Created by mike on 2018/3/5.
@@ -65,7 +72,23 @@ public class SignIn extends CustomView {
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(AccountViewModel.class);
+        viewModel.userLiveData.observe(activity, new Observer<Resource<User>>(){
+            @Override
+            public void onChanged(@Nullable Resource<User> resource) {
+                switch (resource.status) {
+                    case SUCCESS:
+                        Timber.d("SUCCESS");
 
+                        break;
+                    case ERROR:
+
+                        break;
+                    case LOADING:
+
+                        break;
+                }
+            }
+        });
         signInComponent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -88,5 +111,18 @@ public class SignIn extends CustomView {
             ((ImageButton)view).setImageResource(R.drawable.eye_off_outline);
             view.setTag(false);
         }
+    }
+
+    @OnClick(R.id.signIn_signIn)
+    public void signIn(View view) {
+        if(phoneNumber.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        viewModel.setRequestUser(new UserRequest(phoneNumber.getText().toString(), password.getText().toString()));
+    }
+
+    @OnClick(R.id.signIn_signUp)
+    public void signUp(View view) {
+
     }
 }
