@@ -129,13 +129,18 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // region all views
+        browse = new Browse(this, appMain, ViewType.BROWSE);
+        composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
+        composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y);
+        composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z);
+        signIn = new SignIn(this, appMain, ViewType.SIGN_IN);
         viewArray = new SparseArray();
         flingResponseArray = new SparseArray();
-        addCustomView(new Browse(this, appMain, ViewType.BROWSE), new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
-        addCustomView(new ComposeX(this, appMain, ViewType.COMPOSE_X), new FlingResponseComposeX(this), appMain, viewArray, flingResponseArray);
-        addCustomView(new ComposeY(this, appMain, ViewType.COMPOSE_Y), new FlingResponseComposeY(this), appMain, viewArray, flingResponseArray);
-        addCustomView(new ComposeZ(this, appMain, ViewType.COMPOSE_Z), new FlingResponseComposeZ(this), appMain, viewArray, flingResponseArray);
-        addCustomView(new SignIn(this, appMain, ViewType.SIGN_IN), new FlingResponseSignIn(this), appMain, viewArray, flingResponseArray);
+        addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
+        addCustomView(composeX, new FlingResponseComposeX(this), appMain, viewArray, flingResponseArray);
+        addCustomView(composeY, new FlingResponseComposeY(this), appMain, viewArray, flingResponseArray);
+        addCustomView(composeZ, new FlingResponseComposeZ(this), appMain, viewArray, flingResponseArray);
+        addCustomView(signIn, new FlingResponseSignIn(this), appMain, viewArray, flingResponseArray);
         navigationStack = new Stack<>();
         // endregion
 

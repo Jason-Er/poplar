@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/sign_in_component"
+    android:id="@+id/signIn_component"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -10,7 +10,7 @@
     android:focusableInTouchMode="true">
 
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/signIn_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -19,10 +19,10 @@
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <LinearLayout
-        android:id="@+id/sign_in_lock"
+        android:id="@+id/signIn_blankInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/logo"
+        android:layout_below="@id/signIn_logo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:background="@android:color/background_light"
@@ -31,34 +31,41 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/sign_in_phone"
+            android:id="@+id/signIn_phoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:drawablePadding="8dp"
-            android:drawableRight="@drawable/ic_play_arrow"
-            android:drawableStart="@android:drawable/ic_menu_call"
             android:ems="10"
             android:inputType="phone" />
 
-        <com.wecyberstage.wecyberstage.view.account.CustomEditText
-            android:id="@+id/sign_in_password"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginBottom="28dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:drawableEnd="@drawable/eye_off_outline"
-            android:drawableStart="@drawable/key_variant"
-            android:ems="10"
-            android:inputType="textPassword" />
+            android:layout_marginRight="10dp">
+            <EditText
+                android:id="@+id/signIn_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPassword" />
+            <ImageButton
+                android:id="@+id/signIn_showPwd"
+                android:layout_marginLeft="-24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/eye_off_outline"/>
+        </LinearLayout>
     </LinearLayout>
 
     <Button
-        android:id="@+id/sign_in"
+        android:id="@+id/signIn_signIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sign_in_lock"
+        android:layout_below="@id/signIn_blankInfo"
         android:layout_centerHorizontal="true"
         android:elevation="5dp"
         android:layout_marginTop="-18dp"
@@ -66,10 +73,10 @@
         android:theme="@style/PrimaryButton"/>
 
     <Button
-        android:id="@+id/sign_out"
+        android:id="@+id/signIn_signUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sign_in"
+        android:layout_below="@id/signIn_signIn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="Sign out"
@@ -80,15 +87,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/sign_out"
+        android:layout_below="@id/signIn_signUp"
         android:layout_margin="10dp">
         <CheckBox
-            android:id="@+id/sign_in_auto"
+            android:id="@+id/signIn_autoSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Remember me" />
         <Button
-            android:id="@+id/sign_in_forgot"
+            android:id="@+id/signIn_forgotPwd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Forgot password"
