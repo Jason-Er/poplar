@@ -9,6 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,9 +22,11 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.data.dto.UserRequest;
 import com.wecyberstage.wecyberstage.model.User;
+import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
+import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
@@ -53,6 +56,8 @@ public class SignIn extends CustomView {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    @Inject
+    CharacterFactory characterFactory;
 
     public SignIn(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
         super(activity, container, viewType);
@@ -71,13 +76,16 @@ public class SignIn extends CustomView {
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(AccountViewModel.class);
-        viewModel.userLiveData.observe(activity, new Observer<Resource<User>>(){
+        viewModel.signInLiveData.observe(activity, new Observer<Resource<Boolean>>(){
             @Override
-            public void onChanged(@Nullable Resource<User> resource) {
+            public void onChanged(@Nullable Resource<Boolean> resource) {
                 switch (resource.status) {
                     case SUCCESS:
                         Timber.d("SUCCESS");
-
+                        if(resource.data) {
+                            Log.i("SignIn","Sign in success");
+                            ((MainActivity) appCompatActivity).setCharacter(characterFactory.getCharacter(CharacterFactory.USER_TYPE.REGISTERED));
+                        }
                         break;
                     case ERROR:
 
@@ -117,11 +125,11 @@ public class SignIn extends CustomView {
         if(phoneNumber.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             throw new IllegalArgumentException();
         }
-        viewModel.setRequestUser(new UserRequest(phoneNumber.getText().toString(), password.getText().toString()));
+        viewModel.signIn(new UserRequest(phoneNumber.getText().toString(), password.getText().toString()));
     }
 
     @OnClick(R.id.signIn_signUp)
     public void signUp(View view) {
-        ((MainActivity) appCompatActivity).navigateToSignUp();
+        ((MainActivity) appCompatActivity).navigateToSignUp(Direction.TO_LEFT);
     }
 }

@@ -18,9 +18,11 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.data.dto.UserRequest;
 import com.wecyberstage.wecyberstage.model.User;
+import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
+import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
@@ -49,6 +51,8 @@ public class SignUp extends CustomView {
     EditText password;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    @Inject
+    CharacterFactory characterFactory;
 
     public SignUp(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
         super(activity, container, viewType);
@@ -100,11 +104,11 @@ public class SignUp extends CustomView {
         if(phoneNumber.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
             throw new IllegalArgumentException();
         }
-        viewModel.setRequestUser(new UserRequest(phoneNumber.getText().toString(), password.getText().toString()));
+        viewModel.signIn(new UserRequest(phoneNumber.getText().toString(), password.getText().toString()));
     }
 
     @OnClick(R.id.signUp_signIn)
     public void signUp(View view) {
-        ((MainActivity) appCompatActivity).navigateToSignIn();
+        ((MainActivity) appCompatActivity).navigateToSignIn(Direction.TO_RIGHT);
     }
 }

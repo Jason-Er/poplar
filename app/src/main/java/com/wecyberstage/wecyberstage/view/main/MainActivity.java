@@ -22,9 +22,12 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
+import com.wecyberstage.wecyberstage.util.character.Character4Play;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
 import com.wecyberstage.wecyberstage.view.account.SignUp;
+import com.wecyberstage.wecyberstage.view.account.UserProfile;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
@@ -40,6 +43,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
+import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
@@ -81,6 +85,9 @@ public class MainActivity extends AppCompatActivity
     };
     private final Lock queueLock=new ReentrantLock();
 
+    @Inject
+    CharacterFactory characterFactory;
+    private Character4Play character;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -110,6 +117,7 @@ public class MainActivity extends AppCompatActivity
     ComposeZ composeZ;
     SignIn signIn;
     SignUp signUp;
+    UserProfile userProfile;
 
     // endregion
     @Override
@@ -158,7 +166,10 @@ public class MainActivity extends AppCompatActivity
                 switch (menuItemId) {
                     case R.id.menu_item_account:
                         Log.i("onMenuItemClick","menu_item_account");
-                        slideView(currentView, signIn, Direction.TO_DOWN);
+                        // slideView(currentView, signIn, Direction.TO_DOWN);
+                        if( character instanceof Navigate2Account) {
+                            ((Navigate2Account) character).navigate2Account(MainActivity.this);
+                        }
                         break;
                 }
                 return false;
@@ -178,6 +189,12 @@ public class MainActivity extends AppCompatActivity
             String item = navigationStack.peek();
             restoreToView(ViewType.valueOf(item.split(NAVIGATION_COLON)[1]));
         }
+
+        character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
+    }
+
+    public void setCharacter(Character4Play character) {
+        this.character = character;
     }
 
     private void addCustomView(CustomView customView, FlingResponseInterface flingResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
@@ -368,14 +385,19 @@ public class MainActivity extends AppCompatActivity
         composeX.setPlayState(new PlayState(playId, 1L, 0L));
     }
 
-    public void navigateToSignUp() {
+    public void navigateToSignUp(Direction direction) {
         getSupportActionBar().hide();
-        slideView(currentView, signUp, Direction.TO_LEFT);
+        slideView(currentView, signUp, direction);
     }
 
-    public void navigateToSignIn() {
+    public void navigateToSignIn(Direction direction) {
         getSupportActionBar().hide();
-        slideView(currentView, signIn, Direction.TO_RIGHT);
+        slideView(currentView, signIn, direction);
+    }
+
+    public void navigateToUserProfile(Direction direction) {
+        getSupportActionBar().hide();
+        slideView(currentView, userProfile, direction);
     }
     // endregion
 
