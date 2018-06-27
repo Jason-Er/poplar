@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
@@ -26,9 +25,8 @@ import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
+import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -44,6 +42,7 @@ import timber.log.Timber;
 public class SignIn extends CustomView {
 
     private AccountViewModel viewModel;
+    private AppCompatActivity appCompatActivity;
 
     @BindView(R.id.signIn_component)
     View signInComponent;
@@ -57,11 +56,11 @@ public class SignIn extends CustomView {
 
     public SignIn(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
         super(activity, container, viewType);
+        this.appCompatActivity = activity;
     }
 
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
-        final AppCompatActivity activityTemp = activity;
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_signin, container, false);
         ButterKnife.bind(this, view);
@@ -92,7 +91,7 @@ public class SignIn extends CustomView {
         signInComponent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager imm = (InputMethodManager) activityTemp.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(phoneNumber.getWindowToken(), 0);
                 imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
                 return false;
@@ -123,6 +122,6 @@ public class SignIn extends CustomView {
 
     @OnClick(R.id.signIn_signUp)
     public void signUp(View view) {
-
+        ((MainActivity) appCompatActivity).navigateToSignUp();
     }
 }

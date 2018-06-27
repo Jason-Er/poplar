@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
+import com.wecyberstage.wecyberstage.view.account.SignUp;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
@@ -37,6 +38,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeY;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeZ;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
+import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
@@ -107,6 +109,7 @@ public class MainActivity extends AppCompatActivity
     ComposeY composeY;
     ComposeZ composeZ;
     SignIn signIn;
+    SignUp signUp;
 
     // endregion
     @Override
@@ -134,6 +137,7 @@ public class MainActivity extends AppCompatActivity
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN);
+        signUp = new SignUp(this, appMain, ViewType.SIGN_UP);
         viewArray = new SparseArray();
         flingResponseArray = new SparseArray();
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
@@ -141,6 +145,7 @@ public class MainActivity extends AppCompatActivity
         addCustomView(composeY, new FlingResponseComposeY(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeZ, new FlingResponseComposeZ(this), appMain, viewArray, flingResponseArray);
         addCustomView(signIn, new FlingResponseSignIn(this), appMain, viewArray, flingResponseArray);
+        addCustomView(signUp, new FlingResponseSignUp(this), appMain, viewArray, flingResponseArray);
         navigationStack = new Stack<>();
         // endregion
 
@@ -361,7 +366,16 @@ public class MainActivity extends AppCompatActivity
     public void navigateToComposeX(long playId) {
         getSupportActionBar().hide();
         composeX.setPlayState(new PlayState(playId, 1L, 0L));
-//        customViewSlideControl.navigateToView(ViewType.COMPOSE_X, Direction.TO_UP);
+    }
+
+    public void navigateToSignUp() {
+        getSupportActionBar().hide();
+        slideView(currentView, signUp, Direction.TO_LEFT);
+    }
+
+    public void navigateToSignIn() {
+        getSupportActionBar().hide();
+        slideView(currentView, signIn, Direction.TO_RIGHT);
     }
     // endregion
 
