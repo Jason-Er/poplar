@@ -8,6 +8,6 @@ import com.wecyberstage.wecyberstage.view.main.MainActivity;
 public class UnRegistered extends Character4Play implements Navigate2Account{
     @Override
     public void navigate2Account(MainActivity activity) {
-        activity.slideView(ViewType.SIGN_IN, Direction.TO_DOWN);
+        activity.slideTo(ViewType.SIGN_IN, Direction.TO_DOWN);
     }
 }

@@ -71,7 +71,7 @@ public class Browse extends CustomView implements PlayStateInterface {
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
                 playState = new PlayState(((PlayProfileCardView)v).playInfo.id, 1L, 0f);
-                ((MainActivity)activity).slideView(ViewType.COMPOSE_Z, Direction.TO_UP);
+                ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
             }
         };
 

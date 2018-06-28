@@ -21,7 +21,6 @@ import android.widget.ImageButton;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.data.dto.UserRequest;
-import com.wecyberstage.wecyberstage.model.User;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
@@ -131,6 +130,6 @@ public class SignIn extends CustomView {
 
     @OnClick(R.id.signIn_signUp)
     public void signUp(View view) {
-        ((MainActivity) appCompatActivity).slideView(ViewType.SIGN_UP, Direction.TO_LEFT);
+        ((MainActivity) appCompatActivity).slideTo(ViewType.SIGN_UP, Direction.TO_LEFT);
     }
 }

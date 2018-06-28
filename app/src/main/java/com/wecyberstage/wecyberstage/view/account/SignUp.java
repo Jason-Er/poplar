@@ -109,6 +109,6 @@ public class SignUp extends CustomView {
 
     @OnClick(R.id.signUp_signIn)
     public void signUp(View view) {
-        ((MainActivity) appCompatActivity).slideView(ViewType.SIGN_IN, Direction.TO_RIGHT);
+        ((MainActivity) appCompatActivity).slideTo(ViewType.SIGN_IN, Direction.TO_RIGHT);
     }
 }
