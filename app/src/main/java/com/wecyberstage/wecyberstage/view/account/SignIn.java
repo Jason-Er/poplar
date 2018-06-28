@@ -84,7 +84,8 @@ public class SignIn extends CustomView {
                         if(resource.data) {
                             Log.i("SignIn","Sign in success");
                             ((MainActivity) appCompatActivity).setCharacter(characterFactory.getCharacter(CharacterFactory.USER_TYPE.REGISTERED));
-
+                            hideSoftKeyBoard();
+                            ((MainActivity) appCompatActivity).slideUp();
                         }
                         break;
                     case ERROR:
@@ -99,12 +100,16 @@ public class SignIn extends CustomView {
         signInComponent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(phoneNumber.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
+                hideSoftKeyBoard();
                 return false;
             }
         });
+    }
+
+    private void hideSoftKeyBoard() {
+        InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(phoneNumber.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
     }
 
     @OnClick(R.id.signIn_showPwd)

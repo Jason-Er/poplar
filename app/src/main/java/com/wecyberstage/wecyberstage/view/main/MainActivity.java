@@ -48,6 +48,7 @@ import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
+import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -55,7 +56,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -451,8 +454,16 @@ public class MainActivity extends AppCompatActivity
         return directionOpposite;
     }
 
-    public void slideUp(Direction direction) {
-
+    @Override
+    public void slideUp() {
+        while ( navigationStack.size() > 0 ) {
+            String track = navigationStack.pop();
+            if(ViewTypeHelper.isTwoTypesSameLevel(ViewType.valueOf(track.split(NAVIGATION_COLON)[1]), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]))) {
+                continue;
+            } else {
+                slideTo(ViewType.valueOf(track.split(NAVIGATION_COLON)[1]), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]), oppositeDirection(Direction.valueOf(track.split(NAVIGATION_COLON)[2])), false);
+            }
+        }
     }
 
     @Override
