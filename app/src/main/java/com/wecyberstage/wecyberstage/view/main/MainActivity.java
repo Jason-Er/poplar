@@ -458,9 +458,11 @@ public class MainActivity extends AppCompatActivity
         while ( navigationStack.size() > 0 ) {
             String track = navigationStack.pop();
             if(ViewTypeHelper.isTwoTypesSameLevel(currentView.getViewType(), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]))) {
+                Log.i("isTwoTypesSameLevel"," track: "+ track +" currentViewType: " + currentView.getViewType());
                 continue;
             } else {
                 slideTo(currentView.getViewType(), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]), oppositeDirection(Direction.valueOf(track.split(NAVIGATION_COLON)[2])), false);
+                break;
             }
         }
     }
