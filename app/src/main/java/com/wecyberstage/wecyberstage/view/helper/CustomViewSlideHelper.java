@@ -17,7 +17,7 @@ public class CustomViewSlideHelper {
      * @param followView
      * @param index index: -1 left; 1 right
      */
-    public static void SlideHorizontal(final View currentView, final View followView, final int index) {
+    public static void SlideHorizontal(final View currentView, final View followView, final int index, final SlideInterface callback) {
         float pixelPerSecondX = calcInitVelocity( currentView.getWidth(), 700);
         final SpringAnimation springAnimationX = new SpringAnimation(currentView, DynamicAnimation.ROTATION_X)
                 .setSpring(springForce)
@@ -39,6 +39,12 @@ public class CustomViewSlideHelper {
                     @Override
                     public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
                         currentView.setVisibility(View.INVISIBLE);
+                        if( followView instanceof SlideInterface ) {
+                            ((SlideInterface) followView).slideEnd();
+                        }
+                        if(callback != null) {
+                            callback.slideEnd();
+                        }
                         /*
                         springAnimationX.setStartVelocity(velocity)
                                 .setStartValue(value)
@@ -70,7 +76,7 @@ public class CustomViewSlideHelper {
      * @param followView
      * @param index index: -1 up; 1 down
      */
-    public static void SlideVertical(final View currentView, final View followView, final int index) {
+    public static void SlideVertical(final View currentView, final View followView, final int index, final SlideInterface callback) {
         float pixelPerSecondY = calcInitVelocity( currentView.getHeight(), 700);
         final SpringAnimation springAnimationY = new SpringAnimation(currentView, DynamicAnimation.ROTATION_Y)
                 .setSpring(springForce)
@@ -95,6 +101,9 @@ public class CustomViewSlideHelper {
                         Log.i("fling End", " value: " + value + " velocity: " + velocity);
                         Log.i("fling End", " currentView matrix: " + currentView.getMatrix().toString() );
                         currentView.setVisibility(View.INVISIBLE);
+                        if(callback != null) {
+                            callback.slideEnd();
+                        }
                         /*
                         springAnimationY.setStartVelocity(velocity)
                                 .setStartValue(value)

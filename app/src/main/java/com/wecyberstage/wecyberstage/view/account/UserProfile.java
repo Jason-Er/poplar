@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.User;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
@@ -32,7 +34,7 @@ import timber.log.Timber;
  * Created by mike on 2018/3/5.
  */
 
-public class UserProfile extends CustomView {
+public class UserProfile extends CustomView implements SlideInterface {
 
     private AccountViewModel viewModel;
     private AppCompatActivity appCompatActivity;
@@ -87,5 +89,10 @@ public class UserProfile extends CustomView {
     @OnClick(R.id.profile_navigateUp)
     public void navigateUp(View view) {
         ((MainActivity) appCompatActivity).slideUp();
+    }
+
+    @Override
+    public void slideEnd() {
+        appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

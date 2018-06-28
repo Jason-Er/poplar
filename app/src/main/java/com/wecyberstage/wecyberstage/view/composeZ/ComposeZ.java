@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.composeZ;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
+import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
 
@@ -24,7 +26,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeZ extends CustomView implements PlayStateInterface {
+public class ComposeZ extends CustomView implements PlayStateInterface, SlideInterface {
 
     private static final String PARTICIPATE_INFO_KEY = "participate_info";
 
@@ -40,11 +42,12 @@ public class ComposeZ extends CustomView implements PlayStateInterface {
 
     public ComposeZ(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
         super(activity, container, viewType);
+        this.activity = activity;
     }
 
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
-        this.activity = activity;
+
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.view_compose_z, container,false);
 
@@ -81,4 +84,8 @@ public class ComposeZ extends CustomView implements PlayStateInterface {
         return viewModel.getPlayState();
     }
 
+    @Override
+    public void slideEnd() {
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
 }

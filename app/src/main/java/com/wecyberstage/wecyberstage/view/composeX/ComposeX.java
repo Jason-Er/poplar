@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.composeX;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
@@ -25,12 +27,12 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeX extends CustomView implements PlayStateInterface {
+public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
     private ComposeViewModel viewModel;
-    private AppCompatActivity activity;
+    private AppCompatActivity appCompatActivity;
     private ComposeXScriptLayoutManager layoutManager;
 
     @Inject
@@ -40,11 +42,11 @@ public class ComposeX extends CustomView implements PlayStateInterface {
 
     public ComposeX(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
         super(activity, container, viewType);
+        this.appCompatActivity = activity;
     }
 
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
-        this.activity = activity;
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.view_recycler, container,false);
 
@@ -72,12 +74,17 @@ public class ComposeX extends CustomView implements PlayStateInterface {
 
     @Override
     public void setPlayState(PlayState playState) {
-        activity.getIntent().putExtra(COMPOSE_INFO_KEY, playState);
+        appCompatActivity.getIntent().putExtra(COMPOSE_INFO_KEY, playState);
         viewModel.setPlayState(playState);
     }
 
     @Override
     public PlayState getPlayState() {
         return viewModel.getPlayState();
+    }
+
+    @Override
+    public void slideEnd() {
+        appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 }
