@@ -102,4 +102,14 @@
             android:theme="@style/PrimaryFlatButton" />
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/signIn_navigateUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/arrow_down" />
+
 </RelativeLayout>

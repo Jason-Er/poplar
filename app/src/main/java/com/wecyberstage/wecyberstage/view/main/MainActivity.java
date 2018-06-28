@@ -458,10 +458,10 @@ public class MainActivity extends AppCompatActivity
     public void slideUp() {
         while ( navigationStack.size() > 0 ) {
             String track = navigationStack.pop();
-            if(ViewTypeHelper.isTwoTypesSameLevel(ViewType.valueOf(track.split(NAVIGATION_COLON)[1]), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]))) {
+            if(ViewTypeHelper.isTwoTypesSameLevel(currentView.getViewType(), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]))) {
                 continue;
             } else {
-                slideTo(ViewType.valueOf(track.split(NAVIGATION_COLON)[1]), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]), oppositeDirection(Direction.valueOf(track.split(NAVIGATION_COLON)[2])), false);
+                slideTo(currentView.getViewType(), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]), oppositeDirection(Direction.valueOf(track.split(NAVIGATION_COLON)[2])), false);
             }
         }
     }

@@ -137,4 +137,9 @@ public class SignIn extends CustomView {
     public void signUp(View view) {
         ((MainActivity) appCompatActivity).slideTo(ViewType.SIGN_UP, Direction.TO_LEFT);
     }
+
+    @OnClick(R.id.signIn_navigateUp)
+    public void navigateUp(View view) {
+        ((MainActivity) appCompatActivity).slideUp();
+    }
 }
