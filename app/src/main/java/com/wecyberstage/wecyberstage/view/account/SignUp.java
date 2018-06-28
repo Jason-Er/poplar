@@ -64,10 +64,6 @@ public class SignUp extends CustomView {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_signup, container, false);
         ButterKnife.bind(this, view);
-        CustomViewBehavior behavior = new CustomViewBehavior(activity, null);
-        CoordinatorLayout.LayoutParams params =
-                (CoordinatorLayout.LayoutParams) view.getLayoutParams();
-        params.setBehavior(behavior);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(AccountViewModel.class);

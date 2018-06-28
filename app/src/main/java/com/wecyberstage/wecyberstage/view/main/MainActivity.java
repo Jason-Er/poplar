@@ -270,13 +270,12 @@ public class MainActivity extends AppCompatActivity
         outState.putString(NAVIGATION_INFO_KEY, navigationState);
     }
 
-    /*
-        @Override
-        protected void onResume() {
-            super.onResume();
-            autoHideHandler.postDelayed(autoHideRunnable, 3000);
-        }
-        */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        autoHideHandler.postDelayed(autoHideRunnable, 3000);
+    }
+
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
