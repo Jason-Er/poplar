@@ -12,4 +12,8 @@
     <string name="bottom_bar_next">next</string>
     <string name="sign_up">Sign up</string>
     <string name="sign_in">Sign in</string>
+    <string name="phone_number">phone number</string>
+    <string name="password">password</string>
+    <string name="phone_authCode">authenticate code</string>
+    <string name="stage_name">stage name</string>
 </resources>

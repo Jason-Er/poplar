@@ -46,7 +46,7 @@ public class PlayProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.play_profile_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.compose_z_card_profile, parent, false);
         PlayProfileCardViewHolder vh = new PlayProfileCardViewHolder(view);
         return vh;
     }

@@ -22,8 +22,12 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
+import com.wecyberstage.wecyberstage.util.character.Character4Play;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
+import com.wecyberstage.wecyberstage.view.account.SignUp;
+import com.wecyberstage.wecyberstage.view.account.UserProfile;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
@@ -37,11 +41,14 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeY;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeZ;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
+import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
+import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
+import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
+import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -49,7 +56,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -79,6 +88,9 @@ public class MainActivity extends AppCompatActivity
     };
     private final Lock queueLock=new ReentrantLock();
 
+    @Inject
+    CharacterFactory characterFactory;
+    private Character4Play character;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -107,6 +119,8 @@ public class MainActivity extends AppCompatActivity
     ComposeY composeY;
     ComposeZ composeZ;
     SignIn signIn;
+    SignUp signUp;
+    UserProfile userProfile;
 
     // endregion
     @Override
@@ -129,18 +143,25 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // region all views
+        viewArray = new SparseArray();
+        flingResponseArray = new SparseArray();
+
         browse = new Browse(this, appMain, ViewType.BROWSE);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN);
-        viewArray = new SparseArray();
-        flingResponseArray = new SparseArray();
+        signUp = new SignUp(this, appMain, ViewType.SIGN_UP);
+        userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE);
+
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeX, new FlingResponseComposeX(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeY, new FlingResponseComposeY(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeZ, new FlingResponseComposeZ(this), appMain, viewArray, flingResponseArray);
         addCustomView(signIn, new FlingResponseSignIn(this), appMain, viewArray, flingResponseArray);
+        addCustomView(signUp, new FlingResponseSignUp(this), appMain, viewArray, flingResponseArray);
+        addCustomView(userProfile, new FlingResponseUserProfile(this), appMain, viewArray, flingResponseArray);
+
         navigationStack = new Stack<>();
         // endregion
 
@@ -153,7 +174,10 @@ public class MainActivity extends AppCompatActivity
                 switch (menuItemId) {
                     case R.id.menu_item_account:
                         Log.i("onMenuItemClick","menu_item_account");
-                        slideView(currentView, signIn, Direction.TO_DOWN);
+                        // slideTo(currentView, signIn, Direction.TO_DOWN);
+                        if( character instanceof Navigate2Account) {
+                            ((Navigate2Account) character).navigate2Account(MainActivity.this);
+                        }
                         break;
                 }
                 return false;
@@ -173,6 +197,12 @@ public class MainActivity extends AppCompatActivity
             String item = navigationStack.peek();
             restoreToView(ViewType.valueOf(item.split(NAVIGATION_COLON)[1]));
         }
+
+        character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
+    }
+
+    public void setCharacter(Character4Play character) {
+        this.character = character;
     }
 
     private void addCustomView(CustomView customView, FlingResponseInterface flingResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
@@ -195,13 +225,12 @@ public class MainActivity extends AppCompatActivity
         } else {
             if(navigationStack.size() > 0) {
                 String item = navigationStack.pop();
-                slideView(ViewType.valueOf(item.split(NAVIGATION_COLON)[1]), ViewType.valueOf(item.split(NAVIGATION_COLON)[0]), oppositeDirection(Direction.valueOf(item.split(NAVIGATION_COLON)[2])), false);
+                slideTo(ViewType.valueOf(item.split(NAVIGATION_COLON)[1]), ViewType.valueOf(item.split(NAVIGATION_COLON)[0]), oppositeDirection(Direction.valueOf(item.split(NAVIGATION_COLON)[2])), false);
             } else {
                 // TODO: 2018/6/13 double click quit
                 super.onBackPressed();
             }
         }
-
     }
 
     @Override
@@ -241,13 +270,12 @@ public class MainActivity extends AppCompatActivity
         outState.putString(NAVIGATION_INFO_KEY, navigationState);
     }
 
-    /*
-        @Override
-        protected void onResume() {
-            super.onResume();
-            autoHideHandler.postDelayed(autoHideRunnable, 3000);
-        }
-        */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        autoHideHandler.postDelayed(autoHideRunnable, 3000);
+    }
+
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
@@ -347,24 +375,6 @@ public class MainActivity extends AppCompatActivity
         set.setDuration(300).start();
     }
 
-    //region navigation methods
-    public void navigateToBrowse() {
-        getSupportActionBar().show();
-    }
-
-    public void navigateToComposeZ() {
-        getSupportActionBar().hide();
-        slideView(ViewType.BROWSE, ViewType.COMPOSE_Z, Direction.TO_UP);
-        currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(ViewType.COMPOSE_Z.ordinal());
-    }
-
-    public void navigateToComposeX(long playId) {
-        getSupportActionBar().hide();
-        composeX.setPlayState(new PlayState(playId, 1L, 0L));
-//        customViewSlideControl.navigateToView(ViewType.COMPOSE_X, Direction.TO_UP);
-    }
-    // endregion
-
     /*
     public void enlargeContentView(boolean isEnlarge) {
         CoordinatorLayout.LayoutParams params =
@@ -397,9 +407,7 @@ public class MainActivity extends AppCompatActivity
         this.currentView = customView;
     }
 
-    @Override
-    public void slideView(CustomView from, CustomView to, Direction direction) {
-        // TODO: 2018/5/24 save navigation track
+    private void slideTo(CustomView from, CustomView to, Direction direction) {
         View currentView = from.getView();
         View followView = to.getView();
         followView.setVisibility(View.VISIBLE);
@@ -427,34 +435,61 @@ public class MainActivity extends AppCompatActivity
     }
 
     private Direction oppositeDirection(Direction direction) {
-        Direction directionL = Direction.TO_LEFT;
+        Direction directionOpposite = Direction.TO_LEFT;
         switch (direction){
             case TO_UP:
-                directionL = Direction.TO_DOWN;
+                directionOpposite = Direction.TO_DOWN;
                 break;
             case TO_RIGHT:
-                directionL = Direction.TO_LEFT;
+                directionOpposite = Direction.TO_LEFT;
                 break;
             case TO_DOWN:
-                directionL = Direction.TO_UP;
+                directionOpposite = Direction.TO_UP;
                 break;
             case TO_LEFT:
-                directionL = Direction.TO_RIGHT;
+                directionOpposite = Direction.TO_RIGHT;
                 break;
         }
-        return directionL;
+        return directionOpposite;
     }
 
     @Override
-    public void slideView(ViewType from, ViewType to, Direction direction) {
-        slideView(from, to, direction, true);
+    public void slideUp() {
+        while ( navigationStack.size() > 0 ) {
+            String track = navigationStack.pop();
+            if(ViewTypeHelper.isTwoTypesSameLevel(currentView.getViewType(), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]))) {
+                Log.i("isTwoTypesSameLevel"," track: "+ track +" currentViewType: " + currentView.getViewType());
+                continue;
+            } else {
+                slideTo(currentView.getViewType(), ViewType.valueOf(track.split(NAVIGATION_COLON)[0]), oppositeDirection(Direction.valueOf(track.split(NAVIGATION_COLON)[2])), false);
+                break;
+            }
+        }
     }
 
-    public void slideView(ViewType from, ViewType to, Direction direction, boolean saveTrack) {
+    @Override
+    public void slideTo(ViewType to, Direction direction) {
+        slideTo(currentView.getViewType(), to, direction, true);
+    }
+
+    @Override
+    public void slideTo(ViewType to, Direction direction, boolean saveTrack) {
+        slideTo(currentView.getViewType(), to, direction, saveTrack);
+    }
+
+    @Override
+    public void slideTo(ViewType from, ViewType to, Direction direction) {
+        slideTo(from, to, direction, true);
+    }
+
+    @Override
+    public void slideTo(ViewType from, ViewType to, Direction direction, boolean saveTrack) {
         CustomView fromCustomView = getCustomView(from);
         CustomView toCustomView = getCustomView(to);
-        ((PlayStateInterface)toCustomView).setPlayState(((PlayStateInterface)fromCustomView).getPlayState());
-        slideView(fromCustomView, toCustomView, direction);
+        if(fromCustomView instanceof PlayStateInterface && toCustomView instanceof PlayStateInterface) {
+            ((PlayStateInterface) toCustomView).setPlayState(((PlayStateInterface) fromCustomView).getPlayState());
+        }
+        slideTo(fromCustomView, toCustomView, direction);
         currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(to.ordinal());
         if(saveTrack) {
             navigationStack.push(from.name() + NAVIGATION_COLON + to.name() + NAVIGATION_COLON + direction.name());

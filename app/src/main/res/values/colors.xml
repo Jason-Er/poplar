@@ -6,4 +6,5 @@
     <color name="focused_true">#000000</color>
     <color name="focused_false">#000000</color>
     <color name="light_black">#504f4f</color>
+    <color name="divider">#90909090</color>
 </resources>
