@@ -9,11 +9,11 @@ public abstract class CustomView {
 
     protected View view;
     protected ViewType viewType;
-    protected CustomView(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
+    public CustomView(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
         onCreate(activity, container);
         this.viewType = viewType;
     }
-    protected abstract void onCreate(AppCompatActivity activity, @Nullable ViewGroup container);
+    public abstract void onCreate(AppCompatActivity activity, @Nullable ViewGroup container);
 
     public View getView() {
         return view;

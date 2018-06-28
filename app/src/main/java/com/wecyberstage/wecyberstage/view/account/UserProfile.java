@@ -28,12 +28,12 @@ public class UserProfile extends CustomView {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    protected UserProfile(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
+    public UserProfile(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
         super(activity, container, viewType);
     }
 
     @Override
-    protected void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
+    public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_profile, container, false);
         CustomViewBehavior behavior = new CustomViewBehavior(activity, null);

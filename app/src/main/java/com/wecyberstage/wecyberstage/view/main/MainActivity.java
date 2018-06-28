@@ -42,6 +42,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeZ;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
+import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
 import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
@@ -140,20 +141,25 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // region all views
+        viewArray = new SparseArray();
+        flingResponseArray = new SparseArray();
+
         browse = new Browse(this, appMain, ViewType.BROWSE);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN);
         signUp = new SignUp(this, appMain, ViewType.SIGN_UP);
-        viewArray = new SparseArray();
-        flingResponseArray = new SparseArray();
+        userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE);
+
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeX, new FlingResponseComposeX(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeY, new FlingResponseComposeY(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeZ, new FlingResponseComposeZ(this), appMain, viewArray, flingResponseArray);
         addCustomView(signIn, new FlingResponseSignIn(this), appMain, viewArray, flingResponseArray);
         addCustomView(signUp, new FlingResponseSignUp(this), appMain, viewArray, flingResponseArray);
+        addCustomView(userProfile, new FlingResponseUserProfile(this), appMain, viewArray, flingResponseArray);
+
         navigationStack = new Stack<>();
         // endregion
 
@@ -223,7 +229,6 @@ public class MainActivity extends AppCompatActivity
                 super.onBackPressed();
             }
         }
-
     }
 
     @Override
@@ -369,38 +374,6 @@ public class MainActivity extends AppCompatActivity
         set.setDuration(300).start();
     }
 
-    //region navigation methods
-    public void navigateToBrowse() {
-        getSupportActionBar().show();
-    }
-
-    public void navigateToComposeZ() {
-        getSupportActionBar().hide();
-        slideView(ViewType.BROWSE, ViewType.COMPOSE_Z, Direction.TO_UP);
-        currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(ViewType.COMPOSE_Z.ordinal());
-    }
-
-    public void navigateToComposeX(long playId) {
-        getSupportActionBar().hide();
-        composeX.setPlayState(new PlayState(playId, 1L, 0L));
-    }
-
-    public void navigateToSignUp(Direction direction) {
-        getSupportActionBar().hide();
-        slideView(currentView, signUp, direction);
-    }
-
-    public void navigateToSignIn(Direction direction) {
-        getSupportActionBar().hide();
-        slideView(currentView, signIn, direction);
-    }
-
-    public void navigateToUserProfile(Direction direction) {
-        getSupportActionBar().hide();
-        slideView(currentView, userProfile, direction);
-    }
-    // endregion
-
     /*
     public void enlargeContentView(boolean isEnlarge) {
         CoordinatorLayout.LayoutParams params =
@@ -435,7 +408,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void slideView(CustomView from, CustomView to, Direction direction) {
-        // TODO: 2018/5/24 save navigation track
         View currentView = from.getView();
         View followView = to.getView();
         followView.setVisibility(View.VISIBLE);
@@ -479,6 +451,14 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         return directionL;
+    }
+
+    public void slideView(ViewType to, Direction direction) {
+        slideView(currentView.getViewType(), to, direction, true);
+    }
+
+    public void slideView(ViewType to, Direction direction, boolean saveTrack) {
+        slideView(currentView.getViewType(), to, direction, saveTrack);
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.wecyberstage.wecyberstage.data.dto.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
+import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
@@ -70,7 +71,7 @@ public class Browse extends CustomView implements PlayStateInterface {
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
                 playState = new PlayState(((PlayProfileCardView)v).playInfo.id, 1L, 0f);
-                ((MainActivity)activity).navigateToComposeZ();
+                ((MainActivity)activity).slideView(ViewType.COMPOSE_Z, Direction.TO_UP);
             }
         };
 

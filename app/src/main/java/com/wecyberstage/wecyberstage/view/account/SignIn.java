@@ -85,6 +85,7 @@ public class SignIn extends CustomView {
                         if(resource.data) {
                             Log.i("SignIn","Sign in success");
                             ((MainActivity) appCompatActivity).setCharacter(characterFactory.getCharacter(CharacterFactory.USER_TYPE.REGISTERED));
+
                         }
                         break;
                     case ERROR:
@@ -130,6 +131,6 @@ public class SignIn extends CustomView {
 
     @OnClick(R.id.signIn_signUp)
     public void signUp(View view) {
-        ((MainActivity) appCompatActivity).navigateToSignUp(Direction.TO_LEFT);
+        ((MainActivity) appCompatActivity).slideView(ViewType.SIGN_UP, Direction.TO_LEFT);
     }
 }
