@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.util.label.PerActivity;
+import com.wecyberstage.wecyberstage.view.helper.ItemTouchHelperAdapter;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class ComposeXScriptAdapter extends ListDelegationAdapter {
+public class ComposeXScriptAdapter extends ListDelegationAdapter implements ItemTouchHelperAdapter {
 
     @Inject
     public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates) {
@@ -26,6 +27,16 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter {
         dataSet.add(new TimeLine());
         dataSet.addAll(script.avatarLines);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+
     }
 
 }

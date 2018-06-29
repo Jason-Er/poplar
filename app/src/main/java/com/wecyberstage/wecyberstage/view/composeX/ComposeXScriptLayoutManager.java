@@ -212,4 +212,21 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         }
     }
 
+    public void updateOneViewHolder(RecyclerView.ViewHolder viewHolder) {
+        List<Object> dataSet = adapter.getDataSet();
+        int position =  viewHolder.getAdapterPosition();
+        ComposeScript.Avatar_Line avatarLine = (ComposeScript.Avatar_Line) dataSet.get(position);
+        float startTime = viewHolder.itemView.getTranslationX() * TIME_SPAN / getHorizontalSpace() + avatarLine.getLine().startTime;
+        avatarLine.getLine().startTime = startTime;
+        Log.i("LayoutManager","updateOneViewHolder startTime: "+startTime);
+
+        View view = viewHolder.itemView;
+        measureChildWithMargins(view, 0, 0);
+        int mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
+        int mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
+        layoutDecorated(view, (int)(startTime * getHorizontalSpace() / TIME_SPAN) - leftOffset, topOffset + mDecoratedChildHeight,
+                (int)(startTime * getHorizontalSpace() / TIME_SPAN) + mDecoratedChildWidth - leftOffset,
+                topOffset + mDecoratedChildHeight + mDecoratedChildHeight);
+
+    }
 }

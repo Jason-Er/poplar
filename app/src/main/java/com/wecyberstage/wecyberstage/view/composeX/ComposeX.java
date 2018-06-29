@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
+import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
@@ -56,6 +57,10 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(layoutManager);
         ((RecyclerView)view).setAdapter(adapter);
+
+        CustomItemTouchHelper.Callback callback = new ComposeXItemTouchHelperCallback(adapter);
+        CustomItemTouchHelper itemTouchHelper = new CustomItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(((RecyclerView)view));
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
         PlayState playState = activity.getIntent().getParcelableExtra(COMPOSE_INFO_KEY);
