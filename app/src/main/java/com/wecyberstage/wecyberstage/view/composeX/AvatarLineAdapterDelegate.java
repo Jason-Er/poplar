@@ -47,7 +47,7 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.avatar_line_card_view, parent, false);
+                .inflate(R.layout.compose_x_card_line, parent, false);
         return new AvatarLineViewHolder(v);
     }
 
