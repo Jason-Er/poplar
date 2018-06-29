@@ -4,9 +4,9 @@ import com.wecyberstage.wecyberstage.model.ComposeScript;
 
 public class ComposeYItemDto {
     private ComposeYCardViewType viewType;
-    private ComposeScript.Avatar_Line avatarLine;
+    private ComposeScript.AvatarLine avatarLine;
 
-    public ComposeYItemDto(ComposeYCardViewType viewType, ComposeScript.Avatar_Line avatarLine) {
+    public ComposeYItemDto(ComposeYCardViewType viewType, ComposeScript.AvatarLine avatarLine) {
         this.viewType = viewType;
         this.avatarLine = avatarLine;
     }
@@ -15,7 +15,7 @@ public class ComposeYItemDto {
         return viewType;
     }
 
-    public ComposeScript.Avatar_Line getAvatarLine() {
+    public ComposeScript.AvatarLine getAvatarLine() {
         return avatarLine;
     }
 }

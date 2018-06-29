@@ -2,14 +2,13 @@ package com.wecyberstage.wecyberstage.view.helper;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.ArrayMap;
 
 public class PlayState implements Parcelable {
     private long playId;
     private long sceneId;
-    private float startTime; // Millisecond
+    private long startTime; // Millisecond
 
-    public PlayState(long playId, long sceneId, float startTime) {
+    public PlayState(long playId, long sceneId, long startTime) {
         this.playId = playId;
         this.sceneId = sceneId;
         this.startTime = startTime;
@@ -18,7 +17,7 @@ public class PlayState implements Parcelable {
     protected PlayState(Parcel in) {
         playId = in.readLong();
         sceneId = in.readLong();
-        startTime = in.readFloat();
+        startTime = in.readLong();
     }
 
     public static final Creator<PlayState> CREATOR = new Creator<PlayState>() {
@@ -42,7 +41,7 @@ public class PlayState implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(playId);
         dest.writeLong(sceneId);
-        dest.writeFloat(startTime);
+        dest.writeLong(startTime);
     }
 
     public long getPlayId() {
@@ -65,8 +64,28 @@ public class PlayState implements Parcelable {
         return startTime;
     }
 
-    public void setStartTime(float startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        PlayState playState = (PlayState) obj;
+
+        if ( playId != playState.playId || sceneId != playState.sceneId || startTime != playState.startTime ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (31 * playId + 15 * sceneId + startTime);
+        return result;
     }
 }
 

@@ -1,7 +1,6 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.support.annotation.NonNull;
-import android.util.SparseArray;
 
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
@@ -26,7 +25,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter {
         dataSet = new ArrayList<>();
         List<Long> listStart = new ArrayList<>();
         List<Long> listEnd = new ArrayList<>();
-        for(ComposeScript.Avatar_Line avatarLine: script.avatarLines) {
+        for(ComposeScript.AvatarLine avatarLine: script.avatarLines) {
             ComposeYCardViewType viewType;
             // TODO: 2018/5/22 need further refactoring: is user act some role then let the role id be start position
             if(listStart.contains(avatarLine.getLine().roleId)) {

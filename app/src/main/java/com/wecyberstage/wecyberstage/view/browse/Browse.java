@@ -74,7 +74,7 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
             @Override
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
-                playState = new PlayState(((PlayProfileCardView)v).playInfo.id, 1L, 0f);
+                playState = new PlayState(((PlayProfileCardView)v).playInfo.id, 1L, 0L);
                 ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
             }
         };

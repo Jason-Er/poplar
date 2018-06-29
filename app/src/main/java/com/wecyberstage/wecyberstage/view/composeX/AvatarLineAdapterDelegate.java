@@ -39,7 +39,7 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
 
     @Override
     public boolean isForViewType(@NonNull List<Object> items, int position) {
-        return items.get(position) instanceof ComposeScript.Avatar_Line;
+        return items.get(position) instanceof ComposeScript.AvatarLine;
     }
 
     @NonNull
@@ -54,7 +54,7 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
         Log.i("ComposeX", "onBindViewHolder");
-        ((AvatarLineViewHolder) holder).dialogue.setText(((ComposeScript.Avatar_Line) items.get(position)).getLine().dialogue);
+        ((AvatarLineViewHolder) holder).dialogue.setText(((ComposeScript.AvatarLine) items.get(position)).getLine().dialogue);
         ((AvatarLineCardView)holder.itemView).setPosition(position);
     }
 }

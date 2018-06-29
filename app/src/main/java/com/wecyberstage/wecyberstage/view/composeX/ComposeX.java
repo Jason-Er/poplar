@@ -14,12 +14,14 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
+import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
 import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
+import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
 import javax.inject.Inject;
@@ -28,16 +30,15 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface {
+public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface, UpdateComposeScriptInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
     private ComposeViewModel viewModel;
     private AppCompatActivity appCompatActivity;
     private ComposeXScriptLayoutManager layoutManager;
+    private ComposeXScriptAdapter adapter;
 
-    @Inject
-    ComposeXScriptAdapter adapter;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -53,6 +54,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
+        adapter = new ComposeXScriptAdapter(new AdapterDelegatesManager<>(), this);
         layoutManager = new ComposeXScriptLayoutManager(adapter);
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(layoutManager);
@@ -91,5 +93,10 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void slideEnd() {
         appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    @Override
+    public void updateAvatarLine(ComposeScript.AvatarLine avatarLine, int ordinal) {
+        viewModel.updateAvatarLine(avatarLine, ordinal);
     }
 }
