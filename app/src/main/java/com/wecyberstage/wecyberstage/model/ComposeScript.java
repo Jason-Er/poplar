@@ -1,7 +1,5 @@
 package com.wecyberstage.wecyberstage.model;
 
-import com.wecyberstage.wecyberstage.view.composeX.ViewTypeInterface;
-
 import java.util.ArrayList;
 import java.util.List;
 

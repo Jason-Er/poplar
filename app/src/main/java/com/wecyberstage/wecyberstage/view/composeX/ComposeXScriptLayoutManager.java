@@ -110,6 +110,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         return getWidth() - getPaddingStart() - getPaddingEnd();
     }
 
+    private SparseArray viewsMaxHeight;
     private void fillVisibleChildren(RecyclerView.Recycler recycler){
 
         SparseArray viewCache = new SparseArray();
@@ -125,7 +126,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
             }
         }
 
-        SparseArray viewsMaxHeight = new SparseArray();
+        viewsMaxHeight = new SparseArray();
         List<Object> dataSet = adapter.getDataSet();
 
         int mDecoratedChildWidth, mDecoratedChildHeight;
@@ -224,9 +225,10 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         measureChildWithMargins(view, 0, 0);
         int mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
         int mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
-        layoutDecorated(view, (int)(startTime * getHorizontalSpace() / TIME_SPAN) - leftOffset, topOffset + mDecoratedChildHeight,
-                (int)(startTime * getHorizontalSpace() / TIME_SPAN) + mDecoratedChildWidth - leftOffset,
-                topOffset + mDecoratedChildHeight + mDecoratedChildHeight);
+        layoutDecorated(view, (int) ( avatarLine.getLine().startTime / TIME_SPAN * getHorizontalSpace()) - leftOffset,
+                (int) viewsMaxHeight.get((int) avatarLine.getLine().roleId) - topOffset - mDecoratedChildHeight,
+                (int) ( avatarLine.getLine().startTime / TIME_SPAN * getHorizontalSpace()) + mDecoratedChildWidth - leftOffset,
+                (int) viewsMaxHeight.get((int) avatarLine.getLine().roleId) - topOffset);
 
     }
 }
