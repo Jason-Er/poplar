@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -20,12 +21,13 @@ import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
 import javax.inject.Inject;
 
-public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener, UtilityInterface {
+public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener, UtilityInterface, SlideInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -40,11 +42,11 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
 
     public ComposeY(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
         super(activity, container, viewType);
+        this.activity = activity;
     }
 
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
-        this.activity = activity;
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.view_recycler, container,false);
 
@@ -99,5 +101,10 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
         if(activity.getCurrentFocus() == null) return;
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    @Override
+    public void slideEnd() {
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

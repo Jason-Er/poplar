@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.browse;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
@@ -36,9 +38,10 @@ import timber.log.Timber;
  * Created by mike on 2018/3/5.
  */
 
-public class Browse extends CustomView implements PlayStateInterface {
+public class Browse extends CustomView implements PlayStateInterface, SlideInterface {
 
     private BrowseViewModel viewModel;
+    private AppCompatActivity appCompatActivity;
     private RecyclerView.Adapter adapter;
     private PlayState playState; // which contains the play is clicked
 
@@ -47,6 +50,7 @@ public class Browse extends CustomView implements PlayStateInterface {
 
     public Browse(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
         super(activity, container, viewType);
+        this.appCompatActivity = activity;
     }
 
     @Override
@@ -70,7 +74,7 @@ public class Browse extends CustomView implements PlayStateInterface {
             @Override
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
-                playState = new PlayState(((PlayProfileCardView)v).playInfo.id, 1L, 0f);
+                playState = new PlayState(((PlayProfileCardView)v).playInfo.id, 1L, 0L);
                 ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
             }
         };
@@ -94,6 +98,7 @@ public class Browse extends CustomView implements PlayStateInterface {
                 }
             }
         });
+
     }
 
     @Override
@@ -104,5 +109,10 @@ public class Browse extends CustomView implements PlayStateInterface {
     @Override
     public PlayState getPlayState() {
         return playState;
+    }
+
+    @Override
+    public void slideEnd() {
+        appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

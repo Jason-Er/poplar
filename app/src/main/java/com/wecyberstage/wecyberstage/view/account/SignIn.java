@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.HideReturnsTransformationMethod;
@@ -24,6 +25,7 @@ import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
+import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
@@ -39,7 +41,7 @@ import timber.log.Timber;
  * Created by mike on 2018/3/5.
  */
 
-public class SignIn extends CustomView {
+public class SignIn extends CustomView implements SlideInterface {
 
     private AccountViewModel viewModel;
     private AppCompatActivity appCompatActivity;
@@ -135,5 +137,10 @@ public class SignIn extends CustomView {
     @OnClick(R.id.signIn_navigateUp)
     public void navigateUp(View view) {
         ((MainActivity) appCompatActivity).slideUp();
+    }
+
+    @Override
+    public void slideEnd() {
+        appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

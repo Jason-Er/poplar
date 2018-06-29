@@ -47,6 +47,7 @@ import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 
@@ -414,21 +415,21 @@ public class MainActivity extends AppCompatActivity
         switch (direction) {
             case TO_UP:
                 followView.setTranslationY(followView.getHeight());
-                CustomViewSlideHelper.SlideVertical(currentView, followView, -1);
+                CustomViewSlideHelper.SlideVertical(currentView, followView, -1, (SlideInterface) to);
                 break;
             case TO_RIGHT:
                 Log.i("Slide", "To right +++++");
                 followView.setTranslationX(-followView.getWidth());
-                CustomViewSlideHelper.SlideHorizontal(currentView, followView, 1);
+                CustomViewSlideHelper.SlideHorizontal(currentView, followView, 1, (SlideInterface) to);
                 break;
             case TO_DOWN:
                 followView.setTranslationY(-followView.getHeight());
-                CustomViewSlideHelper.SlideVertical(currentView, followView, 1);
+                CustomViewSlideHelper.SlideVertical(currentView, followView, 1, (SlideInterface) to);
                 break;
             case TO_LEFT:
                 Log.i("Slide", "To left +++++");
                 followView.setTranslationX(followView.getWidth());
-                CustomViewSlideHelper.SlideHorizontal(currentView, followView, -1);
+                CustomViewSlideHelper.SlideHorizontal(currentView, followView, -1, (SlideInterface) to);
                 break;
         }
         this.currentView = to;

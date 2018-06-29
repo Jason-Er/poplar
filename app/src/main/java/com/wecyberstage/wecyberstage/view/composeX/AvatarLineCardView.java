@@ -9,8 +9,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 
-public class AvatarLineCardView extends CardView {
+public class AvatarLineCardView extends RelativeLayout {
 
     private int position;
 

@@ -3,7 +3,8 @@ package com.wecyberstage.wecyberstage.view.composeX;
 import android.support.annotation.NonNull;
 
 import com.wecyberstage.wecyberstage.model.ComposeScript;
-import com.wecyberstage.wecyberstage.util.label.PerActivity;
+import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
+import com.wecyberstage.wecyberstage.view.helper.ItemTouchHelperAdapter;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -11,14 +12,17 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class ComposeXScriptAdapter extends ListDelegationAdapter {
+public class ComposeXScriptAdapter extends ListDelegationAdapter implements ItemTouchHelperAdapter, UpdateComposeScriptInterface {
+
+    final private UpdateComposeScriptInterface updateComposeScriptInterface;
 
     @Inject
-    public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates) {
+    public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates, UpdateComposeScriptInterface updateComposeScriptInterface) {
         super(delegates);
         delegatesManager
                 .addDelegate(new AvatarLineAdapterDelegate(ComposeXCardViewType.AVATAR_LINE.ordinal()))
                 .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
+        this.updateComposeScriptInterface = updateComposeScriptInterface;
     }
 
     public void setComposeScript(@NonNull ComposeScript script) {
@@ -28,4 +32,18 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter {
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+
+    }
+
+    @Override
+    public void updateAvatarLine(ComposeScript.AvatarLine avatarLine, int ordinal) {
+        updateComposeScriptInterface.updateAvatarLine(avatarLine, ordinal);
+    }
 }

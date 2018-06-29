@@ -5,11 +5,11 @@ import java.util.List;
 
 public class ComposeScript {
 
-    public static class Avatar_Line {
+    public static class AvatarLine {
         private Avatar avatar;
         private Line line;
 
-        public Avatar_Line(Avatar avatar, Line line) {
+        public AvatarLine(Avatar avatar, Line line) {
             this.avatar = avatar;
             this.line = line;
         }
@@ -18,7 +18,7 @@ public class ComposeScript {
             return avatar;
         }
 
-        public Avatar_Line setAvatar(Avatar avatar) {
+        public AvatarLine setAvatar(Avatar avatar) {
             this.avatar = avatar;
             return this;
         }
@@ -27,10 +27,11 @@ public class ComposeScript {
             return line;
         }
 
-        public Avatar_Line setLine(Line line) {
+        public AvatarLine setLine(Line line) {
             this.line = line;
             return this;
         }
+
     }
 
     public static class Avatar {
@@ -61,7 +62,7 @@ public class ComposeScript {
 
     public long playId;
     public long sceneId;
-    public List<Avatar_Line> avatarLines;
+    public List<AvatarLine> avatarLines;
 
     public ComposeScript(long playId, long sceneId) {
         this.playId = playId;

@@ -6,7 +6,6 @@ import android.util.SparseArray;
 import android.view.View;
 
 import com.wecyberstage.wecyberstage.model.ComposeScript;
-import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegatesManager;
 
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         int totalLength;
         List<Object> dataSet = adapter.getDataSet();
         if (dataSet != null && dataSet.size() > 1) {
-            ComposeScript.Avatar_Line avatarLine = (ComposeScript.Avatar_Line) dataSet.get(dataSet.size() -1);
+            ComposeScript.AvatarLine avatarLine = (ComposeScript.AvatarLine) dataSet.get(dataSet.size() -1);
             int tempLength = (int) ((avatarLine.getLine().startTime + avatarLine.getLine().duration) / TIME_SPAN * getHorizontalSpace());
             totalLength = tempLength > getHorizontalSpace() ? tempLength : getHorizontalSpace();
         } else {
@@ -110,6 +109,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         return getWidth() - getPaddingStart() - getPaddingEnd();
     }
 
+    private SparseArray viewsMaxHeight;
     private void fillVisibleChildren(RecyclerView.Recycler recycler){
 
         SparseArray viewCache = new SparseArray();
@@ -125,7 +125,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
             }
         }
 
-        SparseArray viewsMaxHeight = new SparseArray();
+        viewsMaxHeight = new SparseArray();
         List<Object> dataSet = adapter.getDataSet();
 
         int mDecoratedChildWidth, mDecoratedChildHeight;
@@ -148,7 +148,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
                     break;
                 }
                 case AVATAR_LINE: {
-                    ComposeScript.Avatar_Line avatarLine = (ComposeScript.Avatar_Line) dataSet.get(i);
+                    ComposeScript.AvatarLine avatarLine = (ComposeScript.AvatarLine) dataSet.get(i);
                     if (isVisible(avatarLine.getLine().startTime, avatarLine.getLine().duration)) {
                         View view = (View) viewCache.get(i);
                         if (view != null) {
@@ -187,7 +187,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         for(int i = 1; i < getChildCount(); i++) {
             View view = getChildAt(i);
             int position = ((AvatarLineCardView) view).getPosition();
-            ComposeScript.Avatar_Line avatarLine = (ComposeScript.Avatar_Line) dataSet.get(position);
+            ComposeScript.AvatarLine avatarLine = (ComposeScript.AvatarLine) dataSet.get(position);
 
             mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
             mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
@@ -212,4 +212,23 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         }
     }
 
+    public void updateOneViewHolder(RecyclerView.ViewHolder viewHolder) {
+        List<Object> dataSet = adapter.getDataSet();
+        int position =  viewHolder.getAdapterPosition();
+        ComposeScript.AvatarLine avatarLine = (ComposeScript.AvatarLine) dataSet.get(position);
+        float startTime = viewHolder.itemView.getTranslationX() * TIME_SPAN / getHorizontalSpace() + avatarLine.getLine().startTime;
+        avatarLine.getLine().startTime = startTime;
+        Log.i("LayoutManager","updateOneViewHolder startTime: "+startTime);
+
+        View view = viewHolder.itemView;
+        measureChildWithMargins(view, 0, 0);
+        int mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
+        int mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
+        layoutDecorated(view, (int) ( avatarLine.getLine().startTime / TIME_SPAN * getHorizontalSpace()) - leftOffset,
+                (int) viewsMaxHeight.get((int) avatarLine.getLine().roleId) - topOffset - mDecoratedChildHeight,
+                (int) ( avatarLine.getLine().startTime / TIME_SPAN * getHorizontalSpace()) + mDecoratedChildWidth - leftOffset,
+                (int) viewsMaxHeight.get((int) avatarLine.getLine().roleId) - topOffset);
+
+        adapter.updateAvatarLine(avatarLine, position-1); // "position -1" for the first place is for timeLine view
+    }
 }
