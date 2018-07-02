@@ -1,13 +1,17 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
+import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
@@ -44,8 +48,6 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
         }
     }
 
-
-
     @Override
     public boolean isForViewType(@NonNull List<Object> items, int position) {
         return items.get(position) instanceof ComposeScript.AvatarLine;
@@ -71,6 +73,20 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
                 if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
                     startDragListener.onStartDrag(holder);
                 }
+                return false;
+            }
+        });
+        ((AvatarLineViewHolder) holder).avatar.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.i("AvatarLineAdapter","Long press");
+                LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View popup = inflater.inflate(R.layout.popup_avatar_choose,null);
+                PopupWindow popupWindow = new PopupWindow(popup, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                if(Build.VERSION.SDK_INT>=21){
+                    popupWindow.setElevation(5.0f);
+                }
+                popupWindow.showAsDropDown(v);
                 return false;
             }
         });
