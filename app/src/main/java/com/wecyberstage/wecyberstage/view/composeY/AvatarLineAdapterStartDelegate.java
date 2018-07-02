@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.model.ComposeScript;
-import com.wecyberstage.wecyberstage.view.composeX.AvatarLineCardView;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -48,7 +46,7 @@ class AvatarLineAdapterStartDelegate extends ViewTypeDelegateClass implements Ad
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.compose_y_avatar_line_left, parent, false);
+                .inflate(R.layout.composey_avatarline_left, parent, false);
         return new AvatarLineViewHolder(v);
     }
 

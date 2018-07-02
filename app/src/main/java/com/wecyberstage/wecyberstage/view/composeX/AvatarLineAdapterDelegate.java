@@ -26,9 +26,9 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
     }
 
     class AvatarLineViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.line_avatar)
+        @BindView(R.id.composeXCardLine_lineAvatar)
         ImageView avatar;
-        @BindView(R.id.line_dialogue)
+        @BindView(R.id.composeXCardLine_lineDialogue)
         TextView dialogue;
 
         public AvatarLineViewHolder(View v) {
@@ -47,7 +47,7 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.compose_x_card_line, parent, false);
+                .inflate(R.layout.composex_avatarline, parent, false);
         return new AvatarLineViewHolder(v);
     }
 
