@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -94,7 +95,9 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
                 if(Build.VERSION.SDK_INT>=21){
                     popupWindow.setElevation(5.0f);
                 }
-                popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setFocusable(true);
+                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 popupWindow.showAsDropDown(v);
                 return false;
             }
