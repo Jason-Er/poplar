@@ -1,15 +1,16 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -82,10 +83,18 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
                 Log.i("AvatarLineAdapter","Long press");
                 LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View popup = inflater.inflate(R.layout.popup_avatar_choose,null);
-                PopupWindow popupWindow = new PopupWindow(popup, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                final PopupWindow popupWindow = new PopupWindow(popup, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ImageButton closeButton = popup.findViewById(R.id.ib_close);
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindow.dismiss();
+                    }
+                });
                 if(Build.VERSION.SDK_INT>=21){
                     popupWindow.setElevation(5.0f);
                 }
+                popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
                 popupWindow.showAsDropDown(v);
                 return false;
             }
