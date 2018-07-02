@@ -18,7 +18,7 @@ public class ComposeXItemTouchHelperCallback extends CustomItemTouchHelper.Callb
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
+        return false;
     }
 
     @Override

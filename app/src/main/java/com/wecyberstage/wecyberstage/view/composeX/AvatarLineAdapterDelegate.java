@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
+import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -21,11 +23,16 @@ import butterknife.ButterKnife;
 
 class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
-    public AvatarLineAdapterDelegate(int viewType) {
+    final private OnStartDragListener startDragListener;
+
+    public AvatarLineAdapterDelegate(int viewType, OnStartDragListener startDragListener) {
         super(viewType);
+        this.startDragListener = startDragListener;
     }
 
     class AvatarLineViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.composeXCardLine_dragHandle)
+        ImageView dragHandle;
         @BindView(R.id.composeXCardLine_lineAvatar)
         ImageView avatar;
         @BindView(R.id.composeXCardLine_lineDialogue)
@@ -36,6 +43,8 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
             ButterKnife.bind(this, v);
         }
     }
+
+
 
     @Override
     public boolean isForViewType(@NonNull List<Object> items, int position) {
@@ -52,9 +61,19 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
+    public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull final RecyclerView.ViewHolder holder) {
         Log.i("ComposeX", "onBindViewHolder");
         ((AvatarLineViewHolder) holder).dialogue.setText(((ComposeScript.AvatarLine) items.get(position)).getLine().dialogue);
         ((AvatarLineCardView)holder.itemView).setPosition(position);
+        ((AvatarLineViewHolder) holder).dragHandle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                    startDragListener.onStartDrag(holder);
+                }
+                return false;
+            }
+        });
     }
+
 }

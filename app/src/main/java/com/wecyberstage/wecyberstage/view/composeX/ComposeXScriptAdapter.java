@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
+import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ItemTouchHelperAdapter;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
@@ -17,10 +18,12 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
     final private UpdateComposeScriptInterface updateComposeScriptInterface;
 
     @Inject
-    public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates, UpdateComposeScriptInterface updateComposeScriptInterface) {
+    public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates,
+                                 UpdateComposeScriptInterface updateComposeScriptInterface,
+                                 OnStartDragListener startDragListener) {
         super(delegates);
         delegatesManager
-                .addDelegate(new AvatarLineAdapterDelegate(ComposeXCardViewType.AVATAR_LINE.ordinal()))
+                .addDelegate(new AvatarLineAdapterDelegate(ComposeXCardViewType.AVATAR_LINE.ordinal(), startDragListener))
                 .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
         this.updateComposeScriptInterface = updateComposeScriptInterface;
     }

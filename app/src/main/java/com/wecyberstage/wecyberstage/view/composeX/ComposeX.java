@@ -15,6 +15,7 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
+import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
@@ -30,7 +31,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface, UpdateComposeScriptInterface {
+public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface, UpdateComposeScriptInterface, OnStartDragListener {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -38,6 +39,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     private AppCompatActivity appCompatActivity;
     private ComposeXScriptLayoutManager layoutManager;
     private ComposeXScriptAdapter adapter;
+    private CustomItemTouchHelper itemTouchHelper;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -54,14 +56,14 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
-        adapter = new ComposeXScriptAdapter(new AdapterDelegatesManager<>(), this);
+        adapter = new ComposeXScriptAdapter(new AdapterDelegatesManager<>(), this, this);
         layoutManager = new ComposeXScriptLayoutManager(adapter);
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(layoutManager);
         ((RecyclerView)view).setAdapter(adapter);
 
         CustomItemTouchHelper.Callback callback = new ComposeXItemTouchHelperCallback(adapter);
-        CustomItemTouchHelper itemTouchHelper = new CustomItemTouchHelper(callback);
+        itemTouchHelper = new CustomItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(((RecyclerView)view));
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
@@ -98,5 +100,10 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void updateAvatarLine(ComposeScript.AvatarLine avatarLine, int ordinal) {
         viewModel.updateAvatarLine(avatarLine, ordinal);
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
     }
 }
