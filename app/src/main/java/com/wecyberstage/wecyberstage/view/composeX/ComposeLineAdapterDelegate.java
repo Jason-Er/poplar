@@ -22,11 +22,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
     final private OnStartDragListener startDragListener;
 
-    public AvatarLineAdapterDelegate(int viewType, OnStartDragListener startDragListener) {
+    public ComposeLineAdapterDelegate(int viewType, OnStartDragListener startDragListener) {
         super(viewType);
         this.startDragListener = startDragListener;
     }
@@ -63,7 +63,7 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
     public void onBindViewHolder(@NonNull final List<Object> items, final int position, @NonNull final RecyclerView.ViewHolder holder) {
         Log.i("ComposeX", "onBindViewHolder");
         ((AvatarLineViewHolder) holder).dialogue.setText(((ComposeLine) items.get(position)).line.dialogue);
-        ((AvatarLineCardView)holder.itemView).setPosition(position);
+        ((ComposeLineCardView)holder.itemView).setPosition(position);
         ((AvatarLineViewHolder) holder).dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

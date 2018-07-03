@@ -11,19 +11,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-public class AvatarLineCardView extends RelativeLayout {
+public class ComposeLineCardView extends RelativeLayout {
 
     private int position;
 
-    public AvatarLineCardView(@NonNull Context context) {
+    public ComposeLineCardView(@NonNull Context context) {
         super(context);
     }
 
-    public AvatarLineCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public ComposeLineCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public AvatarLineCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ComposeLineCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
