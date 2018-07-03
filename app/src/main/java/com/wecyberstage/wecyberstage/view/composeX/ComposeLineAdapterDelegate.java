@@ -31,7 +31,7 @@ class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements Adapte
         this.startDragListener = startDragListener;
     }
 
-    class AvatarLineViewHolder extends RecyclerView.ViewHolder {
+    class ComposeLineViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.composeXCardLine_dragHandle)
         ImageView dragHandle;
         @BindView(R.id.composeXCardLine_lineAvatar)
@@ -39,7 +39,7 @@ class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements Adapte
         @BindView(R.id.composeXCardLine_lineDialogue)
         TextView dialogue;
 
-        AvatarLineViewHolder(View v) {
+        ComposeLineViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
@@ -56,15 +56,15 @@ class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements Adapte
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.composex_avatarline, parent, false);
-        return new AvatarLineViewHolder(v);
+        return new ComposeLineViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final List<Object> items, final int position, @NonNull final RecyclerView.ViewHolder holder) {
         Log.i("ComposeX", "onBindViewHolder");
-        ((AvatarLineViewHolder) holder).dialogue.setText(((ComposeLine) items.get(position)).line.dialogue);
+        ((ComposeLineViewHolder) holder).dialogue.setText(((ComposeLine) items.get(position)).line.dialogue);
         ((ComposeLineCardView)holder.itemView).setPosition(position);
-        ((AvatarLineViewHolder) holder).dragHandle.setOnTouchListener(new View.OnTouchListener() {
+        ((ComposeLineViewHolder) holder).dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
@@ -73,7 +73,7 @@ class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements Adapte
                 return false;
             }
         });
-        ((AvatarLineViewHolder) holder).avatar.setOnLongClickListener(new View.OnLongClickListener() {
+        ((ComposeLineViewHolder) holder).avatar.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 Log.i("AvatarLineAdapter","Long press");

@@ -35,7 +35,8 @@ public class LineEntity {
     public String direction;
     public String dialogue;
 
-    @ColumnInfo(name = "begin_time") // offset to ordinal time
+    // millisecond
+    @ColumnInfo(name = "begin_time")
     public long beginTime;
 
     @ColumnInfo(name = "audio_url")

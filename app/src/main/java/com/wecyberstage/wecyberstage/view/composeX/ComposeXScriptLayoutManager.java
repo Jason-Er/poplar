@@ -18,6 +18,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
     private float beginTime = 0;
     private TimeLineView timeLineView;
     private final float TIME_SPAN = 10f; // 10 second for this view
+    private final float MS_PERSECOND = 1000f;
     private ComposeXScriptAdapter adapter;
 
     @Inject
@@ -66,7 +67,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         List<Object> dataSet = adapter.getDataSet();
         if (dataSet != null && dataSet.size() > 1) {
             ComposeLine composeLine = (ComposeLine) dataSet.get(dataSet.size() -1);
-            int tempLength = (int) ((composeLine.line.beginTime + composeLine.line.duration) / TIME_SPAN * getHorizontalSpace());
+            int tempLength = (int) (( (float) composeLine.line.beginTime / MS_PERSECOND + composeLine.line.duration) / TIME_SPAN * getHorizontalSpace());
             totalLength = tempLength > getHorizontalSpace() ? tempLength : getHorizontalSpace();
         } else {
             totalLength = getHorizontalSpace();
@@ -192,9 +193,9 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
             mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
             mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
 
-            layoutDecorated(view, (int) ( composeLine.line.beginTime / TIME_SPAN * getHorizontalSpace()) - leftOffset,
+            layoutDecorated(view, (int) ( (float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace() ) - leftOffset,
                     (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset - mDecoratedChildHeight,
-                    (int) ( composeLine.line.beginTime / TIME_SPAN * getHorizontalSpace()) + mDecoratedChildWidth - leftOffset,
+                    (int) ( (float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace()) + mDecoratedChildWidth - leftOffset,
                     (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset);
         }
 
@@ -205,7 +206,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
     }
 
     private boolean isVisible(float startTime, float duration) {
-        if( startTime >= beginTime && startTime <= beginTime + 10 || startTime + duration >= beginTime && startTime + duration <= beginTime + 10) {
+        if( startTime >= beginTime / MS_PERSECOND && startTime <= beginTime / MS_PERSECOND + 10 || startTime / MS_PERSECOND + duration >= beginTime && startTime / MS_PERSECOND + duration <= beginTime / MS_PERSECOND + 10) {
             return true;
         } else {
             return false;
@@ -216,7 +217,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         List<Object> dataSet = adapter.getDataSet();
         int position =  viewHolder.getAdapterPosition();
         ComposeLine composeLine = (ComposeLine) dataSet.get(position);
-        long startTime = (long) ( viewHolder.itemView.getTranslationX() * TIME_SPAN / getHorizontalSpace() + composeLine.line.beginTime );
+        long startTime = (long) ( viewHolder.itemView.getTranslationX() * TIME_SPAN * MS_PERSECOND / getHorizontalSpace() + (float) composeLine.line.beginTime );
         composeLine.line.beginTime = startTime;
         Log.i("LayoutManager","updateOneViewHolder startTime: "+startTime);
 
@@ -224,9 +225,9 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         measureChildWithMargins(view, 0, 0);
         int mDecoratedChildWidth = getDecoratedMeasuredWidth(view);
         int mDecoratedChildHeight = getDecoratedMeasuredHeight(view);
-        layoutDecorated(view, (int) ( composeLine.line.beginTime / TIME_SPAN * getHorizontalSpace()) - leftOffset,
+        layoutDecorated(view, (int) ( (float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace()) - leftOffset,
                 (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset - mDecoratedChildHeight,
-                (int) ( composeLine.line.beginTime / TIME_SPAN * getHorizontalSpace()) + mDecoratedChildWidth - leftOffset,
+                (int) ( (float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace()) + mDecoratedChildWidth - leftOffset,
                 (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset);
 
         adapter.updateComposeLine(composeLine, position-1); // "position -1" for the first place is for timeLine view

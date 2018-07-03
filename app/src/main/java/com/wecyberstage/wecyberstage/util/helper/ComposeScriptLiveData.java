@@ -32,7 +32,7 @@ public class ComposeScriptLiveData extends LiveData<ComposeScript> implements Pl
             composeScript = new ComposeScript(playState.getPlayId(), playState.getSceneId());
             for(int i = 0; i< 12; i++) {
                 MaskGraph maskGraph = new MaskGraph(i%3, 0, "http://www.f1188.com/upload/20180107205142.jpg");
-                Line line = new Line(i%3, "Hello " + i, 3 * i, 1);
+                Line line = new Line(i%3, "Hello " + i, 3 * i * 1000, 1);
                 ComposeLine composeLine = new ComposeLine(maskGraph, line);
                 composeScript.composeLineList.add(composeLine);
             }
