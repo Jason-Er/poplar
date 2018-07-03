@@ -10,16 +10,23 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.model.ComposeScript;
+import com.wecyberstage.wecyberstage.model.Mask;
+import com.wecyberstage.wecyberstage.model.MaskGraph;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PopupChooseAvatar extends PopupWindow{
+public class PopupChooseMask extends PopupWindow{
 
     private View anchorView;
-    public PopupChooseAvatar(View view) {
+    private MaskGraph maskGraph;
+    public PopupChooseMask(View view, MaskGraph maskGraph, Mask mask) {
         super(view.getContext());
         anchorView = view;
+        this.maskGraph = maskGraph;
         View contentView = LayoutInflater.from(view.getContext()).inflate(R.layout.popup_avatar_choose,null);
         ButterKnife.bind(this, contentView);
         setContentView(contentView);

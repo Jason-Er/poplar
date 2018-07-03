@@ -18,19 +18,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class AvatarLineAdapterEndDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class ComposeLineAdapterEndDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
-    public AvatarLineAdapterEndDelegate(int viewType) {
+    public ComposeLineAdapterEndDelegate(int viewType) {
         super(viewType);
     }
 
-    class AvatarLineViewHolder extends RecyclerView.ViewHolder {
+    class ComposeLineViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.imageview_pic)
         ImageView avatar;
         @BindView(R.id.textview_message)
         TextView dialogue;
 
-        public AvatarLineViewHolder(View v) {
+        public ComposeLineViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
@@ -47,12 +47,12 @@ class AvatarLineAdapterEndDelegate extends ViewTypeDelegateClass implements Adap
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.composey_avatarline_right, parent, false);
-        return new AvatarLineViewHolder(v);
+        return new ComposeLineViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
         Log.i("ComposeX", "onBindViewHolder");
-        ((AvatarLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getAvatarLine().getLine().dialogue);
+        ((ComposeLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getComposeLine().line.dialogue);
     }
 }

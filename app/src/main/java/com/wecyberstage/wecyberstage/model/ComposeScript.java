@@ -5,6 +5,7 @@ import java.util.List;
 
 public class ComposeScript {
 
+    /*
     public static class AvatarLine {
         private Avatar avatar;
         private Line line;
@@ -59,14 +60,14 @@ public class ComposeScript {
             this.duration = duration;
         }
     }
-
+    */
     public long playId;
     public long sceneId;
-    public List<AvatarLine> avatarLines;
+    public List<ComposeLine> composeLineList;
 
     public ComposeScript(long playId, long sceneId) {
         this.playId = playId;
         this.sceneId = sceneId;
-        avatarLines = new ArrayList<>();
+        composeLineList = new ArrayList<>();
     }
 }

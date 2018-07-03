@@ -2,8 +2,8 @@ package com.wecyberstage.wecyberstage.viewmodel;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.util.Log;
 
+import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
 import com.wecyberstage.wecyberstage.util.helper.ComposeScriptLiveData;
@@ -32,7 +32,7 @@ public class ComposeViewModel extends ViewModel implements PlayStateInterface, U
     }
 
     @Override
-    public void updateAvatarLine(ComposeScript.AvatarLine avatarLine, int ordinal) {
-        ((ComposeScriptLiveData) scriptLiveData).updateAvatarLine(avatarLine, ordinal);
+    public void updateComposeLine(ComposeLine composeLine, int ordinal) {
+        ((ComposeScriptLiveData) scriptLiveData).updateComposeLine(composeLine, ordinal);
     }
 }

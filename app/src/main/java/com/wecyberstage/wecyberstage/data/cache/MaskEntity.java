@@ -10,14 +10,14 @@ import android.arch.persistence.room.PrimaryKey;
  * Created by mike on 2018/3/18.
  */
 
-@Entity(tableName = "figure",
+@Entity(tableName = "mask",
         foreignKeys = {
                 @ForeignKey(entity = UserEntity.class, parentColumns = "id", childColumns = "author_id")
         },
         indices = {
                 @Index(value = {"author_id"})
         })
-public class FigureEntity {
+public class MaskEntity {
     @PrimaryKey
     public long id;
 

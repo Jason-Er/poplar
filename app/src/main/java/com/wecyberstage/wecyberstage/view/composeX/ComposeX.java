@@ -6,13 +6,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
+import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
@@ -98,8 +98,8 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     }
 
     @Override
-    public void updateAvatarLine(ComposeScript.AvatarLine avatarLine, int ordinal) {
-        viewModel.updateAvatarLine(avatarLine, ordinal);
+    public void updateComposeLine(ComposeLine composeLine, int ordinal) {
+        viewModel.updateComposeLine(composeLine, ordinal);
     }
 
     @Override

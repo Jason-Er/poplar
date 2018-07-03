@@ -10,19 +10,19 @@ import android.arch.persistence.room.PrimaryKey;
  * Created by mike on 2018/3/19.
  */
 
-@Entity(tableName = "figure_graph",
+@Entity(tableName = "mask_graph",
         foreignKeys = {
-                @ForeignKey(entity = FigureEntity.class, parentColumns = "id", childColumns = "figure_id")
+                @ForeignKey(entity = MaskEntity.class, parentColumns = "id", childColumns = "mask_id")
         },
         indices = {
-                @Index(value = {"figure_id"})
+                @Index(value = {"mask_id"})
         })
-public class FigureGraphEntity {
+public class MaskGraphEntity {
     @PrimaryKey
     public long id;
 
-    @ColumnInfo(name = "figure_id")
-    public long figureId;
+    @ColumnInfo(name = "mask_id")
+    public long maskId;
 
     public long ordinal;
 

@@ -1,21 +1,21 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
-import com.wecyberstage.wecyberstage.model.ComposeScript;
+import com.wecyberstage.wecyberstage.model.ComposeLine;
 
 public class ComposeYItemDto {
     private ComposeYCardViewType viewType;
-    private ComposeScript.AvatarLine avatarLine;
+    private ComposeLine composeLine;
 
-    public ComposeYItemDto(ComposeYCardViewType viewType, ComposeScript.AvatarLine avatarLine) {
+    public ComposeYItemDto(ComposeYCardViewType viewType, ComposeLine composeLine) {
         this.viewType = viewType;
-        this.avatarLine = avatarLine;
+        this.composeLine = composeLine;
     }
 
     public ComposeYCardViewType getViewType() {
         return viewType;
     }
 
-    public ComposeScript.AvatarLine getAvatarLine() {
-        return avatarLine;
+    public ComposeLine getComposeLine() {
+        return composeLine;
     }
 }
