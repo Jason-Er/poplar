@@ -206,7 +206,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
     }
 
     private boolean isVisible(float startTime, float duration) {
-        if( startTime >= beginTime / MS_PERSECOND && startTime <= beginTime / MS_PERSECOND + 10 || startTime / MS_PERSECOND + duration >= beginTime && startTime / MS_PERSECOND + duration <= beginTime / MS_PERSECOND + 10) {
+        if( startTime / MS_PERSECOND >= beginTime && startTime / MS_PERSECOND <= beginTime + TIME_SPAN || startTime / MS_PERSECOND + duration >= beginTime && startTime / MS_PERSECOND + duration <= beginTime  + TIME_SPAN) {
             return true;
         } else {
             return false;
