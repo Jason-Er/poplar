@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
+import com.wecyberstage.wecyberstage.view.helper.PopupChooseAvatar;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -30,6 +31,9 @@ import butterknife.ButterKnife;
 class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
     final private OnStartDragListener startDragListener;
+    // below just for popupWindow
+    private PopupWindow popupWindow;
+    private ImageButton closeButton;
 
     public AvatarLineAdapterDelegate(int viewType, OnStartDragListener startDragListener) {
         super(viewType);
@@ -44,7 +48,7 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
         @BindView(R.id.composeXCardLine_lineDialogue)
         TextView dialogue;
 
-        public AvatarLineViewHolder(View v) {
+        AvatarLineViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
@@ -82,23 +86,8 @@ class AvatarLineAdapterDelegate extends ViewTypeDelegateClass implements Adapter
             @Override
             public boolean onLongClick(View v) {
                 Log.i("AvatarLineAdapter","Long press");
-                LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View popup = inflater.inflate(R.layout.popup_avatar_choose,null);
-                final PopupWindow popupWindow = new PopupWindow(popup, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                ImageButton closeButton = popup.findViewById(R.id.ib_close);
-                closeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        popupWindow.dismiss();
-                    }
-                });
-                if(Build.VERSION.SDK_INT>=21){
-                    popupWindow.setElevation(5.0f);
-                }
-                popupWindow.setOutsideTouchable(true);
-                popupWindow.setFocusable(true);
-                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                popupWindow.showAsDropDown(v);
+                PopupChooseAvatar chooseAvatar = new PopupChooseAvatar(v);
+                chooseAvatar.show();
                 return false;
             }
         });
