@@ -1,5 +1,5 @@
 package com.wecyberstage.wecyberstage.model;
 
 public interface UpdateComposeScriptInterface {
-    void updateAvatarLine(ComposeScript.AvatarLine avatarLine, int ordinal);
+    void updateComposeLine(ComposeLine composeLine, int ordinal);
 }

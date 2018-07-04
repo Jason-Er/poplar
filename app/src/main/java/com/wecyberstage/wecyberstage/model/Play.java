@@ -13,4 +13,5 @@ public class Play extends PlayEntity{
     public Stage stage;
     public List<Scene> scenes;
     public List<Role> cast;
+    public List<Mask> masks;
 }

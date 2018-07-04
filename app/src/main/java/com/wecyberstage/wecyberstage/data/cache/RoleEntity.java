@@ -14,7 +14,7 @@ import android.arch.persistence.room.PrimaryKey;
         foreignKeys = {
                 @ForeignKey(entity = PlayEntity.class, parentColumns = "id", childColumns = "play_id"),
                 @ForeignKey(entity = UserEntity.class, parentColumns = "id", childColumns = "actor_id"),
-                @ForeignKey(entity = FigureEntity.class, parentColumns = "id", childColumns = "figure_id")
+                @ForeignKey(entity = MaskEntity.class, parentColumns = "id", childColumns = "mask_id")
         },
         indices = {
                 @Index("actor_id"),
@@ -39,6 +39,6 @@ public class RoleEntity {
     @ColumnInfo(name = "play_id")
     public long playId;
 
-    @ColumnInfo(name = "figure_id")
-    public long figureId;
+    @ColumnInfo(name = "mask_id")
+    public long maskId;
 }

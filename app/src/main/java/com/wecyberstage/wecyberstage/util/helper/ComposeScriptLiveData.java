@@ -4,7 +4,12 @@ import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
 import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
+import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
+import com.wecyberstage.wecyberstage.model.Line;
+import com.wecyberstage.wecyberstage.model.Mask;
+import com.wecyberstage.wecyberstage.model.MaskGraph;
+import com.wecyberstage.wecyberstage.model.Role;
 import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
@@ -28,10 +33,19 @@ public class ComposeScriptLiveData extends LiveData<ComposeScript> implements Pl
             // TODO: 6/29/2018 dummy data below
             composeScript = new ComposeScript(playState.getPlayId(), playState.getSceneId());
             for(int i = 0; i< 12; i++) {
-                ComposeScript.Avatar avatar = new ComposeScript.Avatar(i%3, 0, "http://www.f1188.com/upload/20180107205142.jpg");
-                ComposeScript.Line line = new ComposeScript.Line(i%3, "Hello " + i, 3f * i, 1);
-                ComposeScript.AvatarLine avatarLine = new ComposeScript.AvatarLine(avatar, line);
-                composeScript.avatarLines.add(avatarLine);
+                MaskGraph maskGraph = new MaskGraph(i%3, 0, "http://www.f1188.com/upload/20180107205142.jpg");
+                Line line = new Line(i%3, "Hello " + i, 3 * i * 1000, 1);
+                ComposeLine composeLine = new ComposeLine(maskGraph, line);
+                composeScript.composeLineList.add(composeLine);
+            }
+            for(int i=0; i<3; i++) {
+                Mask mask = new Mask(i);
+                for(int j=0; j<3; j++) {
+                    MaskGraph maskGraph = new MaskGraph(i, j, "http://www.f1188.com/upload/20180107205142.jpg");
+                    mask.maskGraphList.add(maskGraph);
+                }
+                Role role = new Role(i, mask);
+                composeScript.roleList.add(role);
             }
         }
         setValue(composeScript);
@@ -43,9 +57,9 @@ public class ComposeScriptLiveData extends LiveData<ComposeScript> implements Pl
     }
 
     @Override
-    public void updateAvatarLine(ComposeScript.AvatarLine avatarLine, int ordinal) {
-        Log.i("ComposeScriptLiveData","updateAvatarLine");
-        getValue().avatarLines.get(ordinal).setAvatar(avatarLine.getAvatar());
-        getValue().avatarLines.get(ordinal).setLine(avatarLine.getLine());
+    public void updateComposeLine(ComposeLine composeLine, int ordinal) {
+        Log.i("ComposeScriptLiveData","updateComposeLine");
+        getValue().composeLineList.get(ordinal).maskGraph = composeLine.maskGraph;
+        getValue().composeLineList.get(ordinal).line = composeLine.line;
     }
 }
