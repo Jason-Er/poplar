@@ -8,4 +8,8 @@ import com.wecyberstage.wecyberstage.data.cache.RoleEntity;
 
 public class Role extends RoleEntity {
     public Mask mask;
+    public Role(long id, Mask mask) {
+        this.id = id;
+        this.mask = mask;
+    }
 }

@@ -14,11 +14,11 @@
         android:layout_alignParentRight="true"
         android:background="@null"
         />
-    <TextView
-        android:id="@+id/tv"
+    <RelativeLayout
+        android:id="@+id/mask_choose_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is a sample popup window."
-        android:layout_centerInParent="true"
-        android:padding="25sp"/>
+        android:layout_below="@id/ib_close">
+
+    </RelativeLayout>
 </RelativeLayout>

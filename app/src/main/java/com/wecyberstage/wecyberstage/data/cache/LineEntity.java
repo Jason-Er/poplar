@@ -13,7 +13,8 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "line",
         foreignKeys = {
                 @ForeignKey(entity = SceneEntity.class, parentColumns = "id", childColumns = "scene_id"),
-                @ForeignKey(entity = RoleEntity.class, parentColumns = "id", childColumns = "role_id")
+                @ForeignKey(entity = RoleEntity.class, parentColumns = "id", childColumns = "role_id"),
+                @ForeignKey(entity = MaskGraphEntity.class, parentColumns = "id", childColumns = "maskGraph_id")
         },
         indices = {
                 @Index("scene_id"),
@@ -25,10 +26,10 @@ public class LineEntity {
 
     @ColumnInfo(name = "scene_id")
     public long sceneId;
+    public long ordinal;
 
     @ColumnInfo(name = "role_id")
     public long roleId;
-    public long ordinal;
 
     public LineType type;
     @ColumnInfo(name = "direction")
@@ -41,4 +42,8 @@ public class LineEntity {
 
     @ColumnInfo(name = "audio_url")
     public String audioURL;
+
+    @ColumnInfo(name = "maskGraph_id")
+    public long maskGraphId;
+
 }

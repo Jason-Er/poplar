@@ -7,15 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 
+import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
 
-import java.util.List;
-
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -23,12 +23,22 @@ public class PopupChooseMask extends PopupWindow{
 
     private View anchorView;
     private MaskGraph maskGraph;
+    @BindView(R.id.mask_choose_frame)
+    ViewGroup masksFrame;
+
     public PopupChooseMask(View view, MaskGraph maskGraph, Mask mask) {
         super(view.getContext());
         anchorView = view;
         this.maskGraph = maskGraph;
-        View contentView = LayoutInflater.from(view.getContext()).inflate(R.layout.popup_avatar_choose,null);
+        View contentView = LayoutInflater.from(view.getContext()).inflate(R.layout.popup_mask_choose,null);
         ButterKnife.bind(this, contentView);
+        // add mask to content view
+        for(MaskGraph mg: mask.maskGraphList) {
+            Log.i("PopupChooseMask","maskGraph ID: " + mg.id);
+            ImageButton imageButton = new ImageButton(view.getContext());
+            masksFrame.addView(imageButton);
+            Glide.with(view.getContext()).load(mg.graphURL).into(imageButton);
+        }
         setContentView(contentView);
         setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);

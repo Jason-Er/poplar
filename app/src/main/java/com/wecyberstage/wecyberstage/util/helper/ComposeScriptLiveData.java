@@ -7,7 +7,9 @@ import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
 import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.model.Line;
+import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
+import com.wecyberstage.wecyberstage.model.Role;
 import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
@@ -35,6 +37,15 @@ public class ComposeScriptLiveData extends LiveData<ComposeScript> implements Pl
                 Line line = new Line(i%3, "Hello " + i, 3 * i * 1000, 1);
                 ComposeLine composeLine = new ComposeLine(maskGraph, line);
                 composeScript.composeLineList.add(composeLine);
+            }
+            for(int i=0; i<3; i++) {
+                Mask mask = new Mask(i);
+                for(int j=0; j<3; j++) {
+                    MaskGraph maskGraph = new MaskGraph(i, j, "http://www.f1188.com/upload/20180107205142.jpg");
+                    mask.maskGraphList.add(maskGraph);
+                }
+                Role role = new Role(i, mask);
+                composeScript.roleList.add(role);
             }
         }
         setValue(composeScript);

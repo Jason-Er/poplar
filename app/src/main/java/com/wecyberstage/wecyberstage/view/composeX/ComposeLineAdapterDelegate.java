@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
+import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.view.helper.PopupChooseMask;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
@@ -25,10 +26,12 @@ import butterknife.ButterKnife;
 class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
     final private OnStartDragListener startDragListener;
+    final private ComposeScriptHelper composeScriptHelper;
 
-    public ComposeLineAdapterDelegate(int viewType, OnStartDragListener startDragListener) {
+    public ComposeLineAdapterDelegate(int viewType, OnStartDragListener startDragListener, ComposeScriptHelper composeScriptHelper) {
         super(viewType);
         this.startDragListener = startDragListener;
+        this.composeScriptHelper = composeScriptHelper;
     }
 
     class ComposeLineViewHolder extends RecyclerView.ViewHolder {
@@ -77,7 +80,7 @@ class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements Adapte
             @Override
             public boolean onLongClick(View v) {
                 Log.i("AvatarLineAdapter","Long press");
-                PopupChooseMask chooseMask = new PopupChooseMask(v, ((ComposeLine) items.get(position)).maskGraph, null);
+                PopupChooseMask chooseMask = new PopupChooseMask(v, ((ComposeLine) items.get(position)).maskGraph, composeScriptHelper.getMaskByRole(((ComposeLine) items.get(position)).line.roleId));
                 chooseMask.show();
                 return false;
             }
