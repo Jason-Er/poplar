@@ -14,11 +14,17 @@
         android:layout_alignParentRight="true"
         android:background="@null"
         />
-    <RelativeLayout
+    <GridLayout
         android:id="@+id/mask_choose_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ib_close">
 
-    </RelativeLayout>
+    </GridLayout>
+    <Button
+        android:id="@+id/popup_mask_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ok"
+        android:layout_below="@id/mask_choose_frame"/>
 </RelativeLayout>

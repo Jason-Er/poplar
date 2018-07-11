@@ -16,4 +16,5 @@
     <string name="password">password</string>
     <string name="phone_authCode">authenticate code</string>
     <string name="stage_name">stage name</string>
+    <string name="ok">OK</string>
 </resources>
