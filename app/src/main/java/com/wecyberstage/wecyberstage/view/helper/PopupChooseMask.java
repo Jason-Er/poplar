@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -21,7 +20,6 @@ import com.wecyberstage.wecyberstage.model.MaskGraph;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class PopupChooseMask extends PopupWindow implements MaskImageChoose {
 
@@ -77,7 +75,7 @@ public class PopupChooseMask extends PopupWindow implements MaskImageChoose {
     }
 
     public void show() {
-        showAsDropDown(anchorView);
+        showAsDropDown(anchorView, anchorView.getWidth(), -anchorView.getHeight());
     }
 
     @Override
