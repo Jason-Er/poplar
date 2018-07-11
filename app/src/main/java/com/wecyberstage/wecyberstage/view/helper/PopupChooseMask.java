@@ -76,11 +76,6 @@ public class PopupChooseMask extends PopupWindow{
         setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    @OnClick(R.id.ib_close)
-    public void cancel(View view) {
-        dismiss();
-    }
-
     public void show() {
         showAsDropDown(anchorView);
     }
