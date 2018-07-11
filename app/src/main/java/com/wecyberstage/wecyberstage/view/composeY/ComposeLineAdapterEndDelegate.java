@@ -46,7 +46,7 @@ class ComposeLineAdapterEndDelegate extends ViewTypeDelegateClass implements Ada
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.composey_avatarline_right, parent, false);
+                .inflate(R.layout.composey_maskline_right, parent, false);
         return new ComposeLineViewHolder(v);
     }
 
