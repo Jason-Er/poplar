@@ -23,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PopupChooseMask extends PopupWindow{
+public class PopupChooseMask extends PopupWindow implements MaskImageChoose {
 
     private View anchorView;
     private MaskGraph maskGraph;
@@ -52,9 +52,9 @@ public class PopupChooseMask extends PopupWindow{
             int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, view.getContext().getResources().getDisplayMetrics());
             int width =  (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, view.getContext().getResources().getDisplayMetrics());
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(height, width);
-            ImageButton imageButton = new ImageButton(view.getContext());
+            MaskImageButton imageButton = new MaskImageButton(view.getContext(), this, this);
             imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            // imageButton.setId(R.id.image_view_1);
+            imageButton.setMaskGraph(mg);
             masksFrame.addView(imageButton, layoutParams);
             Glide.with(view.getContext()).load(mg.graphURL).into(imageButton);
         }
@@ -78,5 +78,11 @@ public class PopupChooseMask extends PopupWindow{
 
     public void show() {
         showAsDropDown(anchorView);
+    }
+
+    @Override
+    public void setMaskGraph(MaskGraph maskGraph) {
+        Log.i("setMaskGraph","maskGraph id:" + maskGraph.id);
+        this.maskGraph = maskGraph;
     }
 }
