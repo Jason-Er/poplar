@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.composeZ;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
@@ -26,7 +27,7 @@ class RoleInfoLayoutDelegate extends ViewTypeDelegateClass implements LayoutDele
 
     @Override
     public void onLayoutChildren(@NonNull Object items, RecyclerView.Recycler recycler, RecyclerView.State state) {
-
+        Log.i("RoleInfo","onLayoutChildren");
     }
 
     @Override

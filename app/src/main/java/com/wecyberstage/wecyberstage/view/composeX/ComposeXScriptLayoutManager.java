@@ -9,8 +9,6 @@ import com.wecyberstage.wecyberstage.model.ComposeLine;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
 
     private int leftOffset = 0;
@@ -127,7 +125,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
             // position 0 must be timeline view and other is avatarLine view
             for (int i=1; i < getChildCount(); i++) {
                 final View child = getChildAt(i);
-                int position = ((ComposeLineCardView) child).getPosition();
+                int position = ((MaskLineCardView) child).getPosition();
                 viewCache.put(position, child);
             }
             for (int i=0; i < viewCache.size(); i++) {
@@ -196,7 +194,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         Log.i("fillVisibleChildren","topOffset"+topOffset+" totalHeight: "+totalHeight);
         for(int i = 1; i < getChildCount(); i++) {
             View view = getChildAt(i);
-            int position = ((ComposeLineCardView) view).getPosition();
+            int position = ((MaskLineCardView) view).getPosition();
             ComposeLine composeLine = (ComposeLine) dataSet.get(position);
 
             mDecoratedChildWidth = getDecoratedMeasuredWidth(view);

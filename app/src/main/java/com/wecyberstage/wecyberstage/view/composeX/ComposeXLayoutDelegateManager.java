@@ -12,9 +12,9 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
 
     @Inject
     public ComposeXLayoutDelegateManager() {
-        addDelegate(new LayoutDelegateTimeLine(ComposeXCardViewType.TIME_LINE.ordinal()));
-        addDelegate(new LayoutDelegateMaskLine(ComposeXCardViewType.MASK_LINE.ordinal()));
-        addDelegate(new LayoutDelegatePopup(ComposeXCardViewType.POPUP_WINDOW.ordinal()));
+        addDelegate(new TimeLineLayoutDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
+        addDelegate(new MaskLineLayoutDelegate(ComposeXCardViewType.MASK_LINE.ordinal()));
+        addDelegate(new PopupLayoutDelegate(ComposeXCardViewType.POPUP_WINDOW.ordinal()));
     }
 
     @Override

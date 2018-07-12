@@ -7,9 +7,9 @@ import android.util.Log;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
-public class LayoutDelegateMaskLine extends ViewTypeDelegateClass implements LayoutDelegateInterface {
+public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface {
 
-    public LayoutDelegateMaskLine(int viewType) {
+    public MaskLineLayoutDelegate(int viewType) {
         super(viewType);
     }
 

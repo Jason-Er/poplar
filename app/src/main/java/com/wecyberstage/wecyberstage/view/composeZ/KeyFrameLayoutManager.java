@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.composeZ;
 import android.support.v7.widget.RecyclerView;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by mike on 2018/3/17.
@@ -10,18 +11,13 @@ import javax.inject.Inject;
 
 public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
 
-    // protected LayoutDelegatesManager layoutDelegatesManager;
+    private KeyFrameLayoutDelegateManager layoutDelegatesManager;
+    private KeyFrameAdapter keyFrameAdapter;
 
     @Inject
-    public KeyFrameLayoutManager() {
-        /*
+    public KeyFrameLayoutManager(KeyFrameLayoutDelegateManager layoutDelegatesManager, KeyFrameAdapter keyFrameAdapter) {
         this.layoutDelegatesManager = layoutDelegatesManager;
-        layoutDelegatesManager
-                .addDelegate(new StageInfoLayoutDelegate(KeyFrameCardViewType.STAGE.ordinal()))
-                .addDelegate(new RoleInfoLayoutDelegate(KeyFrameCardViewType.ROLE.ordinal()))
-                .addDelegate(new PropInfoLayoutDelegate(KeyFrameCardViewType.PROP.ordinal()))
-                .addDelegate(new LineInfoLayoutDelegate(KeyFrameCardViewType.LINE.ordinal()));
-                */
+        this.keyFrameAdapter = keyFrameAdapter;
     }
 
     @Override
@@ -44,6 +40,7 @@ public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
         }
         detachAndScrapAttachedViews(recycler);
 
+        layoutDelegatesManager.onLayoutChildren(keyFrameAdapter.getDataSet(), recycler, state);
     }
 
 }

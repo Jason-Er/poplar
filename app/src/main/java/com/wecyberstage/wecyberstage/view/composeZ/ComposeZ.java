@@ -18,7 +18,10 @@ import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
+import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -32,11 +35,8 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
 
     private ParticipateViewModel viewModel;
     private AppCompatActivity activity;
+    private KeyFrameAdapter adapter;
 
-    @Inject
-    KeyFrameAdapter adapter;
-    @Inject
-    KeyFrameLayoutManager layoutManager;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -53,6 +53,8 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
+        adapter = new KeyFrameAdapter(new AdapterDelegatesManager<List<Object>>());
+        KeyFrameLayoutManager layoutManager = new KeyFrameLayoutManager(new KeyFrameLayoutDelegateManager(), adapter);
         RecyclerView recyclerView = view.findViewById(R.id.frag_participate);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);

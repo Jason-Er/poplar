@@ -23,12 +23,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
     final private OnStartDragListener startDragListener;
     final private ComposeScriptHelper composeScriptHelper;
 
-    public ComposeLineAdapterDelegate(int viewType, OnStartDragListener startDragListener, ComposeScriptHelper composeScriptHelper) {
+    public MaskLineAdapterDelegate(int viewType, OnStartDragListener startDragListener, ComposeScriptHelper composeScriptHelper) {
         super(viewType);
         this.startDragListener = startDragListener;
         this.composeScriptHelper = composeScriptHelper;
@@ -66,7 +66,7 @@ class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements Adapte
     public void onBindViewHolder(@NonNull final List<Object> items, final int position, @NonNull final RecyclerView.ViewHolder holder) {
         Log.i("ComposeX", "onBindViewHolder");
         ((ComposeLineViewHolder) holder).dialogue.setText(((ComposeLine) items.get(position)).line.dialogue);
-        ((ComposeLineCardView)holder.itemView).setPosition(position);
+        ((MaskLineCardView)holder.itemView).setPosition(position);
         ((ComposeLineViewHolder) holder).dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

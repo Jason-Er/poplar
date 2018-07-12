@@ -11,19 +11,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-public class ComposeLineCardView extends RelativeLayout {
+public class MaskLineCardView extends RelativeLayout {
 
     private int position;
 
-    public ComposeLineCardView(@NonNull Context context) {
+    public MaskLineCardView(@NonNull Context context) {
         super(context);
     }
 
-    public ComposeLineCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public MaskLineCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ComposeLineCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MaskLineCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

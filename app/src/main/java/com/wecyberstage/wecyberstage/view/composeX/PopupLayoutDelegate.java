@@ -7,15 +7,15 @@ import android.util.Log;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
-public class LayoutDelegateTimeLine extends ViewTypeDelegateClass implements LayoutDelegateInterface {
+public class PopupLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface {
 
-    public LayoutDelegateTimeLine(int viewType) {
+    public PopupLayoutDelegate(int viewType) {
         super(viewType);
     }
 
     @Override
     public void onLayoutChildren(@NonNull Object items, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        Log.i("TimeLine","onLayoutChildren");
+        Log.i("Popup","onLayoutChildren");
     }
 
     @Override

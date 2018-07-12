@@ -2,6 +2,7 @@ package com.wecyberstage.wecyberstage.view.composeZ;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
@@ -22,7 +23,7 @@ class StageInfoLayoutDelegate extends ViewTypeDelegateClass implements LayoutDel
 
     @Override
     public void onLayoutChildren(@NonNull Object items, RecyclerView.Recycler recycler, RecyclerView.State state) {
-
+        Log.i("StageInfo","onLayoutChildren");
     }
 
     @Override
