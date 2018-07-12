@@ -38,7 +38,7 @@ class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements Adapte
         @BindView(R.id.composeXCardLine_dragHandle)
         ImageView dragHandle;
         @BindView(R.id.composeXCardLine_lineAvatar)
-        ImageView avatar;
+        ImageView mask;
         @BindView(R.id.composeXCardLine_lineDialogue)
         TextView dialogue;
 
@@ -58,7 +58,7 @@ class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements Adapte
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.composex_avatarline, parent, false);
+                .inflate(R.layout.composex_maskline, parent, false);
         return new ComposeLineViewHolder(v);
     }
 
@@ -76,13 +76,11 @@ class ComposeLineAdapterDelegate extends ViewTypeDelegateClass implements Adapte
                 return false;
             }
         });
-        ((ComposeLineViewHolder) holder).avatar.setOnLongClickListener(new View.OnLongClickListener() {
+        ((ComposeLineViewHolder) holder).mask.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                Log.i("AvatarLineAdapter","Long press");
+            public void onClick(View v) {
                 PopupChooseMask chooseMask = new PopupChooseMask(v, ((ComposeLine) items.get(position)).maskGraph, composeScriptHelper.getMaskByRole(((ComposeLine) items.get(position)).line.roleId));
                 chooseMask.show();
-                return false;
             }
         });
     }

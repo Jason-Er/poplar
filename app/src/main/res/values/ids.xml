@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="image_view_1" type="id">image_view_1</item>
+    <item name="image_view_2" type="id">image_view_2</item>
+    <item name="image_view_3" type="id">image_view_3</item>
+    <item name="image_view_4" type="id">image_view_4</item>
+    <item name="image_view_5" type="id">image_view_5</item>
+    <item name="image_view_6" type="id">image_view_6</item>
+    <item name="image_view_7" type="id">image_view_7</item>
+    <item name="image_view_8" type="id">image_view_8</item>
+    <item name="image_view_9" type="id">image_view_9</item>
+</resources>
