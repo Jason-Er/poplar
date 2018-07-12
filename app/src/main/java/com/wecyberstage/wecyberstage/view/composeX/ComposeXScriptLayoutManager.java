@@ -20,10 +20,12 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
     private final float TIME_SPAN = 10f; // 10 second for this view
     private final float MS_PERSECOND = 1000f;
     private ComposeXScriptAdapter adapter;
+    private ComposeXLayoutDelegateManager delegatesManager;
 
-    @Inject
-    public ComposeXScriptLayoutManager(ComposeXScriptAdapter adapter) {
+    public ComposeXScriptLayoutManager(ComposeXScriptAdapter adapter,
+                                       ComposeXLayoutDelegateManager<Object> delegates) {
         this.adapter = adapter;
+        delegatesManager = delegates;
     }
 
     @Override
@@ -46,9 +48,12 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         }
         detachAndScrapAttachedViews(recycler);
 
+        delegatesManager.onLayoutChildren(adapter.getDataSet(), recycler, state);
+        /*
         if (getChildCount() == 0) { //First or empty layout
             fillVisibleChildren(recycler);
         }
+        */
     }
 
     @Override
@@ -63,6 +68,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
 
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        /*
         int totalLength;
         List<Object> dataSet = adapter.getDataSet();
         if (dataSet != null && dataSet.size() > 1) {
@@ -94,12 +100,14 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         offsetChildrenHorizontal(-deltaX);
         fillVisibleChildren(recycler);
         timeLineView.invalidate();
-        return deltaReturn;
+        */
+        return delegatesManager.scrollHorizontallyBy(adapter.getDataSet(), dx, recycler, state);
     }
 
     @Override
     public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        return super.scrollVerticallyBy(dy, recycler, state);
+        return delegatesManager.scrollVerticallyBy(adapter.getDataSet(), dy, recycler, state);
+        // return super.scrollVerticallyBy(dy, recycler, state);
     }
 
     private int getVerticalSpace() {
@@ -111,6 +119,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
     }
 
     private SparseArray viewsMaxHeight;
+
     private void fillVisibleChildren(RecyclerView.Recycler recycler){
 
         SparseArray viewCache = new SparseArray();
@@ -148,7 +157,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
                     Log.i("fillVisibleChildren", "mDecoratedChildWidth: " + mDecoratedChildWidth + " mDecoratedChildHeight: " + mDecoratedChildHeight);
                     break;
                 }
-                case AVATAR_LINE: {
+                case MASK_LINE: {
                     ComposeLine composeLine = (ComposeLine) dataSet.get(i);
                     if (isVisible(composeLine.line.beginTime, composeLine.line.duration)) {
                         View view = (View) viewCache.get(i);

@@ -2,8 +2,6 @@ package com.wecyberstage.wecyberstage.view.composeZ;
 
 import android.support.v7.widget.RecyclerView;
 
-import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegatesManager;
-
 import javax.inject.Inject;
 
 /**
@@ -12,16 +10,18 @@ import javax.inject.Inject;
 
 public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
 
-    protected LayoutDelegatesManager layoutDelegatesManager;
+    // protected LayoutDelegatesManager layoutDelegatesManager;
 
     @Inject
-    public KeyFrameLayoutManager(LayoutDelegatesManager layoutDelegatesManager) {
+    public KeyFrameLayoutManager() {
+        /*
         this.layoutDelegatesManager = layoutDelegatesManager;
         layoutDelegatesManager
                 .addDelegate(new StageInfoLayoutDelegate(KeyFrameCardViewType.STAGE.ordinal()))
                 .addDelegate(new RoleInfoLayoutDelegate(KeyFrameCardViewType.ROLE.ordinal()))
                 .addDelegate(new PropInfoLayoutDelegate(KeyFrameCardViewType.PROP.ordinal()))
                 .addDelegate(new LineInfoLayoutDelegate(KeyFrameCardViewType.LINE.ordinal()));
+                */
     }
 
     @Override
@@ -44,8 +44,6 @@ public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
         }
         detachAndScrapAttachedViews(recycler);
 
-        // layout according to position
-        layoutDelegatesManager.onLayoutChildren(this, recycler);
     }
 
 }

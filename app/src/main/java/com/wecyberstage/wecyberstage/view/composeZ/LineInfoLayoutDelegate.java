@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.composeZ;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -13,7 +14,17 @@ class LineInfoLayoutDelegate extends ViewTypeDelegateClass implements LayoutDele
     }
 
     @Override
-    public void layout(RecyclerView.LayoutManager layoutManager, View view) {
+    public void onLayoutChildren(@NonNull Object items, RecyclerView.Recycler recycler, RecyclerView.State state) {
 
+    }
+
+    @Override
+    public int scrollHorizontallyBy(@NonNull Object items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        return 0;
+    }
+
+    @Override
+    public int scrollVerticallyBy(@NonNull Object items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        return 0;
     }
 }

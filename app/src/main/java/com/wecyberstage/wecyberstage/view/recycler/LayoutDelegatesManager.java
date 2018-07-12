@@ -7,30 +7,76 @@ import android.view.View;
 
 import javax.inject.Inject;
 
-public class LayoutDelegatesManager {
+public abstract class LayoutDelegatesManager<T> {
 
     private SparseArray delegates = new SparseArray();
 
-    @Inject
     public LayoutDelegatesManager() {}
 
-    public LayoutDelegatesManager addDelegate(@NonNull LayoutDelegateInterface delegate) {
+    public LayoutDelegatesManager addDelegate(@NonNull ViewTypeDelegateClass delegate) {
         delegates.put(delegate.getItemViewType(), delegate);
         return this;
     }
 
-    public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, RecyclerView.Recycler recycler) {
-        for(int i=0; i < layoutManager.getItemCount(); i++ ) {
-            View view = recycler.getViewForPosition(i);
-            int viewType = layoutManager.getItemViewType(view);
-            layoutManager.addView(view);
-            LayoutDelegateInterface delegate = (LayoutDelegateInterface) delegates.get(viewType);
-            if (delegate != null) {
-                delegate.layout(layoutManager, view);
-            } else {
-                throw new IllegalArgumentException("No delegate found");
+    public ViewTypeDelegateClass getDelegate(int viewType) {
+        ViewTypeDelegateClass delegate = null;
+        for(int i = 0; i < delegates.size(); i++) {
+            if( viewType == delegates.keyAt(i) ) {
+                delegate = (ViewTypeDelegateClass) delegates.valueAt(i);
             }
         }
+        return delegate;
     }
-
+    /*
+    public int getItemViewType(@NonNull T items, int position) {
+        int key = 0;
+        for(int i = 0; i < delegates.size(); i++) {
+            key = delegates.keyAt(i);
+            LayoutDelegateInterface delegate = (LayoutDelegateInterface)delegates.get(key);
+            if ( delegate.isForViewType(items, position) ) {
+                return key;
+            }
+        }
+        throw new IllegalArgumentException("No delegate found");
+    }
+    */
+    public abstract void onLayoutChildren(@NonNull T items, RecyclerView.Recycler recycler, RecyclerView.State state);
+    /*
+    {
+        for(int i = 0; i < delegates.size(); i++) {
+            LayoutDelegateInterface<T> delegate = (LayoutDelegateInterface<T>) delegates.valueAt(i);
+            delegate.onLayoutChildren(items, recycler, state);
+        }
+    }
+    */
+    public abstract int scrollHorizontallyBy(@NonNull T items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state);
+    /*
+    {
+        int minimum = 0;
+        for(int i = 0; i < delegates.size(); i++) {
+            LayoutDelegateInterface<T> delegate = (LayoutDelegateInterface<T>) delegates.valueAt(i);
+            int value = delegate.scrollHorizontallyBy(items, dx, recycler, state);
+            if( minimum == 0 )
+                minimum = value;
+            if( value < minimum )
+                minimum = value;
+        }
+        return minimum;
+    }
+    */
+    public abstract int scrollVerticallyBy(@NonNull T items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state);
+    /*
+    {
+        int minimum = 0;
+        for(int i = 0; i < delegates.size(); i++) {
+            LayoutDelegateInterface<T> delegate = (LayoutDelegateInterface<T>) delegates.valueAt(i);
+            int value = delegate.scrollVerticallyBy(items, dy, recycler, state);
+            if( minimum == 0 )
+                minimum = value;
+            if( value < minimum )
+                minimum = value;
+        }
+        return minimum;
+    }
+    */
 }
