@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
@@ -104,8 +105,6 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    @Inject
-    UICommon uiCommon;
 
     // region navigation
     private Stack<String> navigationStack;
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        uiCommon.toImmersive();
+        UICommon.toImmersive(this);
         EventBus.getDefault().register(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -200,6 +199,18 @@ public class MainActivity extends AppCompatActivity
         }
 
         character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
+        View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if( (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                    Log.i("MainActivity","onSystemUiVisibilityChange to visible");
+                    // uiCommon.hideNavigationBar();
+                } else {
+                    Log.i("MainActivity","onSystemUiVisibilityChange to invisible");
+                }
+            }
+        });
     }
 
     public void setCharacter(Character4Play character) {
@@ -496,4 +507,6 @@ public class MainActivity extends AppCompatActivity
             navigationStack.push(from.name() + NAVIGATION_COLON + to.name() + NAVIGATION_COLON + direction.name());
         }
     }
+
+
 }
