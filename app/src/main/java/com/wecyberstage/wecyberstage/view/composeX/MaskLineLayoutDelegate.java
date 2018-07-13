@@ -33,7 +33,39 @@ public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
 
     @Override
     public int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        return dx;
+        // calc totalLength
+        int totalLength;
+        if (items != null && items.size() > 1) {
+            ComposeLine composeLine = (ComposeLine) items.get(items.size() -1);
+            int tempLength = (int) (( (float) composeLine.line.beginTime / MS_PERSECOND + composeLine.line.duration) / TIME_SPAN * getHorizontalSpace(layoutManager));
+            totalLength = tempLength > getHorizontalSpace(layoutManager) ? tempLength : getHorizontalSpace(layoutManager);
+        } else {
+            totalLength = getHorizontalSpace(layoutManager);
+        }
+
+        int deltaX = 0;
+        int deltaReturn = 0;
+        int temp = leftOffset + dx;
+
+        if(temp >= 0 && temp <= totalLength - getHorizontalSpace(layoutManager)) {
+            deltaX = dx;
+            deltaReturn = dx;
+            leftOffset += dx;
+        } else if( temp < 0 ) {
+            deltaX = -leftOffset;
+            deltaReturn = -(leftOffset + dx);
+            leftOffset = 0;
+        } else if( temp > totalLength - getHorizontalSpace(layoutManager) ) {
+            deltaX = totalLength - getHorizontalSpace(layoutManager) - leftOffset;
+            deltaReturn = -(temp - totalLength + getHorizontalSpace(layoutManager));
+            leftOffset = totalLength - getHorizontalSpace(layoutManager);
+        }
+        beginTime = leftOffset * TIME_SPAN / getHorizontalSpace(layoutManager);
+
+        layoutManager.offsetChildrenHorizontal(-deltaX);
+        fillVisibleChildren(layoutManager, items, recycler);
+
+        return deltaReturn;
     }
 
     @Override
@@ -41,12 +73,13 @@ public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
         return dy;
     }
 
-    private void fillVisibleChildren(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, RecyclerView.Recycler recycler){
+    private void fillVisibleChildren(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, RecyclerView.Recycler recycler) {
         SparseArray viewCache = new SparseArray();
         for (int i=0; i < layoutManager.getChildCount(); i++) {
             final View child = layoutManager.getChildAt(i);
             if( child instanceof MaskLineCardView) {
                 int position = ((MaskLineCardView) child).getPosition();
+                layoutManager.detachView(child);
                 viewCache.put(position, child);
             }
         }

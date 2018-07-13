@@ -47,6 +47,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         detachAndScrapAttachedViews(recycler);
 
         delegatesManager.onLayoutChildren(this, adapter.getDataSet(), recycler, state);
+
         /*
         if (getChildCount() == 0) { //First or empty layout
             fillVisibleChildren(recycler);
