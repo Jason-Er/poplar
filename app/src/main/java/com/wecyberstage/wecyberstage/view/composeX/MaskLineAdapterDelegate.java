@@ -14,11 +14,12 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
-import com.wecyberstage.wecyberstage.view.helper.PopupChooseMask;
+import com.wecyberstage.wecyberstage.view.helper.RecyclerViewEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
-import java.util.Calendar;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,39 +79,14 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
             }
         });
 
-        ((ComposeLineViewHolder) holder).mask.setOnTouchListener(new View.OnTouchListener() {
-            private static final int MAX_CLICK_DURATION = 200;
-            private long startClickTime;
-            private boolean status = false;
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        startClickTime = Calendar.getInstance().getTimeInMillis();
-                        break;
-                    }
-                    case MotionEvent.ACTION_UP: {
-                        long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                        if(clickDuration < MAX_CLICK_DURATION) {
-                            //click event has occurred
-                            Log.i("onBindViewHolder","single click!");
-                            status = true;
-                        }
-                    }
-                }
-                return status;
-            }
-        });
-
-        /*
         ((ComposeLineViewHolder) holder).mask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // TODO: 7/13/2018 notidyItemchange
+                RecyclerViewEvent event = new RecyclerViewEvent("MASK_CLICK");
+                EventBus.getDefault().post(event);
             }
         });
-        */
+
     }
 
 }

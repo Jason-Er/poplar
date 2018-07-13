@@ -1,13 +1,6 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.View;
-
-import com.wecyberstage.wecyberstage.model.ComposeLine;
-
-import java.util.List;
 
 public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
 

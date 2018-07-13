@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
@@ -10,8 +11,13 @@ import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.view.helper.ItemTouchHelperAdapter;
+import com.wecyberstage.wecyberstage.view.helper.RecyclerViewEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +37,7 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
                 .addDelegate(new MaskLineAdapterDelegate(ComposeXCardViewType.MASK_LINE.ordinal(), startDragListener, this))
                 .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
         this.updateComposeScriptInterface = updateComposeScriptInterface;
+        EventBus.getDefault().register(this);
     }
 
     public void setComposeScript(@NonNull ComposeScript script) {
@@ -84,4 +91,15 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
     public List<Role> getRoleList() {
         return null;
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseEventBus(RecyclerViewEvent event) {
+        switch (event.getMessage()) {
+            case "MASK_CLICK":
+                Log.i("ComposeXScriptAdapter","receive MASK_CLICK");
+                // notifyItemChanged(1);
+                break;
+        }
+    }
+
 }
