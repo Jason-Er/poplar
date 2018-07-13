@@ -13,6 +13,7 @@ import java.util.List;
 public class TimeLineLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>> {
 
     private TimeLineView timeLineView;
+    private int leftOffset = 0;
 
     public TimeLineLayoutDelegate(int viewType) {
         super(viewType);
@@ -37,6 +38,8 @@ public class TimeLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
 
     @Override
     public int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        leftOffset += dx;
+        timeLineView.setLeftOffset(leftOffset);
         return dx;
     }
 
