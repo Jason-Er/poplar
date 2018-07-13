@@ -37,5 +37,8 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
         return ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).scrollVerticallyBy(layoutManager, items, dy, recycler, state);
     }
 
+    public void updateOneViewHolder(RecyclerView.LayoutManager layoutManager,  ComposeXScriptAdapter adapter, RecyclerView.ViewHolder viewHolder) {
+        ((MaskLineLayoutDelegate)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).updateOneViewHolder(layoutManager, adapter, viewHolder);
+    }
 
 }

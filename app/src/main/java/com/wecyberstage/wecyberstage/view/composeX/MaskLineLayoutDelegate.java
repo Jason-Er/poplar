@@ -155,4 +155,24 @@ public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
     private int getHorizontalSpace(RecyclerView.LayoutManager layoutManager) {
         return layoutManager.getWidth() - layoutManager.getPaddingStart() - layoutManager.getPaddingEnd();
     }
+
+    public void updateOneViewHolder(RecyclerView.LayoutManager layoutManager,  ComposeXScriptAdapter adapter, RecyclerView.ViewHolder viewHolder) {
+        List<Object> dataSet = adapter.getDataSet();
+        int position =  viewHolder.getAdapterPosition();
+        ComposeLine composeLine = (ComposeLine) dataSet.get(position);
+        long startTime = (long) ( viewHolder.itemView.getTranslationX() * TIME_SPAN * MS_PERSECOND / getHorizontalSpace(layoutManager) + (float) composeLine.line.beginTime );
+        composeLine.line.beginTime = startTime;
+        Log.i("LayoutManager","updateOneViewHolder startTime: "+startTime);
+
+        View view = viewHolder.itemView;
+        layoutManager.measureChildWithMargins(view, 0, 0);
+        int mDecoratedChildWidth = layoutManager.getDecoratedMeasuredWidth(view);
+        int mDecoratedChildHeight = layoutManager.getDecoratedMeasuredHeight(view);
+        layoutManager.layoutDecorated(view, (int) ( (float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) - leftOffset,
+                (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset - mDecoratedChildHeight,
+                (int) ( (float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) + mDecoratedChildWidth - leftOffset,
+                (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset);
+
+        adapter.updateComposeLine(composeLine, position-1); // "position -1" for the first place is for timeLine view
+    }
 }
