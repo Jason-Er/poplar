@@ -57,7 +57,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
         adapter = new ComposeXScriptAdapter(new AdapterDelegatesManager<>(), this, this);
-        layoutManager = new ComposeXScriptLayoutManager(adapter);
+        layoutManager = new ComposeXScriptLayoutManager(adapter, new ComposeXLayoutDelegateManager<Object>());
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(layoutManager);
         ((RecyclerView)view).setAdapter(adapter);

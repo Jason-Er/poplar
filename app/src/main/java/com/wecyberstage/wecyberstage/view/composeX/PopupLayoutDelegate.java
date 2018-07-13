@@ -1,30 +1,30 @@
-package com.wecyberstage.wecyberstage.view.composeZ;
+package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.util.Log;
 
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
-class LineInfoLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface {
+public class PopupLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface {
 
-    public LineInfoLayoutDelegate(int viewType) {
+    public PopupLayoutDelegate(int viewType) {
         super(viewType);
     }
 
     @Override
     public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull Object items, RecyclerView.Recycler recycler, RecyclerView.State state) {
-
+        Log.i("Popup","onLayoutChildren");
     }
 
     @Override
     public int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull Object items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        return 0;
+        return dx;
     }
 
     @Override
     public int scrollVerticallyBy(RecyclerView.LayoutManager layoutManager, @NonNull Object items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        return 0;
+        return dy;
     }
 }

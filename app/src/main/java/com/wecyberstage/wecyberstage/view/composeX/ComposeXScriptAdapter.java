@@ -28,7 +28,7 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
                                  OnStartDragListener startDragListener) {
         super(delegates);
         delegatesManager
-                .addDelegate(new ComposeLineAdapterDelegate(ComposeXCardViewType.AVATAR_LINE.ordinal(), startDragListener, this))
+                .addDelegate(new MaskLineAdapterDelegate(ComposeXCardViewType.MASK_LINE.ordinal(), startDragListener, this))
                 .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
         this.updateComposeScriptInterface = updateComposeScriptInterface;
     }
