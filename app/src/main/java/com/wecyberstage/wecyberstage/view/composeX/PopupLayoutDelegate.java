@@ -14,17 +14,17 @@ public class PopupLayoutDelegate extends ViewTypeDelegateClass implements Layout
     }
 
     @Override
-    public void onLayoutChildren(@NonNull Object items, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull Object items, RecyclerView.Recycler recycler, RecyclerView.State state) {
         Log.i("Popup","onLayoutChildren");
     }
 
     @Override
-    public int scrollHorizontallyBy(@NonNull Object items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull Object items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
         return dx;
     }
 
     @Override
-    public int scrollVerticallyBy(@NonNull Object items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollVerticallyBy(RecyclerView.LayoutManager layoutManager, @NonNull Object items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
         return dy;
     }
 }

@@ -40,7 +40,7 @@ public abstract class LayoutDelegatesManager<T> {
         throw new IllegalArgumentException("No delegate found");
     }
     */
-    public abstract void onLayoutChildren(@NonNull T items, RecyclerView.Recycler recycler, RecyclerView.State state);
+    public abstract void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull T items, RecyclerView.Recycler recycler, RecyclerView.State state);
     /*
     {
         for(int i = 0; i < delegates.size(); i++) {
@@ -49,7 +49,7 @@ public abstract class LayoutDelegatesManager<T> {
         }
     }
     */
-    public abstract int scrollHorizontallyBy(@NonNull T items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state);
+    public abstract int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull T items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state);
     /*
     {
         int minimum = 0;
@@ -64,7 +64,7 @@ public abstract class LayoutDelegatesManager<T> {
         return minimum;
     }
     */
-    public abstract int scrollVerticallyBy(@NonNull T items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state);
+    public abstract int scrollVerticallyBy(RecyclerView.LayoutManager layoutManager, @NonNull T items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state);
     /*
     {
         int minimum = 0;

@@ -18,23 +18,23 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
     }
 
     @Override
-    public void onLayoutChildren(@NonNull T items, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).onLayoutChildren(items, recycler, state);
-        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.TIME_LINE.ordinal())).onLayoutChildren(items, recycler, state);
-        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.POPUP_WINDOW.ordinal())).onLayoutChildren(items, recycler, state);
+    public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull T items, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
+        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.TIME_LINE.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
+        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.POPUP_WINDOW.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
     }
 
     @Override
-    public int scrollHorizontallyBy(@NonNull T items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull T items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
         int minimum =
-        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).scrollHorizontallyBy(items, dx, recycler, state);
-        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.TIME_LINE.ordinal())).scrollHorizontallyBy(items, dx, recycler, state);
+        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).scrollHorizontallyBy(layoutManager, items, dx, recycler, state);
+        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.TIME_LINE.ordinal())).scrollHorizontallyBy(layoutManager, items, dx, recycler, state);
         return minimum;
     }
 
     @Override
-    public int scrollVerticallyBy(@NonNull T items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        return ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).scrollVerticallyBy(items, dy, recycler, state);
+    public int scrollVerticallyBy(RecyclerView.LayoutManager layoutManager, @NonNull T items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        return ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).scrollVerticallyBy(layoutManager, items, dy, recycler, state);
     }
 
 

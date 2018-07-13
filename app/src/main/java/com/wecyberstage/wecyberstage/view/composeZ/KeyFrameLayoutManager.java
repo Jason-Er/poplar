@@ -40,7 +40,7 @@ public class KeyFrameLayoutManager extends RecyclerView.LayoutManager{
         }
         detachAndScrapAttachedViews(recycler);
 
-        layoutDelegatesManager.onLayoutChildren(keyFrameAdapter.getDataSet(), recycler, state);
+        layoutDelegatesManager.onLayoutChildren(this, keyFrameAdapter.getDataSet(), recycler, state);
     }
 
 }

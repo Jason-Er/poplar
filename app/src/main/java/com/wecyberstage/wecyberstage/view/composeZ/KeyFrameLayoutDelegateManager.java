@@ -19,18 +19,18 @@ public class KeyFrameLayoutDelegateManager<T> extends LayoutDelegatesManager<T>{
     }
 
     @Override
-    public void onLayoutChildren(@NonNull T items, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        ((LayoutDelegateInterface)getDelegate(KeyFrameCardViewType.STAGE.ordinal())).onLayoutChildren(items, recycler, state);
-        ((LayoutDelegateInterface)getDelegate(KeyFrameCardViewType.ROLE.ordinal())).onLayoutChildren(items, recycler, state);
+    public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull T items, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        ((LayoutDelegateInterface)getDelegate(KeyFrameCardViewType.STAGE.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
+        ((LayoutDelegateInterface)getDelegate(KeyFrameCardViewType.ROLE.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
     }
 
     @Override
-    public int scrollHorizontallyBy(@NonNull T items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull T items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
         return 0;
     }
 
     @Override
-    public int scrollVerticallyBy(@NonNull T items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollVerticallyBy(RecyclerView.LayoutManager layoutManager, @NonNull T items, int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
         return 0;
     }
 }

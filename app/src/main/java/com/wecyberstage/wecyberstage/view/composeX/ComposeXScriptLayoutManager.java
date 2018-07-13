@@ -46,7 +46,7 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         }
         detachAndScrapAttachedViews(recycler);
 
-        delegatesManager.onLayoutChildren(adapter.getDataSet(), recycler, state);
+        delegatesManager.onLayoutChildren(this, adapter.getDataSet(), recycler, state);
         /*
         if (getChildCount() == 0) { //First or empty layout
             fillVisibleChildren(recycler);
@@ -99,12 +99,12 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         fillVisibleChildren(recycler);
         timeLineView.invalidate();
         */
-        return delegatesManager.scrollHorizontallyBy(adapter.getDataSet(), dx, recycler, state);
+        return delegatesManager.scrollHorizontallyBy(this, adapter.getDataSet(), dx, recycler, state);
     }
 
     @Override
     public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        return delegatesManager.scrollVerticallyBy(adapter.getDataSet(), dy, recycler, state);
+        return delegatesManager.scrollVerticallyBy(this, adapter.getDataSet(), dy, recycler, state);
         // return super.scrollVerticallyBy(dy, recycler, state);
     }
 
