@@ -18,6 +18,7 @@ import com.wecyberstage.wecyberstage.view.helper.PopupChooseMask;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -76,13 +77,40 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
                 return false;
             }
         });
+
+        ((ComposeLineViewHolder) holder).mask.setOnTouchListener(new View.OnTouchListener() {
+            private static final int MAX_CLICK_DURATION = 200;
+            private long startClickTime;
+            private boolean status = false;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        startClickTime = Calendar.getInstance().getTimeInMillis();
+                        break;
+                    }
+                    case MotionEvent.ACTION_UP: {
+                        long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                        if(clickDuration < MAX_CLICK_DURATION) {
+                            //click event has occurred
+                            Log.i("onBindViewHolder","single click!");
+                            status = true;
+                        }
+                    }
+                }
+                return status;
+            }
+        });
+
+        /*
         ((ComposeLineViewHolder) holder).mask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupChooseMask chooseMask = new PopupChooseMask(v, ((ComposeLine) items.get(position)).maskGraph, composeScriptHelper.getMaskByRole(((ComposeLine) items.get(position)).line.roleId));
-                chooseMask.show();
+
+                // TODO: 7/13/2018 notidyItemchange
             }
         });
+        */
     }
 
 }
