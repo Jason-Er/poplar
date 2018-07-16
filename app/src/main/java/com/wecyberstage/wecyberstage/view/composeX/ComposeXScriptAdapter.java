@@ -7,6 +7,7 @@ import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.Role;
+import com.wecyberstage.wecyberstage.model.TimeLine;
 import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
@@ -35,7 +36,8 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
         super(delegates);
         delegatesManager
                 .addDelegate(new MaskLineAdapterDelegate(ComposeXCardViewType.MASK_LINE.ordinal(), startDragListener, this))
-                .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
+                .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()))
+                .addDelegate(new RoleAdapterDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
         this.updateComposeScriptInterface = updateComposeScriptInterface;
         EventBus.getDefault().register(this);
     }
@@ -44,6 +46,7 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
         // for recyclerView show
         dataSet = new ArrayList<>();
         dataSet.add(new TimeLine());
+        dataSet.addAll(script.roleList);
         dataSet.addAll(script.composeLineList);
         // for whole scene info
         roleList = script.roleList;

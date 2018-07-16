@@ -14,14 +14,14 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
     public ComposeXLayoutDelegateManager() {
         addDelegate(new TimeLineLayoutDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
         addDelegate(new MaskLineLayoutDelegate(ComposeXCardViewType.MASK_LINE.ordinal()));
-        addDelegate(new PopupLayoutDelegate(ComposeXCardViewType.POPUP_WINDOW.ordinal()));
+        addDelegate(new RoleLayoutDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
     }
 
     @Override
     public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull T items, RecyclerView.Recycler recycler, RecyclerView.State state) {
         ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
         ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.TIME_LINE.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
-        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.POPUP_WINDOW.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
+        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
     }
 
     @Override

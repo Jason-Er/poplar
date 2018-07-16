@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.wecyberstage.wecyberstage.model.ComposeLine;
+import com.wecyberstage.wecyberstage.model.TimeLine;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -27,7 +28,7 @@ public class TimeLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
     public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, RecyclerView.Recycler recycler, RecyclerView.State state) {
         Log.i("TimeLine","onLayoutChildren");
         for(Object item: items) {
-            if( item instanceof TimeLine ) {
+            if( item instanceof TimeLine) {
                 int index = items.indexOf(item);
                 timeLineView = (TimeLineView) recycler.getViewForPosition(index);
                 layoutManager.addView(timeLineView);
