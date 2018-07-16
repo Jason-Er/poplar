@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 
 import com.wecyberstage.wecyberstage.model.Role;
 import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
-import com.wecyberstage.wecyberstage.view.helper.RecyclerViewEvent;
+import com.wecyberstage.wecyberstage.view.helper.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -60,11 +59,11 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseEventBus(RecyclerViewEvent event) {
+    public void onResponseEventBus(MaskClickEvent event) {
         switch (event.getMessage()) {
             case "MASK_CLICK":
-                Log.i("RoleLayoutDelegate","receive MASK_CLICK");
-                // notifyItemChanged(1);
+                Log.i("RoleLayoutDelegate","receive MASK_CLICK role ID:" + event.getId());
+                roleMap.get(event.getId()).setVisibility(View.VISIBLE);
                 break;
         }
     }

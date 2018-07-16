@@ -1,10 +1,13 @@
 package com.wecyberstage.wecyberstage.view.helper;
 
-public class RecyclerViewEvent {
-    private String message;
+public class MaskClickEvent {
 
-    public RecyclerViewEvent(String message) {
+    private String message;
+    private long id;
+
+    public MaskClickEvent(String message, long id) {
         this.message = message;
+        this.id = id;
     }
 
     public String getMessage() {
@@ -13,5 +16,13 @@ public class RecyclerViewEvent {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

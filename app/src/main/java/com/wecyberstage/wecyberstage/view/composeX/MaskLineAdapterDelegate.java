@@ -14,7 +14,7 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
-import com.wecyberstage.wecyberstage.view.helper.RecyclerViewEvent;
+import com.wecyberstage.wecyberstage.view.helper.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -83,7 +83,7 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
             @Override
             public void onClick(View v) {
                 Log.i("MaskLineAdapterDelegate","send click");
-                RecyclerViewEvent event = new RecyclerViewEvent("MASK_CLICK");
+                MaskClickEvent event = new MaskClickEvent("MASK_CLICK", ((ComposeLine) items.get(position)).line.roleId);
                 EventBus.getDefault().post(event);
             }
         });
