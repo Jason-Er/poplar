@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         UICommon.toImmersive(this);
-        EventBus.getDefault().register(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -286,12 +285,13 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         autoHideHandler.postDelayed(autoHideRunnable, 3000);
+        EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
