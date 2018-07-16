@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -105,5 +106,15 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);
+    }
+
+    @Override
+    public void onResume(Activity activity) {
+        layoutManager.onResume(activity);
+    }
+
+    @Override
+    public void onPause(Activity activity) {
+        layoutManager.onPause(activity);
     }
 }

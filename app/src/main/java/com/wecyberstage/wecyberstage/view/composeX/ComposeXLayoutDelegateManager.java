@@ -1,14 +1,16 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
+import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegatesManager;
 
 import javax.inject.Inject;
 
-public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> {
+public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> implements LifeCycle {
 
     @Inject
     public ComposeXLayoutDelegateManager() {
@@ -41,4 +43,13 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
         ((MaskLineLayoutDelegate)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).updateOneViewHolder(layoutManager, adapter, viewHolder);
     }
 
+    @Override
+    public void onResume(Activity activity) {
+        ((LifeCycle)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).onResume(activity);
+    }
+
+    @Override
+    public void onPause(Activity activity) {
+        ((LifeCycle)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).onPause(activity);
+    }
 }

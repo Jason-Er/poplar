@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity
     SignIn signIn;
     SignUp signUp;
     UserProfile userProfile;
+    List<CustomView> customViewList;
 
     // endregion
     @Override
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity
         // region all views
         viewArray = new SparseArray();
         flingResponseArray = new SparseArray();
+        customViewList = new ArrayList<>();
 
         browse = new Browse(this, appMain, ViewType.BROWSE);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
@@ -217,6 +219,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void addCustomView(CustomView customView, FlingResponseInterface flingResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
+        customViewList.add(customView);
         viewArray.put(customView.getViewType().ordinal(), customView);
         flingResponseArray.put(customView.getViewType().ordinal(), flingResponseInterface);
         viewGroup.addView(customView.getView(), 1);
@@ -286,12 +289,18 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         autoHideHandler.postDelayed(autoHideRunnable, 3000);
         EventBus.getDefault().register(this);
+        for(CustomView customView: customViewList) {
+            customView.onResume(this);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+        for(CustomView customView: customViewList) {
+            customView.onPause(this);
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

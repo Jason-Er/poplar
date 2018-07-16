@@ -39,7 +39,7 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
                 .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()))
                 .addDelegate(new RoleAdapterDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
         this.updateComposeScriptInterface = updateComposeScriptInterface;
-        EventBus.getDefault().register(this);
+        // EventBus.getDefault().register(this);
     }
 
     public void setComposeScript(@NonNull ComposeScript script) {
@@ -95,6 +95,7 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
         return null;
     }
 
+    /*
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseEventBus(RecyclerViewEvent event) {
         switch (event.getMessage()) {
@@ -104,5 +105,6 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
                 break;
         }
     }
+    */
 
 }

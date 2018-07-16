@@ -82,6 +82,7 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
         ((ComposeLineViewHolder) holder).mask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("MaskLineAdapterDelegate","send click");
                 RecyclerViewEvent event = new RecyclerViewEvent("MASK_CLICK");
                 EventBus.getDefault().post(event);
             }
