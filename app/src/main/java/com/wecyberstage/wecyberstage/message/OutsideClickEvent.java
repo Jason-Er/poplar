@@ -1,9 +1,9 @@
-package com.wecyberstage.wecyberstage.view.helper;
+package com.wecyberstage.wecyberstage.message;
 
-public class MessageEvent {
+public class OutsideClickEvent {
     private String message;
 
-    public MessageEvent(String message) {
+    public OutsideClickEvent(String message) {
         this.message = message;
     }
 

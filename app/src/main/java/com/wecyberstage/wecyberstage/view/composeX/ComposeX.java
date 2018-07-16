@@ -8,11 +8,15 @@ import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
+import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
@@ -25,6 +29,8 @@ import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
+
+import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
@@ -62,6 +68,36 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(layoutManager);
         ((RecyclerView)view).setAdapter(adapter);
+        ((RecyclerView)view).addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                if (e.getAction() != MotionEvent.ACTION_UP) {
+                    return false;
+                }
+                View child = ((RecyclerView)view).findChildViewUnder(e.getX(), e.getY());
+                if (child != null) {
+                    // tapped on child
+                    return false;
+                } else {
+                    // Tap occured outside all child-views.
+                    // do something
+                    Log.i("RecyclerView","ComposeX RecyclerView click");
+                    OutsideClickEvent event = new OutsideClickEvent("OUTSIDE_CLICK");
+                    EventBus.getDefault().post(event);
+                    return true;
+                }
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
 
         CustomItemTouchHelper.Callback callback = new ComposeXItemTouchHelperCallback(adapter);
         itemTouchHelper = new CustomItemTouchHelper(callback);

@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
+import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.Role;
 import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
-import com.wecyberstage.wecyberstage.view.helper.MaskClickEvent;
+import com.wecyberstage.wecyberstage.message.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -17,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -59,12 +62,21 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseEventBus(MaskClickEvent event) {
+    public void onMaskClickEventBus(MaskClickEvent event) {
         switch (event.getMessage()) {
             case "MASK_CLICK":
                 Log.i("RoleLayoutDelegate","receive MASK_CLICK role ID:" + event.getId());
                 roleMap.get(event.getId()).setVisibility(View.VISIBLE);
                 break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onOutsideClickEventBus(OutsideClickEvent event) {
+        Iterator iter = roleMap.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            ((View)entry.getValue()).setVisibility(View.INVISIBLE);
         }
     }
 

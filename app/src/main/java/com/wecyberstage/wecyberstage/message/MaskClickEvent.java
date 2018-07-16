@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.helper;
+package com.wecyberstage.wecyberstage.message;
 
 public class MaskClickEvent {
 

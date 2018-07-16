@@ -14,7 +14,7 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.ComposeLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
-import com.wecyberstage.wecyberstage.view.helper.MaskClickEvent;
+import com.wecyberstage.wecyberstage.message.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
