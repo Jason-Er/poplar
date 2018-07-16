@@ -3,13 +3,14 @@ package com.wecyberstage.wecyberstage.view.composeX;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.RelativeLayout;
+
+import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class MaskLineCardView extends RelativeLayout {
 
@@ -33,6 +34,26 @@ public class MaskLineCardView extends RelativeLayout {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    private long lastTouchDown;
+    private static int CLICK_ACTION_THRESHHOLD = 200;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                lastTouchDown = System.currentTimeMillis();
+                break;
+            case MotionEvent.ACTION_UP:
+                if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHHOLD) {
+                    Log.w("App", "You clicked!");
+                    OutsideClickEvent event = new OutsideClickEvent("OUTSIDE_CLICK");
+                    EventBus.getDefault().post(event);
+                }
+                break;
+        }
+        return true;
     }
 
 }
