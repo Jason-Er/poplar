@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Debug.startMethodTracing("/data/data/com.wecyberstage.wecyberstage/love_world_");
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
@@ -289,6 +291,7 @@ public class MainActivity extends AppCompatActivity
         for(CustomView customView: customViewList) {
             customView.onResume(this);
         }
+        // Debug.stopMethodTracing();
     }
 
     @Override
