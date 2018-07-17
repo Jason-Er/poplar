@@ -68,7 +68,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(layoutManager);
         ((RecyclerView)view).setAdapter(adapter);
-        /*
+
         ((RecyclerView)view).addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
@@ -85,7 +85,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
                     Log.i("RecyclerView","ComposeX RecyclerView click");
                     OutsideClickEvent event = new OutsideClickEvent("OUTSIDE_CLICK");
                     EventBus.getDefault().post(event);
-                    return true;
+                    return false;
                 }
             }
 
@@ -99,7 +99,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
 
             }
         });
-        */
+
         CustomItemTouchHelper.Callback callback = new ComposeXItemTouchHelperCallback(adapter);
         itemTouchHelper = new CustomItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(((RecyclerView)view));
