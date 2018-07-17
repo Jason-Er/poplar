@@ -68,6 +68,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(layoutManager);
         ((RecyclerView)view).setAdapter(adapter);
+        /*
         ((RecyclerView)view).addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
@@ -98,7 +99,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
 
             }
         });
-
+        */
         CustomItemTouchHelper.Callback callback = new ComposeXItemTouchHelperCallback(adapter);
         itemTouchHelper = new CustomItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(((RecyclerView)view));
