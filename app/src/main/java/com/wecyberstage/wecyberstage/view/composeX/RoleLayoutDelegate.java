@@ -1,14 +1,13 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.app.Activity;
-import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.wecyberstage.wecyberstage.message.MessageEvent;
 import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
-import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.Role;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
@@ -81,11 +80,29 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onOutsideClickEventBus(OutsideClickEvent event) {
+        if(isAnyViewVisible()) {
+            Iterator iterator = roleMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                ((View)entry.getValue()).setVisibility(View.INVISIBLE);
+            }
+        } else {
+            MessageEvent messageEvent = new MessageEvent("CLICK");
+            EventBus.getDefault().post(messageEvent);
+        }
+    }
+
+    private boolean isAnyViewVisible() {
+        boolean status = false;
         Iterator iterator = roleMap.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
-            ((View)entry.getValue()).setVisibility(View.INVISIBLE);
+            if(((View)entry.getValue()).getVisibility() == View.VISIBLE) {
+                status = true;
+                break;
+            }
         }
+        return status;
     }
 
     @Override

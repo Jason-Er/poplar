@@ -75,8 +75,10 @@ public class CustomViewBehavior<V extends View> extends CoordinatorLayout.Behavi
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
+            /*
             MessageEvent messageEvent = new MessageEvent("CLICK");
             EventBus.getDefault().post(messageEvent);
+            */
             return super.onSingleTapUp(e);
         }
 

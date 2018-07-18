@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
