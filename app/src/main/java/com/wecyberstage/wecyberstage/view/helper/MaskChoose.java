@@ -28,15 +28,20 @@ public class MaskChoose extends RelativeLayout {
 
     public MaskChoose(Context context, AttributeSet attrs) {
         super(context, attrs);
-        // ButterKnife.bind(this);
     }
 
     public MaskChoose(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        ButterKnife.bind(this);
+    }
+
     public void init(Mask mask) {
-        masksFrame = findViewById(R.id.mask_choose_frame);
+        // masksFrame = findViewById(R.id.mask_choose_frame);
         if(mask.maskGraphList.size() <= 4) {
             masksFrame.setColumnCount(2);
             masksFrame.setRowCount(2);
