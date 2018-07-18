@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.app.Activity;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.Role;
+import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 import com.wecyberstage.wecyberstage.message.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
@@ -71,10 +73,8 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
     public void onMaskClickEventBus(MaskClickEvent event) {
         switch (event.getMessage()) {
             case "MASK_CLICK":
-                Log.i("RoleLayoutDelegate","receive MASK_CLICK role ID:" + event.getId() + " x: "+ event.getPoint().x + " y: "+event.getPoint().y);
-                roleMap.get(event.getId()).setVisibility(View.VISIBLE);
-                roleMap.get(event.getId()).setX(event.getPoint().x);
-                roleMap.get(event.getId()).setY(event.getPoint().y);
+                Log.i("RoleLayoutDelegate","receive MASK_CLICK role ID:" + event.getId());
+                UICommon.showPopupWindow(roleMap.get(event.getId()), event.getRect());
                 break;
         }
     }

@@ -1,17 +1,17 @@
 package com.wecyberstage.wecyberstage.message;
 
-import android.graphics.Point;
+import android.graphics.Rect;
 
 public class MaskClickEvent {
 
     private String message;
     private long id;
-    private Point point;
+    private Rect rect;
 
-    public MaskClickEvent(String message, long id, Point point) {
+    public MaskClickEvent(String message, long id, Rect rect) {
         this.message = message;
         this.id = id;
-        this.point = point;
+        this.rect = rect;
     }
 
     public String getMessage() {
@@ -30,11 +30,11 @@ public class MaskClickEvent {
         this.id = id;
     }
 
-    public Point getPoint() {
-        return point;
+    public Rect getRect() {
+        return rect;
     }
 
-    public void setPoint(Point point) {
-        this.point = point;
+    public void setRect(Rect rect) {
+        this.rect = rect;
     }
 }
