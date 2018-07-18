@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.util.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
@@ -41,7 +42,7 @@ public class UICommon {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
-    public static int dp2px(AppCompatActivity activity, int dp) {
+    public static int dp2px(Activity activity, int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, activity.getResources().getDisplayMetrics());
     }
 

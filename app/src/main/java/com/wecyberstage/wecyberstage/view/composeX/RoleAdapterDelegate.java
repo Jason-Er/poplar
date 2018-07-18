@@ -18,6 +18,7 @@ import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.Role;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.view.helper.MaskChoose;
 import com.wecyberstage.wecyberstage.view.helper.MaskImageButton;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
@@ -60,31 +61,7 @@ public class RoleAdapterDelegate extends ViewTypeDelegateClass implements Adapte
         Log.i("RoleAdapterDelegate","onBindViewHolder position:"+position);
         Role role = (Role) items.get(position);
         Mask mask = role.mask;
-        if(mask.maskGraphList.size() <= 4) {
-            ((GridLayout)((RoleViewHolder) holder).masksFrame).setColumnCount(2);
-            ((GridLayout)((RoleViewHolder) holder).masksFrame).setRowCount(2);
-        } else if(mask.maskGraphList.size() <= 9) {
-            ((GridLayout)((RoleViewHolder) holder).masksFrame).setColumnCount(3);
-            ((GridLayout)((RoleViewHolder) holder).masksFrame).setRowCount(3);
-        } else if(mask.maskGraphList.size() <= 16) {
-            ((GridLayout)((RoleViewHolder) holder).masksFrame).setColumnCount(4);
-            ((GridLayout)((RoleViewHolder) holder).masksFrame).setRowCount(4);
-        }
-
-        // add mask to content view
-        for(MaskGraph mg: mask.maskGraphList) {
-            Log.i("PopupChooseMask","maskGraph ID: " + mg.id);
-            int height = UICommon.dp2px((AppCompatActivity) ((RoleViewHolder) holder).masksFrame.getContext(), 48); // (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, view.getContext().getResources().getDisplayMetrics());
-            int width =  UICommon.dp2px((AppCompatActivity) ((RoleViewHolder) holder).masksFrame.getContext(), 48); // (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, view.getContext().getResources().getDisplayMetrics());
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(height, width);
-            // MaskImageButton imageButton = new MaskImageButton(((RoleViewHolder) holder).masksFrame.getContext(), this, this);
-            ImageButton imageButton = new ImageButton(((RoleViewHolder) holder).masksFrame.getContext());
-            imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            // imageButton.setMaskGraph(mg);
-            ((RoleViewHolder) holder).masksFrame.addView(imageButton, layoutParams);
-            Glide.with(((RoleViewHolder) holder).masksFrame.getContext()).load(mg.graphURL).into(imageButton);
-        }
-
+        ((MaskChoose)holder.itemView).init(mask);
     }
 
 }
