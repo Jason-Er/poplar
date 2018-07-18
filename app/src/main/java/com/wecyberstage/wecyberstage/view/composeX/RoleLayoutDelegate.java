@@ -65,8 +65,10 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
     public void onMaskClickEventBus(MaskClickEvent event) {
         switch (event.getMessage()) {
             case "MASK_CLICK":
-                Log.i("RoleLayoutDelegate","receive MASK_CLICK role ID:" + event.getId());
+                Log.i("RoleLayoutDelegate","receive MASK_CLICK role ID:" + event.getId() + " x: "+ event.getPoint().x + " y: "+event.getPoint().y);
                 roleMap.get(event.getId()).setVisibility(View.VISIBLE);
+                roleMap.get(event.getId()).setX(event.getPoint().x);
+                roleMap.get(event.getId()).setY(event.getPoint().y);
                 break;
         }
     }

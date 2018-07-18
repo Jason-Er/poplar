@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
+import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -83,7 +84,9 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
             @Override
             public void onClick(View v) {
                 Log.i("MaskLineAdapterDelegate","send click");
-                MaskClickEvent event = new MaskClickEvent("MASK_CLICK", ((ComposeLine) items.get(position)).line.roleId);
+                int[] viewLocation = new int[2];
+                v.getLocationOnScreen(viewLocation);
+                MaskClickEvent event = new MaskClickEvent("MASK_CLICK", ((ComposeLine) items.get(position)).line.roleId, new Point(viewLocation[0], viewLocation[1]));
                 EventBus.getDefault().post(event);
             }
         });
