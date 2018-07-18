@@ -53,6 +53,12 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
 
     @Override
     public int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        Iterator iterator = roleMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            layoutManager.detachView((View)entry.getValue());
+            layoutManager.attachView((View)entry.getValue());
+        }
         return dx;
     }
 
@@ -75,9 +81,9 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onOutsideClickEventBus(OutsideClickEvent event) {
-        Iterator iter = roleMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry entry = (Map.Entry) iter.next();
+        Iterator iterator = roleMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry) iterator.next();
             ((View)entry.getValue()).setVisibility(View.INVISIBLE);
         }
     }

@@ -31,6 +31,7 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
         int minimum =
         ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).scrollHorizontallyBy(layoutManager, items, dx, recycler, state);
         ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.TIME_LINE.ordinal())).scrollHorizontallyBy(layoutManager, items, dx, recycler, state);
+        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).scrollHorizontallyBy(layoutManager, items, dx, recycler, state);
         return minimum;
     }
 

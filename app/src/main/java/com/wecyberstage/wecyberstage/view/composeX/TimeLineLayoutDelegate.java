@@ -82,6 +82,8 @@ public class TimeLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
     }
 
     private void repositionTimeLine(RecyclerView.LayoutManager layoutManager) {
+        layoutManager.detachView(timeLineView);
+        layoutManager.attachView(timeLineView);
         int width = layoutManager.getDecoratedMeasuredWidth(timeLineView);
         int height = layoutManager.getDecoratedMeasuredHeight(timeLineView);
         layoutManager.layoutDecorated(timeLineView, 0, 0, width, height);
