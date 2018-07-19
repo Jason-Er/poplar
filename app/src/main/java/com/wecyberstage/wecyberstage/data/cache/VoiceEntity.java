@@ -6,26 +6,24 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-/**
- * Created by mike on 2018/3/15.
- */
-
-@Entity(tableName = "line_local",
+@Entity(tableName = "voice",
         foreignKeys = {
-                @ForeignKey(entity = LineEntity.class, parentColumns = "id", childColumns = "line_id"),
-                @ForeignKey(entity = UserEntity.class, parentColumns = "id", childColumns = "user_id")
+                @ForeignKey(entity = UserEntity.class, parentColumns = "id", childColumns = "user_id"),
+                @ForeignKey(entity = StageLineEntity.class, parentColumns = "id", childColumns = "line_id")
         },
         indices = {
                 @Index(value = {"line_id", "user_id"})
         })
-public class LineLocalEntity {
+public class VoiceEntity {
     @PrimaryKey
     public long id;
 
-    @ColumnInfo(name = "audio_url")
-    public String audioURL;
-    @ColumnInfo(name = "line_id")
-    public long lineId;
     @ColumnInfo(name = "user_id")
     public long userId;
+
+    @ColumnInfo(name = "line_id")
+    public long lineId;
+
+    @ColumnInfo(name = "res_url")
+    public String audioURL;
 }

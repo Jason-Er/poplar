@@ -21,6 +21,7 @@ public class SceneEntity {
     @PrimaryKey
     public long id;
 
+    public String name;
     @ColumnInfo(name = "act_ordinal")
     public long actOrdinal;
     public long ordinal;
@@ -31,13 +32,4 @@ public class SceneEntity {
     public String setting;
     @ColumnInfo(name = "at_rise")
     public String atrise;
-
-    @ColumnInfo(name = "action_script")
-    public String actionScript;
-
-    @ColumnInfo(name = "setting_url")
-    public String settingURL;
-
-    @ColumnInfo(name = "bgm_url")
-    public String backgroundMusicURL;
 }

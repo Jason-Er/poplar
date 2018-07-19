@@ -12,14 +12,10 @@ import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "role",
         foreignKeys = {
-                @ForeignKey(entity = PlayEntity.class, parentColumns = "id", childColumns = "play_id"),
-                @ForeignKey(entity = UserEntity.class, parentColumns = "id", childColumns = "actor_id"),
-                @ForeignKey(entity = MaskEntity.class, parentColumns = "id", childColumns = "mask_id")
+                @ForeignKey(entity = PlayEntity.class, parentColumns = "id", childColumns = "play_id")
         },
         indices = {
-                @Index("actor_id"),
-                @Index("play_id"),
-                @Index("figure_id")
+                @Index("play_id")
         })
 public class RoleEntity {
     @PrimaryKey
@@ -33,12 +29,6 @@ public class RoleEntity {
 
     public String description;
 
-    @ColumnInfo(name = "actor_id")
-    public long actorId;
-
     @ColumnInfo(name = "play_id")
     public long playId;
-
-    @ColumnInfo(name = "mask_id")
-    public long maskId;
 }
