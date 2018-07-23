@@ -34,6 +34,7 @@ public class StageSceneLiveData extends LiveData<StageScene> implements PlayStat
             for(int i = 0; i< 12; i++) {
                 MaskGraph maskGraph = new MaskGraph(i%3, 0, "http://www.f1188.com/upload/20180107205142.jpg");
                 StageLine line = new StageLine(i%3, "Hello " + i, 3 * i * 1000, 1, maskGraph);
+                line.ordinal = i + 1;
                 stageScene.stageLines.add(line);
             }
             for(int i=0; i<3; i++) {

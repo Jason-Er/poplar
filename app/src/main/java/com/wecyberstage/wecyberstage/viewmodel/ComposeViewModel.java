@@ -14,25 +14,25 @@ import javax.inject.Inject;
 
 public class ComposeViewModel extends ViewModel implements PlayStateInterface, UpdateStagePlayInterface {
 
-    public final LiveData<StageScene> scriptLiveData;
+    public final LiveData<StageScene> stageSceneLiveData;
 
     @Inject
-    public ComposeViewModel(StageSceneLiveData scriptLiveData) {
-        this.scriptLiveData = scriptLiveData;
+    public ComposeViewModel(StageSceneLiveData stageSceneLiveData) {
+        this.stageSceneLiveData = stageSceneLiveData;
     }
 
     @Override
     public void setPlayState(PlayState playState) {
-        ((StageSceneLiveData) scriptLiveData).setPlayState(playState);
+        ((StageSceneLiveData) stageSceneLiveData).setPlayState(playState);
     }
 
     @Override
     public PlayState getPlayState() {
-        return ((StageSceneLiveData) scriptLiveData).getPlayState();
+        return ((StageSceneLiveData) stageSceneLiveData).getPlayState();
     }
 
     @Override
     public void updateStageLine(StageLine maskLine) {
-        ((StageSceneLiveData) scriptLiveData).updateStageLine(maskLine);
+        ((StageSceneLiveData) stageSceneLiveData).updateStageLine(maskLine);
     }
 }

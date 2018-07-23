@@ -15,6 +15,7 @@ public class StageLine extends StageLineEntity {
         this.roleId = roleId;
         this.dialogue = dialogue;
         this.beginTime = beginTime;
+        this.voice = new Voice();
         this.voice.duration = duration;
         this.maskGraph = maskGraph;
     }

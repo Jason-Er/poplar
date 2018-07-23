@@ -69,7 +69,7 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
         if(playState != null) {
             viewModel.setPlayState(playState);
         }
-        viewModel.scriptLiveData.observe(activity, new Observer<StageScene>() {
+        viewModel.stageSceneLiveData.observe(activity, new Observer<StageScene>() {
             @Override
             public void onChanged(@Nullable StageScene stageScene) {
                 if(stageScene != null) {

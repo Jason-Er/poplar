@@ -109,7 +109,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
         if(playState != null) {
             viewModel.setPlayState(playState);
         }
-        viewModel.scriptLiveData.observe(activity, new Observer<StageScene>() {
+        viewModel.stageSceneLiveData.observe(activity, new Observer<StageScene>() {
             @Override
             public void onChanged(@Nullable StageScene stageScene) {
                 if(stageScene != null) {

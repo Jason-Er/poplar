@@ -2,6 +2,7 @@ package com.wecyberstage.wecyberstage.model;
 
 import com.wecyberstage.wecyberstage.data.cache.StageSceneEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,4 +14,9 @@ public class StageScene extends StageSceneEntity {
     public List<StageLine> stageLines;
     public List<StageRole> stageRoles; // for roles in the scene
     public List<Prop> props; // for props used in the scene
+
+    public StageScene() {
+        this.stageLines = new ArrayList<>();
+        this.stageRoles = new ArrayList<>();
+    }
 }
