@@ -2,8 +2,8 @@ package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.support.annotation.NonNull;
 
-import com.wecyberstage.wecyberstage.model.ComposeLine;
-import com.wecyberstage.wecyberstage.model.ComposeScript;
+import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -22,25 +22,25 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter {
                 .addDelegate(new ComposeLineAdapterEndDelegate(ComposeYCardViewType.END.ordinal()));
     }
 
-    public void setComposeScript(@NonNull ComposeScript script) {
+    public void setStageScene(@NonNull StageScene stageScene) {
         dataSet = new ArrayList<>();
         List<Long> listStart = new ArrayList<>();
         List<Long> listEnd = new ArrayList<>();
-        for(ComposeLine composeLine: script.composeLineList) {
+        for(StageLine stageLine : stageScene.stageLines) {
             ComposeYCardViewType viewType;
-            // TODO: 2018/5/22 need further refactoring: is user act some role then let the role id be start position
-            if(listStart.contains(composeLine.line.roleId)) {
+            // TODO: 2018/5/22 need further refactoring: is user act some stageRole then let the stageRole id be start position
+            if(listStart.contains(stageLine.roleId)) {
                 viewType = ComposeYCardViewType.START;
-            } else if(listEnd.contains(composeLine.line.roleId)) {
+            } else if(listEnd.contains(stageLine.roleId)) {
                 viewType = ComposeYCardViewType.END;
             } else if(listStart.size() > listEnd.size()) {
-                listEnd.add(composeLine.line.roleId);
+                listEnd.add(stageLine.roleId);
                 viewType = ComposeYCardViewType.END;
             } else {
-                listStart.add(composeLine.line.roleId);
+                listStart.add(stageLine.roleId);
                 viewType = ComposeYCardViewType.START;
             }
-            ComposeYItemDto dto = new ComposeYItemDto(viewType, composeLine);
+            ComposeYItemDto dto = new ComposeYItemDto(viewType, stageLine);
             dataSet.add(dto);
         }
         notifyDataSetChanged();

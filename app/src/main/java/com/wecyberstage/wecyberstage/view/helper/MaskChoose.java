@@ -41,7 +41,6 @@ public class MaskChoose extends RelativeLayout {
     }
 
     public void init(Mask mask) {
-        // masksFrame = findViewById(R.id.mask_choose_frame);
         if(mask.maskGraphList.size() <= 4) {
             masksFrame.setColumnCount(2);
             masksFrame.setRowCount(2);

@@ -19,7 +19,7 @@ import android.arch.persistence.room.PrimaryKey;
                 @Index("actor_id"),
                 @Index("mask_id")
         })
-public class StageRoleEntity {
+public class StageRoleEntity extends RoleEntity {
     @PrimaryKey
     public long id;
 
@@ -34,4 +34,12 @@ public class StageRoleEntity {
 
     @ColumnInfo(name = "adapted_from")
     public long adaptedFrom;
+
+    @ColumnInfo(name = "first_name")
+    public String firstName;
+
+    @ColumnInfo(name = "last_name")
+    public String lastName;
+
+    public String description;
 }

@@ -10,7 +10,7 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "role",
+@Entity(tableName = "stageRole",
         foreignKeys = {
                 @ForeignKey(entity = PlayEntity.class, parentColumns = "id", childColumns = "play_id")
         },

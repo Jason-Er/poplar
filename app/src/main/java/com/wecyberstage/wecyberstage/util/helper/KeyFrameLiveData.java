@@ -3,14 +3,12 @@ package com.wecyberstage.wecyberstage.util.helper;
 import android.arch.lifecycle.LiveData;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.util.ArrayMap;
 
 import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
-import com.wecyberstage.wecyberstage.model.Line;
-import com.wecyberstage.wecyberstage.model.Play;
+import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.Prop;
-import com.wecyberstage.wecyberstage.model.Role;
+import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 
@@ -51,10 +49,10 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> implements PlayStateInt
         keyFrame.propInfoList = new ArrayList<>();
         keyFrame.stageInfo = new KeyFrame.StageInfo();
 
-        Role role = new Role(1, null);
-        role.firstName = "jason";
-        role.lastName = "E";
-        Line line = new Line();
+        StageRole stageRole = new StageRole(1, null);
+        stageRole.firstName = "jason";
+        stageRole.lastName = "E";
+        StageLine line = new StageLine();
         line.dialogue = "Hello world!";
         PointF point = new PointF(200,200);
         RectF roleViewRect = new RectF(0.2f,0.2f,0.4f,0.6f);
@@ -62,7 +60,7 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> implements PlayStateInt
         Prop prop = new Prop();
         RectF propViewRect = new RectF(0,0,40,40);
 
-        KeyFrame.RoleInfo roleInfo = new KeyFrame.RoleInfo(role, roleViewRect,0);
+        KeyFrame.RoleInfo roleInfo = new KeyFrame.RoleInfo(stageRole, roleViewRect,0);
         KeyFrame.LineInfo lineInfo = new KeyFrame.LineInfo(point, line);
         KeyFrame.PropInfo propInfo = new KeyFrame.PropInfo(prop, propViewRect);
 

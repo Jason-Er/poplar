@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.model.ComposeLine;
+import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.message.MaskClickEvent;
@@ -40,11 +40,10 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
     class ComposeLineViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.composeXCardLine_dragHandle)
         ImageView dragHandle;
-        @BindView(R.id.composeXCardLine_lineAvatar)
+        @BindView(R.id.composeXCardLine_lineMask)
         ImageView mask;
         @BindView(R.id.composeXCardLine_lineDialogue)
         TextView dialogue;
-
         ComposeLineViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
@@ -53,7 +52,7 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
 
     @Override
     public boolean isForViewType(@NonNull List<Object> items, int position) {
-        return items.get(position) instanceof ComposeLine;
+        return items.get(position) instanceof StageLine;
     }
 
     @NonNull
@@ -67,9 +66,9 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
 
     @Override
     public void onBindViewHolder(@NonNull final List<Object> items, final int position, @NonNull final RecyclerView.ViewHolder holder) {
-        Log.i("ComposeX", "onBindViewHolder");
-        ((ComposeLineViewHolder) holder).dialogue.setText(((ComposeLine) items.get(position)).line.dialogue);
-        ((MaskLineCardView)holder.itemView).setPosition(position);
+        ((StageLineCardView)holder.itemView).setPosition(position);
+        ((StageLineCardView)holder.itemView).setStageLine((StageLine)items.get(position));
+
         ((ComposeLineViewHolder) holder).dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -87,7 +86,7 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
                 int[] viewLocation = new int[2];
                 v.getLocationOnScreen(viewLocation);
                 Rect viewRect = new Rect(viewLocation[0], viewLocation[1], viewLocation[0] + v.getWidth(), viewLocation[1] + v.getHeight());
-                MaskClickEvent event = new MaskClickEvent("MASK_CLICK", ((ComposeLine) items.get(position)).line.roleId, viewRect);
+                MaskClickEvent event = new MaskClickEvent("MASK_CLICK", ((StageLine) items.get(position)).roleId, viewRect);
                 EventBus.getDefault().post(event);
             }
         });

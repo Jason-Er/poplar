@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.model.PlayInfo;
+import com.wecyberstage.wecyberstage.model.StagePlayInfo;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 
 public class PlayProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<PlayInfo> dataset;
+    private List<StagePlayInfo> dataset;
 
     public View.OnClickListener onItemClickCallBack = null;
 
@@ -54,12 +54,12 @@ public class PlayProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         PlayProfileCardViewHolder vh = (PlayProfileCardViewHolder) holder;
-        PlayInfo playInfo = dataset.get(position);
+        StagePlayInfo stagePlayInfo = dataset.get(position);
         ((PlayProfileCardView) vh.cardView).onClickCallBack = onItemClickCallBack;
-        ((PlayProfileCardView) vh.cardView).playInfo = playInfo;
-        vh.brief.setText(playInfo.briefIntro);
-        vh.title.setText(playInfo.name);
-        Glide.with(vh.cardView.getContext()).load(playInfo.posterURL).into(vh.poster);
+        ((PlayProfileCardView) vh.cardView).stagePlayInfo = stagePlayInfo;
+        vh.brief.setText(stagePlayInfo.briefIntro);
+        vh.title.setText(stagePlayInfo.name);
+        Glide.with(vh.cardView.getContext()).load(stagePlayInfo.posterURL).into(vh.poster);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class PlayProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return dataset == null? 0 : dataset.size();
     }
 
-    public void setDataset(List<PlayInfo> dataset) {
+    public void setDataset(List<StagePlayInfo> dataset) {
         this.dataset = dataset;
         notifyDataSetChanged();
     }

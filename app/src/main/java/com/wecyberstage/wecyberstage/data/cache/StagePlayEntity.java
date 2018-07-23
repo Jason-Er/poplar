@@ -17,7 +17,7 @@ import android.arch.persistence.room.PrimaryKey;
                 @Index("stage_id"),
                 @Index("adapted_from")
         })
-public class StagePlayEntity {
+public class StagePlayEntity extends PlayEntity {
     @PrimaryKey
     public long id;
 

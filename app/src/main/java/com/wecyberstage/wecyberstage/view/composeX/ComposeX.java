@@ -17,9 +17,9 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
-import com.wecyberstage.wecyberstage.model.ComposeLine;
-import com.wecyberstage.wecyberstage.model.ComposeScript;
-import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
+import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StageScene;
+import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
@@ -38,7 +38,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface, UpdateComposeScriptInterface, OnStartDragListener {
+public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface, UpdateStagePlayInterface, OnStartDragListener {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -109,11 +109,11 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
         if(playState != null) {
             viewModel.setPlayState(playState);
         }
-        viewModel.scriptLiveData.observe(activity, new Observer<ComposeScript>() {
+        viewModel.scriptLiveData.observe(activity, new Observer<StageScene>() {
             @Override
-            public void onChanged(@Nullable ComposeScript script) {
-                if(script != null) {
-                    adapter.setComposeScript(script);
+            public void onChanged(@Nullable StageScene stageScene) {
+                if(stageScene != null) {
+                    adapter.setStageScene(stageScene);
                 }
             }
         });
@@ -136,8 +136,8 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     }
 
     @Override
-    public void updateComposeLine(ComposeLine composeLine, int ordinal) {
-        viewModel.updateComposeLine(composeLine, ordinal);
+    public void updateStageLine(StageLine stageLine) {
+        viewModel.updateStageLine(stageLine);
     }
 
     @Override

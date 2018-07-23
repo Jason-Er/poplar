@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.wecyberstage.wecyberstage.message.MessageEvent;
 import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
-import com.wecyberstage.wecyberstage.model.Role;
+import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 import com.wecyberstage.wecyberstage.message.MaskClickEvent;
@@ -36,7 +36,7 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
         Log.i("Popup","onLayoutChildren");
         roleMap = new HashMap<>();
         for(Object item: items) {
-            if (item instanceof Role) {
+            if (item instanceof StageRole) {
                 int index = items.indexOf(item);
                 View view = recycler.getViewForPosition(index);
                 layoutManager.addView(view);
@@ -44,8 +44,8 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
                 int width = layoutManager.getDecoratedMeasuredWidth(view);
                 int height = layoutManager.getDecoratedMeasuredHeight(view);
                 layoutManager.layoutDecorated(view, 0, 0, width, height);
-                if(!roleMap.containsKey(((Role) item).id)) {
-                    roleMap.put(((Role) item).id, view);
+                if(!roleMap.containsKey(((StageRole) item).id)) {
+                    roleMap.put(((StageRole) item).id, view);
                 }
                 view.setVisibility(View.INVISIBLE);
             }
@@ -72,7 +72,7 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
     public void onMaskClickEventBus(MaskClickEvent event) {
         switch (event.getMessage()) {
             case "MASK_CLICK":
-                Log.i("RoleLayoutDelegate","receive MASK_CLICK role ID:" + event.getId());
+                Log.i("RoleLayoutDelegate","receive MASK_CLICK stageRole ID:" + event.getId());
                 UICommon.showPopupWindow(roleMap.get(event.getId()), event.getRect());
                 break;
         }

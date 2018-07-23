@@ -15,7 +15,7 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
     @Inject
     public ComposeXLayoutDelegateManager() {
         addDelegate(new TimeLineLayoutDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
-        addDelegate(new MaskLineLayoutDelegate(ComposeXCardViewType.MASK_LINE.ordinal()));
+        addDelegate(new StageLineLayoutDelegate(ComposeXCardViewType.MASK_LINE.ordinal()));
         addDelegate(new RoleLayoutDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
     }
 
@@ -41,7 +41,7 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
     }
 
     public void updateOneViewHolder(RecyclerView.LayoutManager layoutManager,  ComposeXScriptAdapter adapter, RecyclerView.ViewHolder viewHolder) {
-        ((MaskLineLayoutDelegate)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).updateOneViewHolder(layoutManager, adapter, viewHolder);
+        ((StageLineLayoutDelegate)getDelegate(ComposeXCardViewType.MASK_LINE.ordinal())).updateOneViewHolder(layoutManager, adapter, viewHolder);
     }
 
     @Override

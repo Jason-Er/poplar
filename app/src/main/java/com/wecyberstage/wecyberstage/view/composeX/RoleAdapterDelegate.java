@@ -1,25 +1,16 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.Mask;
-import com.wecyberstage.wecyberstage.model.MaskGraph;
-import com.wecyberstage.wecyberstage.model.Role;
-import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.view.helper.MaskChoose;
-import com.wecyberstage.wecyberstage.view.helper.MaskImageButton;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -45,7 +36,7 @@ public class RoleAdapterDelegate extends ViewTypeDelegateClass implements Adapte
 
     @Override
     public boolean isForViewType(@NonNull List<Object> items, int position) {
-        return items.get(position) instanceof Role;
+        return items.get(position) instanceof StageRole;
     }
 
     @NonNull
@@ -59,8 +50,8 @@ public class RoleAdapterDelegate extends ViewTypeDelegateClass implements Adapte
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
         Log.i("RoleAdapterDelegate","onBindViewHolder position:"+position);
-        Role role = (Role) items.get(position);
-        Mask mask = role.mask;
+        StageRole stageRole = (StageRole) items.get(position);
+        Mask mask = stageRole.mask;
         ((MaskChoose)holder.itemView).init(mask);
     }
 

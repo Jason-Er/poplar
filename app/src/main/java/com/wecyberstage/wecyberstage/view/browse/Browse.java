@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
-import com.wecyberstage.wecyberstage.model.PlayInfo;
+import com.wecyberstage.wecyberstage.model.StagePlayInfo;
 import com.wecyberstage.wecyberstage.data.dto.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
@@ -75,16 +75,16 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
             @Override
             public void onClick(View v) {
                 Timber.d("navigate to somewhere");
-                playState = new PlayState(((PlayProfileCardView)v).playInfo.id, 1L, 0L);
+                playState = new PlayState(((PlayProfileCardView)v).stagePlayInfo.id, 1L, 0L);
                 ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
             }
         };
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(BrowseViewModel.class);
         viewModel.setRequestPage(new PageRequest(0,15,""));
-        viewModel.playInfoLiveData.observe(activity, new Observer<Resource<List<PlayInfo>>>(){
+        viewModel.playInfoLiveData.observe(activity, new Observer<Resource<List<StagePlayInfo>>>(){
             @Override
-            public void onChanged(@Nullable Resource<List<PlayInfo>> resource) {
+            public void onChanged(@Nullable Resource<List<StagePlayInfo>> resource) {
                 switch (resource.status) {
                     case SUCCESS:
                         Timber.d("SUCCESS");

@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.wecyberstage.wecyberstage.model.ComposeLine;
+import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.TimeLine;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
@@ -45,8 +45,8 @@ public class TimeLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
     public int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
         int totalLength;
         if (items != null && items.size() > 1) {
-            ComposeLine composeLine = (ComposeLine) items.get(items.size() -1);
-            int tempLength = (int) (( (float) composeLine.line.beginTime / MS_PERSECOND + composeLine.line.duration) / TIME_SPAN * getHorizontalSpace(layoutManager));
+            StageLine stageLine = (StageLine) items.get(items.size() -1);
+            int tempLength = (int) (( (float) stageLine.beginTime / MS_PERSECOND + stageLine.voice.duration) / TIME_SPAN * getHorizontalSpace(layoutManager));
             totalLength = tempLength > getHorizontalSpace(layoutManager) ? tempLength : getHorizontalSpace(layoutManager);
         } else {
             totalLength = getHorizontalSpace(layoutManager);
