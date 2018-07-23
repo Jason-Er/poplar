@@ -1,9 +1,6 @@
 package com.wecyberstage.wecyberstage.model;
 
-import android.graphics.Matrix;
-import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import java.util.List;
@@ -16,9 +13,9 @@ public class KeyFrame {
 
     public static class LineInfo {
         public PointF point;
-        public Line line;
+        public StageLine line;
 
-        public LineInfo(PointF point, Line line) {
+        public LineInfo(PointF point, StageLine line) {
             this.point = point;
             this.line = line;
         }
@@ -35,12 +32,12 @@ public class KeyFrame {
     }
 
     public static class RoleInfo {
-        public Role role;
+        public StageRole stageRole;
         public RectF roleViewRect;
         public int selectedFigureGraphOrdinal;
 
-        public RoleInfo(Role role, RectF roleViewRect, int selectedFigureGraphOrdinal) {
-            this.role = role;
+        public RoleInfo(StageRole stageRole, RectF roleViewRect, int selectedFigureGraphOrdinal) {
+            this.stageRole = stageRole;
             this.roleViewRect = roleViewRect;
             this.selectedFigureGraphOrdinal = selectedFigureGraphOrdinal;
         }
