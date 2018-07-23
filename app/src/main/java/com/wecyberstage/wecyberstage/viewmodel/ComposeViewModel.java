@@ -3,36 +3,36 @@ package com.wecyberstage.wecyberstage.viewmodel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.wecyberstage.wecyberstage.model.ComposeLine;
-import com.wecyberstage.wecyberstage.model.ComposeScript;
-import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
-import com.wecyberstage.wecyberstage.util.helper.ComposeScriptLiveData;
+import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StageScene;
+import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
+import com.wecyberstage.wecyberstage.util.helper.StageSceneLiveData;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 
 import javax.inject.Inject;
 
-public class ComposeViewModel extends ViewModel implements PlayStateInterface, UpdateComposeScriptInterface {
+public class ComposeViewModel extends ViewModel implements PlayStateInterface, UpdateStagePlayInterface {
 
-    public final LiveData<ComposeScript> scriptLiveData;
+    public final LiveData<StageScene> stageSceneLiveData;
 
     @Inject
-    public ComposeViewModel(ComposeScriptLiveData scriptLiveData) {
-        this.scriptLiveData = scriptLiveData;
+    public ComposeViewModel(StageSceneLiveData stageSceneLiveData) {
+        this.stageSceneLiveData = stageSceneLiveData;
     }
 
     @Override
     public void setPlayState(PlayState playState) {
-        ((ComposeScriptLiveData) scriptLiveData).setPlayState(playState);
+        ((StageSceneLiveData) stageSceneLiveData).setPlayState(playState);
     }
 
     @Override
     public PlayState getPlayState() {
-        return ((ComposeScriptLiveData) scriptLiveData).getPlayState();
+        return ((StageSceneLiveData) stageSceneLiveData).getPlayState();
     }
 
     @Override
-    public void updateComposeLine(ComposeLine composeLine, int ordinal) {
-        ((ComposeScriptLiveData) scriptLiveData).updateComposeLine(composeLine, ordinal);
+    public void updateStageLine(StageLine maskLine) {
+        ((StageSceneLiveData) stageSceneLiveData).updateStageLine(maskLine);
     }
 }

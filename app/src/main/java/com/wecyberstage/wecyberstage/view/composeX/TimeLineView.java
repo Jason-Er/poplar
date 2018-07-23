@@ -58,13 +58,11 @@ public class TimeLineView extends View {
     }
 
     public void setLeftOffset(int leftOffset) {
-        Log.i("TimeLineView", "setLeftOffset");
         this.leftOffset = leftOffset;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Log.i("TimeLineView", "onMeasure");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
@@ -81,7 +79,6 @@ public class TimeLineView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.i("TimeLineView", "onDraw");
         drawPath();
         canvas.drawBitmap(mBitmap, 0, 0, null);
     }

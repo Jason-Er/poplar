@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.composeY;
+package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,10 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.model.Mask;
+import com.wecyberstage.wecyberstage.model.StageRole;
+import com.wecyberstage.wecyberstage.view.helper.MaskChoose;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -18,19 +19,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class ComposeLineAdapterStartDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
-
-    public ComposeLineAdapterStartDelegate(int viewType) {
+public class RoleAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+    public RoleAdapterDelegate(int viewType) {
         super(viewType);
     }
 
-    class ComposeLineViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.imageview_pic)
-        ImageView avatar;
-        @BindView(R.id.textview_message)
-        TextView dialogue;
+    class RoleViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.mask_choose_frame)
+        ViewGroup masksFrame;
 
-        public ComposeLineViewHolder(View v) {
+        public RoleViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
@@ -38,21 +36,23 @@ class ComposeLineAdapterStartDelegate extends ViewTypeDelegateClass implements A
 
     @Override
     public boolean isForViewType(@NonNull List<Object> items, int position) {
-        return ((ComposeYItemDto)items.get(position)).getViewType() == ComposeYCardViewType.START;
+        return items.get(position) instanceof StageRole;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.composey_maskline_left, parent, false);
-        return new ComposeLineViewHolder(v);
+                .inflate(R.layout.role_mask_choose, parent, false);
+        return new RoleViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
-        Log.i("ComposeX", "onBindViewHolder");
-        ((ComposeLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
+        Log.i("RoleAdapterDelegate","onBindViewHolder position:"+position);
+        StageRole stageRole = (StageRole) items.get(position);
+        Mask mask = stageRole.mask;
+        ((MaskChoose)holder.itemView).init(mask);
     }
+
 }

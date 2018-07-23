@@ -7,7 +7,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -17,7 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
-import com.wecyberstage.wecyberstage.model.ComposeScript;
+import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
@@ -70,11 +69,11 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
         if(playState != null) {
             viewModel.setPlayState(playState);
         }
-        viewModel.scriptLiveData.observe(activity, new Observer<ComposeScript>() {
+        viewModel.stageSceneLiveData.observe(activity, new Observer<StageScene>() {
             @Override
-            public void onChanged(@Nullable ComposeScript script) {
-                if(script != null) {
-                    adapter.setComposeScript(script);
+            public void onChanged(@Nullable StageScene stageScene) {
+                if(stageScene != null) {
+                    adapter.setStageScene(stageScene);
                 }
             }
         });
@@ -106,5 +105,15 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     @Override
     public void slideEnd() {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    @Override
+    public void onResume(Activity activity) {
+
+    }
+
+    @Override
+    public void onPause(Activity activity) {
+
     }
 }

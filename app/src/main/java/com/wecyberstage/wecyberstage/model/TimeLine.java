@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.composeX;
+package com.wecyberstage.wecyberstage.model;
 
 /**
  * this class just for type

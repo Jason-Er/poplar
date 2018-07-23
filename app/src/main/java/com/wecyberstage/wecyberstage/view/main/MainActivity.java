@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
@@ -44,7 +44,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
-import com.wecyberstage.wecyberstage.view.helper.MessageEvent;
+import com.wecyberstage.wecyberstage.message.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
@@ -58,9 +58,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -121,17 +119,18 @@ public class MainActivity extends AppCompatActivity
     SignIn signIn;
     SignUp signUp;
     UserProfile userProfile;
+    List<CustomView> customViewList;
 
     // endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Debug.startMethodTracing("/data/data/com.wecyberstage.wecyberstage/love_world_");
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
         UICommon.toImmersive(this);
-        EventBus.getDefault().register(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -145,6 +144,7 @@ public class MainActivity extends AppCompatActivity
         // region all views
         viewArray = new SparseArray();
         flingResponseArray = new SparseArray();
+        customViewList = new ArrayList<>();
 
         browse = new Browse(this, appMain, ViewType.BROWSE);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void addCustomView(CustomView customView, FlingResponseInterface flingResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
+        customViewList.add(customView);
         viewArray.put(customView.getViewType().ordinal(), customView);
         flingResponseArray.put(customView.getViewType().ordinal(), flingResponseInterface);
         viewGroup.addView(customView.getView(), 1);
@@ -286,12 +287,20 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         autoHideHandler.postDelayed(autoHideRunnable, 3000);
+        EventBus.getDefault().register(this);
+        for(CustomView customView: customViewList) {
+            customView.onResume(this);
+        }
+        // Debug.stopMethodTracing();
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
+        super.onPause();
         EventBus.getDefault().unregister(this);
-        super.onDestroy();
+        for(CustomView customView: customViewList) {
+            customView.onPause(this);
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

@@ -53,6 +53,6 @@ class ComposeLineAdapterEndDelegate extends ViewTypeDelegateClass implements Ada
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
         Log.i("ComposeX", "onBindViewHolder");
-        ((ComposeLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getComposeLine().line.dialogue);
+        ((ComposeLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
     }
 }

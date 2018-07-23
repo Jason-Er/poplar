@@ -1,13 +1,14 @@
 package com.wecyberstage.wecyberstage.view.helper;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.wecyberstage.wecyberstage.message.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -74,8 +75,10 @@ public class CustomViewBehavior<V extends View> extends CoordinatorLayout.Behavi
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
+            /*
             MessageEvent messageEvent = new MessageEvent("CLICK");
             EventBus.getDefault().post(messageEvent);
+            */
             return super.onSingleTapUp(e);
         }
 

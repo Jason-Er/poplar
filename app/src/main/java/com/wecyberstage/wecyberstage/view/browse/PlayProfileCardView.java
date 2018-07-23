@@ -5,7 +5,7 @@ import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.wecyberstage.wecyberstage.model.PlayInfo;
+import com.wecyberstage.wecyberstage.model.StagePlayInfo;
 
 /**
  * Created by mike on 2018/3/7.
@@ -16,7 +16,7 @@ public class PlayProfileCardView extends CardView
 
     public View.OnClickListener onClickCallBack = null;
 
-    public PlayInfo playInfo;
+    public StagePlayInfo stagePlayInfo;
 
     public PlayProfileCardView(Context context) {
         super(context);

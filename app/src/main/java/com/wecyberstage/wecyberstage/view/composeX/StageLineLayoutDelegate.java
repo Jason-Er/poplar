@@ -6,13 +6,13 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.wecyberstage.wecyberstage.model.ComposeLine;
+import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
 import java.util.List;
 
-public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>> {
+public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>> {
 
     private int leftOffset = 0;
     private int topOffset = 0;
@@ -21,13 +21,13 @@ public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
     private final float MS_PERSECOND = 1000f;
     private SparseArray viewsMaxHeight;
 
-    public MaskLineLayoutDelegate(int viewType) {
+    public StageLineLayoutDelegate(int viewType) {
         super(viewType);
     }
 
     @Override
     public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        Log.i("ComposeLine","onLayoutChildren");
+        Log.i("StageLine","onLayoutChildren");
         fillVisibleChildren(layoutManager, items, recycler);
     }
 
@@ -36,8 +36,8 @@ public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
         // calc totalLength
         int totalLength;
         if (items != null && items.size() > 1) {
-            ComposeLine composeLine = (ComposeLine) items.get(items.size() -1);
-            int tempLength = (int) (( (float) composeLine.line.beginTime / MS_PERSECOND + composeLine.line.duration) / TIME_SPAN * getHorizontalSpace(layoutManager));
+            StageLine StageLine = (StageLine) items.get(items.size() -1);
+            int tempLength = (int) (( (float) StageLine.beginTime / MS_PERSECOND + StageLine.voice.duration) / TIME_SPAN * getHorizontalSpace(layoutManager));
             totalLength = tempLength > getHorizontalSpace(layoutManager) ? tempLength : getHorizontalSpace(layoutManager);
         } else {
             totalLength = getHorizontalSpace(layoutManager);
@@ -77,18 +77,18 @@ public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
         SparseArray viewCache = new SparseArray();
         for (int i=0; i < layoutManager.getChildCount(); i++) {
             final View child = layoutManager.getChildAt(i);
-            if( child instanceof MaskLineCardView) {
-                int position = ((MaskLineCardView) child).getPosition();
+            if( child instanceof StageLineCardView) {
+                int position = ((StageLineCardView) child).getPosition();
                 layoutManager.detachView(child);
                 viewCache.put(position, child);
             }
         }
         viewsMaxHeight = new SparseArray();
         for(Object item: items) {
-            if(item instanceof ComposeLine) {
+            if(item instanceof StageLine) {
                 int index = items.indexOf(item);
-                ComposeLine composeLine = (ComposeLine) item;
-                if (isVisible(composeLine.line.beginTime, composeLine.line.duration)) {
+                StageLine StageLine = (StageLine) item;
+                if (isVisible(StageLine.beginTime, StageLine.voice.duration)) {
                     View view = (View) viewCache.get(index);
                     if (view != null) {
                         layoutManager.attachView(view);
@@ -101,13 +101,13 @@ public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
                     int mDecoratedChildWidth = layoutManager.getDecoratedMeasuredWidth(view);
                     int mDecoratedChildHeight = layoutManager.getDecoratedMeasuredHeight(view);
 
-                    if (viewsMaxHeight.get((int) composeLine.line.roleId) != null) {
-                        int height = (int) viewsMaxHeight.get((int) composeLine.line.roleId);
+                    if (viewsMaxHeight.get((int) StageLine.roleId) != null) {
+                        int height = (int) viewsMaxHeight.get((int) StageLine.roleId);
                         if (height < mDecoratedChildHeight) {
-                            viewsMaxHeight.setValueAt((int) composeLine.line.roleId, mDecoratedChildHeight);
+                            viewsMaxHeight.setValueAt((int) StageLine.roleId, mDecoratedChildHeight);
                         }
                     } else {
-                        viewsMaxHeight.put((int) composeLine.line.roleId, mDecoratedChildHeight);
+                        viewsMaxHeight.put((int) StageLine.roleId, mDecoratedChildHeight);
                     }
                 }
             }
@@ -121,17 +121,17 @@ public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
         topOffset = (totalHeight - getVerticalSpace(layoutManager))/2;
         for(int i = 0; i < layoutManager.getChildCount(); i++) {
             View view = layoutManager.getChildAt(i);
-            if(view instanceof MaskLineCardView) {
-                int position = ((MaskLineCardView) view).getPosition();
-                ComposeLine composeLine = (ComposeLine) items.get(position);
+            if(view instanceof StageLineCardView) {
+                int position = ((StageLineCardView) view).getPosition();
+                StageLine StageLine = (StageLine) items.get(position);
 
                 int mDecoratedChildWidth = layoutManager.getDecoratedMeasuredWidth(view);
                 int mDecoratedChildHeight = layoutManager.getDecoratedMeasuredHeight(view);
 
-                layoutManager.layoutDecorated(view, (int) ((float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) - leftOffset,
-                        (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset - mDecoratedChildHeight,
-                        (int) ((float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) + mDecoratedChildWidth - leftOffset,
-                        (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset);
+                layoutManager.layoutDecorated(view, (int) ((float) StageLine.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) - leftOffset,
+                        (int) viewsMaxHeight.get((int) StageLine.roleId) - topOffset - mDecoratedChildHeight,
+                        (int) ((float) StageLine.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) + mDecoratedChildWidth - leftOffset,
+                        (int) viewsMaxHeight.get((int) StageLine.roleId) - topOffset);
             }
         }
 
@@ -159,20 +159,20 @@ public class MaskLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
     public void updateOneViewHolder(RecyclerView.LayoutManager layoutManager,  ComposeXScriptAdapter adapter, RecyclerView.ViewHolder viewHolder) {
         List<Object> dataSet = adapter.getDataSet();
         int position =  viewHolder.getAdapterPosition();
-        ComposeLine composeLine = (ComposeLine) dataSet.get(position);
-        long startTime = (long) ( viewHolder.itemView.getTranslationX() * TIME_SPAN * MS_PERSECOND / getHorizontalSpace(layoutManager) + (float) composeLine.line.beginTime );
-        composeLine.line.beginTime = startTime;
+        StageLine StageLine = (StageLine) dataSet.get(position);
+        long startTime = (long) ( viewHolder.itemView.getTranslationX() * TIME_SPAN * MS_PERSECOND / getHorizontalSpace(layoutManager) + (float) StageLine.beginTime );
+        StageLine.beginTime = startTime;
         Log.i("LayoutManager","updateOneViewHolder startTime: "+startTime);
 
         View view = viewHolder.itemView;
         layoutManager.measureChildWithMargins(view, 0, 0);
         int mDecoratedChildWidth = layoutManager.getDecoratedMeasuredWidth(view);
         int mDecoratedChildHeight = layoutManager.getDecoratedMeasuredHeight(view);
-        layoutManager.layoutDecorated(view, (int) ( (float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) - leftOffset,
-                (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset - mDecoratedChildHeight,
-                (int) ( (float) composeLine.line.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) + mDecoratedChildWidth - leftOffset,
-                (int) viewsMaxHeight.get((int) composeLine.line.roleId) - topOffset);
+        layoutManager.layoutDecorated(view, (int) ( (float) StageLine.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) - leftOffset,
+                (int) viewsMaxHeight.get((int) StageLine.roleId) - topOffset - mDecoratedChildHeight,
+                (int) ( (float) StageLine.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) + mDecoratedChildWidth - leftOffset,
+                (int) viewsMaxHeight.get((int) StageLine.roleId) - topOffset);
 
-        adapter.updateComposeLine(composeLine, position-1); // "position -1" for the first place is for timeLine view
+        adapter.updateStageLine(StageLine); // "position -1" for the first place is for timeLine view
     }
 }

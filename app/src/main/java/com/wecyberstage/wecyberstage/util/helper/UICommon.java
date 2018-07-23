@@ -1,6 +1,10 @@
 package com.wecyberstage.wecyberstage.util.helper;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -38,7 +42,35 @@ public class UICommon {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
-    public static int dp2px(AppCompatActivity activity, int dp) {
+    public static int dp2px(Activity activity, int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, activity.getResources().getDisplayMetrics());
+    }
+
+    public static int getScreenWidthInPixels(Context context){
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        return width;
+    }
+
+    public static int getScreenHeightInPixels(Context context){
+        DisplayMetrics dm = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(dm);
+        int height = dm.heightPixels;
+        return height;
+    }
+
+    public static void showPopupWindow(View view, Rect anchorViewRect) {
+        view.setVisibility(View.VISIBLE);
+        if ( view.getHeight() + anchorViewRect.bottom <= getScreenHeightInPixels(view.getContext())
+                && view.getWidth() + anchorViewRect.left <= getScreenWidthInPixels(view.getContext()) ) {
+            view.setX(anchorViewRect.left);
+            view.setY(anchorViewRect.bottom);
+        } else {
+            view.setX(anchorViewRect.left - view.getWidth());
+            view.setY(anchorViewRect.bottom - view.getHeight());
+        }
     }
 }

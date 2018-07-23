@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ public class PopupChooseMask extends PopupWindow implements MaskImageChoose {
         super(view.getContext());
         anchorView = view;
         this.maskGraph = maskGraph;
-        View contentView = LayoutInflater.from(view.getContext()).inflate(R.layout.popup_mask_choose,null);
+        View contentView = LayoutInflater.from(view.getContext()).inflate(R.layout.role_mask_choose,null);
         ButterKnife.bind(this, contentView);
         if(mask.maskGraphList.size() <= 4) {
             ((GridLayout) masksFrame).setColumnCount(2);

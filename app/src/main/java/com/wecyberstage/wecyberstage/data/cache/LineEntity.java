@@ -35,15 +35,4 @@ public class LineEntity {
     @ColumnInfo(name = "direction")
     public String direction;
     public String dialogue;
-
-    // millisecond
-    @ColumnInfo(name = "begin_time")
-    public long beginTime;
-
-    @ColumnInfo(name = "audio_url")
-    public String audioURL;
-
-    @ColumnInfo(name = "maskGraph_id")
-    public long maskGraphId;
-
 }

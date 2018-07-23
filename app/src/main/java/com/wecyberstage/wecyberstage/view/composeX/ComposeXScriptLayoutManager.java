@@ -1,15 +1,11 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.View;
 
-import com.wecyberstage.wecyberstage.model.ComposeLine;
+import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 
-import java.util.List;
-
-public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
+public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager implements LifeCycle {
 
     private ComposeXScriptAdapter adapter;
     private ComposeXLayoutDelegateManager delegatesManager;
@@ -67,4 +63,13 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager {
         delegatesManager.updateOneViewHolder(this, adapter, viewHolder);
     }
 
+    @Override
+    public void onResume(Activity activity) {
+        delegatesManager.onResume(activity);
+    }
+
+    @Override
+    public void onPause(Activity activity) {
+        delegatesManager.onPause(activity);
+    }
 }

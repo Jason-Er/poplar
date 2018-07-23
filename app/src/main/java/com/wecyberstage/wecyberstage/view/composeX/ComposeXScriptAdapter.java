@@ -2,11 +2,12 @@ package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.support.annotation.NonNull;
 
-import com.wecyberstage.wecyberstage.model.ComposeLine;
-import com.wecyberstage.wecyberstage.model.ComposeScript;
 import com.wecyberstage.wecyberstage.model.Mask;
-import com.wecyberstage.wecyberstage.model.Role;
-import com.wecyberstage.wecyberstage.model.UpdateComposeScriptInterface;
+import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StageRole;
+import com.wecyberstage.wecyberstage.model.StageScene;
+import com.wecyberstage.wecyberstage.model.TimeLine;
+import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.view.helper.ItemTouchHelperAdapter;
@@ -18,28 +19,31 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ComposeXScriptAdapter extends ListDelegationAdapter implements ItemTouchHelperAdapter, UpdateComposeScriptInterface, ComposeScriptHelper {
+public class ComposeXScriptAdapter extends ListDelegationAdapter implements ItemTouchHelperAdapter, UpdateStagePlayInterface, ComposeScriptHelper {
 
-    final private UpdateComposeScriptInterface updateComposeScriptInterface;
-    private List<Role> roleList;
+    final private UpdateStagePlayInterface updateStagePlayInterface;
+    private List<StageRole> stageRoleList;
     @Inject
     public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates,
-                                 UpdateComposeScriptInterface updateComposeScriptInterface,
+                                 UpdateStagePlayInterface updateStagePlayInterface,
                                  OnStartDragListener startDragListener) {
         super(delegates);
         delegatesManager
                 .addDelegate(new MaskLineAdapterDelegate(ComposeXCardViewType.MASK_LINE.ordinal(), startDragListener, this))
-                .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
-        this.updateComposeScriptInterface = updateComposeScriptInterface;
+                .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()))
+                .addDelegate(new RoleAdapterDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
+        this.updateStagePlayInterface = updateStagePlayInterface;
+        // EventBus.getDefault().register(this);
     }
 
-    public void setComposeScript(@NonNull ComposeScript script) {
+    public void setStageScene(@NonNull StageScene stageScene) {
         // for recyclerView show
         dataSet = new ArrayList<>();
         dataSet.add(new TimeLine());
-        dataSet.addAll(script.composeLineList);
+        dataSet.addAll(stageScene.stageRoles);
+        dataSet.addAll(stageScene.stageLines);
         // for whole scene info
-        roleList = script.roleList;
+        stageRoleList = stageScene.stageRoles;
         notifyDataSetChanged();
     }
 
@@ -54,8 +58,8 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
     }
 
     @Override
-    public void updateComposeLine(ComposeLine composeLine, int ordinal) {
-        updateComposeScriptInterface.updateComposeLine(composeLine, ordinal);
+    public void updateStageLine(StageLine stageLine) {
+        updateStagePlayInterface.updateStageLine(stageLine);
     }
 
     @Override
@@ -71,9 +75,9 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
     @Override
     public Mask getMaskByRole(long roleId) {
         Mask mask = null;
-        for(Role role: roleList) {
-            if(role.id == roleId) {
-                mask = role.mask;
+        for(StageRole stageRole : stageRoleList) {
+            if(stageRole.id == roleId) {
+                mask = stageRole.mask;
                 break;
             }
         }
@@ -81,7 +85,20 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
     }
 
     @Override
-    public List<Role> getRoleList() {
+    public List<StageRole> getStageRoleList() {
         return null;
     }
+
+    /*
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseEventBus(MaskClickEvent event) {
+        switch (event.getMessage()) {
+            case "MASK_CLICK":
+                Log.i("ComposeXScriptAdapter","receive MASK_CLICK");
+                // notifyItemChanged(1);
+                break;
+        }
+    }
+    */
+
 }

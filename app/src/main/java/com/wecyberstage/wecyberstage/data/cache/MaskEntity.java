@@ -21,7 +21,8 @@ public class MaskEntity {
     @PrimaryKey
     public long id;
 
+    public String name;
+
     @ColumnInfo(name = "author_id")
     public long authorId;
-    public String name;
 }

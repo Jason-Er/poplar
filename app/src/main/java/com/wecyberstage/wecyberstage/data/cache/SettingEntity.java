@@ -6,18 +6,14 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-/**
- * Created by mike on 2018/3/18.
- */
-
-@Entity(tableName = "prop",
+@Entity(tableName = "setting",
         foreignKeys = {
                 @ForeignKey(entity = UserEntity.class, parentColumns = "id", childColumns = "author_id")
         },
         indices = {
                 @Index(value = {"author_id"})
         })
-public class PropEntity {
+public class SettingEntity {
     @PrimaryKey
     public long id;
 
@@ -27,5 +23,5 @@ public class PropEntity {
     public long authorId;
 
     @ColumnInfo(name = "res_url")
-    public String graphURL;
+    public String settingURL;
 }

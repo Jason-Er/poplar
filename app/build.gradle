@@ -37,7 +37,7 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
     implementation "android.arch.persistence.room:runtime:$arch_version"
     annotationProcessor "android.arch.persistence.room:compiler:$arch_version"
-    testCompile("android.arch.core:core-testing:$arch_version", {
+    testImplementation("android.arch.core:core-testing:$arch_version", {
         exclude group: 'com.android.support', module: 'support-compat'
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-core-utils'
