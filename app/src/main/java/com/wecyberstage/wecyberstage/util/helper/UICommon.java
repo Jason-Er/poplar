@@ -73,4 +73,11 @@ public class UICommon {
             view.setY(anchorViewRect.bottom - view.getHeight());
         }
     }
+
+    private static int CLICK_ACTION_THRESHOLD = 200;
+    public static boolean isAClick(float startX, float endX, float startY, float endY) {
+        float differenceX = Math.abs(startX - endX);
+        float differenceY = Math.abs(startY - endY);
+        return !(differenceX > CLICK_ACTION_THRESHOLD/* =5 */ || differenceY > CLICK_ACTION_THRESHOLD);
+    }
 }
