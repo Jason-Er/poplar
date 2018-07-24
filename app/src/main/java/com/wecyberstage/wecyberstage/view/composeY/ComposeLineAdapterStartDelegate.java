@@ -46,7 +46,7 @@ class ComposeLineAdapterStartDelegate extends ViewTypeDelegateClass implements A
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.composey_maskline_left, parent, false);
+                .inflate(R.layout.composey_stageline_left, parent, false);
         return new ComposeLineViewHolder(v);
     }
 

@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
+import android.app.Activity;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,29 +13,33 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.message.MaskChooseEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
-import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.message.MaskClickEvent;
+import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
+import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>>, LifeCycle {
 
     final private OnStartDragListener startDragListener;
-    final private ComposeScriptHelper composeScriptHelper;
+    final private RecyclerView.Adapter adapter;
 
-    public MaskLineAdapterDelegate(int viewType, OnStartDragListener startDragListener, ComposeScriptHelper composeScriptHelper) {
+    public StageLineAdapterDelegate(int viewType, RecyclerView.Adapter adapter, OnStartDragListener startDragListener) {
         super(viewType);
         this.startDragListener = startDragListener;
-        this.composeScriptHelper = composeScriptHelper;
+        this.adapter = adapter;
     }
 
     class ComposeLineViewHolder extends RecyclerView.ViewHolder {
@@ -60,7 +65,7 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.composex_maskline, parent, false);
+                .inflate(R.layout.composex_stageline, parent, false);
         return new ComposeLineViewHolder(v);
     }
 
@@ -82,15 +87,43 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
         ((ComposeLineViewHolder) holder).mask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("MaskLineAdapterDelegate","send click");
+                Log.i("StageLine","send click");
                 int[] viewLocation = new int[2];
                 v.getLocationOnScreen(viewLocation);
                 Rect viewRect = new Rect(viewLocation[0], viewLocation[1], viewLocation[0] + v.getWidth(), viewLocation[1] + v.getHeight());
-                MaskClickEvent event = new MaskClickEvent("MASK_CLICK", ((StageLine) items.get(position)).roleId, viewRect);
+                MaskClickEvent event = new MaskClickEvent("MASK_CLICK", (StageLine) items.get(position), viewRect);
                 EventBus.getDefault().post(event);
             }
         });
 
     }
 
+    @Override
+    public void onResume(Activity activity) {
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause(Activity activity) {
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseEventBus(MaskChooseEvent event) {
+        switch (event.getMessage()) {
+            case "Click":
+                Log.i("StageLineAdapter","Click");
+                int headPosition = 0;
+                for(Object object: ((ListDelegationAdapter) adapter).getDataSet()) {
+                    if ( object instanceof StageLine ) {
+                        break;
+                    } else {
+                        headPosition ++;
+                    }
+                }
+                event.getStageLine().maskGraph = event.getMaskGraph();
+                adapter.notifyItemChanged(headPosition + (int)event.getStageLine().ordinal -1);
+                break;
+        }
+    }
 }

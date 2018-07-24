@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
@@ -84,5 +85,6 @@ public class StageLineCardView extends RelativeLayout {
     public void setStageLine(StageLine stageLine) {
         this.stageLine = stageLine;
         dialogue.setText(stageLine.dialogue);
+        Glide.with(getContext()).load(stageLine.maskGraph.graphURL).into(mask);
     }
 }

@@ -20,6 +20,7 @@ import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
+import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
@@ -48,6 +49,10 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     private ComposeXScriptAdapter adapter;
     private CustomItemTouchHelper itemTouchHelper;
 
+    // single click detect
+    private float startX;
+    private float startY;
+
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -72,21 +77,25 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
         ((RecyclerView)view).addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                if (e.getAction() != MotionEvent.ACTION_UP) {
-                    return false;
+                switch (e.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = e.getX();
+                        startY = e.getY();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        float endX = e.getX();
+                        float endY = e.getY();
+                        if (UICommon.isAClick(startX, endX, startY, endY)) {
+                            View child = ((RecyclerView)view).findChildViewUnder(e.getX(), e.getY());
+                            if (child == null) {
+                                Log.i("ComposeX","click outside");
+                                OutsideClickEvent event = new OutsideClickEvent("OUTSIDE_CLICK");
+                                EventBus.getDefault().post(event);
+                            }
+                        }
+                        break;
                 }
-                View child = ((RecyclerView)view).findChildViewUnder(e.getX(), e.getY());
-                if (child != null) {
-                    // tapped on child
-                    return false;
-                } else {
-                    // Tap occured outside all child-views.
-                    // do something
-                    Log.i("RecyclerView","ComposeX RecyclerView click");
-                    OutsideClickEvent event = new OutsideClickEvent("OUTSIDE_CLICK");
-                    EventBus.getDefault().post(event);
-                    return false;
-                }
+                return false;
             }
 
             @Override
@@ -148,10 +157,12 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void onResume(Activity activity) {
         layoutManager.onResume(activity);
+        adapter.onResume(activity);
     }
 
     @Override
     public void onPause(Activity activity) {
         layoutManager.onPause(activity);
+        adapter.onPause(activity);
     }
 }

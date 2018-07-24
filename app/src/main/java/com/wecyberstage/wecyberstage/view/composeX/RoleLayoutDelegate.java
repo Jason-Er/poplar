@@ -12,6 +12,7 @@ import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 import com.wecyberstage.wecyberstage.message.MaskClickEvent;
+import com.wecyberstage.wecyberstage.view.helper.MaskChoose;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -72,8 +73,9 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
     public void onMaskClickEventBus(MaskClickEvent event) {
         switch (event.getMessage()) {
             case "MASK_CLICK":
-                Log.i("RoleLayoutDelegate","receive MASK_CLICK stageRole ID:" + event.getId());
-                UICommon.showPopupWindow(roleMap.get(event.getId()), event.getRect());
+                Log.i("RoleLayoutDelegate","receive MASK_CLICK stageRole ID:" + event.getStageLine().roleId);
+                ((MaskChoose)roleMap.get(event.getStageLine().roleId)).setStageLine(event.getStageLine());
+                UICommon.showPopupWindow(roleMap.get(event.getStageLine().roleId), event.getRect());
                 break;
         }
     }

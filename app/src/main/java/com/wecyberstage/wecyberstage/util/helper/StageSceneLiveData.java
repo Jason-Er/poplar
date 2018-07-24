@@ -31,8 +31,11 @@ public class StageSceneLiveData extends LiveData<StageScene> implements PlayStat
             this.playState = playState;
             // TODO: 6/29/2018 dummy data below
             stageScene = new StageScene();
+            String[] arrIcon = {"http://demo.sc.chinaz.com/Files/pic/icons/6124/10dvs.png",
+                    "http://demo.sc.chinaz.com/Files/pic/icons/6124/3dvs.png",
+                    "http://demo.sc.chinaz.com/Files/pic/icons/6124/8dvs.png"};
             for(int i = 0; i< 12; i++) {
-                MaskGraph maskGraph = new MaskGraph(i%3, 0, "http://www.f1188.com/upload/20180107205142.jpg");
+                MaskGraph maskGraph = new MaskGraph(i%3, 0, arrIcon[i%3]);
                 StageLine line = new StageLine(i%3, "Hello " + i, 3 * i * 1000, 1, maskGraph);
                 line.ordinal = i + 1;
                 stageScene.stageLines.add(line);
@@ -40,7 +43,7 @@ public class StageSceneLiveData extends LiveData<StageScene> implements PlayStat
             for(int i=0; i<3; i++) {
                 Mask mask = new Mask(i);
                 for(int j=0; j<3; j++) {
-                    MaskGraph maskGraph = new MaskGraph(i, j, "http://www.f1188.com/upload/20180107205142.jpg");
+                    MaskGraph maskGraph = new MaskGraph(i, j, arrIcon[j]);
                     mask.maskGraphList.add(maskGraph);
                 }
                 StageRole stageRole = new StageRole(i, mask);
