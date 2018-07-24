@@ -148,10 +148,12 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void onResume(Activity activity) {
         layoutManager.onResume(activity);
+        adapter.onResume(activity);
     }
 
     @Override
     public void onPause(Activity activity) {
         layoutManager.onPause(activity);
+        adapter.onResume(activity);
     }
 }

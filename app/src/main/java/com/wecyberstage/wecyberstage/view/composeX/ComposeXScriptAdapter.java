@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.wecyberstage.wecyberstage.model.Mask;
@@ -11,6 +12,7 @@ import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.view.helper.ItemTouchHelperAdapter;
+import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -19,7 +21,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ComposeXScriptAdapter extends ListDelegationAdapter implements ItemTouchHelperAdapter, UpdateStagePlayInterface, ComposeScriptHelper {
+public class ComposeXScriptAdapter extends ListDelegationAdapter implements ItemTouchHelperAdapter, UpdateStagePlayInterface, ComposeScriptHelper, LifeCycle {
 
     final private UpdateStagePlayInterface updateStagePlayInterface;
     private List<StageRole> stageRoleList;
@@ -29,11 +31,11 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
                                  OnStartDragListener startDragListener) {
         super(delegates);
         delegatesManager
-                .addDelegate(new StageLineAdapterDelegate(ComposeXCardViewType.MASK_LINE.ordinal(), startDragListener))
+                .addDelegate(new StageLineAdapterDelegate(ComposeXCardViewType.MASK_LINE.ordinal(), this, startDragListener))
                 .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()))
                 .addDelegate(new RoleAdapterDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
         this.updateStagePlayInterface = updateStagePlayInterface;
-        // EventBus.getDefault().register(this);
+
     }
 
     public void setStageScene(@NonNull StageScene stageScene) {
@@ -89,16 +91,14 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
         return null;
     }
 
-    /*
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseEventBus(MaskClickEvent event) {
-        switch (event.getMessage()) {
-            case "MASK_CLICK":
-                Log.i("ComposeXScriptAdapter","receive MASK_CLICK");
-                // notifyItemChanged(1);
-                break;
-        }
+    @Override
+    public void onResume(Activity activity) {
+        delegatesManager.onResume(activity);
     }
-    */
+
+    @Override
+    public void onPause(Activity activity) {
+        delegatesManager.onPause(activity);
+    }
 
 }

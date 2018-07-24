@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
+import android.app.Activity;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,27 +13,33 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.message.MaskChooseEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
-import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.message.MaskClickEvent;
+import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
+import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>>, LifeCycle {
 
     final private OnStartDragListener startDragListener;
+    final private RecyclerView.Adapter adapter;
 
-    public StageLineAdapterDelegate(int viewType, OnStartDragListener startDragListener) {
+    public StageLineAdapterDelegate(int viewType, RecyclerView.Adapter adapter, OnStartDragListener startDragListener) {
         super(viewType);
         this.startDragListener = startDragListener;
+        this.adapter = adapter;
     }
 
     class ComposeLineViewHolder extends RecyclerView.ViewHolder {
@@ -91,4 +98,33 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterD
 
     }
 
+    @Override
+    public void onResume(Activity activity) {
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause(Activity activity) {
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseEventBus(MaskChooseEvent event) {
+        switch (event.getMessage()) {
+            case "Click":
+                Log.i("StageLineAdapter","Click");
+                int headPosition = 0;
+                for(Object object: ((ListDelegationAdapter) adapter).getDataSet()) {
+                    if ( object instanceof StageLine ) {
+                        break;
+                    } else {
+                        headPosition ++;
+                    }
+                }
+                StageLine stageLine = (StageLine) ((ListDelegationAdapter) adapter).getDataSet().get( headPosition + (int)event.getStageLine().ordinal -1 );
+                stageLine.maskGraph = event.getMaskGraph();
+                adapter.notifyItemChanged(headPosition + (int)event.getStageLine().ordinal -1);
+                break;
+        }
+    }
 }

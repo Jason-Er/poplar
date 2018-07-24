@@ -1,9 +1,12 @@
 package com.wecyberstage.wecyberstage.view.recycler;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+
+import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 
 import javax.inject.Inject;
 
@@ -11,7 +14,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/26.
  */
 
-public class AdapterDelegatesManager<T> {
+public class AdapterDelegatesManager<T> implements LifeCycle {
 
     private SparseArray delegates = new SparseArray();
 
@@ -55,5 +58,23 @@ public class AdapterDelegatesManager<T> {
             }
         }
         throw new IllegalArgumentException("No delegate found");
+    }
+
+    @Override
+    public void onResume(Activity activity) {
+        for(int i = 0; i < delegates.size(); i++) {
+            if( delegates.valueAt(i) instanceof LifeCycle ) {
+                ((LifeCycle)delegates.valueAt(i)).onResume(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onPause(Activity activity) {
+        for(int i = 0; i < delegates.size(); i++) {
+            if( delegates.valueAt(i) instanceof LifeCycle ) {
+                ((LifeCycle)delegates.valueAt(i)).onPause(activity);
+            }
+        }
     }
 }
