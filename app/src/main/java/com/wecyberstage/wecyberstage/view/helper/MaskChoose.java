@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
+import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 
 import butterknife.BindView;
@@ -21,6 +22,7 @@ public class MaskChoose extends RelativeLayout {
 
     @BindView(R.id.mask_choose_frame)
     GridLayout masksFrame;
+    private StageLine stageLine;
 
     public MaskChoose(Context context) {
         super(context);
@@ -63,5 +65,13 @@ public class MaskChoose extends RelativeLayout {
             masksFrame.addView(imageButton, layoutParams);
             Glide.with(getContext()).load(mg.graphURL).into(imageButton);
         }
+    }
+
+    public StageLine getStageLine() {
+        return stageLine;
+    }
+
+    public void setStageLine(StageLine stageLine) {
+        this.stageLine = stageLine;
     }
 }

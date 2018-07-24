@@ -29,12 +29,10 @@ import butterknife.ButterKnife;
 class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
     final private OnStartDragListener startDragListener;
-    final private ComposeScriptHelper composeScriptHelper;
 
-    public StageLineAdapterDelegate(int viewType, OnStartDragListener startDragListener, ComposeScriptHelper composeScriptHelper) {
+    public StageLineAdapterDelegate(int viewType, OnStartDragListener startDragListener) {
         super(viewType);
         this.startDragListener = startDragListener;
-        this.composeScriptHelper = composeScriptHelper;
     }
 
     class ComposeLineViewHolder extends RecyclerView.ViewHolder {
@@ -86,7 +84,7 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterD
                 int[] viewLocation = new int[2];
                 v.getLocationOnScreen(viewLocation);
                 Rect viewRect = new Rect(viewLocation[0], viewLocation[1], viewLocation[0] + v.getWidth(), viewLocation[1] + v.getHeight());
-                MaskClickEvent event = new MaskClickEvent("MASK_CLICK", ((StageLine) items.get(position)).roleId, viewRect);
+                MaskClickEvent event = new MaskClickEvent("MASK_CLICK", (StageLine) items.get(position), viewRect);
                 EventBus.getDefault().post(event);
             }
         });

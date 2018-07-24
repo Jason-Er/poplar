@@ -2,15 +2,17 @@ package com.wecyberstage.wecyberstage.message;
 
 import android.graphics.Rect;
 
+import com.wecyberstage.wecyberstage.model.StageLine;
+
 public class MaskClickEvent {
 
     private String message;
-    private long id;
+    private StageLine stageLine;
     private Rect rect;
 
-    public MaskClickEvent(String message, long id, Rect rect) {
+    public MaskClickEvent(String message, StageLine stageLine, Rect rect) {
         this.message = message;
-        this.id = id;
+        this.stageLine = stageLine;
         this.rect = rect;
     }
 
@@ -22,12 +24,12 @@ public class MaskClickEvent {
         this.message = message;
     }
 
-    public long getId() {
-        return id;
+    public StageLine getStageLine() {
+        return stageLine;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setStageLine(StageLine stageLine) {
+        this.stageLine = stageLine;
     }
 
     public Rect getRect() {

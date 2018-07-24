@@ -1,7 +1,6 @@
 package com.wecyberstage.wecyberstage.util.helper;
 
 import android.arch.lifecycle.LiveData;
-import android.os.Environment;
 import android.util.Log;
 
 import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
@@ -13,8 +12,6 @@ import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
-
-import java.io.File;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
