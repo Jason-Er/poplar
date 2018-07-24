@@ -121,8 +121,7 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterD
                         headPosition ++;
                     }
                 }
-                StageLine stageLine = (StageLine) ((ListDelegationAdapter) adapter).getDataSet().get( headPosition + (int)event.getStageLine().ordinal -1 );
-                stageLine.maskGraph = event.getMaskGraph();
+                event.getStageLine().maskGraph = event.getMaskGraph();
                 adapter.notifyItemChanged(headPosition + (int)event.getStageLine().ordinal -1);
                 break;
         }
