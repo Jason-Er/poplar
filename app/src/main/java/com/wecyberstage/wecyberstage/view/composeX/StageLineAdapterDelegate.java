@@ -26,12 +26,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
     final private OnStartDragListener startDragListener;
     final private ComposeScriptHelper composeScriptHelper;
 
-    public MaskLineAdapterDelegate(int viewType, OnStartDragListener startDragListener, ComposeScriptHelper composeScriptHelper) {
+    public StageLineAdapterDelegate(int viewType, OnStartDragListener startDragListener, ComposeScriptHelper composeScriptHelper) {
         super(viewType);
         this.startDragListener = startDragListener;
         this.composeScriptHelper = composeScriptHelper;
@@ -60,7 +60,7 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.composex_maskline, parent, false);
+                .inflate(R.layout.composex_stageline, parent, false);
         return new ComposeLineViewHolder(v);
     }
 
@@ -82,7 +82,7 @@ class MaskLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDe
         ((ComposeLineViewHolder) holder).mask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("MaskLineAdapterDelegate","send click");
+                Log.i("StageLine","send click");
                 int[] viewLocation = new int[2];
                 v.getLocationOnScreen(viewLocation);
                 Rect viewRect = new Rect(viewLocation[0], viewLocation[1], viewLocation[0] + v.getWidth(), viewLocation[1] + v.getHeight());
