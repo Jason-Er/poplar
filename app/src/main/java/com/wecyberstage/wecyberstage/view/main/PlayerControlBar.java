@@ -31,7 +31,15 @@ public class PlayerControlBar extends RelativeLayout {
                 event.setMessage("PRE");
                 break;
             case R.id.footerMain_playerControl_play:
-                event.setMessage("PLAY");
+                if( button.getTag() == null || !(boolean) button.getTag() ) {
+                    button.setTag(true);
+                    event.setMessage("PLAY");
+                    button.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pause));
+                } else {
+                    button.setTag(false);
+                    event.setMessage("PAUSE");
+                    button.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play));
+                }
                 break;
             case R.id.footerMain_playerControl_next:
                 event.setMessage("NEXT");

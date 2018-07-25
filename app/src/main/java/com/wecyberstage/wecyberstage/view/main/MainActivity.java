@@ -366,6 +366,8 @@ public class MainActivity extends AppCompatActivity
                 break;
             case "PLAY":
                 break;
+            case "PAUSE":
+                break;
             case "NEXT":
                 break;
             case "VOLUME":
