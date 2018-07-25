@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
@@ -329,7 +330,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseEventBus(MessageEvent messageEvent) {
+    public void onResponseMessageEvent(MessageEvent messageEvent) {
         Log.i("Main onResponseEventBus", messageEvent.getMessage());
         queueLock.lock();
         switch (messageEvent.getMessage()) {
@@ -351,6 +352,23 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     moveInHeaderAndFooter(header, footer);
                 }
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponsePlayerControlEvent(PlayerControlEvent messageEvent) {
+        Log.i("Main", "onResponsePlayerControlEvent: " + messageEvent.getMessage());
+        switch (messageEvent.getMessage()) {
+            case "STOP":
+                break;
+            case "PRE":
+                break;
+            case "PLAY":
+                break;
+            case "NEXT":
+                break;
+            case "VOLUME":
                 break;
         }
     }
