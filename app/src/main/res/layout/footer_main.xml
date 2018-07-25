@@ -5,33 +5,55 @@
     android:layout_alignParentBottom="true"
     android:layout_gravity="bottom"
     android:background="@color/colorPrimaryDark"
-    android:orientation="horizontal"
     android:id="@+id/footer_main"
     android:elevation="4dp" >
-
-    <ImageButton
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/btn_player_control_pre"
-        android:contentDescription="@string/bottom_bar_pre"
-        android:background="@drawable/onclick_press_color"
-        android:src="@drawable/ic_skip_previous"/>
-    <ImageButton
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/btn_player_control_play"
-        android:contentDescription="@string/bottom_bar_play"
-        android:background="@drawable/onclick_press_color"
-        android:src="@drawable/ic_play_arrow"/>
-    <ImageButton
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/btn_player_control_next"
-        android:contentDescription="@string/bottom_bar_next"
-        android:background="@drawable/onclick_press_color"
-        android:src="@drawable/ic_skip_next"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/btn_player_control_stop"
+            android:contentDescription="@string/bottom_bar_pre"
+            android:background="@drawable/onclick_press_color"
+            android:src="@drawable/ic_stop"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/btn_player_control_pre"
+            android:contentDescription="@string/bottom_bar_pre"
+            android:background="@drawable/onclick_press_color"
+            android:src="@drawable/ic_skip_previous"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/btn_player_control_play"
+            android:contentDescription="@string/bottom_bar_play"
+            android:background="@drawable/onclick_press_color"
+            android:src="@drawable/ic_play"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/btn_player_control_next"
+            android:contentDescription="@string/bottom_bar_next"
+            android:background="@drawable/onclick_press_color"
+            android:src="@drawable/ic_skip_next"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/btn_player_control_volume"
+            android:contentDescription="@string/bottom_bar_next"
+            android:background="@drawable/onclick_press_color"
+            android:src="@drawable/ic_volume"/>
+    </LinearLayout>
 
 </com.wecyberstage.wecyberstage.view.main.PlayerControlBar>
