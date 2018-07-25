@@ -3,6 +3,7 @@ package com.wecyberstage.wecyberstage.view.main;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -11,10 +12,14 @@ import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PlayerControlBar extends RelativeLayout {
+
+    @BindView(R.id.footerMain_playerControl_play)
+    ImageButton imageButtonPlay;
 
     @OnClick({R.id.footerMain_playerControl_stop,
             R.id.footerMain_playerControl_pre,
@@ -25,6 +30,8 @@ public class PlayerControlBar extends RelativeLayout {
         PlayerControlEvent event = new PlayerControlEvent("NULL");
         switch (button.getId()) {
             case R.id.footerMain_playerControl_stop:
+                imageButtonPlay.setTag(false);
+                imageButtonPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play));
                 event.setMessage("STOP");
                 break;
             case R.id.footerMain_playerControl_pre:

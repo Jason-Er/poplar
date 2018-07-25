@@ -48,6 +48,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
 import com.wecyberstage.wecyberstage.message.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
@@ -361,16 +362,46 @@ public class MainActivity extends AppCompatActivity
         Log.i("Main", "onResponsePlayerControlEvent: " + messageEvent.getMessage());
         switch (messageEvent.getMessage()) {
             case "STOP":
+                for(CustomView customView: customViewList) {
+                    if(customView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) customView).stop();
+                    }
+                }
                 break;
             case "PRE":
+                for(CustomView customView: customViewList) {
+                    if(customView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) customView).pre();
+                    }
+                }
                 break;
             case "PLAY":
+                for(CustomView customView: customViewList) {
+                    if(customView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) customView).play();
+                    }
+                }
                 break;
             case "PAUSE":
+                for(CustomView customView: customViewList) {
+                    if(customView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) customView).pause();
+                    }
+                }
                 break;
             case "NEXT":
+                for(CustomView customView: customViewList) {
+                    if(customView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) customView).next();
+                    }
+                }
                 break;
             case "VOLUME":
+                for(CustomView customView: customViewList) {
+                    if(customView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) customView).volume(true);
+                    }
+                }
                 break;
         }
     }
