@@ -49,7 +49,6 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     private ComposeXScriptLayoutManager layoutManager;
     private ComposeXScriptAdapter adapter;
     private CustomItemTouchHelper itemTouchHelper;
-    private ComposeXPlayControl playControl;
     // single click detect
     private float startX;
     private float startY;
@@ -65,7 +64,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.view_recycler, container,false);
+        view = inflater.inflate(R.layout.composex, container,false);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
@@ -110,7 +109,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
             }
         });
 
-        playControl = new ComposeXPlayControl((RecyclerView)view);
+        // playControl = new ComposeXPlayControl((RecyclerView)view);
 
         CustomItemTouchHelper.Callback callback = new ComposeXItemTouchHelperCallback(adapter);
         itemTouchHelper = new CustomItemTouchHelper(callback);
@@ -173,42 +172,44 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void play() {
         if( view.getVisibility() == View.VISIBLE ) {
-            playControl.play();
+            ((ComposeXPlayControl)view).play();
         }
     }
 
     @Override
     public void pause() {
         if( view.getVisibility() == View.VISIBLE ) {
-            playControl.pause();
+            ((ComposeXPlayControl)view).pause();
         }
     }
 
     @Override
     public void pre() {
         if( view.getVisibility() == View.VISIBLE ) {
-            playControl.pre();
+            ((ComposeXPlayControl)view).pre();
+            // TODO: 7/26/2018 to pre stage scene
         }
     }
 
     @Override
     public void next() {
         if( view.getVisibility() == View.VISIBLE ) {
-            playControl.next();
+            ((ComposeXPlayControl)view).next();
+            // TODO: 7/26/2018 to next stage scene
         }
     }
 
     @Override
     public void stop() {
         if( view.getVisibility() == View.VISIBLE ) {
-            playControl.stop();
+            ((ComposeXPlayControl)view).stop();
         }
     }
 
     @Override
     public void volume(boolean open) {
         if( view.getVisibility() == View.VISIBLE ) {
-            playControl.volume(open);
+            ((ComposeXPlayControl)view).volume(true);
         }
     }
     // endregion

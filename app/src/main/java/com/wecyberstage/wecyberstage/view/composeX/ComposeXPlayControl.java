@@ -1,51 +1,49 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
-import android.os.Handler;
-import android.os.Message;
-import android.os.SystemClock;
+import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.Scroller;
 
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 
-public class ComposeXPlayControl implements PlayControlInterface {
-    private RecyclerView recyclerView;
-    private Handler timer;
-    private long startTime;
-    private long currentTime;
+public class ComposeXPlayControl extends RecyclerView implements PlayControlInterface {
 
-    public ComposeXPlayControl(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
-        timer = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case 0:
-                        timer.removeMessages(0);
-                        currentTime = SystemClock.uptimeMillis();
-                        // TODO: 7/25/2018 scroll recyclerView
-                        Log.i("ComposeXPlayControl","millisecond passed: " + (currentTime - startTime));
+    private Scroller scroller;
 
-                        startTime = currentTime;
-                        timer.sendEmptyMessageDelayed(0, 16);
-                        break;
-                    case 1:
-                        timer.removeMessages(0);
-                        break;
-                }
-            }
-        };
+    public ComposeXPlayControl(Context context) {
+        super(context);
+    }
+
+    public ComposeXPlayControl(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        scroller = new Scroller(context);
+    }
+
+    public ComposeXPlayControl(Context context, @Nullable AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if(scroller.computeScrollOffset()) {
+            scrollBy(scroller.getCurrX(), scroller.getCurrY());
+            invalidate();
+        }
     }
 
     @Override
     public void play() {
-        startTime = SystemClock.uptimeMillis();
-        timer.sendEmptyMessage(0);
+        scroller.startScroll(getScrollX(), 0, 1000, 0, 1000);
+        invalidate();
     }
 
     @Override
     public void pause() {
-
+        scroller.forceFinished(true);
     }
 
     @Override
@@ -60,7 +58,7 @@ public class ComposeXPlayControl implements PlayControlInterface {
 
     @Override
     public void stop() {
-        timer.sendEmptyMessage(1);
+
     }
 
     @Override
