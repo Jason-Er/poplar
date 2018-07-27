@@ -46,6 +46,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
 import com.wecyberstage.wecyberstage.message.MessageEvent;
+import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity
     SignUp signUp;
     UserProfile userProfile;
     List<CustomView> customViewList;
+    List<LifeCycle> lifeCycleComponents;
 
     // endregion
     @Override
@@ -147,6 +149,7 @@ public class MainActivity extends AppCompatActivity
         viewArray = new SparseArray();
         flingResponseArray = new SparseArray();
         customViewList = new ArrayList<>();
+        lifeCycleComponents = new ArrayList<>();
 
         browse = new Browse(this, appMain, ViewType.BROWSE);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
@@ -164,9 +167,9 @@ public class MainActivity extends AppCompatActivity
         addCustomView(signUp, new FlingResponseSignUp(this), appMain, viewArray, flingResponseArray);
         addCustomView(userProfile, new FlingResponseUserProfile(this), appMain, viewArray, flingResponseArray);
 
+        constructLifeCycleComponents();
         navigationStack = new Stack<>();
         // endregion
-
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -225,6 +228,20 @@ public class MainActivity extends AppCompatActivity
         flingResponseArray.put(customView.getViewType().ordinal(), flingResponseInterface);
         viewGroup.addView(customView.getView(), 1);
         customView.getView().setVisibility(View.INVISIBLE);
+    }
+
+    private void constructLifeCycleComponents() {
+        if( footer != null && footer instanceof LifeCycle ) {
+            lifeCycleComponents.add((LifeCycle) footer);
+        }
+        if( header != null && header instanceof LifeCycle ) {
+            lifeCycleComponents.add((LifeCycle) header);
+        }
+        for(CustomView customView: customViewList) {
+            if(customView instanceof LifeCycle) {
+                lifeCycleComponents.add(customView);
+            }
+        }
     }
 
     @Override
@@ -290,8 +307,8 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         autoHideHandler.postDelayed(autoHideRunnable, 3000);
         EventBus.getDefault().register(this);
-        for(CustomView customView: customViewList) {
-            customView.onResume(this);
+        for(LifeCycle lifeCycle: lifeCycleComponents) {
+            lifeCycle.onResume(this);
         }
         // Debug.stopMethodTracing();
     }
@@ -300,8 +317,8 @@ public class MainActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
-        for(CustomView customView: customViewList) {
-            customView.onPause(this);
+        for(LifeCycle lifeCycle: lifeCycleComponents) {
+            lifeCycle.onPause(this);
         }
     }
 

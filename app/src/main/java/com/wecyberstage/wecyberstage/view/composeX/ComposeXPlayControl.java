@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
+import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlSub1Interface;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1Interface {
 
@@ -29,13 +32,19 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1
     }
 
     int lastX;
+    int duration;
     @Override
     public void computeScroll() {
         super.computeScroll();
         if(scroller.computeScrollOffset()) {
             scrollBy(scroller.getCurrX() - lastX, 0);
             lastX = scroller.getCurrX();
-            invalidate();
+        } else {
+            Log.d("ComposeXPlayControl","scroller.timePassed(): "+scroller.timePassed()+" duration: "+duration);
+            if(scroller.timePassed() >= duration && scroller.isFinished()) {
+                PlayerControlEvent event = new PlayerControlEvent("END");
+                EventBus.getDefault().post(event);
+            }
         }
     }
 
@@ -46,9 +55,9 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1
             int timeSpan = ((PlayTimeInterface) layoutManager).getTimeSpan();
             int timeSpanCover = ((PlayTimeInterface) layoutManager).getTimeSpanCover();
             int scrolledX = ((PlayTimeInterface) layoutManager).getScrolledX();
-            Log.d("ComposeXPlayControl","scrolledX: "+scrolledX);
-            scroller.startScroll(scrolledX, 0, timeSpanCover - scrolledX, 0,
-                    (int) ((float) (timeSpanCover - scrolledX)  * (float) timeSpan / (float) timeSpanCover ));
+            duration = (int) ((float) (timeSpanCover - scrolledX)  * (float) timeSpan / (float) timeSpanCover );
+            Log.d("ComposeXPlayControl","scrolledX: "+scrolledX+" duration: "+duration);
+            scroller.startScroll(scrolledX, 0, timeSpanCover - scrolledX, 0, duration);
             lastX = scrolledX;
             invalidate();
         }
