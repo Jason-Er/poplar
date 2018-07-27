@@ -7,12 +7,13 @@ import android.util.SparseArray;
 import android.view.View;
 
 import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
 import java.util.List;
 
-public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>> {
+public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>>, PlayTimeInterface {
 
     private int leftOffset = 0;
     private int topOffset = 0;
@@ -20,6 +21,8 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
     private final float TIME_SPAN = 10f; // 10 second for this view
     private final float MS_PERSECOND = 1000f;
     private SparseArray viewsMaxHeight;
+    private RecyclerView.LayoutManager layoutManager;
+    private List<Object> items;
 
     public StageLineLayoutDelegate(int viewType) {
         super(viewType);
@@ -28,6 +31,8 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
     @Override
     public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, RecyclerView.Recycler recycler, RecyclerView.State state) {
         Log.i("StageLine","onLayoutChildren");
+        this.items = items;
+        this.layoutManager = layoutManager;
         fillVisibleChildren(layoutManager, items, recycler);
     }
 
@@ -37,7 +42,7 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
         int totalLength;
         if (items != null && items.size() > 1) {
             StageLine StageLine = (StageLine) items.get(items.size() -1);
-            int tempLength = (int) (( (float) StageLine.beginTime / MS_PERSECOND + StageLine.voice.duration) / TIME_SPAN * getHorizontalSpace(layoutManager));
+            int tempLength = (int) (((float) StageLine.beginTime + (float) StageLine.voice.duration) / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager));
             totalLength = tempLength > getHorizontalSpace(layoutManager) ? tempLength : getHorizontalSpace(layoutManager);
         } else {
             totalLength = getHorizontalSpace(layoutManager);
@@ -141,7 +146,7 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
     }
 
     private boolean isVisible(float startTime, float duration) {
-        if( startTime / MS_PERSECOND >= beginTime && startTime / MS_PERSECOND <= beginTime + TIME_SPAN || startTime / MS_PERSECOND + duration >= beginTime && startTime / MS_PERSECOND + duration <= beginTime  + TIME_SPAN) {
+        if( startTime / MS_PERSECOND >= beginTime && startTime / MS_PERSECOND <= beginTime + TIME_SPAN || ( startTime + duration ) / MS_PERSECOND >= beginTime && ( startTime + duration ) / MS_PERSECOND<= beginTime  + TIME_SPAN) {
             return true;
         } else {
             return false;
@@ -174,5 +179,23 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
                 (int) viewsMaxHeight.get((int) StageLine.roleId) - topOffset);
 
         adapter.updateStageLine(StageLine); // "position -1" for the first place is for timeLine view
+    }
+
+    @Override
+    public int getTimeSpanCover() {
+        StageLine StageLine = (StageLine) items.get(items.size() -1);
+        int tempLength = (int) (((float) StageLine.beginTime + (float) StageLine.voice.duration) / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) - getHorizontalSpace(layoutManager);
+        return tempLength;
+    }
+
+    @Override
+    public int getTimeSpan() {
+        StageLine StageLine = (StageLine) items.get(items.size() -1);
+        return (int) (StageLine.beginTime + StageLine.voice.duration) - (int) (TIME_SPAN * MS_PERSECOND);
+    }
+
+    @Override
+    public int getScrolledX() {
+        return leftOffset;
     }
 }

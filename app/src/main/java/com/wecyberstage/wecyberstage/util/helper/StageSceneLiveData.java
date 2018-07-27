@@ -36,7 +36,7 @@ public class StageSceneLiveData extends LiveData<StageScene> implements PlayStat
                     "http://demo.sc.chinaz.com/Files/pic/icons/6124/8dvs.png"};
             for(int i = 0; i< 12; i++) {
                 MaskGraph maskGraph = new MaskGraph(i%3, 0, arrIcon[i%3]);
-                StageLine line = new StageLine(i%3, "Hello " + i, 3 * i * 1000, 1, maskGraph);
+                StageLine line = new StageLine(i%3, "Hello " + i, 3 * i * 1000, 1000, maskGraph);
                 line.ordinal = i + 1;
                 stageScene.stageLines.add(line);
             }

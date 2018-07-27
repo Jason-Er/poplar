@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 
 import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 
-public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager implements LifeCycle {
+public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager implements LifeCycle, PlayTimeInterface {
 
     private ComposeXScriptAdapter adapter;
     private ComposeXLayoutDelegateManager delegatesManager;
@@ -72,4 +73,21 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager impl
     public void onPause(Activity activity) {
         delegatesManager.onPause(activity);
     }
+
+    @Override
+    public int getTimeSpanCover() {
+        return delegatesManager.getTimeSpanCover();
+    }
+
+    @Override
+    public int getTimeSpan() {
+        return delegatesManager.getTimeSpan();
+    }
+
+    @Override
+    public int getScrolledX() {
+        return delegatesManager.getScrolledX();
+    }
+
+
 }

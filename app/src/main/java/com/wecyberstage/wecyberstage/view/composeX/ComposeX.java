@@ -24,6 +24,8 @@ import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
+import com.wecyberstage.wecyberstage.view.helper.PlayControlSub1Interface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
@@ -39,7 +41,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface, UpdateStagePlayInterface, OnStartDragListener {
+public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface, UpdateStagePlayInterface, OnStartDragListener, PlayControlInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -48,7 +50,6 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     private ComposeXScriptLayoutManager layoutManager;
     private ComposeXScriptAdapter adapter;
     private CustomItemTouchHelper itemTouchHelper;
-
     // single click detect
     private float startX;
     private float startY;
@@ -64,7 +65,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.view_recycler, container,false);
+        view = inflater.inflate(R.layout.composex, container,false);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
@@ -108,6 +109,8 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
 
             }
         });
+
+        // playControl = new ComposeXPlayControl((RecyclerView)view);
 
         CustomItemTouchHelper.Callback callback = new ComposeXItemTouchHelperCallback(adapter);
         itemTouchHelper = new CustomItemTouchHelper(callback);
@@ -165,4 +168,54 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
         layoutManager.onPause(activity);
         adapter.onPause(activity);
     }
+
+    // region implementation of PlayControlInterface
+    @Override
+    public void play() {
+        if( view.getVisibility() == View.VISIBLE ) {
+            if(view instanceof PlayControlSub1Interface) {
+                ((PlayControlSub1Interface) view).play();
+            }
+        }
+    }
+
+    @Override
+    public void pause() {
+        if( view.getVisibility() == View.VISIBLE ) {
+            if(view instanceof PlayControlSub1Interface) {
+                ((PlayControlSub1Interface) view).pause();
+            }
+        }
+    }
+
+    @Override
+    public void pre() {
+        if( view.getVisibility() == View.VISIBLE ) {
+            // TODO: 7/26/2018 to pre stage scene
+        }
+    }
+
+    @Override
+    public void next() {
+        if( view.getVisibility() == View.VISIBLE ) {
+            // TODO: 7/26/2018 to next stage scene
+        }
+    }
+
+    @Override
+    public void stop() {
+        if( view.getVisibility() == View.VISIBLE ) {
+            if(view instanceof PlayControlSub1Interface) {
+                ((PlayControlSub1Interface) view).stop();
+            }
+        }
+    }
+
+    @Override
+    public void volume(boolean open) {
+        if( view.getVisibility() == View.VISIBLE ) {
+            // TODO: 7/27/2018 open or shut down volume
+        }
+    }
+    // endregion
 }
