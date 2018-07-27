@@ -46,7 +46,7 @@ public class TimeLineLayoutDelegate extends ViewTypeDelegateClass implements Lay
         int totalLength;
         if (items != null && items.size() > 1) {
             StageLine stageLine = (StageLine) items.get(items.size() -1);
-            int tempLength = (int) (( (float) stageLine.beginTime / MS_PERSECOND + stageLine.voice.duration) / TIME_SPAN * getHorizontalSpace(layoutManager));
+            int tempLength = (int) (( (float) stageLine.beginTime + (float) stageLine.voice.duration) / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager));
             totalLength = tempLength > getHorizontalSpace(layoutManager) ? tempLength : getHorizontalSpace(layoutManager);
         } else {
             totalLength = getHorizontalSpace(layoutManager);

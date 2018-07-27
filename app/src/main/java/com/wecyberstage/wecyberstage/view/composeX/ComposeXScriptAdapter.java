@@ -31,7 +31,7 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
                                  OnStartDragListener startDragListener) {
         super(delegates);
         delegatesManager
-                .addDelegate(new StageLineAdapterDelegate(ComposeXCardViewType.MASK_LINE.ordinal(), this, startDragListener))
+                .addDelegate(new StageLineAdapterDelegate(ComposeXCardViewType.STAGE_LINE.ordinal(), this, startDragListener))
                 .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()))
                 .addDelegate(new RoleAdapterDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
         this.updateStagePlayInterface = updateStagePlayInterface;
