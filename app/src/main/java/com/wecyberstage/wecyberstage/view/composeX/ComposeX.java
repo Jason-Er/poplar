@@ -25,6 +25,7 @@ import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
+import com.wecyberstage.wecyberstage.view.helper.PlayControlSub1Interface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
@@ -172,21 +173,24 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void play() {
         if( view.getVisibility() == View.VISIBLE ) {
-            ((ComposeXPlayControl)view).play();
+            if(view instanceof PlayControlSub1Interface) {
+                ((PlayControlSub1Interface) view).play();
+            }
         }
     }
 
     @Override
     public void pause() {
         if( view.getVisibility() == View.VISIBLE ) {
-            ((ComposeXPlayControl)view).pause();
+            if(view instanceof PlayControlSub1Interface) {
+                ((PlayControlSub1Interface) view).pause();
+            }
         }
     }
 
     @Override
     public void pre() {
         if( view.getVisibility() == View.VISIBLE ) {
-            ((ComposeXPlayControl)view).pre();
             // TODO: 7/26/2018 to pre stage scene
         }
     }
@@ -194,7 +198,6 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void next() {
         if( view.getVisibility() == View.VISIBLE ) {
-            ((ComposeXPlayControl)view).next();
             // TODO: 7/26/2018 to next stage scene
         }
     }
@@ -202,14 +205,16 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void stop() {
         if( view.getVisibility() == View.VISIBLE ) {
-            ((ComposeXPlayControl)view).stop();
+            if(view instanceof PlayControlSub1Interface) {
+                ((PlayControlSub1Interface) view).stop();
+            }
         }
     }
 
     @Override
     public void volume(boolean open) {
         if( view.getVisibility() == View.VISIBLE ) {
-            ((ComposeXPlayControl)view).volume(true);
+            // TODO: 7/27/2018 open or shut down volume
         }
     }
     // endregion

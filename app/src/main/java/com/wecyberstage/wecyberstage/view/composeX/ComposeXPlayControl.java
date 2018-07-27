@@ -8,10 +8,10 @@ import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
-import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
+import com.wecyberstage.wecyberstage.view.helper.PlayControlSub1Interface;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 
-public class ComposeXPlayControl extends RecyclerView implements PlayControlInterface {
+public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1Interface {
 
     private Scroller scroller;
     private int totalScrolledX = 0;
@@ -34,7 +34,9 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlInte
     @Override
     public void computeScroll() {
         super.computeScroll();
+        Log.d("ComposeXPlayControl","computeScroll: " + totalScrolledX + "line 37");
         if(scroller.computeScrollOffset()) {
+            Log.d("ComposeXPlayControl","computeScroll: " + totalScrolledX + "line 39");
             scrollBy(scroller.getCurrX() - lastX, scroller.getCurrY() - lastY);
             lastX = scroller.getCurrX();
             lastY = scroller.getCurrY();
@@ -46,6 +48,7 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlInte
     public void onScrolled(int dx, int dy) {
         super.onScrolled(dx, dy);
         totalScrolledX += dx;
+        Log.d("ComposeXPlayControl","onScrolled: "+totalScrolledX);
     }
 
     @Override
@@ -68,25 +71,9 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlInte
     }
 
     @Override
-    public void pre() {
-
-    }
-
-    @Override
-    public void next() {
-
-    }
-
-    @Override
     public void stop() {
         scroller.forceFinished(true);
         smoothScrollBy(-totalScrolledX,0);
-        invalidate();
-    }
-
-    @Override
-    public void volume(boolean open) {
-
     }
 
 }

@@ -42,7 +42,7 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
         int totalLength;
         if (items != null && items.size() > 1) {
             StageLine StageLine = (StageLine) items.get(items.size() -1);
-            int tempLength = (int) ((((float) StageLine.beginTime + (float) StageLine.voice.duration / MS_PERSECOND) ) / TIME_SPAN * getHorizontalSpace(layoutManager));
+            int tempLength = (int) (((float) StageLine.beginTime + (float) StageLine.voice.duration) / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager));
             totalLength = tempLength > getHorizontalSpace(layoutManager) ? tempLength : getHorizontalSpace(layoutManager);
         } else {
             totalLength = getHorizontalSpace(layoutManager);
@@ -184,7 +184,7 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
     @Override
     public int getTimeSpanCover() {
         StageLine StageLine = (StageLine) items.get(items.size() -1);
-        int tempLength = (int) ((((float) StageLine.beginTime + (float) StageLine.voice.duration) / MS_PERSECOND ) / TIME_SPAN * getHorizontalSpace(layoutManager)) - getHorizontalSpace(layoutManager);
+        int tempLength = (int) (((float) StageLine.beginTime + (float) StageLine.voice.duration) / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) - getHorizontalSpace(layoutManager);
         return tempLength;
     }
 
