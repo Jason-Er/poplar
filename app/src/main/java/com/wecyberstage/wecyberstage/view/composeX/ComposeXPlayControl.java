@@ -79,7 +79,9 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlInte
 
     @Override
     public void stop() {
-        smoothScrollToPosition(0);
+        scroller.forceFinished(true);
+        smoothScrollBy(-totalScrolledX,0);
+        invalidate();
     }
 
     @Override
