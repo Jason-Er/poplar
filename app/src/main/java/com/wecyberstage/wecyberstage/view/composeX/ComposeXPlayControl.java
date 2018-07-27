@@ -14,6 +14,7 @@ import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 public class ComposeXPlayControl extends RecyclerView implements PlayControlInterface {
 
     private Scroller scroller;
+    private int totalScrolledX = 0;
 
     public ComposeXPlayControl(Context context) {
         super(context);
@@ -37,7 +38,14 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlInte
             scrollBy(scroller.getCurrX() - lastX, scroller.getCurrY() - lastY);
             lastX = scroller.getCurrX();
             lastY = scroller.getCurrY();
+            invalidate();
         }
+    }
+
+    @Override
+    public void onScrolled(int dx, int dy) {
+        super.onScrolled(dx, dy);
+        totalScrolledX += dx;
     }
 
     @Override
@@ -46,10 +54,8 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlInte
         if( layoutManager instanceof PlayTimeInterface ) {
             int timeSpan = ((PlayTimeInterface) layoutManager).getTimeSpan();
             int timeSpanCover = ((PlayTimeInterface) layoutManager).getTimeSpanCover();
-            Log.d("ComposeXPlayControl","play() timeSpan: "+timeSpan+" timeSpanCover: "+timeSpanCover);
-            scroller.startScroll(getScrollX(), 0, timeSpanCover - getScrollX(), 0,
-                    (int) ((float) (timeSpanCover - getScrollX())  * (float) timeSpan / (float) timeSpanCover ));
-            Log.d("ComposeXPlayControl","getScrollX() "+getScrollX()+" timeSpanCover: "+ (timeSpanCover - getScrollX())+" duration: "+(int) ((float) (timeSpanCover - getScrollX())  * (float) timeSpan / (float) timeSpanCover ));
+            scroller.startScroll(totalScrolledX, 0, timeSpanCover - totalScrolledX, 0,
+                    (int) ((float) (timeSpanCover - totalScrolledX)  * (float) timeSpan / (float) timeSpanCover ));
             lastX = scroller.getCurrX();
             lastY = scroller.getCurrY();
             invalidate();
@@ -73,7 +79,7 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlInte
 
     @Override
     public void stop() {
-
+        smoothScrollToPosition(0);
     }
 
     @Override
