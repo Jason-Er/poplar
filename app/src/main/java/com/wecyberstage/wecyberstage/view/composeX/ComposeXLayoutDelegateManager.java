@@ -64,4 +64,9 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
     public int getTimeSpan() {
         return ((PlayTimeInterface)getDelegate(ComposeXCardViewType.STAGE_LINE.ordinal())).getTimeSpan();
     }
+
+    @Override
+    public int getScrolledX() {
+        return ((PlayTimeInterface)getDelegate(ComposeXCardViewType.STAGE_LINE.ordinal())).getScrolledX();
+    }
 }

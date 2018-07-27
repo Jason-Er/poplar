@@ -83,4 +83,11 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager impl
     public int getTimeSpan() {
         return delegatesManager.getTimeSpan();
     }
+
+    @Override
+    public int getScrolledX() {
+        return delegatesManager.getScrolledX();
+    }
+
+
 }

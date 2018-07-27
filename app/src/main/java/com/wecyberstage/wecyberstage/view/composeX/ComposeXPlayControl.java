@@ -14,7 +14,6 @@ import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1Interface {
 
     private Scroller scroller;
-    private int totalScrolledX = 0;
 
     public ComposeXPlayControl(Context context) {
         super(context);
@@ -30,25 +29,14 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1
     }
 
     int lastX;
-    int lastY;
     @Override
     public void computeScroll() {
         super.computeScroll();
-        Log.d("ComposeXPlayControl","computeScroll: " + totalScrolledX + "line 37");
         if(scroller.computeScrollOffset()) {
-            Log.d("ComposeXPlayControl","computeScroll: " + totalScrolledX + "line 39");
-            scrollBy(scroller.getCurrX() - lastX, scroller.getCurrY() - lastY);
+            scrollBy(scroller.getCurrX() - lastX, 0);
             lastX = scroller.getCurrX();
-            lastY = scroller.getCurrY();
             invalidate();
         }
-    }
-
-    @Override
-    public void onScrolled(int dx, int dy) {
-        super.onScrolled(dx, dy);
-        totalScrolledX += dx;
-        Log.d("ComposeXPlayControl","onScrolled: "+totalScrolledX);
     }
 
     @Override
@@ -57,10 +45,11 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1
         if( layoutManager instanceof PlayTimeInterface ) {
             int timeSpan = ((PlayTimeInterface) layoutManager).getTimeSpan();
             int timeSpanCover = ((PlayTimeInterface) layoutManager).getTimeSpanCover();
-            scroller.startScroll(totalScrolledX, 0, timeSpanCover - totalScrolledX, 0,
-                    (int) ((float) (timeSpanCover - totalScrolledX)  * (float) timeSpan / (float) timeSpanCover ));
-            lastX = scroller.getCurrX();
-            lastY = scroller.getCurrY();
+            int scrolledX = ((PlayTimeInterface) layoutManager).getScrolledX();
+            Log.d("ComposeXPlayControl","scrolledX: "+scrolledX);
+            scroller.startScroll(scrolledX, 0, timeSpanCover - scrolledX, 0,
+                    (int) ((float) (timeSpanCover - scrolledX)  * (float) timeSpan / (float) timeSpanCover ));
+            lastX = scrolledX;
             invalidate();
         }
     }
@@ -73,7 +62,9 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1
     @Override
     public void stop() {
         scroller.forceFinished(true);
-        smoothScrollBy(-totalScrolledX,0);
+        LayoutManager layoutManager = getLayoutManager();
+        int scrolledX = ((PlayTimeInterface) layoutManager).getScrolledX();
+        smoothScrollBy(-scrolledX,0);
     }
 
 }

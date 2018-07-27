@@ -193,4 +193,9 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
         StageLine StageLine = (StageLine) items.get(items.size() -1);
         return (int) (StageLine.beginTime + StageLine.voice.duration) - (int) (TIME_SPAN * MS_PERSECOND);
     }
+
+    @Override
+    public int getScrolledX() {
+        return leftOffset;
+    }
 }
