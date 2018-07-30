@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
@@ -20,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PlayerControlBar extends RelativeLayout implements LifeCycle {
+public class PlayerControlBar extends LinearLayout implements LifeCycle {
 
     @BindView(R.id.footerMain_playerControl_play)
     ImageButton imageButtonPlay;
