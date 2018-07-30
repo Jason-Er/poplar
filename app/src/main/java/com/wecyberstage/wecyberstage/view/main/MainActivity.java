@@ -420,6 +420,13 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
                 break;
+            case "SEEK":
+                for(CustomView customView: customViewList) {
+                    if(customView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) customView).seek(messageEvent.getSeekProcess());
+                    }
+                }
+                break;
         }
     }
 

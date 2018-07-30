@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.wecyberstage.wecyberstage.view.main.PlayerControlBar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/player_control_bar_size"
     android:layout_alignParentBottom="true"
     android:layout_gravity="bottom"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@color/colorPrimaryDark"
     android:id="@+id/footer_main"
     android:elevation="4dp" >
     <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
         android:max="100"
+        android:layout_height="match_parent"
         android:id="@+id/footerMain_seekBar"/>
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:minWidth="240dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:orientation="horizontal">

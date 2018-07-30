@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.message.ComposeEvent;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 
@@ -20,8 +22,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PlayerControlBar extends RelativeLayout implements LifeCycle {
+public class PlayerControlBar extends LinearLayout implements LifeCycle {
 
+    @BindView(R.id.footerMain_seekBar)
+    SeekBar seekBar;
     @BindView(R.id.footerMain_playerControl_play)
     ImageButton imageButtonPlay;
 
@@ -34,8 +38,7 @@ public class PlayerControlBar extends RelativeLayout implements LifeCycle {
         PlayerControlEvent event = new PlayerControlEvent("NULL");
         switch (button.getId()) {
             case R.id.footerMain_playerControl_stop:
-                imageButtonPlay.setTag(false);
-                imageButtonPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play));
+                stopAction();
                 event.setMessage("STOP");
                 break;
             case R.id.footerMain_playerControl_pre:
@@ -70,6 +73,28 @@ public class PlayerControlBar extends RelativeLayout implements LifeCycle {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser) {
+                    Log.d("PlayerControlBar", "current process: " + progress + "%");
+                    PlayerControlEvent event = new PlayerControlEvent("SEEK");
+                    event.setSeekProcess((float) progress / seekBar.getMax());
+                    EventBus.getDefault().post(event);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.d("PlayerControlBar","touch down ");
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d("PlayerControlBar","touch up ");
+            }
+        });
+
     }
 
     @Override
@@ -83,11 +108,23 @@ public class PlayerControlBar extends RelativeLayout implements LifeCycle {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseEvent(PlayerControlEvent event) {
+    public void onResponseEvent(ComposeEvent event) {
         switch (event.getMessage()) {
+            case "SEEK":
+                Log.d("PlayerControlBar","Seek to " + event.getSeekProcess() * 100 + "%");
+                if( seekBar.getProgress() != (int)(event.getSeekProcess() * 100) ) {
+                    seekBar.setProgress((int) (event.getSeekProcess() * 100));
+                }
+                break;
             case "END":
                 Log.d("PlayerControlBar","Play to End");
+                stopAction();
                 break;
         }
+    }
+
+    private void stopAction() {
+        imageButtonPlay.setTag(false);
+        imageButtonPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play));
     }
 }

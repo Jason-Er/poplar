@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
-import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
+import com.wecyberstage.wecyberstage.message.ComposeEvent;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlSub1Interface;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 
@@ -42,7 +42,7 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1
         } else {
             Log.d("ComposeXPlayControl","scroller.timePassed(): "+scroller.timePassed()+" duration: "+duration);
             if(scroller.timePassed() >= duration && scroller.isFinished()) {
-                PlayerControlEvent event = new PlayerControlEvent("END");
+                ComposeEvent event = new ComposeEvent("END");
                 EventBus.getDefault().post(event);
             }
         }
@@ -74,6 +74,17 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1
         LayoutManager layoutManager = getLayoutManager();
         int scrolledX = ((PlayTimeInterface) layoutManager).getScrolledX();
         smoothScrollBy(-scrolledX,0);
+    }
+
+    @Override
+    public void seek(float percent) {
+        Log.d("ComposeXPlayControl","seek() percent: "+percent);
+        LayoutManager layoutManager = getLayoutManager();
+        int timeSpanCover = ((PlayTimeInterface) layoutManager).getTimeSpanCover();
+        int scrolledX = ((PlayTimeInterface) layoutManager).getScrolledX();
+        int cover = Math.min((int) (percent*timeSpanCover), timeSpanCover);
+        cover = Math.max(cover, 0);
+        smoothScrollBy(cover -  scrolledX,0);
     }
 
 }

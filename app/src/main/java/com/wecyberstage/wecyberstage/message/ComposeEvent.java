@@ -1,10 +1,9 @@
 package com.wecyberstage.wecyberstage.message;
 
-public class PlayerControlEvent {
+public class ComposeEvent {
     private String message;
     float seekProcess;
-
-    public PlayerControlEvent(String message) {
+    public ComposeEvent(String message) {
         this.message = message;
     }
 
