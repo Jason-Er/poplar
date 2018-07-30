@@ -34,8 +34,7 @@ public class PlayerControlBar extends RelativeLayout implements LifeCycle {
         PlayerControlEvent event = new PlayerControlEvent("NULL");
         switch (button.getId()) {
             case R.id.footerMain_playerControl_stop:
-                imageButtonPlay.setTag(false);
-                imageButtonPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play));
+                stopAction();
                 event.setMessage("STOP");
                 break;
             case R.id.footerMain_playerControl_pre:
@@ -87,7 +86,13 @@ public class PlayerControlBar extends RelativeLayout implements LifeCycle {
         switch (event.getMessage()) {
             case "END":
                 Log.d("PlayerControlBar","Play to End");
+                stopAction();
                 break;
         }
+    }
+
+    private void stopAction() {
+        imageButtonPlay.setTag(false);
+        imageButtonPlay.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_play));
     }
 }
