@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
@@ -22,6 +23,8 @@ import butterknife.OnClick;
 
 public class PlayerControlBar extends LinearLayout implements LifeCycle {
 
+    @BindView(R.id.footerMain_seekBar)
+    SeekBar seekBar;
     @BindView(R.id.footerMain_playerControl_play)
     ImageButton imageButtonPlay;
 
@@ -69,6 +72,26 @@ public class PlayerControlBar extends LinearLayout implements LifeCycle {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.d("PlayerControlBar","current process: "+progress+"%");
+                PlayerControlEvent event = new PlayerControlEvent("SEEK");
+                event.setSeekProcess((float) progress / seekBar.getMax());
+                EventBus.getDefault().post(event);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.d("PlayerControlBar","touch down ");
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d("PlayerControlBar","touch up ");
+            }
+        });
+
     }
 
     @Override

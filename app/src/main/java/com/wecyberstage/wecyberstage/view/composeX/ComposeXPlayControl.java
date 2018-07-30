@@ -76,4 +76,15 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1
         smoothScrollBy(-scrolledX,0);
     }
 
+    @Override
+    public void seek(float percent) {
+        Log.d("ComposeXPlayControl","seek() percent: "+percent);
+        LayoutManager layoutManager = getLayoutManager();
+        int timeSpanCover = ((PlayTimeInterface) layoutManager).getTimeSpanCover();
+        int scrolledX = ((PlayTimeInterface) layoutManager).getScrolledX();
+        int cover = Math.min((int) (percent*timeSpanCover), timeSpanCover);
+        cover = Math.max(cover, 0);
+        smoothScrollBy(cover -  scrolledX,0);
+    }
+
 }

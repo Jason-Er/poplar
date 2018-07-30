@@ -212,6 +212,15 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     }
 
     @Override
+    public void seek(float percent) {
+        if( view.getVisibility() == View.VISIBLE ) {
+            if(view instanceof PlayControlSub1Interface) {
+                ((PlayControlSub1Interface) view).seek(percent);
+            }
+        }
+    }
+
+    @Override
     public void volume(boolean open) {
         if( view.getVisibility() == View.VISIBLE ) {
             // TODO: 7/27/2018 open or shut down volume

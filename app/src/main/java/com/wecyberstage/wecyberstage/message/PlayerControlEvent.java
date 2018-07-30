@@ -2,6 +2,7 @@ package com.wecyberstage.wecyberstage.message;
 
 public class PlayerControlEvent {
     private String message;
+    float seekProcess;
 
     public PlayerControlEvent(String message) {
         this.message = message;
@@ -13,5 +14,13 @@ public class PlayerControlEvent {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public float getSeekProcess() {
+        return seekProcess;
+    }
+
+    public void setSeekProcess(float seekProcess) {
+        this.seekProcess = seekProcess;
     }
 }
