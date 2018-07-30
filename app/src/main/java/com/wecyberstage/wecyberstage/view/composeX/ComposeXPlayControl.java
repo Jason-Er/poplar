@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
-import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
+import com.wecyberstage.wecyberstage.message.ComposeEvent;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlSub1Interface;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 
@@ -42,7 +42,7 @@ public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1
         } else {
             Log.d("ComposeXPlayControl","scroller.timePassed(): "+scroller.timePassed()+" duration: "+duration);
             if(scroller.timePassed() >= duration && scroller.isFinished()) {
-                PlayerControlEvent event = new PlayerControlEvent("END");
+                ComposeEvent event = new ComposeEvent("END");
                 EventBus.getDefault().post(event);
             }
         }

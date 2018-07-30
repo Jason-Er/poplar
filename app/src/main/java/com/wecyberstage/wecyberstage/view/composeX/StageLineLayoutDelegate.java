@@ -6,10 +6,13 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 
+import com.wecyberstage.wecyberstage.message.ComposeEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -69,6 +72,11 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
 
         layoutManager.offsetChildrenHorizontal(-deltaX);
         fillVisibleChildren(layoutManager, items, recycler);
+
+        // send seek message
+        ComposeEvent event = new ComposeEvent("SEEK");
+        event.setSeekProcess((float)getScrolledX() / getTimeSpanCover());
+        EventBus.getDefault().post(event);
 
         return deltaReturn;
     }

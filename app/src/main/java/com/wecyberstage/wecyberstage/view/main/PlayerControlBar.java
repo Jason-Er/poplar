@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.message.ComposeEvent;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
 
@@ -75,10 +76,12 @@ public class PlayerControlBar extends LinearLayout implements LifeCycle {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d("PlayerControlBar","current process: "+progress+"%");
-                PlayerControlEvent event = new PlayerControlEvent("SEEK");
-                event.setSeekProcess((float) progress / seekBar.getMax());
-                EventBus.getDefault().post(event);
+                if(fromUser) {
+                    Log.d("PlayerControlBar", "current process: " + progress + "%");
+                    PlayerControlEvent event = new PlayerControlEvent("SEEK");
+                    event.setSeekProcess((float) progress / seekBar.getMax());
+                    EventBus.getDefault().post(event);
+                }
             }
 
             @Override
@@ -105,8 +108,14 @@ public class PlayerControlBar extends LinearLayout implements LifeCycle {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseEvent(PlayerControlEvent event) {
+    public void onResponseEvent(ComposeEvent event) {
         switch (event.getMessage()) {
+            case "SEEK":
+                Log.d("PlayerControlBar","Seek to " + event.getSeekProcess() * 100 + "%");
+                if( seekBar.getProgress() != (int)(event.getSeekProcess() * 100) ) {
+                    seekBar.setProgress((int) (event.getSeekProcess() * 100));
+                }
+                break;
             case "END":
                 Log.d("PlayerControlBar","Play to End");
                 stopAction();
