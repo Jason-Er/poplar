@@ -63,7 +63,7 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterD
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        Log.i("ComposeX", "onCreateViewHolder");
+        Log.i("StageLineAdapter", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.composex_stageline, parent, false);
         return new ComposeLineViewHolder(v);
