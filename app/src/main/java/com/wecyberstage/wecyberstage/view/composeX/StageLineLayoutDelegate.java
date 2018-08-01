@@ -14,6 +14,7 @@ import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>>, PlayTimeInterface {
@@ -33,7 +34,7 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
 
     @Override
     public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        Log.i("StageLine","onLayoutChildren");
+        Log.i("stageLineLayout","onLayoutChildren");
         this.items = items;
         this.layoutManager = layoutManager;
         fillVisibleChildren(layoutManager, items, recycler);
@@ -42,6 +43,7 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
     @Override
     public int scrollHorizontallyBy(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
         // calc totalLength
+        Log.d("stageLineLayout","scrollHorizontallyBy");
         int totalLength;
         if (items != null && items.size() > 1) {
             StageLine StageLine = (StageLine) items.get(items.size() -1);
@@ -87,44 +89,68 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
     }
 
     private void fillVisibleChildren(RecyclerView.LayoutManager layoutManager, @NonNull List<Object> items, RecyclerView.Recycler recycler) {
+        Log.d("stageLineLayout","fillVisibleChildren");
         SparseArray viewCache = new SparseArray();
         for (int i=0; i < layoutManager.getChildCount(); i++) {
             final View child = layoutManager.getChildAt(i);
             if( child instanceof StageLineCardView) {
                 int position = ((StageLineCardView) child).getPosition();
-                layoutManager.detachView(child);
+                Log.d("stageLineLayout","detachView position: "+position);
                 viewCache.put(position, child);
             }
         }
+        // detach all stageLineCardView
+        for (int i=0; i < viewCache.size(); i++) {
+            layoutManager.detachView((View) viewCache.valueAt(i));
+        }
         viewsMaxHeight = new SparseArray();
+        List<Integer> indexList = new ArrayList<>();
         for(Object item: items) {
             if(item instanceof StageLine) {
                 int index = items.indexOf(item);
-                StageLine StageLine = (StageLine) item;
-                if (isVisible(StageLine.beginTime, StageLine.voice.duration)) {
+                StageLine stageLine = (StageLine) item;
+                if (isVisible(stageLine.beginTime, stageLine.voice.duration)) {
                     View view = (View) viewCache.get(index);
                     if (view != null) {
                         layoutManager.attachView(view);
                         viewCache.remove(index);
                     } else {
-                        view = recycler.getViewForPosition(index);
-                        layoutManager.addView(view);
-                    }
-                    layoutManager.measureChildWithMargins(view, 0, 0);
-                    int mDecoratedChildWidth = layoutManager.getDecoratedMeasuredWidth(view);
-                    int mDecoratedChildHeight = layoutManager.getDecoratedMeasuredHeight(view);
-
-                    if (viewsMaxHeight.get((int) StageLine.roleId) != null) {
-                        int height = (int) viewsMaxHeight.get((int) StageLine.roleId);
-                        if (height < mDecoratedChildHeight) {
-                            viewsMaxHeight.setValueAt((int) StageLine.roleId, mDecoratedChildHeight);
-                        }
-                    } else {
-                        viewsMaxHeight.put((int) StageLine.roleId, mDecoratedChildHeight);
+                        indexList.add(index);
                     }
                 }
             }
         }
+        // recycle views
+        for (int i=0; i < viewCache.size(); i++) {
+            Log.d("stageLineLayout","viewCache.keyAt(i)" + viewCache.keyAt(i));
+            recycler.recycleView((View) viewCache.valueAt(i));
+        }
+        // add new views
+        for(int index: indexList) {
+            Log.d("stageLineLayout","recycler.getViewForPosition(index): " + index);
+            View view = recycler.getViewForPosition(index);
+            layoutManager.addView(view);
+        }
+        // clac viewsMaxHeight
+        for (int i=0; i < layoutManager.getChildCount(); i++) {
+            final View view = layoutManager.getChildAt(i);
+            if( view instanceof StageLineCardView) {
+                layoutManager.measureChildWithMargins(view, 0, 0);
+                // int mDecoratedChildWidth = layoutManager.getDecoratedMeasuredWidth(view);
+                int mDecoratedChildHeight = layoutManager.getDecoratedMeasuredHeight(view);
+                int position = ((StageLineCardView) view).getPosition();
+                StageLine stageLine = (StageLine) items.get(position);
+                if (viewsMaxHeight.get((int) stageLine.roleId) != null) {
+                    int height = (int) viewsMaxHeight.get((int) stageLine.roleId);
+                    if (height < mDecoratedChildHeight) {
+                        viewsMaxHeight.setValueAt((int) stageLine.roleId, mDecoratedChildHeight);
+                    }
+                } else {
+                    viewsMaxHeight.put((int) stageLine.roleId, mDecoratedChildHeight);
+                }
+            }
+        }
+
 
         int totalHeight = 0;
         for(int i = 0, size = viewsMaxHeight.size(); i < size; i++) {
@@ -136,21 +162,19 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
             View view = layoutManager.getChildAt(i);
             if(view instanceof StageLineCardView) {
                 int position = ((StageLineCardView) view).getPosition();
-                StageLine StageLine = (StageLine) items.get(position);
+                StageLine stageLine = (StageLine) items.get(position);
 
                 int mDecoratedChildWidth = layoutManager.getDecoratedMeasuredWidth(view);
                 int mDecoratedChildHeight = layoutManager.getDecoratedMeasuredHeight(view);
 
-                layoutManager.layoutDecorated(view, (int) ((float) StageLine.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) - leftOffset,
-                        (int) viewsMaxHeight.get((int) StageLine.roleId) - topOffset - mDecoratedChildHeight,
-                        (int) ((float) StageLine.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) + mDecoratedChildWidth - leftOffset,
-                        (int) viewsMaxHeight.get((int) StageLine.roleId) - topOffset);
+                layoutManager.layoutDecorated(view, (int) ((float) stageLine.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) - leftOffset,
+                        (int) viewsMaxHeight.get((int) stageLine.roleId) - topOffset - mDecoratedChildHeight,
+                        (int) ((float) stageLine.beginTime / MS_PERSECOND / TIME_SPAN * getHorizontalSpace(layoutManager)) + mDecoratedChildWidth - leftOffset,
+                        (int) viewsMaxHeight.get((int) stageLine.roleId) - topOffset);
             }
         }
 
-        for (int i=0; i < viewCache.size(); i++) {
-            recycler.recycleView((View) viewCache.valueAt(i));
-        }
+
     }
 
     private boolean isVisible(float startTime, float duration) {

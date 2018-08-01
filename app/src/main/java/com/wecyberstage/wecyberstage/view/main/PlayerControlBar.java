@@ -111,13 +111,11 @@ public class PlayerControlBar extends LinearLayout implements LifeCycle {
     public void onResponseEvent(ComposeEvent event) {
         switch (event.getMessage()) {
             case "SEEK":
-                Log.d("PlayerControlBar","Seek to " + event.getSeekProcess() * 100 + "%");
                 if( seekBar.getProgress() != (int)(event.getSeekProcess() * 100) ) {
                     seekBar.setProgress((int) (event.getSeekProcess() * 100));
                 }
                 break;
             case "END":
-                Log.d("PlayerControlBar","Play to End");
                 stopAction();
                 break;
         }
