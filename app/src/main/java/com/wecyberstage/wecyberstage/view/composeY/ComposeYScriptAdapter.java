@@ -18,8 +18,8 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter {
     public ComposeYScriptAdapter(AdapterDelegatesManager<Object> delegates) {
         super(delegates);
         delegatesManager
-                .addDelegate(new ComposeLineAdapterStartDelegate(ComposeYCardViewType.START.ordinal()))
-                .addDelegate(new ComposeLineAdapterEndDelegate(ComposeYCardViewType.END.ordinal()));
+                .addDelegate(new StageLineStartAdapterDelegate(ComposeYCardViewType.START.ordinal()))
+                .addDelegate(new StageLineEndAdapterDelegate(ComposeYCardViewType.END.ordinal()));
     }
 
     public void setStageScene(@NonNull StageScene stageScene) {

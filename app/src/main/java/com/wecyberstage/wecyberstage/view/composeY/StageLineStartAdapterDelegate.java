@@ -18,19 +18,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class ComposeLineAdapterStartDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class StageLineStartAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
-    public ComposeLineAdapterStartDelegate(int viewType) {
+    public StageLineStartAdapterDelegate(int viewType) {
         super(viewType);
     }
 
-    class ComposeLineViewHolder extends RecyclerView.ViewHolder {
+    class StageLineViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.imageview_pic)
         ImageView avatar;
         @BindView(R.id.textview_message)
         TextView dialogue;
 
-        public ComposeLineViewHolder(View v) {
+        public StageLineViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
@@ -46,13 +46,13 @@ class ComposeLineAdapterStartDelegate extends ViewTypeDelegateClass implements A
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.composey_stageline_left, parent, false);
-        return new ComposeLineViewHolder(v);
+                .inflate(R.layout.composey_stageline_start, parent, false);
+        return new StageLineViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
         Log.i("ComposeX", "onBindViewHolder");
-        ((ComposeLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
+        ((StageLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
     }
 }
