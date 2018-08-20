@@ -8,11 +8,12 @@ import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class ComposeYScriptAdapter extends ListDelegationAdapter {
+public class ComposeYScriptAdapter extends ListDelegationAdapter implements ItemTouchHelperAdapter {
 
     @Inject
     public ComposeYScriptAdapter(AdapterDelegatesManager<Object> delegates) {
@@ -46,4 +47,23 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter {
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(dataSet, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(dataSet, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        dataSet.remove(position);
+        notifyItemRemoved(position);
+    }
 }

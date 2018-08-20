@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -55,15 +56,16 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(new LinearLayoutManager(activity));
         ((RecyclerView)view).setAdapter(adapter);
+
         /*
         DividerItemDecoration decoration = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
         ((RecyclerView)view).addItemDecoration(decoration);
+        */
 
-        /*
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView( (RecyclerView) view);
-        */
+
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
         PlayState playState = activity.getIntent().getParcelableExtra(COMPOSE_INFO_KEY);
         if(playState != null) {
