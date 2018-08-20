@@ -25,9 +25,9 @@ class StageLineStartAdapterDelegate extends ViewTypeDelegateClass implements Ada
     }
 
     class StageLineViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.imageview_pic)
-        ImageView avatar;
-        @BindView(R.id.textview_message)
+        @BindView(R.id.composeY_stageLine_start_image)
+        ImageView mask;
+        @BindView(R.id.composeY_stageLine_start_text)
         TextView dialogue;
 
         public StageLineViewHolder(View v) {

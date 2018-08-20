@@ -25,9 +25,9 @@ class StageLineEndAdapterDelegate extends ViewTypeDelegateClass implements Adapt
     }
 
     class StageLineViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.imageview_pic)
-        ImageView avatar;
-        @BindView(R.id.textview_message)
+        @BindView(R.id.composeY_stageLine_end_image)
+        ImageView mask;
+        @BindView(R.id.composeY_stageLine_end_text)
         TextView dialogue;
 
         public StageLineViewHolder(View v) {
