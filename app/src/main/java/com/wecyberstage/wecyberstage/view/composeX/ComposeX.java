@@ -112,7 +112,7 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
 
         // playControl = new ComposeXPlayControl((RecyclerView)view);
 
-        CustomItemTouchHelper.Callback callback = new ComposeXItemTouchHelperCallback(adapter);
+        CustomItemTouchHelper.Callback callback = new ComposeXItemTouchHelperCallback();
         itemTouchHelper = new CustomItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(((RecyclerView)view));
 
@@ -150,6 +150,21 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     @Override
     public void updateStageLine(StageLine stageLine) {
         viewModel.updateStageLine(stageLine);
+    }
+
+    @Override
+    public void addStageLine(StageLine stageLine) {
+
+    }
+
+    @Override
+    public void deleteStageLine(StageLine stageLine) {
+
+    }
+
+    @Override
+    public void swapStageLines(int position1, int position2) {
+
     }
 
     @Override

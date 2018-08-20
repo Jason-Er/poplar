@@ -21,7 +21,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ComposeXScriptAdapter extends ListDelegationAdapter implements ItemTouchHelperAdapter, UpdateStagePlayInterface, ComposeScriptHelper, LifeCycle {
+public class ComposeXScriptAdapter extends ListDelegationAdapter implements UpdateStagePlayInterface, ComposeScriptHelper, LifeCycle {
 
     final private UpdateStagePlayInterface updateStagePlayInterface;
     private List<StageRole> stageRoleList;
@@ -50,18 +50,23 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
     }
 
     @Override
-    public void onItemMove(int fromPosition, int toPosition) {
-
-    }
-
-    @Override
-    public void onItemDismiss(int position) {
-
-    }
-
-    @Override
     public void updateStageLine(StageLine stageLine) {
         updateStagePlayInterface.updateStageLine(stageLine);
+    }
+
+    @Override
+    public void addStageLine(StageLine stageLine) {
+        updateStagePlayInterface.addStageLine(stageLine);
+    }
+
+    @Override
+    public void deleteStageLine(StageLine stageLine) {
+        updateStagePlayInterface.deleteStageLine(stageLine);
+    }
+
+    @Override
+    public void swapStageLines(int position1, int position2) {
+        updateStagePlayInterface.swapStageLines(position1, position2);
     }
 
     @Override
