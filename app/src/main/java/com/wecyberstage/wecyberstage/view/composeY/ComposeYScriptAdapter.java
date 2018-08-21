@@ -74,8 +74,8 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
 
     @Override
     public void onItemDismiss(int position) {
-        dataSet.remove(position);
         updateStagePlayInterface.deleteStageLine(((ComposeYItemDto)dataSet.get(position)).getStageLine());
+        dataSet.remove(position);
         notifyItemRemoved(position);
     }
 
