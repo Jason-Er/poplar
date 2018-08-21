@@ -3,10 +3,10 @@ package com.wecyberstage.wecyberstage.view.composeX;
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 
-public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager implements LifeCycle, PlayTimeInterface {
+public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager implements RegisterBusEventInterface, PlayTimeInterface {
 
     private ComposeXScriptAdapter adapter;
     private ComposeXLayoutDelegateManager delegatesManager;
@@ -65,13 +65,13 @@ public class ComposeXScriptLayoutManager extends RecyclerView.LayoutManager impl
     }
 
     @Override
-    public void onResume(Activity activity) {
-        delegatesManager.onResume(activity);
+    public void register(Activity activity) {
+        delegatesManager.register(activity);
     }
 
     @Override
-    public void onPause(Activity activity) {
-        delegatesManager.onPause(activity);
+    public void unRegister(Activity activity) {
+        delegatesManager.unRegister(activity);
     }
 
     @Override

@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -46,7 +45,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
 import com.wecyberstage.wecyberstage.message.MessageEvent;
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity
     SignUp signUp;
     UserProfile userProfile;
     List<CustomView> customViewList;
-    List<LifeCycle> lifeCycleComponents;
+    List<RegisterBusEventInterface> lifeCycleComponents;
 
     // endregion
     @Override
@@ -218,6 +217,14 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        for(CustomView customView: customViewList) {
+            customView.onStop(this, appMain);
+        }
+    }
+
     public void setCharacter(Character4Play character) {
         this.character = character;
     }
@@ -231,15 +238,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void constructLifeCycleComponents() {
-        if( footer != null && footer instanceof LifeCycle ) {
-            lifeCycleComponents.add((LifeCycle) footer);
+        if( footer != null && footer instanceof RegisterBusEventInterface) {
+            lifeCycleComponents.add((RegisterBusEventInterface) footer);
         }
-        if( header != null && header instanceof LifeCycle ) {
-            lifeCycleComponents.add((LifeCycle) header);
+        if( header != null && header instanceof RegisterBusEventInterface) {
+            lifeCycleComponents.add((RegisterBusEventInterface) header);
         }
         for(CustomView customView: customViewList) {
-            if(customView instanceof LifeCycle) {
-                lifeCycleComponents.add(customView);
+            if(customView instanceof RegisterBusEventInterface) {
+                lifeCycleComponents.add((RegisterBusEventInterface) customView);
             }
         }
     }
@@ -307,8 +314,8 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         autoHideHandler.postDelayed(autoHideRunnable, 3000);
         EventBus.getDefault().register(this);
-        for(LifeCycle lifeCycle: lifeCycleComponents) {
-            lifeCycle.onResume(this);
+        for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
+            lifeCycle.register(this);
         }
         // Debug.stopMethodTracing();
     }
@@ -317,8 +324,8 @@ public class MainActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
-        for(LifeCycle lifeCycle: lifeCycleComponents) {
-            lifeCycle.onPause(this);
+        for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
+            lifeCycle.unRegister(this);
         }
     }
 

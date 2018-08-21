@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 
 import javax.inject.Inject;
 
@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/26.
  */
 
-public class AdapterDelegatesManager<T> implements LifeCycle {
+public class AdapterDelegatesManager<T> implements RegisterBusEventInterface {
 
     private SparseArray delegates = new SparseArray();
 
@@ -61,19 +61,19 @@ public class AdapterDelegatesManager<T> implements LifeCycle {
     }
 
     @Override
-    public void onResume(Activity activity) {
+    public void register(Activity activity) {
         for(int i = 0; i < delegates.size(); i++) {
-            if( delegates.valueAt(i) instanceof LifeCycle ) {
-                ((LifeCycle)delegates.valueAt(i)).onResume(activity);
+            if( delegates.valueAt(i) instanceof RegisterBusEventInterface) {
+                ((RegisterBusEventInterface)delegates.valueAt(i)).register(activity);
             }
         }
     }
 
     @Override
-    public void onPause(Activity activity) {
+    public void unRegister(Activity activity) {
         for(int i = 0; i < delegates.size(); i++) {
-            if( delegates.valueAt(i) instanceof LifeCycle ) {
-                ((LifeCycle)delegates.valueAt(i)).onPause(activity);
+            if( delegates.valueAt(i) instanceof RegisterBusEventInterface) {
+                ((RegisterBusEventInterface)delegates.valueAt(i)).unRegister(activity);
             }
         }
     }

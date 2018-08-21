@@ -12,31 +12,36 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
+import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageScene;
+import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
+import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
 import javax.inject.Inject;
 
-public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener, UtilityInterface, SlideInterface {
+public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener,
+        UtilityInterface, SlideInterface, UpdateStagePlayInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
     private ComposeViewModel viewModel;
     private AppCompatActivity activity;
+    private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
 
-    @Inject
-    ComposeYScriptAdapter adapter;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -52,7 +57,9 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
-        // final ComposeYScriptAdapter adapter = new ComposeYScriptAdapter(activity, this);
+        adapter = new ComposeYScriptAdapter(new AdapterDelegatesManager<>(), this);
+        adapter.restoreStates(activity);
+
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(new LinearLayoutManager(activity));
         ((RecyclerView)view).setAdapter(adapter);
@@ -79,6 +86,11 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
                 }
             }
         });
+    }
+
+    @Override
+    public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
+        adapter.saveStates(activity);
     }
 
     @Override
@@ -110,12 +122,23 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     }
 
     @Override
-    public void onResume(Activity activity) {
-
+    public void updateStageLine(StageLine stageLine) {
+        viewModel.updateStageLine(stageLine);
     }
 
     @Override
-    public void onPause(Activity activity) {
-
+    public void addStageLine(StageLine stageLine) {
+        viewModel.addStageLine(stageLine);
     }
+
+    @Override
+    public void deleteStageLine(StageLine stageLine) {
+        viewModel.deleteStageLine(stageLine);
+    }
+
+    @Override
+    public void swapStageLines(int position1, int position2) {
+        viewModel.swapStageLines(position1, position2);
+    }
+
 }

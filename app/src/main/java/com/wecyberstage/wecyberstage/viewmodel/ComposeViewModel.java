@@ -33,6 +33,21 @@ public class ComposeViewModel extends ViewModel implements PlayStateInterface, U
 
     @Override
     public void updateStageLine(StageLine maskLine) {
-        ((StageSceneLiveData) stageSceneLiveData).updateStageLine(maskLine);
+        ((UpdateStagePlayInterface) stageSceneLiveData).updateStageLine(maskLine);
+    }
+
+    @Override
+    public void addStageLine(StageLine stageLine) {
+        ((UpdateStagePlayInterface) stageSceneLiveData).addStageLine(stageLine);
+    }
+
+    @Override
+    public void deleteStageLine(StageLine stageLine) {
+        ((UpdateStagePlayInterface) stageSceneLiveData).deleteStageLine(stageLine);
+    }
+
+    @Override
+    public void swapStageLines(int position1, int position2) {
+        ((UpdateStagePlayInterface) stageSceneLiveData).swapStageLines(position1,position2);
     }
 }

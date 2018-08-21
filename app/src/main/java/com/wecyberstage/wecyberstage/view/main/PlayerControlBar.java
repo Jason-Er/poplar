@@ -12,7 +12,7 @@ import android.widget.SeekBar;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.message.ComposeEvent;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PlayerControlBar extends LinearLayout implements LifeCycle {
+public class PlayerControlBar extends LinearLayout implements RegisterBusEventInterface {
 
     @BindView(R.id.footerMain_seekBar)
     SeekBar seekBar;
@@ -98,12 +98,12 @@ public class PlayerControlBar extends LinearLayout implements LifeCycle {
     }
 
     @Override
-    public void onResume(Activity activity) {
+    public void register(Activity activity) {
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onPause(Activity activity) {
+    public void unRegister(Activity activity) {
         EventBus.getDefault().unregister(this);
     }
 

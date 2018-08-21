@@ -45,7 +45,6 @@ class StageLineStartAdapterDelegate extends ViewTypeDelegateClass implements Ada
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.composey_stageline_start, parent, false);
         return new StageLineViewHolder(v);
@@ -53,7 +52,7 @@ class StageLineStartAdapterDelegate extends ViewTypeDelegateClass implements Ada
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
-        Log.i("ComposeX", "onBindViewHolder");
+        Log.d("LineStartAdapter", "onBindViewHolder position: "+position+" dialogue: "+ ((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
         ((StageLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
         Glide.with(holder.itemView.getContext()).load(((ComposeYItemDto) items.get(position)).getStageLine().maskGraph.graphURL).into(((StageLineViewHolder) holder).mask);
     }

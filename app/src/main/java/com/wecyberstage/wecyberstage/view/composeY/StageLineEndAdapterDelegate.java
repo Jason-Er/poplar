@@ -45,7 +45,6 @@ class StageLineEndAdapterDelegate extends ViewTypeDelegateClass implements Adapt
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.composey_stageline_end, parent, false);
         return new StageLineViewHolder(v);
@@ -53,7 +52,7 @@ class StageLineEndAdapterDelegate extends ViewTypeDelegateClass implements Adapt
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
-        Log.i("ComposeX", "onBindViewHolder");
+        Log.d("LineEndAdapter", "onBindViewHolder position: "+position + " dialogue: "+ ((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
         ((StageLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
         Glide.with(holder.itemView.getContext()).load(((ComposeYItemDto) items.get(position)).getStageLine().maskGraph.graphURL).into(((StageLineViewHolder) holder).mask);
     }

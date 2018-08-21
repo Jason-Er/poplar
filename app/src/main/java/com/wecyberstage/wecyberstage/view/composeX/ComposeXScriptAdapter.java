@@ -11,8 +11,7 @@ import com.wecyberstage.wecyberstage.model.TimeLine;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
-import com.wecyberstage.wecyberstage.view.helper.ItemTouchHelperAdapter;
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -21,7 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ComposeXScriptAdapter extends ListDelegationAdapter implements UpdateStagePlayInterface, ComposeScriptHelper, LifeCycle {
+public class ComposeXScriptAdapter extends ListDelegationAdapter implements UpdateStagePlayInterface, ComposeScriptHelper, RegisterBusEventInterface {
 
     final private UpdateStagePlayInterface updateStagePlayInterface;
     private List<StageRole> stageRoleList;
@@ -97,13 +96,13 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Upda
     }
 
     @Override
-    public void onResume(Activity activity) {
-        delegatesManager.onResume(activity);
+    public void register(Activity activity) {
+        delegatesManager.register(activity);
     }
 
     @Override
-    public void onPause(Activity activity) {
-        delegatesManager.onPause(activity);
+    public void unRegister(Activity activity) {
+        delegatesManager.unRegister(activity);
     }
 
 }

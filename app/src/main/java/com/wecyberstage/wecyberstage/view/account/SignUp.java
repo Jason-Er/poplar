@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.account;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -96,6 +95,11 @@ public class SignUp extends CustomView implements SlideInterface {
         });
     }
 
+    @Override
+    public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
+
+    }
+
     @OnClick(R.id.signUp_signUp)
     public void signIn(View view) {
         if(phoneNumber.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
@@ -119,13 +123,4 @@ public class SignUp extends CustomView implements SlideInterface {
         appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-    @Override
-    public void onResume(Activity activity) {
-
-    }
-
-    @Override
-    public void onPause(Activity activity) {
-
-    }
 }

@@ -28,6 +28,7 @@ import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlSub1Interface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
@@ -41,7 +42,9 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeX extends CustomView implements PlayStateInterface, SlideInterface, UpdateStagePlayInterface, OnStartDragListener, PlayControlInterface {
+public class ComposeX extends CustomView implements PlayStateInterface,
+        SlideInterface, UpdateStagePlayInterface, OnStartDragListener,
+        PlayControlInterface, RegisterBusEventInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -132,6 +135,11 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     }
 
     @Override
+    public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
+
+    }
+
+    @Override
     public void setPlayState(PlayState playState) {
         appCompatActivity.getIntent().putExtra(COMPOSE_INFO_KEY, playState);
         viewModel.setPlayState(playState);
@@ -173,15 +181,15 @@ public class ComposeX extends CustomView implements PlayStateInterface, SlideInt
     }
 
     @Override
-    public void onResume(Activity activity) {
-        layoutManager.onResume(activity);
-        adapter.onResume(activity);
+    public void register(Activity activity) {
+        layoutManager.register(activity);
+        adapter.register(activity);
     }
 
     @Override
-    public void onPause(Activity activity) {
-        layoutManager.onPause(activity);
-        adapter.onPause(activity);
+    public void unRegister(Activity activity) {
+        layoutManager.unRegister(activity);
+        adapter.unRegister(activity);
     }
 
     // region implementation of PlayControlInterface

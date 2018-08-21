@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.account;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -103,6 +102,11 @@ public class SignIn extends CustomView implements SlideInterface {
         });
     }
 
+    @Override
+    public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
+
+    }
+
     private void hideSoftKeyBoard() {
         InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(phoneNumber.getWindowToken(), 0);
@@ -145,13 +149,4 @@ public class SignIn extends CustomView implements SlideInterface {
         appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-    @Override
-    public void onResume(Activity activity) {
-
-    }
-
-    @Override
-    public void onPause(Activity activity) {
-
-    }
 }

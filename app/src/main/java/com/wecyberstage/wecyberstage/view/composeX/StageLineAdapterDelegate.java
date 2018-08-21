@@ -17,7 +17,7 @@ import com.wecyberstage.wecyberstage.message.MaskChooseEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.message.MaskClickEvent;
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
@@ -31,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>>, LifeCycle {
+class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>>, RegisterBusEventInterface {
 
     final private OnStartDragListener startDragListener;
     final private RecyclerView.Adapter adapter;
@@ -99,12 +99,12 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterD
     }
 
     @Override
-    public void onResume(Activity activity) {
+    public void register(Activity activity) {
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onPause(Activity activity) {
+    public void unRegister(Activity activity) {
         EventBus.getDefault().unregister(this);
     }
 

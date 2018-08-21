@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.composeZ;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -77,6 +76,11 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
     }
 
     @Override
+    public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
+
+    }
+
+    @Override
     public void setPlayState(PlayState playState) {
         activity.getIntent().putExtra(PARTICIPATE_INFO_KEY, playState);
         viewModel.setPlayState(playState);
@@ -92,13 +96,4 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
-    @Override
-    public void onResume(Activity activity) {
-
-    }
-
-    @Override
-    public void onPause(Activity activity) {
-
-    }
 }
