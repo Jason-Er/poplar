@@ -18,6 +18,12 @@ public class UICommon {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
+    public static void showNavigationBar(AppCompatActivity activity) {
+        View decorView = activity.getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
     public static void toImmersive(AppCompatActivity activity) {
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN
                 | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
