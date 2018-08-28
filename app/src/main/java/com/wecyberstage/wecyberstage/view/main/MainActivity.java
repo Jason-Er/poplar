@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +36,7 @@ import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
+import com.wecyberstage.wecyberstage.view.helper.AdjustingViewGlobalLayoutListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
@@ -53,6 +55,7 @@ import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.SoftKeyBroadManager;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 
@@ -102,8 +105,12 @@ public class MainActivity extends AppCompatActivity
     View header;
     @BindView(R.id.footer_main)
     View footer;
+    @BindView(R.id.edit_input_main)
+    View editInput;
     @BindView(R.id.app_main)
     ViewGroup appMain;
+    @BindView(R.id.activity_main_layout)
+    ViewGroup mainLayout;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -137,7 +144,7 @@ public class MainActivity extends AppCompatActivity
 
         UICommon.toImmersive(this);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -205,6 +212,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
+        /*
         View decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
@@ -217,6 +225,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+        */
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +235,52 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+
+        /*
+        AdjustingViewGlobalLayoutListener listen = new AdjustingViewGlobalLayoutListener(editInput);
+        appMain.getViewTreeObserver().addOnGlobalLayoutListener(listen);
+        */
+
+        SoftKeyBroadManager softKeyBroadManager = new SoftKeyBroadManager(appMain);
+        softKeyBroadManager.addSoftKeyboardStateListener(new SoftKeyBroadManager.SoftKeyboardStateListener() {
+            @Override
+            public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+                Log.d("MainActivity","onSoftKeyboardOpened");
+            }
+
+            @Override
+            public void onSoftKeyboardClosed() {
+                Log.d("MainActivity","onSoftKeyboardClosed");
+            }
+        });
+
+        // appMain.getViewTreeObserver().addOnGlobalLayoutListener(mLayoutChangeListener);
     }
+
+    /*
+    ViewTreeObserver.OnGlobalLayoutListener mLayoutChangeListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        @Override
+        public void onGlobalLayout() {
+            Rect r = new Rect();
+            // getWindowVisibleDisplayFrame()会返回窗口的可见区域高度
+            getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+            //如果屏幕高度和Window可见区域高度差值大于整个屏幕高度的1/3，则表示软键盘显示中，否则软键盘为隐藏状态。
+            int heightDifference = WT.mScreenHeight - (r.bottom - r.top);
+            boolean isKeyboardShowing = heightDifference > WT.mScreenHeight / 3;
+            if(isKeyboardShowing){
+                //                D.i("slack","show..."+ r.bottom + " - " + r.top + " = " + (r.bottom - r.top) +","+ heightDifference);
+                // bottomView 需要跟随软键盘移动的布局
+                // setDuration(0) 默认300, 设置 0 ，表示动画执行时间为0，没有过程，只有动画结果了
+                bottomView.animate().translationY(-heightDifference).setDuration(0).start();
+            }else{
+                //                D.i("slack","hide...");
+                bottomView.animate().translationY(0).start();
+            }
+        }
+
+    };
+    */
 
     @Override
     protected void onStop() {
@@ -269,7 +323,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.activity_main_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -328,7 +382,20 @@ public class MainActivity extends AppCompatActivity
         for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
             lifeCycle.register(this);
         }
-        // Debug.stopMethodTracing();
+        getWindow().getDecorView().getHeight();
+        getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Rect rect = new Rect();
+                getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+                if(bottom!=0 && oldBottom!=0 && bottom - rect.bottom <= 0){
+                    Log.d("main","state hide");
+                }else {
+                    Log.d("main","state show");
+                }
+
+            }
+        });
     }
 
     @Override
@@ -360,7 +427,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

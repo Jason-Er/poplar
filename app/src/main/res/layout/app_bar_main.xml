@@ -33,5 +33,6 @@
         app:srcCompat="@drawable/ic_plus" />
 
     <include layout="@layout/footer_main" />
+    <include layout="@layout/edit_input_main" />
 
 </android.support.design.widget.CoordinatorLayout>
