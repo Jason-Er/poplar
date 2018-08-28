@@ -28,7 +28,6 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
-import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
 import com.wecyberstage.wecyberstage.view.account.SignUp;
 import com.wecyberstage.wecyberstage.view.account.UserProfile;
@@ -36,7 +35,6 @@ import com.wecyberstage.wecyberstage.view.browse.Browse;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
-import com.wecyberstage.wecyberstage.view.helper.AdjustingViewGlobalLayoutListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
@@ -55,7 +53,6 @@ import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
-import com.wecyberstage.wecyberstage.view.helper.SoftKeyBroadManager;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 
@@ -212,20 +209,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
-        /*
-        View decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if( (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                    Log.i("MainActivity","onSystemUiVisibilityChange to visible");
-                    // uiCommon.hideNavigationBar();
-                } else {
-                    Log.i("MainActivity","onSystemUiVisibilityChange to invisible");
-                }
-            }
-        });
-        */
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -236,51 +219,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        /*
-        AdjustingViewGlobalLayoutListener listen = new AdjustingViewGlobalLayoutListener(editInput);
-        appMain.getViewTreeObserver().addOnGlobalLayoutListener(listen);
-        */
-
-        SoftKeyBroadManager softKeyBroadManager = new SoftKeyBroadManager(appMain);
-        softKeyBroadManager.addSoftKeyboardStateListener(new SoftKeyBroadManager.SoftKeyboardStateListener() {
-            @Override
-            public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-                Log.d("MainActivity","onSoftKeyboardOpened");
-            }
-
-            @Override
-            public void onSoftKeyboardClosed() {
-                Log.d("MainActivity","onSoftKeyboardClosed");
-            }
-        });
-
-        // appMain.getViewTreeObserver().addOnGlobalLayoutListener(mLayoutChangeListener);
     }
-
-    /*
-    ViewTreeObserver.OnGlobalLayoutListener mLayoutChangeListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-
-        @Override
-        public void onGlobalLayout() {
-            Rect r = new Rect();
-            // getWindowVisibleDisplayFrame()会返回窗口的可见区域高度
-            getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
-            //如果屏幕高度和Window可见区域高度差值大于整个屏幕高度的1/3，则表示软键盘显示中，否则软键盘为隐藏状态。
-            int heightDifference = WT.mScreenHeight - (r.bottom - r.top);
-            boolean isKeyboardShowing = heightDifference > WT.mScreenHeight / 3;
-            if(isKeyboardShowing){
-                //                D.i("slack","show..."+ r.bottom + " - " + r.top + " = " + (r.bottom - r.top) +","+ heightDifference);
-                // bottomView 需要跟随软键盘移动的布局
-                // setDuration(0) 默认300, 设置 0 ，表示动画执行时间为0，没有过程，只有动画结果了
-                bottomView.animate().translationY(-heightDifference).setDuration(0).start();
-            }else{
-                //                D.i("slack","hide...");
-                bottomView.animate().translationY(0).start();
-            }
-        }
-
-    };
-    */
 
     @Override
     protected void onStop() {
@@ -382,20 +321,6 @@ public class MainActivity extends AppCompatActivity
         for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
             lifeCycle.register(this);
         }
-        getWindow().getDecorView().getHeight();
-        getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Rect rect = new Rect();
-                getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-                if(bottom!=0 && oldBottom!=0 && bottom - rect.bottom <= 0){
-                    Log.d("main","state hide");
-                }else {
-                    Log.d("main","state show");
-                }
-
-            }
-        });
     }
 
     @Override
