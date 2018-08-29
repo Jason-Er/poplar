@@ -7,4 +7,8 @@
     <color name="focused_false">#000000</color>
     <color name="light_black">#504f4f</color>
     <color name="divider">#90909090</color>
+    <color name="transparent">#0000</color>
+    <color name="black">#000</color>
+    <color name="white">#fff</color>
+    <color name="gray">#999</color>
 </resources>

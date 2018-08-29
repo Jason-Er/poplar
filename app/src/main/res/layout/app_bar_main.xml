@@ -34,5 +34,6 @@
 
     <include layout="@layout/footer_main" />
     <include layout="@layout/edit_input_main" />
+    <include layout="@layout/mask_choose_tablayout" />
 
 </android.support.design.widget.CoordinatorLayout>
