@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -102,12 +101,14 @@ public class MainActivity extends AppCompatActivity
     View header;
     @BindView(R.id.footer_main)
     View footer;
-    @BindView(R.id.edit_input_main)
-    View editInput;
+    @BindView(R.id.line_edit_main)
+    View lineEdit;
     @BindView(R.id.app_main)
     ViewGroup appMain;
     @BindView(R.id.activity_main_layout)
     ViewGroup mainLayout;
+    @BindView(R.id.mask_edit_main)
+    ViewGroup maskEdit;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity
 
     private SparseArray viewArray;
     private SparseArray flingResponseArray;
+    private int softKeyBroadHeight;
     Browse browse;
     ComposeX composeX;
     ComposeY composeY;
@@ -219,6 +221,27 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        maskEdit.setVisibility(View.GONE);
+
+        appMain.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Log.d("new change ", "left : " + left + " top : " + top + " right : " + right + " bottom : " + bottom);
+                Log.d("old change ", "oldLeft : " + oldLeft + " oldTop : " + oldTop + " oldRight : " + oldRight + " oldBottom : " + oldBottom);
+                Log.d("change diff ", " oldBottom - bottom : " + (oldBottom - bottom) + " bottom - top : "+ (bottom-top));
+
+                if(oldBottom - bottom > 0) {
+                    softKeyBroadHeight = oldBottom - bottom;
+                    Log.d("new change","softKeyBroadHeight: "+softKeyBroadHeight);
+                    /*
+                    ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
+                    params.height = oldBottom - bottom;
+                    maskEdit.requestLayout();
+                    maskEdit.setY(bottom-top);
+                    */
+                }
+            }
+        });
     }
 
     @Override
@@ -275,6 +298,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
