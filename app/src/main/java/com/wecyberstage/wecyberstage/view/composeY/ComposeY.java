@@ -14,7 +14,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
@@ -33,7 +32,7 @@ import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 import javax.inject.Inject;
 
 public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener,
-        UtilityInterface, SlideInterface, UpdateStagePlayInterface {
+        SlideInterface, UpdateStagePlayInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -107,13 +106,6 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         itemTouchHelper.startDrag(viewHolder);
-    }
-
-    @Override
-    public void hideSoftKeyboard() {
-        if(activity.getCurrentFocus() == null) return;
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     @Override

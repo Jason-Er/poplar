@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
@@ -78,7 +77,7 @@ public class UserProfile extends CustomView implements SlideInterface {
         profileComponent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                // InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 // imm.hideSoftInputFromWindow(phoneNumber.getWindowToken(), 0);
                 // imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
                 return false;

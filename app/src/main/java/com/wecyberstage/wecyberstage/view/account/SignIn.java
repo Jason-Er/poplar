@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -23,6 +22,7 @@ import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.data.dto.UserRequest;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
+import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
@@ -107,10 +107,10 @@ public class SignIn extends CustomView implements SlideInterface {
 
     }
 
+
     private void hideSoftKeyBoard() {
-        InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(phoneNumber.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
+        UICommon.hideSoftKeyboard(phoneNumber);
+        UICommon.hideSoftKeyboard(password);
     }
 
     @OnClick(R.id.signIn_showPwd)

@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.wecyberstage.wecyberstage.R;
@@ -20,6 +19,7 @@ import com.wecyberstage.wecyberstage.data.dto.UserRequest;
 import com.wecyberstage.wecyberstage.model.User;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
+import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
@@ -87,9 +87,8 @@ public class SignUp extends CustomView implements SlideInterface {
         signUpComponent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(phoneNumber.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
+                UICommon.hideSoftKeyboard(phoneNumber);
+                UICommon.hideSoftKeyboard(password);
                 return false;
             }
         });
