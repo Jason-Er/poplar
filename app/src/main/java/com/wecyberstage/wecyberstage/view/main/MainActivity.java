@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.data.file.LocalSettings;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
@@ -120,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    @Inject
+    LocalSettings localSettings;
 
     // region navigation
     private Stack<String> navigationStack;
@@ -231,7 +234,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             }
         });
 
+        // change maskEdit height
+        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
+        params.height = localSettings.getSoftKeyboardHeight();
         maskEdit.setVisibility(View.GONE);
+
 
         appMain.post(new Runnable() {
             @Override
@@ -239,27 +246,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 keyboardHeightProvider.start();
             }
         });
-        /*
-        appMain.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Log.d("new change ", "left : " + left + " top : " + top + " right : " + right + " bottom : " + bottom);
-                Log.d("old change ", "oldLeft : " + oldLeft + " oldTop : " + oldTop + " oldRight : " + oldRight + " oldBottom : " + oldBottom);
-                Log.d("change diff ", " oldBottom - bottom : " + (oldBottom - bottom) + " bottom - top : "+ (bottom-top));
 
-                if(oldBottom - bottom > 0) {
-                    softKeyBroadHeight = oldBottom - bottom;
-                    Log.d("new change","softKeyBroadHeight: "+softKeyBroadHeight);
-                    /*
-                    ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
-                    params.height = oldBottom - bottom;
-                    maskEdit.requestLayout();
-                    maskEdit.setY(bottom-top);
-
-                }
-            }
-        });
-        */
     }
 
     @Override
@@ -674,9 +661,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     public void onKeyboardHeightChanged(int height, int orientation) {
         String or = orientation == Configuration.ORIENTATION_PORTRAIT ? "portrait" : "landscape";
         Log.i("mainActivity", "onKeyboardHeightChanged in pixels: " + height + " " + or);
-        if( height > 0 && maskEdit.getHeight() != height ) {
-            ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
+        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
+        if( height > 0 && params.height != height ) {
             params.height = height;
+            localSettings.saveSoftKeyboardHeight(height);
         }
         if( height > 0 ) { // show state
             maskEdit.setVisibility(View.VISIBLE);

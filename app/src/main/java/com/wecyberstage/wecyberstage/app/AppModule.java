@@ -24,7 +24,7 @@ class AppModule {
 
     @Provides
     SharedPreferences provideSharedPrefs(Application application) {
-        return application.getSharedPreferences("demo-prefs", Context.MODE_PRIVATE);
+        return application.getSharedPreferences("poplar", Context.MODE_PRIVATE);
     }
 
 }
