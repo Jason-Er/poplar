@@ -14,20 +14,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LineEditBar extends LinearLayout {
+public class FooterEditBar extends LinearLayout {
 
-    @BindView(R.id.lineEdit_line)
-    EditText line;
-
-    public LineEditBar(Context context) {
+    public FooterEditBar(Context context) {
         super(context);
     }
 
-    public LineEditBar(Context context, @Nullable AttributeSet attrs) {
+    public FooterEditBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public LineEditBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public FooterEditBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

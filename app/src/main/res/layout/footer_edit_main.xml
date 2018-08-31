@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.wecyberstage.wecyberstage.view.main.FooterEditBar
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:orientation="vertical">
     <include layout="@layout/line_edit_main" />
     <include layout="@layout/mask_edit_main" />
-</LinearLayout>
+</com.wecyberstage.wecyberstage.view.main.FooterEditBar>
