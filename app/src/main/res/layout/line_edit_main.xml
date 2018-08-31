@@ -14,13 +14,15 @@
         />
     <ImageButton
         android:id="@+id/lineEdit_mask"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@android:drawable/sym_def_app_icon" />
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/shape_circle"
+        android:src="@drawable/emoticon_happy" />
     <ImageButton
         android:id="@+id/lineEdit_ok"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@android:drawable/sym_def_app_icon" />
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/shape_circle"
+        android:src="@drawable/ic_plus" />
 
 </LinearLayout>
