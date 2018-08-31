@@ -653,20 +653,38 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     // region surrounding components tools
+    private boolean isShowMaskChoose = false;
+
     @OnClick(R.id.lineEdit_mask)
     public void onLineEditMaskClick(View view) {
         Log.d("LineEditBar","onLineEditMaskClick");
+        isShowMaskChoose = true;
         UICommon.hideSoftKeyboard(view);
-        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
-        params.height = softKeyBroadHeight;
-        maskEdit.requestLayout();
-        maskEdit.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.lineEdit_ok)
+    public void onLineEditOKClick(View view) {
+        Log.d("LineEditBar","onLineEditMaskClick");
+        isShowMaskChoose = false;
+        maskEdit.setVisibility(View.GONE);
+        UICommon.hideSoftKeyboard(view);
     }
 
     @Override
     public void onKeyboardHeightChanged(int height, int orientation) {
         String or = orientation == Configuration.ORIENTATION_PORTRAIT ? "portrait" : "landscape";
         Log.i("mainActivity", "onKeyboardHeightChanged in pixels: " + height + " " + or);
+        if( height > 0 && maskEdit.getHeight() != height ) {
+            ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
+            params.height = height;
+        }
+        if( height > 0 ) { // show state
+            maskEdit.setVisibility(View.VISIBLE);
+        } else { // hide state
+            if( !isShowMaskChoose ) {
+                maskEdit.setVisibility(View.GONE);
+            }
+        }
     }
 
     // endregion
