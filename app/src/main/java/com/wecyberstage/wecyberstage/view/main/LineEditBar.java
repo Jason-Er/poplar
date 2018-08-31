@@ -37,9 +37,4 @@ public class LineEditBar extends LinearLayout {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.lineEdit_mask)
-    public void onLineEditMaskClick(View view) {
-        Log.d("LineEditBar","onLineEditMaskClick");
-        
-    }
 }

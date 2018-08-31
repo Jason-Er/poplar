@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +28,7 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
+import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
 import com.wecyberstage.wecyberstage.view.account.SignUp;
 import com.wecyberstage.wecyberstage.view.account.UserProfile;
@@ -46,6 +48,8 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
 import com.wecyberstage.wecyberstage.message.MessageEvent;
+import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightObserver;
+import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightProvider;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
@@ -70,11 +74,13 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.AndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class MainActivity extends AppCompatActivity
-        implements HasSupportFragmentInjector, NavigationView.OnNavigationItemSelectedListener, CustomViewSlideInterface {
+public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector,
+        NavigationView.OnNavigationItemSelectedListener,
+        CustomViewSlideInterface, KeyboardHeightObserver {
 
     private final String NAVIGATION_SEMICOLON = ";";
     private final String NAVIGATION_COLON = ":";
@@ -90,6 +96,8 @@ public class MainActivity extends AppCompatActivity
         }
     };
     private final Lock queueLock=new ReentrantLock();
+
+    private KeyboardHeightProvider keyboardHeightProvider;
 
     @Inject
     CharacterFactory characterFactory;
@@ -140,6 +148,8 @@ public class MainActivity extends AppCompatActivity
         // Debug.startMethodTracing("/data/data/com.wecyberstage.wecyberstage/love_world_");
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        keyboardHeightProvider = new KeyboardHeightProvider(this);
 
         // UICommon.toImmersive(this);
 
@@ -223,6 +233,13 @@ public class MainActivity extends AppCompatActivity
 
         maskEdit.setVisibility(View.GONE);
 
+        appMain.post(new Runnable() {
+            @Override
+            public void run() {
+                keyboardHeightProvider.start();
+            }
+        });
+        /*
         appMain.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -238,10 +255,11 @@ public class MainActivity extends AppCompatActivity
                     params.height = oldBottom - bottom;
                     maskEdit.requestLayout();
                     maskEdit.setY(bottom-top);
-                    */
+
                 }
             }
         });
+        */
     }
 
     @Override
@@ -345,6 +363,7 @@ public class MainActivity extends AppCompatActivity
         for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
             lifeCycle.register(this);
         }
+        keyboardHeightProvider.setKeyboardHeightObserver(this);
     }
 
     @Override
@@ -354,6 +373,13 @@ public class MainActivity extends AppCompatActivity
         for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
             lifeCycle.unRegister(this);
         }
+        keyboardHeightProvider.setKeyboardHeightObserver(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        keyboardHeightProvider.close();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -626,5 +652,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    // region surrounding components tools
+    @OnClick(R.id.lineEdit_mask)
+    public void onLineEditMaskClick(View view) {
+        Log.d("LineEditBar","onLineEditMaskClick");
+        UICommon.hideSoftKeyboard(view);
+        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
+        params.height = softKeyBroadHeight;
+        maskEdit.requestLayout();
+        maskEdit.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onKeyboardHeightChanged(int height, int orientation) {
+        String or = orientation == Configuration.ORIENTATION_PORTRAIT ? "portrait" : "landscape";
+        Log.i("mainActivity", "onKeyboardHeightChanged in pixels: " + height + " " + or);
+    }
+
+    // endregion
 
 }
