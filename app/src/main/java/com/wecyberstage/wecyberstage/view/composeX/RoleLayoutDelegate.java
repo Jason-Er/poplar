@@ -10,7 +10,7 @@ import com.wecyberstage.wecyberstage.message.MessageEvent;
 import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.message.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.helper.MaskChoose;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>>, LifeCycle {
+public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>>, RegisterBusEventInterface {
 
     private Map<Long, View> roleMap;
     public RoleLayoutDelegate(int viewType) {
@@ -108,12 +108,12 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
     }
 
     @Override
-    public void onResume(Activity activity) {
+    public void register(Activity activity) {
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onPause(Activity activity) {
+    public void unRegister(Activity activity) {
         EventBus.getDefault().unregister(this);
     }
 }

@@ -5,9 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.SparseArray;
@@ -23,6 +25,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.data.file.LocalSettings;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
@@ -46,7 +49,9 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
 import com.wecyberstage.wecyberstage.message.MessageEvent;
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightObserver;
+import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightProvider;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
@@ -70,11 +75,13 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.AndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class MainActivity extends AppCompatActivity
-        implements HasSupportFragmentInjector, NavigationView.OnNavigationItemSelectedListener, CustomViewSlideInterface {
+public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector,
+        NavigationView.OnNavigationItemSelectedListener,
+        CustomViewSlideInterface, KeyboardHeightObserver {
 
     private final String NAVIGATION_SEMICOLON = ";";
     private final String NAVIGATION_COLON = ":";
@@ -91,6 +98,8 @@ public class MainActivity extends AppCompatActivity
     };
     private final Lock queueLock=new ReentrantLock();
 
+    private KeyboardHeightProvider keyboardHeightProvider;
+
     @Inject
     CharacterFactory characterFactory;
     private Character4Play character;
@@ -101,11 +110,19 @@ public class MainActivity extends AppCompatActivity
     View header;
     @BindView(R.id.footer_main)
     View footer;
+    @BindView(R.id.line_edit_main)
+    View lineEdit;
     @BindView(R.id.app_main)
     ViewGroup appMain;
+    @BindView(R.id.activity_main_layout)
+    ViewGroup mainLayout;
+    @BindView(R.id.mask_edit_main)
+    ViewGroup maskEdit;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    @Inject
+    LocalSettings localSettings;
 
     // region navigation
     private Stack<String> navigationStack;
@@ -115,6 +132,7 @@ public class MainActivity extends AppCompatActivity
 
     private SparseArray viewArray;
     private SparseArray flingResponseArray;
+    private int softKeyBroadHeight;
     Browse browse;
     ComposeX composeX;
     ComposeY composeY;
@@ -123,7 +141,7 @@ public class MainActivity extends AppCompatActivity
     SignUp signUp;
     UserProfile userProfile;
     List<CustomView> customViewList;
-    List<LifeCycle> lifeCycleComponents;
+    List<RegisterBusEventInterface> lifeCycleComponents;
 
     // endregion
     @Override
@@ -134,9 +152,11 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        UICommon.toImmersive(this);
+        keyboardHeightProvider = new KeyboardHeightProvider(this);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // UICommon.toImmersive(this);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -204,18 +224,37 @@ public class MainActivity extends AppCompatActivity
         }
 
         character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
-        View decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if( (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                    Log.i("MainActivity","onSystemUiVisibilityChange to visible");
-                    // uiCommon.hideNavigationBar();
-                } else {
-                    Log.i("MainActivity","onSystemUiVisibilityChange to invisible");
-                }
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
+
+        // change maskEdit height
+        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
+        params.height = localSettings.getSoftKeyboardHeight();
+        maskEdit.setVisibility(View.GONE);
+
+
+        appMain.post(new Runnable() {
+            @Override
+            public void run() {
+                keyboardHeightProvider.start();
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        for(CustomView customView: customViewList) {
+            customView.onStop(this, appMain);
+        }
     }
 
     public void setCharacter(Character4Play character) {
@@ -231,15 +270,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void constructLifeCycleComponents() {
-        if( footer != null && footer instanceof LifeCycle ) {
-            lifeCycleComponents.add((LifeCycle) footer);
+        if( footer != null && footer instanceof RegisterBusEventInterface) {
+            lifeCycleComponents.add((RegisterBusEventInterface) footer);
         }
-        if( header != null && header instanceof LifeCycle ) {
-            lifeCycleComponents.add((LifeCycle) header);
+        if( header != null && header instanceof RegisterBusEventInterface) {
+            lifeCycleComponents.add((RegisterBusEventInterface) header);
         }
         for(CustomView customView: customViewList) {
-            if(customView instanceof LifeCycle) {
-                lifeCycleComponents.add(customView);
+            if(customView instanceof RegisterBusEventInterface) {
+                lifeCycleComponents.add((RegisterBusEventInterface) customView);
             }
         }
     }
@@ -251,7 +290,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.activity_main_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -264,6 +303,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -307,19 +347,26 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         autoHideHandler.postDelayed(autoHideRunnable, 3000);
         EventBus.getDefault().register(this);
-        for(LifeCycle lifeCycle: lifeCycleComponents) {
-            lifeCycle.onResume(this);
+        for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
+            lifeCycle.register(this);
         }
-        // Debug.stopMethodTracing();
+        keyboardHeightProvider.setKeyboardHeightObserver(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
-        for(LifeCycle lifeCycle: lifeCycleComponents) {
-            lifeCycle.onPause(this);
+        for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
+            lifeCycle.unRegister(this);
         }
+        keyboardHeightProvider.setKeyboardHeightObserver(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        keyboardHeightProvider.close();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -342,7 +389,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -592,5 +639,42 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    // region surrounding components tools
+    private boolean isShowMaskChoose = false;
+
+    @OnClick(R.id.lineEdit_mask)
+    public void onLineEditMaskClick(View view) {
+        Log.d("LineEditBar","onLineEditMaskClick");
+        isShowMaskChoose = true;
+        UICommon.hideSoftKeyboard(view);
+    }
+
+    @OnClick(R.id.lineEdit_ok)
+    public void onLineEditOKClick(View view) {
+        Log.d("LineEditBar","onLineEditMaskClick");
+        isShowMaskChoose = false;
+        maskEdit.setVisibility(View.GONE);
+        UICommon.hideSoftKeyboard(view);
+    }
+
+    @Override
+    public void onKeyboardHeightChanged(int height, int orientation) {
+        String or = orientation == Configuration.ORIENTATION_PORTRAIT ? "portrait" : "landscape";
+        Log.i("mainActivity", "onKeyboardHeightChanged in pixels: " + height + " " + or);
+        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
+        if( height > 0 && params.height != height ) {
+            params.height = height;
+            localSettings.saveSoftKeyboardHeight(height);
+        }
+        if( height > 0 ) { // show state
+            maskEdit.setVisibility(View.VISIBLE);
+        } else { // hide state
+            if( !isShowMaskChoose ) {
+                maskEdit.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    // endregion
 
 }

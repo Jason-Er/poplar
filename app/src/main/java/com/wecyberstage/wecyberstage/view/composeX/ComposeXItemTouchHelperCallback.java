@@ -10,12 +10,6 @@ import com.wecyberstage.wecyberstage.view.helper.ItemTouchHelperViewHolder;
 
 public class ComposeXItemTouchHelperCallback extends CustomItemTouchHelper.Callback {
 
-    private final ItemTouchHelperAdapter adapter;
-
-    public ComposeXItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
-        this.adapter = adapter;
-    }
-
     @Override
     public boolean isLongPressDragEnabled() {
         return false;
@@ -57,13 +51,11 @@ public class ComposeXItemTouchHelperCallback extends CustomItemTouchHelper.Callb
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        adapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        adapter.onItemDismiss(viewHolder.getAdapterPosition());
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
@@ -18,19 +19,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class ComposeLineAdapterStartDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
+class StageLineStartAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>> {
 
-    public ComposeLineAdapterStartDelegate(int viewType) {
+    public StageLineStartAdapterDelegate(int viewType) {
         super(viewType);
     }
 
-    class ComposeLineViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.imageview_pic)
-        ImageView avatar;
-        @BindView(R.id.textview_message)
+    class StageLineViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.composeY_stageLine_start_image)
+        ImageView mask;
+        @BindView(R.id.composeY_stageLine_start_text)
         TextView dialogue;
 
-        public ComposeLineViewHolder(View v) {
+        public StageLineViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
@@ -44,15 +45,15 @@ class ComposeLineAdapterStartDelegate extends ViewTypeDelegateClass implements A
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        Log.i("ComposeX", "onCreateViewHolder");
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.composey_stageline_left, parent, false);
-        return new ComposeLineViewHolder(v);
+                .inflate(R.layout.composey_stageline_start, parent, false);
+        return new StageLineViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
-        Log.i("ComposeX", "onBindViewHolder");
-        ((ComposeLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
+        Log.d("LineStartAdapter", "onBindViewHolder position: "+position+" dialogue: "+ ((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
+        ((StageLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
+        Glide.with(holder.itemView.getContext()).load(((ComposeYItemDto) items.get(position)).getStageLine().maskGraph.graphURL).into(((StageLineViewHolder) holder).mask);
     }
 }

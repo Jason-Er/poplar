@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id = "@+id/line_edit_main"
+    android:orientation="horizontal">
+    <EditText
+        android:layout_width = "wrap_content"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:id="@+id/lineEdit_line"
+        android:gravity="start"
+        />
+    <ImageButton
+        android:id="@+id/lineEdit_mask"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/shape_circle"
+        android:src="@drawable/emoticon_happy" />
+    <ImageButton
+        android:id="@+id/lineEdit_ok"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/shape_circle"
+        android:src="@drawable/ic_plus" />
+
+</LinearLayout>

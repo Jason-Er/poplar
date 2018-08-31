@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class CustomView implements LifeCycle {
+public abstract class CustomView {
 
     protected View view;
     protected ViewType viewType;
@@ -15,6 +15,7 @@ public abstract class CustomView implements LifeCycle {
     }
 
     public abstract void onCreate(AppCompatActivity activity, @Nullable ViewGroup container);
+    public abstract void onStop(AppCompatActivity activity, @Nullable ViewGroup container);
 
     public View getView() {
         return view;

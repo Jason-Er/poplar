@@ -4,14 +4,14 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegatesManager;
 
 import javax.inject.Inject;
 
-public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> implements LifeCycle, PlayTimeInterface {
+public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> implements RegisterBusEventInterface, PlayTimeInterface {
 
     @Inject
     public ComposeXLayoutDelegateManager() {
@@ -46,13 +46,13 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
     }
 
     @Override
-    public void onResume(Activity activity) {
-        ((LifeCycle)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).onResume(activity);
+    public void register(Activity activity) {
+        ((RegisterBusEventInterface)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).register(activity);
     }
 
     @Override
-    public void onPause(Activity activity) {
-        ((LifeCycle)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).onPause(activity);
+    public void unRegister(Activity activity) {
+        ((RegisterBusEventInterface)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).unRegister(activity);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.account;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
@@ -79,12 +77,17 @@ public class UserProfile extends CustomView implements SlideInterface {
         profileComponent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                // InputMethodManager imm = (InputMethodManager) appCompatActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 // imm.hideSoftInputFromWindow(phoneNumber.getWindowToken(), 0);
                 // imm.hideSoftInputFromWindow(password.getWindowToken(), 0);
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
+
     }
 
     @OnClick(R.id.profile_navigateUp)
@@ -97,13 +100,4 @@ public class UserProfile extends CustomView implements SlideInterface {
         appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-    @Override
-    public void onResume(Activity activity) {
-
-    }
-
-    @Override
-    public void onPause(Activity activity) {
-
-    }
 }

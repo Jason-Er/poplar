@@ -13,6 +13,8 @@ import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 
+import java.util.Collections;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -60,7 +62,38 @@ public class StageSceneLiveData extends LiveData<StageScene> implements PlayStat
 
     @Override
     public void updateStageLine(StageLine stageLine) {
-        Log.i("StageSceneLiveData","updateStageLine");
+        Log.d("StageSceneLiveData","updateStageLine");
         getValue().stageLines.set((int)stageLine.ordinal - 1, stageLine);
+    }
+
+    @Override
+    public void addStageLine(StageLine stageLine) {
+        Log.d("StageSceneLiveData","deleteStageLine");
+        if( stageLine.ordinal > 0 ) {
+            getValue().stageLines.add((int)stageLine.ordinal - 1, stageLine);
+        } else {
+            getValue().stageLines.add(stageLine);
+        }
+        updateStageLinesOrdinal();
+    }
+
+    @Override
+    public void deleteStageLine(StageLine stageLine) {
+        Log.d("StageSceneLiveData","deleteStageLine");
+        getValue().stageLines.remove(stageLine);
+        updateStageLinesOrdinal();
+    }
+
+    @Override
+    public void swapStageLines(int position1, int position2) {
+        Log.d("StageSceneLiveData","deleteStageLine");
+        Collections.swap(getValue().stageLines, position1, position2);
+        updateStageLinesOrdinal();
+    }
+
+    private void updateStageLinesOrdinal() {
+        for(StageLine stageLine: getValue().stageLines) {
+            stageLine.ordinal = getValue().stageLines.indexOf(stageLine) + 1;
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.browse;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -103,6 +102,11 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
     }
 
     @Override
+    public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
+
+    }
+
+    @Override
     public void setPlayState(PlayState playState) {
         this.playState = playState;
     }
@@ -117,13 +121,4 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
         appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-    @Override
-    public void onResume(Activity activity) {
-
-    }
-
-    @Override
-    public void onPause(Activity activity) {
-
-    }
 }

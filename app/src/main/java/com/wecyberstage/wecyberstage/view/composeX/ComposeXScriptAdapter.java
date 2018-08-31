@@ -11,8 +11,7 @@ import com.wecyberstage.wecyberstage.model.TimeLine;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
-import com.wecyberstage.wecyberstage.view.helper.ItemTouchHelperAdapter;
-import com.wecyberstage.wecyberstage.view.helper.LifeCycle;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -21,7 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ComposeXScriptAdapter extends ListDelegationAdapter implements ItemTouchHelperAdapter, UpdateStagePlayInterface, ComposeScriptHelper, LifeCycle {
+public class ComposeXScriptAdapter extends ListDelegationAdapter implements UpdateStagePlayInterface, ComposeScriptHelper, RegisterBusEventInterface {
 
     final private UpdateStagePlayInterface updateStagePlayInterface;
     private List<StageRole> stageRoleList;
@@ -50,18 +49,23 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
     }
 
     @Override
-    public void onItemMove(int fromPosition, int toPosition) {
-
-    }
-
-    @Override
-    public void onItemDismiss(int position) {
-
-    }
-
-    @Override
     public void updateStageLine(StageLine stageLine) {
         updateStagePlayInterface.updateStageLine(stageLine);
+    }
+
+    @Override
+    public void addStageLine(StageLine stageLine) {
+        updateStagePlayInterface.addStageLine(stageLine);
+    }
+
+    @Override
+    public void deleteStageLine(StageLine stageLine) {
+        updateStagePlayInterface.deleteStageLine(stageLine);
+    }
+
+    @Override
+    public void swapStageLines(int position1, int position2) {
+        updateStagePlayInterface.swapStageLines(position1, position2);
     }
 
     @Override
@@ -92,13 +96,13 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Item
     }
 
     @Override
-    public void onResume(Activity activity) {
-        delegatesManager.onResume(activity);
+    public void register(Activity activity) {
+        delegatesManager.register(activity);
     }
 
     @Override
-    public void onPause(Activity activity) {
-        delegatesManager.onPause(activity);
+    public void unRegister(Activity activity) {
+        delegatesManager.unRegister(activity);
     }
 
 }
