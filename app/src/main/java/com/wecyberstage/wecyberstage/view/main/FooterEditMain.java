@@ -2,10 +2,13 @@ package com.wecyberstage.wecyberstage.view.main;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -30,6 +33,8 @@ public class FooterEditMain extends LinearLayout {
     ImageButton imageButtonMask;
     @BindView(R.id.lineEditSub_ok)
     ImageButton imageButtonOK;
+    @BindView(R.id.lineEditSub_line)
+    EditText editText;
 
     public FooterEditMain(Context context) {
         super(context);
@@ -48,6 +53,26 @@ public class FooterEditMain extends LinearLayout {
         super.onFinishInflate();
         ButterKnife.bind(this);
         setPanelVisible(PANEL_VISIBLE.BOTH_GONE);
+        editText.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() > 0){
+                    switchToCheckState(imageButtonOK);
+                } else {
+                    switchToPlusState(imageButtonOK);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     // region for mask image button switch state
@@ -58,6 +83,14 @@ public class FooterEditMain extends LinearLayout {
     private void switchToKeyBoardState(ImageButton imageButton) {
         imageButton.setImageResource(R.drawable.keyboard_variant);
         imageButton.setTag("keyboard");
+    }
+    private void switchToCheckState(ImageButton imageButton) {
+        imageButton.setImageResource(R.drawable.ic_check);
+        imageButton.setTag("check");
+    }
+    private void switchToPlusState(ImageButton imageButton) {
+        imageButton.setImageResource(R.drawable.ic_plus);
+        imageButton.setTag("plus");
     }
     private void setPanelVisible(PANEL_VISIBLE visible) {
         switch (visible) {
@@ -105,8 +138,21 @@ public class FooterEditMain extends LinearLayout {
                 UICommon.hideSoftKeyboard(view);
                 break;
             case "check":
+                // TODO: 9/3/2018 add text to line
+                Log.d("FooterEditMain","onLineEditOKClick " + editText.getText());
+                hide();
+                editText.setText("");
                 break;
         }
+    }
+
+    public void show() {
+
+    }
+
+    public void hide() {
+        UICommon.hideSoftKeyboard(this);
+        setPanelVisible(PANEL_VISIBLE.BOTH_GONE);
     }
 
     public void showSoftKeyBoard() {
