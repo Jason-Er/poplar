@@ -18,7 +18,9 @@ import butterknife.OnClick;
 
 public class FooterEditMain extends LinearLayout {
 
-    private boolean isShowMaskChoose = false;
+    enum PANEL_VISIBLE {
+        MASK_VISIBLE, FILE_VISIBLE, BOTH_VISIBLE, BOTH_GONE
+    }
 
     @BindView(R.id.mask_choose_sub)
     ViewGroup maskChoose;
@@ -26,6 +28,8 @@ public class FooterEditMain extends LinearLayout {
     ViewGroup fileChoose;
     @BindView(R.id.lineEditSub_mask)
     ImageButton imageButtonMask;
+    @BindView(R.id.lineEditSub_ok)
+    ImageButton imageButtonOK;
 
     public FooterEditMain(Context context) {
         super(context);
@@ -43,8 +47,7 @@ public class FooterEditMain extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        maskChoose.setVisibility(GONE);
-        fileChoose.setVisibility(GONE);
+        setPanelVisible(PANEL_VISIBLE.BOTH_GONE);
     }
 
     // region for mask image button switch state
@@ -56,40 +59,67 @@ public class FooterEditMain extends LinearLayout {
         imageButton.setImageResource(R.drawable.keyboard_variant);
         imageButton.setTag("keyboard");
     }
+    private void setPanelVisible(PANEL_VISIBLE visible) {
+        switch (visible) {
+            case BOTH_GONE:
+                maskChoose.setVisibility(GONE);
+                fileChoose.setVisibility(GONE);
+                break;
+            case MASK_VISIBLE:
+                maskChoose.setVisibility(VISIBLE);
+                fileChoose.setVisibility(GONE);
+                break;
+            case FILE_VISIBLE:
+                maskChoose.setVisibility(GONE);
+                fileChoose.setVisibility(VISIBLE);
+                break;
+            case BOTH_VISIBLE:
+                maskChoose.setVisibility(VISIBLE);
+                fileChoose.setVisibility(VISIBLE);
+                break;
+        }
+    }
     // endregion
 
     @OnClick(R.id.lineEditSub_mask)
     public void onLineEditMaskClick(View view) {
         switch ((String)view.getTag()) {
             case "mask":
+                setPanelVisible(PANEL_VISIBLE.MASK_VISIBLE);
                 UICommon.hideSoftKeyboard(view);
                 switchToKeyBoardState((ImageButton)view);
                 break;
             case "keyboard":
+                setPanelVisible(PANEL_VISIBLE.MASK_VISIBLE);
                 UICommon.showSoftKeyboard(view);
                 switchToMaskState((ImageButton)view);
                 break;
         }
     }
 
-    @OnClick(R.id.lineEdit_ok)
+    @OnClick(R.id.lineEditSub_ok)
     public void onLineEditOKClick(View view) {
-        Log.d("FooterEditMain","onLineEditMaskClick");
-        maskChoose.setVisibility(View.GONE);
-        UICommon.hideSoftKeyboard(view);
+        switch((String)view.getTag()) {
+            case "plus":
+                setPanelVisible(PANEL_VISIBLE.FILE_VISIBLE);
+                UICommon.hideSoftKeyboard(view);
+                break;
+            case "check":
+                break;
+        }
     }
 
     public void showSoftKeyBoard() {
-        maskChoose.setVisibility(VISIBLE);
-        fileChoose.setVisibility(GONE);
+        setPanelVisible(PANEL_VISIBLE.MASK_VISIBLE);
         switchToMaskState(imageButtonMask);
     }
 
     public void hideSoftKeyBoard() {
+        /*
         if( imageButtonMask.getTag().equals("mask")) {
-            maskChoose.setVisibility(GONE);
-            fileChoose.setVisibility(GONE);
+            setPanelVisible(PANEL_VISIBLE.BOTH_GONE);
         }
+        */
     }
 
     public void setSoftKeyBoardHeight(int height) {
