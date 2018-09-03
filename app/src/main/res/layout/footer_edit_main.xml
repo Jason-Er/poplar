@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.wecyberstage.wecyberstage.view.main.FooterEditBar
+<com.wecyberstage.wecyberstage.view.main.FooterEditMain
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:orientation="vertical">
-    <include layout="@layout/line_edit_main" />
-    <include layout="@layout/mask_edit_main" />
-</com.wecyberstage.wecyberstage.view.main.FooterEditBar>
+    android:orientation="vertical"
+    android:id="@+id/footer_edit_main">
+    <include layout="@layout/line_edit_sub" />
+    <include layout="@layout/mask_choose_sub" />
+    <include layout="@layout/file_choose_sub" />
+</com.wecyberstage.wecyberstage.view.main.FooterEditMain>

@@ -110,14 +110,14 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     View header;
     @BindView(R.id.footer_main)
     View footer;
-    @BindView(R.id.line_edit_main)
+    @BindView(R.id.line_edit_sub)
     View lineEdit;
     @BindView(R.id.app_main)
     ViewGroup appMain;
     @BindView(R.id.activity_main_layout)
     ViewGroup mainLayout;
-    @BindView(R.id.mask_edit_main)
-    ViewGroup maskEdit;
+    @BindView(R.id.footer_edit_main)
+    FooterEditMain footerEditMain;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     private SparseArray viewArray;
     private SparseArray flingResponseArray;
-    private int softKeyBroadHeight;
+    // private int softKeyBroadHeight;
     Browse browse;
     ComposeX composeX;
     ComposeY composeY;
@@ -234,11 +234,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             }
         });
 
-        // change maskEdit height
-        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
-        params.height = localSettings.getSoftKeyboardHeight();
-        maskEdit.setVisibility(View.GONE);
-
+        // change maskChoose height
+        if( localSettings.getSoftKeyboardHeight() > 0 ) {
+            footerEditMain.setSoftKeyBoardHeight(localSettings.getSoftKeyboardHeight());
+        }
 
         appMain.post(new Runnable() {
             @Override
@@ -640,41 +639,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     // region surrounding components tools
-    private boolean isShowMaskChoose = false;
-
-    @OnClick(R.id.lineEdit_mask)
-    public void onLineEditMaskClick(View view) {
-        Log.d("LineEditBar","onLineEditMaskClick");
-        isShowMaskChoose = true;
-        UICommon.hideSoftKeyboard(view);
-    }
-
-    @OnClick(R.id.lineEdit_ok)
-    public void onLineEditOKClick(View view) {
-        Log.d("LineEditBar","onLineEditMaskClick");
-        isShowMaskChoose = false;
-        maskEdit.setVisibility(View.GONE);
-        UICommon.hideSoftKeyboard(view);
-    }
-
     @Override
     public void onKeyboardHeightChanged(int height, int orientation) {
         String or = orientation == Configuration.ORIENTATION_PORTRAIT ? "portrait" : "landscape";
         Log.i("mainActivity", "onKeyboardHeightChanged in pixels: " + height + " " + or);
-        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
-        if( height > 0 && params.height != height ) {
-            params.height = height;
-            localSettings.saveSoftKeyboardHeight(height);
-        }
-        if( height > 0 ) { // show state
-            maskEdit.setVisibility(View.VISIBLE);
-        } else { // hide state
-            if( !isShowMaskChoose ) {
-                maskEdit.setVisibility(View.GONE);
+        if( height > 0 ) {
+            if ( localSettings.getSoftKeyboardHeight() == 0 ) {
+                localSettings.saveSoftKeyboardHeight(height);
+                footerEditMain.setSoftKeyBoardHeight(height);
             }
+            footerEditMain.showSoftKeyBoard();
+        } else {
+            footerEditMain.hideSoftKeyBoard();
         }
     }
-
     // endregion
 
 }

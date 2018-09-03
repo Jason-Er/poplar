@@ -1,16 +1,13 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 
-import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
+import com.wecyberstage.wecyberstage.view.main.FooterEditMain;
 
 public class ComposeYFABBehavior extends FloatingActionButton.Behavior {
     public ComposeYFABBehavior() {
@@ -40,7 +37,7 @@ public class ComposeYFABBehavior extends FloatingActionButton.Behavior {
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
-        return dependency instanceof FooterEditBar;
+        return dependency instanceof FooterEditMain;
     }
 
     @Override
