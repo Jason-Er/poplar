@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -81,6 +82,14 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
                 if(stageScene != null) {
                     adapter.setStageScene(stageScene);
                 }
+            }
+        });
+
+        toolViewsDelegate.getFloatingActionButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((FloatingActionButton)toolViewsDelegate.getFloatingActionButton()).hide();
+                toolViewsDelegate.getLineEditBar().setVisibility(View.VISIBLE);
             }
         });
     }

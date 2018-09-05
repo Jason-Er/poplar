@@ -239,14 +239,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         // change maskChoose height
         if( localSettings.getSoftKeyboardHeight() > 0 ) {
             footerEditMain.setSoftKeyBoardHeight(localSettings.getSoftKeyboardHeight());

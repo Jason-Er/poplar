@@ -13,10 +13,10 @@ public abstract class CustomView implements SlideInterface {
     protected AppCompatActivity activity;
     public CustomView(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType,
                       ToolViewsDelegate toolViewsDelegate) {
-        onCreate(activity, container);
         this.activity = activity;
         this.viewType = viewType;
         this.toolViewsDelegate = toolViewsDelegate;
+        onCreate(activity, container);
     }
 
     public abstract void onCreate(AppCompatActivity activity, @Nullable ViewGroup container);
