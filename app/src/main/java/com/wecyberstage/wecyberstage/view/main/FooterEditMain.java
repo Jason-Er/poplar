@@ -29,6 +29,8 @@ public class FooterEditMain extends LinearLayout {
     ViewGroup maskChoose;
     @BindView(R.id.file_choose_sub)
     ViewGroup fileChoose;
+    @BindView(R.id.line_edit_sub)
+    ViewGroup lineEdit;
     @BindView(R.id.lineEditSub_mask)
     ImageButton imageButtonMask;
     @BindView(R.id.lineEditSub_ok)

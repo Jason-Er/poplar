@@ -18,6 +18,7 @@ import com.wecyberstage.wecyberstage.model.User;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
@@ -36,7 +37,6 @@ import timber.log.Timber;
 public class UserProfile extends CustomView implements SlideInterface {
 
     private AccountViewModel viewModel;
-    private AppCompatActivity appCompatActivity;
 
     @BindView(R.id.profile_component)
     View profileComponent;
@@ -44,9 +44,8 @@ public class UserProfile extends CustomView implements SlideInterface {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    public UserProfile(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
-        super(activity, container, viewType);
-        this.appCompatActivity = activity;
+    public UserProfile(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
+        super(activity, container, viewType, toolViewsDelegate);
     }
 
     @Override
@@ -92,12 +91,12 @@ public class UserProfile extends CustomView implements SlideInterface {
 
     @OnClick(R.id.profile_navigateUp)
     public void navigateUp(View view) {
-        ((MainActivity) appCompatActivity).slideUp();
+        ((MainActivity) activity).slideUp();
     }
 
     @Override
     public void slideEnd() {
-        appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 }

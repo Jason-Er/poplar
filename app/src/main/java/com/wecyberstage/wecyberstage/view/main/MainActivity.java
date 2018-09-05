@@ -29,14 +29,20 @@ import com.wecyberstage.wecyberstage.data.file.LocalSettings;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
-import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
+import com.wecyberstage.wecyberstage.view.account.SignInToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.account.SignUp;
+import com.wecyberstage.wecyberstage.view.account.SignUpToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.account.UserProfile;
+import com.wecyberstage.wecyberstage.view.account.UserProfileToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
+import com.wecyberstage.wecyberstage.view.browse.BrowseToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
+import com.wecyberstage.wecyberstage.view.composeX.ComposeXToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
+import com.wecyberstage.wecyberstage.view.composeY.ComposeYToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
+import com.wecyberstage.wecyberstage.view.composeZ.ComposeZToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
@@ -57,6 +63,7 @@ import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 
@@ -75,7 +82,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import dagger.android.AndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
@@ -115,9 +121,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @BindView(R.id.app_main)
     ViewGroup appMain;
     @BindView(R.id.activity_main_layout)
-    ViewGroup mainLayout;
+    ViewGroup drawerLayout;
     @BindView(R.id.footer_edit_main)
     FooterEditMain footerEditMain;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -171,13 +179,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         customViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
-        browse = new Browse(this, appMain, ViewType.BROWSE);
-        composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
-        composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y);
-        composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z);
-        signIn = new SignIn(this, appMain, ViewType.SIGN_IN);
-        signUp = new SignUp(this, appMain, ViewType.SIGN_UP);
-        userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE);
+        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
+        delegate = new ComposeXToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
+        delegate = new ComposeYToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y, delegate);
+        delegate = new ComposeZToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z, delegate);
+        delegate = new SignInToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        signIn = new SignIn(this, appMain, ViewType.SIGN_IN, delegate);
+        delegate = new SignUpToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        signUp = new SignUp(this, appMain, ViewType.SIGN_UP, delegate);
+        delegate = new UserProfileToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeX, new FlingResponseComposeX(this), appMain, viewArray, flingResponseArray);
@@ -543,16 +558,16 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     private void restoreToView(ViewType viewType) {
         CustomView customView = getCustomView(viewType);
-        View view = customView.getView();
-        view.setVisibility(View.VISIBLE);
+        customView.becomeVisible();
         currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(viewType.ordinal());
         this.currentView = customView;
+        customView.afterEnterMain();
     }
 
     private void slideTo(CustomView from, CustomView to, Direction direction) {
         View currentView = from.getView();
+        to.becomeVisible();
         View followView = to.getView();
-        followView.setVisibility(View.VISIBLE);
         switch (direction) {
             case TO_UP:
                 followView.setTranslationY(followView.getHeight());

@@ -17,6 +17,7 @@ import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
@@ -34,15 +35,13 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
     private static final String PARTICIPATE_INFO_KEY = "participate_info";
 
     private ParticipateViewModel viewModel;
-    private AppCompatActivity activity;
     private KeyFrameAdapter adapter;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    public ComposeZ(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
-        super(activity, container, viewType);
-        this.activity = activity;
+    public ComposeZ(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
+        super(activity, container, viewType, toolViewsDelegate);
     }
 
     @Override
@@ -95,5 +94,4 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
     public void slideEnd() {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
-
 }

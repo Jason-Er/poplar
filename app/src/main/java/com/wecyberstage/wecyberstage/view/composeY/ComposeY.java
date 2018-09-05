@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -25,6 +24,7 @@ import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
@@ -37,16 +37,14 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
     private ComposeViewModel viewModel;
-    private AppCompatActivity activity;
     private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    public ComposeY(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
-        super(activity, container, viewType);
-        this.activity = activity;
+    public ComposeY(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
+        super(activity, container, viewType, toolViewsDelegate);
     }
 
     @Override
