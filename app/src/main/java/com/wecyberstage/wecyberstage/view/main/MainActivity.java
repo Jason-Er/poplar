@@ -4,6 +4,8 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -520,10 +522,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
     */
 
+
     /*
     public void enlargeContentView(boolean isEnlarge) {
         CoordinatorLayout.LayoutParams params =
-                (CoordinatorLayout.LayoutParams) viewPager.getLayoutParams();
+                (CoordinatorLayout.LayoutParams) appMain.getLayoutParams();
         if(isEnlarge) {
             params.setBehavior(null);
         } else {
@@ -533,6 +536,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     }
     */
+
 
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {

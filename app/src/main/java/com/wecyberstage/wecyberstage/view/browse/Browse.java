@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -113,6 +114,15 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
     @Override
     public PlayState getPlayState() {
         return playState;
+    }
+
+    @Override
+    public void slideBegin() {
+        super.slideBegin();
+        CoordinatorLayout.LayoutParams params =
+                (CoordinatorLayout.LayoutParams) view.getLayoutParams();
+        AppBarLayout.ScrollingViewBehavior behavior = new AppBarLayout.ScrollingViewBehavior();
+        params.setBehavior(behavior);
     }
 
     @Override
