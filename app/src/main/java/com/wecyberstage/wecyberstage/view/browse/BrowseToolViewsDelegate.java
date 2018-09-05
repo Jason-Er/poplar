@@ -12,12 +12,12 @@ public class BrowseToolViewsDelegate extends ToolViewsDelegate {
     }
 
     @Override
-    public void beforeEnterMain() {
+    public void slideBegin() {
         ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
-    public void afterEnterMain() {
+    public void slideEnd() {
 
     }
 }

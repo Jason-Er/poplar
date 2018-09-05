@@ -11,12 +11,12 @@ public class ComposeZToolViewsDelegate extends ToolViewsDelegate {
     }
 
     @Override
-    public void beforeEnterMain() {
+    public void slideBegin() {
 
     }
 
     @Override
-    public void afterEnterMain() {
+    public void slideEnd() {
 
     }
 }

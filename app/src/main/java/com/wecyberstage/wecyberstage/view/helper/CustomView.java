@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class CustomView implements ViewsMoveTimingInterface {
+public abstract class CustomView implements SlideInterface {
 
     protected View view;
     protected ViewType viewType;
@@ -37,12 +37,13 @@ public abstract class CustomView implements ViewsMoveTimingInterface {
     }
 
     @Override
-    public void beforeEnterMain() {
-        toolViewsDelegate.beforeEnterMain();
+    public void slideBegin() {
+        toolViewsDelegate.slideBegin();
     }
 
     @Override
-    public void afterEnterMain() {
-        toolViewsDelegate.afterEnterMain();
+    public void slideEnd() {
+        toolViewsDelegate.slideEnd();
     }
+
 }

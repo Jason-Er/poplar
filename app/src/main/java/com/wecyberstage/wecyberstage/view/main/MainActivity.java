@@ -120,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     View lineEdit;
     @BindView(R.id.app_main)
     ViewGroup appMain;
-    @BindView(R.id.activity_main_layout)
-    ViewGroup drawerLayout;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
     @BindView(R.id.footer_edit_main)
     FooterEditMain footerEditMain;
     @BindView(R.id.fab)
@@ -164,10 +164,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         // UICommon.toImmersive(this);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -179,19 +178,19 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         customViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
-        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
         browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
-        delegate = new ComposeXToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        delegate = new ComposeXToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
-        delegate = new ComposeYToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        delegate = new ComposeYToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y, delegate);
-        delegate = new ComposeZToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        delegate = new ComposeZToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z, delegate);
-        delegate = new SignInToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        delegate = new SignInToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN, delegate);
-        delegate = new SignUpToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        delegate = new SignUpToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
         signUp = new SignUp(this, appMain, ViewType.SIGN_UP, delegate);
-        delegate = new UserProfileToolViewsDelegate(header, footer, lineEdit, drawerLayout, fab);
+        delegate = new UserProfileToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
@@ -240,7 +239,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -304,9 +302,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.activity_main_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             if(navigationStack.size() > 0) {
                 String item = navigationStack.pop();
@@ -403,8 +400,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -559,33 +555,35 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private void restoreToView(ViewType viewType) {
         CustomView customView = getCustomView(viewType);
         customView.becomeVisible();
+        customView.slideBegin();
         currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(viewType.ordinal());
         this.currentView = customView;
-        customView.afterEnterMain();
+        customView.slideEnd();
     }
 
     private void slideTo(CustomView from, CustomView to, Direction direction) {
         View currentView = from.getView();
         to.becomeVisible();
         View followView = to.getView();
+        to.slideBegin();
         switch (direction) {
             case TO_UP:
                 followView.setTranslationY(followView.getHeight());
-                CustomViewSlideHelper.SlideVertical(currentView, followView, -1, (SlideInterface) to);
+                CustomViewSlideHelper.SlideVertical(currentView, followView, -1, to);
                 break;
             case TO_RIGHT:
                 Log.i("Slide", "To right +++++");
                 followView.setTranslationX(-followView.getWidth());
-                CustomViewSlideHelper.SlideHorizontal(currentView, followView, 1, (SlideInterface) to);
+                CustomViewSlideHelper.SlideHorizontal(currentView, followView, 1, to);
                 break;
             case TO_DOWN:
                 followView.setTranslationY(-followView.getHeight());
-                CustomViewSlideHelper.SlideVertical(currentView, followView, 1, (SlideInterface) to);
+                CustomViewSlideHelper.SlideVertical(currentView, followView, 1, to);
                 break;
             case TO_LEFT:
                 Log.i("Slide", "To left +++++");
                 followView.setTranslationX(followView.getWidth());
-                CustomViewSlideHelper.SlideHorizontal(currentView, followView, -1, (SlideInterface) to);
+                CustomViewSlideHelper.SlideHorizontal(currentView, followView, -1, to);
                 break;
         }
         this.currentView = to;

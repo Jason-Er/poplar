@@ -2,7 +2,7 @@ package com.wecyberstage.wecyberstage.view.helper;
 
 import android.view.View;
 
-public abstract class ToolViewsDelegate implements ViewsMoveTimingInterface {
+public abstract class ToolViewsDelegate implements SlideInterface {
     protected View toolBar;
     protected View playerControlBar;
     protected View lineEditBar;
