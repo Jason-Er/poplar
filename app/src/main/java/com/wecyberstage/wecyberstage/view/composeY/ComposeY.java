@@ -108,6 +108,7 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
 
     @Override
     public void slideEnd() {
+        super.slideEnd();
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 

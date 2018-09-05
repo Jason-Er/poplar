@@ -143,6 +143,7 @@ public class SignIn extends CustomView implements SlideInterface {
 
     @Override
     public void slideEnd() {
+        super.slideEnd();
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 

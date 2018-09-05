@@ -15,12 +15,12 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
     @Override
     public void slideBegin() {
         ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        ((FloatingActionButton)floatingActionButton).show();
+        ((FloatingActionButton)floatingActionButton).hide();
         lineEditBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void slideEnd() {
-
+        ((FloatingActionButton)floatingActionButton).show();
     }
 }

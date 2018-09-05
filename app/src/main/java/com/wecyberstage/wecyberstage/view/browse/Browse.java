@@ -117,6 +117,7 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
 
     @Override
     public void slideEnd() {
+        super.slideEnd();
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
