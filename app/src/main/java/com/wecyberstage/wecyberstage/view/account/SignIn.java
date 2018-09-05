@@ -61,7 +61,7 @@ public class SignIn extends CustomView implements SlideInterface {
     }
 
     @Override
-    public void onCreate(AppCompatActivity appCompatActivity, @Nullable ViewGroup container) {
+    public void onCreate(final AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_signin, container, false);
         ButterKnife.bind(this, view);
