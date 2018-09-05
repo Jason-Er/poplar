@@ -17,6 +17,7 @@ public class BrowseToolViewsDelegate extends ToolViewsDelegate {
         ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         ((FloatingActionButton)floatingActionButton).hide();
         lineEditBar.setVisibility(View.INVISIBLE);
+        playerControlBar.setVisibility(View.INVISIBLE);
     }
 
     @Override

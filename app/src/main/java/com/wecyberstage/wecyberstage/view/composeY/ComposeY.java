@@ -84,14 +84,6 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
                 }
             }
         });
-
-        toolViewsDelegate.getFloatingActionButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((FloatingActionButton)toolViewsDelegate.getFloatingActionButton()).hide();
-                toolViewsDelegate.getLineEditBar().setVisibility(View.VISIBLE);
-            }
-        });
     }
 
     @Override
@@ -119,6 +111,13 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     public void slideEnd() {
         super.slideEnd();
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        toolViewsDelegate.getFloatingActionButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((FloatingActionButton)toolViewsDelegate.getFloatingActionButton()).hide();
+                toolViewsDelegate.showLineEditBar();
+            }
+        });
     }
 
     @Override

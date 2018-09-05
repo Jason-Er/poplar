@@ -20,7 +20,7 @@ public abstract class ToolViewsDelegate implements SlideInterface {
         return floatingActionButton;
     }
 
-    public View getLineEditBar() {
-        return lineEditBar;
+    public void showLineEditBar() {
+        lineEditBar.setVisibility(View.VISIBLE);
     }
 }

@@ -6,7 +6,7 @@
     android:layout_gravity="bottom"
     android:orientation="horizontal"
     android:background="@color/colorPrimaryDark"
-    android:id="@+id/footer_main"
+    android:id="@+id/player_control"
     android:elevation="4dp" >
     <SeekBar
         android:layout_width="wrap_content"

@@ -32,7 +32,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_plus" />
 
-    <include layout="@layout/footer_main" />
+    <include layout="@layout/player_control_main" />
     <include layout="@layout/footer_edit_main" />
 
 </android.support.design.widget.CoordinatorLayout>

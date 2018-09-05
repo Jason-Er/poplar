@@ -1,15 +1,10 @@
 package com.wecyberstage.wecyberstage.view.main;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.SparseArray;
@@ -62,7 +57,6 @@ import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
-import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
@@ -93,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private final String NAVIGATION_COLON = ":";
 
     private Handler autoHideHandler = new Handler();
+    /*
     private Runnable autoHideRunnable=new Runnable() {
         @Override
         public void run() {
@@ -102,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             }
         }
     };
+    */
     private final Lock queueLock=new ReentrantLock();
 
     private KeyboardHeightProvider keyboardHeightProvider;
@@ -114,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     Toolbar toolbar;
     @BindView(R.id.header_main)
     View header;
-    @BindView(R.id.footer_main)
-    View footer;
+    @BindView(R.id.player_control)
+    View playerControl;
     @BindView(R.id.line_edit_sub)
     View lineEdit;
     @BindView(R.id.app_main)
@@ -178,19 +174,19 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         customViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
-        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
+        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
         browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
-        delegate = new ComposeXToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeXToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
-        delegate = new ComposeYToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeYToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y, delegate);
-        delegate = new ComposeZToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeZToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z, delegate);
-        delegate = new SignInToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
+        delegate = new SignInToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN, delegate);
-        delegate = new SignUpToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
+        delegate = new SignUpToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
         signUp = new SignUp(this, appMain, ViewType.SIGN_UP, delegate);
-        delegate = new UserProfileToolViewsDelegate(header, footer, lineEdit, this.drawerLayout, fab);
+        delegate = new UserProfileToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
@@ -274,8 +270,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     private void constructLifeCycleComponents() {
-        if( footer != null && footer instanceof RegisterBusEventInterface) {
-            lifeCycleComponents.add((RegisterBusEventInterface) footer);
+        if( playerControl != null && playerControl instanceof RegisterBusEventInterface) {
+            lifeCycleComponents.add((RegisterBusEventInterface) playerControl);
         }
         if( header != null && header instanceof RegisterBusEventInterface) {
             lifeCycleComponents.add((RegisterBusEventInterface) header);
@@ -348,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     protected void onResume() {
         super.onResume();
-        autoHideHandler.postDelayed(autoHideRunnable, 3000);
+        // autoHideHandler.postDelayed(autoHideRunnable, 3000);
         EventBus.getDefault().register(this);
         for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
             lifeCycle.register(this);
@@ -414,11 +410,13 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 currentFlingResponse.toDown();
                 break;
             case "CLICK":
+                /*
                 if(header.getVisibility() == View.VISIBLE) {
-                    moveOutHeaderAndFooter(header, footer);
+                    moveOutHeaderAndFooter(header, playerControl);
                 } else {
-                    moveInHeaderAndFooter(header, footer);
+                    moveInHeaderAndFooter(header, playerControl);
                 }
+                */
                 break;
         }
     }
@@ -479,46 +477,48 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         }
     }
 
-    public void moveOutHeaderAndFooter(final View header, final View footer) {
+    /*
+    public void moveOutHeaderAndFooter(final View header, final View playerControl) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
                 ObjectAnimator.ofFloat(header, "alpha", 0.0f),
                 ObjectAnimator.ofFloat(header, "translationY", -header.getHeight()),
-                ObjectAnimator.ofFloat(footer, "alpha", 0.0f),
-                ObjectAnimator.ofFloat(footer, "translationY", footer.getHeight())
+                ObjectAnimator.ofFloat(playerControl, "alpha", 0.0f),
+                ObjectAnimator.ofFloat(playerControl, "translationY", playerControl.getHeight())
         );
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 header.setVisibility(View.INVISIBLE);
-                footer.setVisibility(View.INVISIBLE);
+                playerControl.setVisibility(View.INVISIBLE);
                 queueLock.unlock();
             }
         });
         set.setDuration(300).start();
     }
 
-    public void moveInHeaderAndFooter(final View header, final View footer) {
+    public void moveInHeaderAndFooter(final View header, final View playerControl) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
                 ObjectAnimator.ofFloat(header, "alpha", 1.0f),
                 ObjectAnimator.ofFloat(header, "translationY", 0),
-                ObjectAnimator.ofFloat(footer, "alpha", 1.0f),
-                ObjectAnimator.ofFloat(footer, "translationY", 0)
+                ObjectAnimator.ofFloat(playerControl, "alpha", 1.0f),
+                ObjectAnimator.ofFloat(playerControl, "translationY", 0)
         );
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
                 header.setVisibility(View.VISIBLE);
-                footer.setVisibility(View.VISIBLE);
+                playerControl.setVisibility(View.VISIBLE);
                 queueLock.unlock();
                 autoHideHandler.postDelayed(autoHideRunnable, 3000);
             }
         });
         set.setDuration(300).start();
     }
+    */
 
     /*
     public void enlargeContentView(boolean isEnlarge) {
