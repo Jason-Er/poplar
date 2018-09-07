@@ -30,6 +30,7 @@ import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
@@ -49,7 +50,6 @@ public class ComposeX extends CustomView implements PlayStateInterface,
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
     private ComposeViewModel viewModel;
-    private AppCompatActivity appCompatActivity;
     private ComposeXScriptLayoutManager layoutManager;
     private ComposeXScriptAdapter adapter;
     private CustomItemTouchHelper itemTouchHelper;
@@ -60,9 +60,8 @@ public class ComposeX extends CustomView implements PlayStateInterface,
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    public ComposeX(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
-        super(activity, container, viewType);
-        this.appCompatActivity = activity;
+    public ComposeX(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
+        super(activity, container, viewType, toolViewsDelegate);
     }
 
     @Override
@@ -141,7 +140,7 @@ public class ComposeX extends CustomView implements PlayStateInterface,
 
     @Override
     public void setPlayState(PlayState playState) {
-        appCompatActivity.getIntent().putExtra(COMPOSE_INFO_KEY, playState);
+        activity.getIntent().putExtra(COMPOSE_INFO_KEY, playState);
         viewModel.setPlayState(playState);
     }
 
@@ -152,7 +151,8 @@ public class ComposeX extends CustomView implements PlayStateInterface,
 
     @Override
     public void slideEnd() {
-        appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        super.slideEnd();
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Override

@@ -3,25 +3,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id = "@+id/line_edit_main"
+    android:id = "@+id/line_edit_sub"
     android:orientation="horizontal">
     <EditText
         android:layout_width = "wrap_content"
         android:layout_height="48dp"
         android:layout_weight="1"
-        android:id="@+id/lineEdit_line"
+        android:minLines="5"
+        android:id="@+id/lineEditSub_line"
         android:gravity="start"
         />
     <ImageButton
-        android:id="@+id/lineEdit_mask"
+        android:id="@+id/lineEditSub_mask"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:tag="mask"
         android:background="@drawable/shape_circle"
         android:src="@drawable/emoticon_happy" />
     <ImageButton
-        android:id="@+id/lineEdit_ok"
+        android:id="@+id/lineEditSub_ok"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:tag="plus"
         android:background="@drawable/shape_circle"
         android:src="@drawable/ic_plus" />
 

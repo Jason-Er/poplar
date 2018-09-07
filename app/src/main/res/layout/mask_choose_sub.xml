@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/mask_edit_main"
+    android:id="@+id/mask_choose_sub"
     app:layout_behavior=".view.main.MaskChooseBehavior">
 
     <android.support.v4.view.ViewPager

@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
@@ -41,16 +43,14 @@ import timber.log.Timber;
 public class Browse extends CustomView implements PlayStateInterface, SlideInterface {
 
     private BrowseViewModel viewModel;
-    private AppCompatActivity appCompatActivity;
     private RecyclerView.Adapter adapter;
     private PlayState playState; // which contains the play is clicked
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    public Browse(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
-        super(activity, container, viewType);
-        this.appCompatActivity = activity;
+    public Browse(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
+        super(activity, container, viewType, toolViewsDelegate);
     }
 
     @Override
@@ -117,8 +117,18 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
     }
 
     @Override
+    public void slideBegin() {
+        super.slideBegin();
+        CoordinatorLayout.LayoutParams params =
+                (CoordinatorLayout.LayoutParams) view.getLayoutParams();
+        AppBarLayout.ScrollingViewBehavior behavior = new AppBarLayout.ScrollingViewBehavior();
+        params.setBehavior(behavior);
+    }
+
+    @Override
     public void slideEnd() {
-        appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        super.slideEnd();
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 }

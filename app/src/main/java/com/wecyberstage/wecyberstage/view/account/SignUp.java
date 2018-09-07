@@ -23,6 +23,7 @@ import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
@@ -41,7 +42,6 @@ import timber.log.Timber;
 public class SignUp extends CustomView implements SlideInterface {
 
     private AccountViewModel viewModel;
-    private AppCompatActivity appCompatActivity;
 
     @BindView(R.id.signUp_component)
     View signUpComponent;
@@ -54,9 +54,8 @@ public class SignUp extends CustomView implements SlideInterface {
     @Inject
     CharacterFactory characterFactory;
 
-    public SignUp(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
-        super(activity, container, viewType);
-        this.appCompatActivity = activity;
+    public SignUp(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
+        super(activity, container, viewType, toolViewsDelegate);
     }
 
     @Override
@@ -109,17 +108,18 @@ public class SignUp extends CustomView implements SlideInterface {
 
     @OnClick(R.id.signUp_signIn)
     public void signUp(View view) {
-        ((MainActivity) appCompatActivity).slideTo(ViewType.SIGN_IN, Direction.TO_RIGHT);
+        ((MainActivity) activity).slideTo(ViewType.SIGN_IN, Direction.TO_RIGHT);
     }
 
     @OnClick(R.id.signUp_navigateUp)
     public void navigateUp(View view) {
-        ((MainActivity) appCompatActivity).slideUp();
+        ((MainActivity) activity).slideUp();
     }
 
     @Override
     public void slideEnd() {
-        appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        super.slideEnd();
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 }

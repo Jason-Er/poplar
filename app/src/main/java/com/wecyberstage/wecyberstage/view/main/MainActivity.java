@@ -1,15 +1,9 @@
 package com.wecyberstage.wecyberstage.view.main;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.SparseArray;
@@ -29,16 +23,22 @@ import com.wecyberstage.wecyberstage.data.file.LocalSettings;
 import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
-import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
+import com.wecyberstage.wecyberstage.view.account.SignInToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.account.SignUp;
+import com.wecyberstage.wecyberstage.view.account.SignUpToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.account.UserProfile;
+import com.wecyberstage.wecyberstage.view.account.UserProfileToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.browse.Browse;
+import com.wecyberstage.wecyberstage.view.browse.BrowseToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
+import com.wecyberstage.wecyberstage.view.composeX.ComposeXToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
+import com.wecyberstage.wecyberstage.view.composeY.ComposeYToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
+import com.wecyberstage.wecyberstage.view.composeZ.ComposeZToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
-import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideHelper;
+import com.wecyberstage.wecyberstage.view.helper.FlingViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseBrowse;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeX;
@@ -56,7 +56,7 @@ import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
-import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 
@@ -75,7 +75,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import dagger.android.AndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
@@ -86,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private final String NAVIGATION_SEMICOLON = ";";
     private final String NAVIGATION_COLON = ":";
 
+    /*
     private Handler autoHideHandler = new Handler();
     private Runnable autoHideRunnable=new Runnable() {
         @Override
@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             }
         }
     };
+    */
     private final Lock queueLock=new ReentrantLock();
 
     private KeyboardHeightProvider keyboardHeightProvider;
@@ -108,16 +109,18 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     Toolbar toolbar;
     @BindView(R.id.header_main)
     View header;
-    @BindView(R.id.footer_main)
-    View footer;
-    @BindView(R.id.line_edit_main)
+    @BindView(R.id.player_control)
+    View playerControl;
+    @BindView(R.id.line_edit_sub)
     View lineEdit;
     @BindView(R.id.app_main)
     ViewGroup appMain;
-    @BindView(R.id.activity_main_layout)
-    ViewGroup mainLayout;
-    @BindView(R.id.mask_edit_main)
-    ViewGroup maskEdit;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.footer_edit_main)
+    FooterEditMain footerEditMain;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     private SparseArray viewArray;
     private SparseArray flingResponseArray;
-    private int softKeyBroadHeight;
+    // private int softKeyBroadHeight;
     Browse browse;
     ComposeX composeX;
     ComposeY composeY;
@@ -156,10 +159,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         // UICommon.toImmersive(this);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -171,13 +173,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         customViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
-        browse = new Browse(this, appMain, ViewType.BROWSE);
-        composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X);
-        composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y);
-        composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z);
-        signIn = new SignIn(this, appMain, ViewType.SIGN_IN);
-        signUp = new SignUp(this, appMain, ViewType.SIGN_UP);
-        userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE);
+        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
+        delegate = new ComposeXToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
+        delegate = new ComposeYToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y, delegate);
+        delegate = new ComposeZToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z, delegate);
+        delegate = new SignInToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        signIn = new SignIn(this, appMain, ViewType.SIGN_IN, delegate);
+        delegate = new SignUpToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        signUp = new SignUp(this, appMain, ViewType.SIGN_UP, delegate);
+        delegate = new UserProfileToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeX, new FlingResponseComposeX(this), appMain, viewArray, flingResponseArray);
@@ -225,20 +234,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        // change maskEdit height
-        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
-        params.height = localSettings.getSoftKeyboardHeight();
-        maskEdit.setVisibility(View.GONE);
-
+        // change maskChoose height
+        if( localSettings.getSoftKeyboardHeight() > 0 ) {
+            footerEditMain.setSoftKeyBoardHeight(localSettings.getSoftKeyboardHeight());
+        }
 
         appMain.post(new Runnable() {
             @Override
@@ -270,8 +269,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     private void constructLifeCycleComponents() {
-        if( footer != null && footer instanceof RegisterBusEventInterface) {
-            lifeCycleComponents.add((RegisterBusEventInterface) footer);
+        if( playerControl != null && playerControl instanceof RegisterBusEventInterface) {
+            lifeCycleComponents.add((RegisterBusEventInterface) playerControl);
         }
         if( header != null && header instanceof RegisterBusEventInterface) {
             lifeCycleComponents.add((RegisterBusEventInterface) header);
@@ -290,9 +289,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.activity_main_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             if(navigationStack.size() > 0) {
                 String item = navigationStack.pop();
@@ -345,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     protected void onResume() {
         super.onResume();
-        autoHideHandler.postDelayed(autoHideRunnable, 3000);
+        // autoHideHandler.postDelayed(autoHideRunnable, 3000);
         EventBus.getDefault().register(this);
         for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
             lifeCycle.register(this);
@@ -389,8 +387,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_main_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -412,11 +409,13 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 currentFlingResponse.toDown();
                 break;
             case "CLICK":
+                /*
                 if(header.getVisibility() == View.VISIBLE) {
-                    moveOutHeaderAndFooter(header, footer);
+                    moveOutHeaderAndFooter(header, playerControl);
                 } else {
-                    moveInHeaderAndFooter(header, footer);
+                    moveInHeaderAndFooter(header, playerControl);
                 }
+                */
                 break;
         }
     }
@@ -477,51 +476,54 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         }
     }
 
-    public void moveOutHeaderAndFooter(final View header, final View footer) {
+    /*
+    public void moveOutHeaderAndFooter(final View header, final View playerControl) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
                 ObjectAnimator.ofFloat(header, "alpha", 0.0f),
                 ObjectAnimator.ofFloat(header, "translationY", -header.getHeight()),
-                ObjectAnimator.ofFloat(footer, "alpha", 0.0f),
-                ObjectAnimator.ofFloat(footer, "translationY", footer.getHeight())
+                ObjectAnimator.ofFloat(playerControl, "alpha", 0.0f),
+                ObjectAnimator.ofFloat(playerControl, "translationY", playerControl.getHeight())
         );
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 header.setVisibility(View.INVISIBLE);
-                footer.setVisibility(View.INVISIBLE);
+                playerControl.setVisibility(View.INVISIBLE);
                 queueLock.unlock();
             }
         });
         set.setDuration(300).start();
     }
 
-    public void moveInHeaderAndFooter(final View header, final View footer) {
+    public void moveInHeaderAndFooter(final View header, final View playerControl) {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
                 ObjectAnimator.ofFloat(header, "alpha", 1.0f),
                 ObjectAnimator.ofFloat(header, "translationY", 0),
-                ObjectAnimator.ofFloat(footer, "alpha", 1.0f),
-                ObjectAnimator.ofFloat(footer, "translationY", 0)
+                ObjectAnimator.ofFloat(playerControl, "alpha", 1.0f),
+                ObjectAnimator.ofFloat(playerControl, "translationY", 0)
         );
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
                 header.setVisibility(View.VISIBLE);
-                footer.setVisibility(View.VISIBLE);
+                playerControl.setVisibility(View.VISIBLE);
                 queueLock.unlock();
                 autoHideHandler.postDelayed(autoHideRunnable, 3000);
             }
         });
         set.setDuration(300).start();
     }
+    */
+
 
     /*
     public void enlargeContentView(boolean isEnlarge) {
         CoordinatorLayout.LayoutParams params =
-                (CoordinatorLayout.LayoutParams) viewPager.getLayoutParams();
+                (CoordinatorLayout.LayoutParams) appMain.getLayoutParams();
         if(isEnlarge) {
             params.setBehavior(null);
         } else {
@@ -531,6 +533,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     }
     */
+
 
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
@@ -544,34 +547,39 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     private void restoreToView(ViewType viewType) {
         CustomView customView = getCustomView(viewType);
-        View view = customView.getView();
-        view.setVisibility(View.VISIBLE);
+        customView.becomeVisible();
+        customView.slideBegin();
         currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(viewType.ordinal());
         this.currentView = customView;
+        customView.slideEnd();
     }
 
     private void slideTo(CustomView from, CustomView to, Direction direction) {
         View currentView = from.getView();
+        to.becomeVisible();
         View followView = to.getView();
-        followView.setVisibility(View.VISIBLE);
+        to.slideBegin();
+
         switch (direction) {
             case TO_UP:
+                followView.setTranslationX(0);
                 followView.setTranslationY(followView.getHeight());
-                CustomViewSlideHelper.SlideVertical(currentView, followView, -1, (SlideInterface) to);
+                FlingViewSlideHelper.SlideVertical(currentView, followView, -1, to);
                 break;
             case TO_RIGHT:
-                Log.i("Slide", "To right +++++");
                 followView.setTranslationX(-followView.getWidth());
-                CustomViewSlideHelper.SlideHorizontal(currentView, followView, 1, (SlideInterface) to);
+                followView.setTranslationY(0);
+                FlingViewSlideHelper.SlideHorizontal(currentView, followView, 1, to);
                 break;
             case TO_DOWN:
-                followView.setTranslationY(-followView.getHeight());
-                CustomViewSlideHelper.SlideVertical(currentView, followView, 1, (SlideInterface) to);
+                followView.setTranslationX(0);
+                followView.setTranslationY(-Math.max(followView.getHeight(),currentView.getHeight()));
+                FlingViewSlideHelper.SlideVertical(currentView, followView, 1, to);
                 break;
             case TO_LEFT:
-                Log.i("Slide", "To left +++++");
                 followView.setTranslationX(followView.getWidth());
-                CustomViewSlideHelper.SlideHorizontal(currentView, followView, -1, (SlideInterface) to);
+                followView.setTranslationY(0);
+                FlingViewSlideHelper.SlideHorizontal(currentView, followView, -1, to);
                 break;
         }
         this.currentView = to;
@@ -640,41 +648,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     // region surrounding components tools
-    private boolean isShowMaskChoose = false;
-
-    @OnClick(R.id.lineEdit_mask)
-    public void onLineEditMaskClick(View view) {
-        Log.d("LineEditBar","onLineEditMaskClick");
-        isShowMaskChoose = true;
-        UICommon.hideSoftKeyboard(view);
-    }
-
-    @OnClick(R.id.lineEdit_ok)
-    public void onLineEditOKClick(View view) {
-        Log.d("LineEditBar","onLineEditMaskClick");
-        isShowMaskChoose = false;
-        maskEdit.setVisibility(View.GONE);
-        UICommon.hideSoftKeyboard(view);
-    }
-
     @Override
     public void onKeyboardHeightChanged(int height, int orientation) {
         String or = orientation == Configuration.ORIENTATION_PORTRAIT ? "portrait" : "landscape";
         Log.i("mainActivity", "onKeyboardHeightChanged in pixels: " + height + " " + or);
-        ViewGroup.LayoutParams params = maskEdit.getLayoutParams();
-        if( height > 0 && params.height != height ) {
-            params.height = height;
-            localSettings.saveSoftKeyboardHeight(height);
-        }
-        if( height > 0 ) { // show state
-            maskEdit.setVisibility(View.VISIBLE);
-        } else { // hide state
-            if( !isShowMaskChoose ) {
-                maskEdit.setVisibility(View.GONE);
+        if( height > 0 ) {
+            if ( localSettings.getSoftKeyboardHeight() == 0 ) {
+                localSettings.saveSoftKeyboardHeight(height);
+                footerEditMain.setSoftKeyBoardHeight(height);
             }
+            footerEditMain.showSoftKeyBoard();
+        } else {
+            footerEditMain.hideSoftKeyBoard();
         }
     }
-
     // endregion
 
 }

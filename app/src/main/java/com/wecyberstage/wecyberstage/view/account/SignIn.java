@@ -3,7 +3,6 @@ package com.wecyberstage.wecyberstage.view.account;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +25,7 @@ import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
+import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.AccountViewModel;
@@ -44,8 +44,6 @@ import timber.log.Timber;
 public class SignIn extends CustomView implements SlideInterface {
 
     private AccountViewModel viewModel;
-    private AppCompatActivity appCompatActivity;
-
     @BindView(R.id.signIn_component)
     View signInComponent;
     @BindView(R.id.signIn_phoneNumber)
@@ -58,13 +56,12 @@ public class SignIn extends CustomView implements SlideInterface {
     @Inject
     CharacterFactory characterFactory;
 
-    public SignIn(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType) {
-        super(activity, container, viewType);
-        this.appCompatActivity = activity;
+    public SignIn(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
+        super(activity, container, viewType, toolViewsDelegate);
     }
 
     @Override
-    public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
+    public void onCreate(final AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_signin, container, false);
         ButterKnife.bind(this, view);
@@ -79,9 +76,9 @@ public class SignIn extends CustomView implements SlideInterface {
                         Timber.d("SUCCESS");
                         if(resource.data) {
                             Log.i("SignIn","Sign in success");
-                            ((MainActivity) appCompatActivity).setCharacter(characterFactory.getCharacter(CharacterFactory.USER_TYPE.REGISTERED));
+                            ((MainActivity) activity).setCharacter(characterFactory.getCharacter(CharacterFactory.USER_TYPE.REGISTERED));
                             hideSoftKeyBoard();
-                            ((MainActivity) appCompatActivity).slideUp();
+                            ((MainActivity) activity).slideUp();
                         }
                         break;
                     case ERROR:
@@ -136,17 +133,18 @@ public class SignIn extends CustomView implements SlideInterface {
 
     @OnClick(R.id.signIn_signUp)
     public void signUp(View view) {
-        ((MainActivity) appCompatActivity).slideTo(ViewType.SIGN_UP, Direction.TO_LEFT);
+        ((MainActivity) activity).slideTo(ViewType.SIGN_UP, Direction.TO_LEFT);
     }
 
     @OnClick(R.id.signIn_navigateUp)
     public void navigateUp(View view) {
-        ((MainActivity) appCompatActivity).slideUp();
+        ((MainActivity) activity).slideUp();
     }
 
     @Override
     public void slideEnd() {
-        appCompatActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        super.slideEnd();
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 }
