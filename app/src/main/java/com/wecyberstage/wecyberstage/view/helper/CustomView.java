@@ -44,6 +44,9 @@ public abstract class CustomView implements SlideInterface {
     @Override
     public void slideEnd() {
         toolViewsDelegate.slideEnd();
+
+        view.setTranslationY(0);
+        view.setTranslationX(0);
     }
 
 }

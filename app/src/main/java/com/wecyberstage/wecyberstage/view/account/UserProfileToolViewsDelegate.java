@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.account;
 
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
@@ -17,6 +18,9 @@ public class UserProfileToolViewsDelegate extends ToolViewsDelegate {
         ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         ((FloatingActionButton)floatingActionButton).hide();
         lineEditBar.setVisibility(View.INVISIBLE);
+        playerControlBar.setVisibility(View.GONE);
+        ((AppBarLayout) toolbar.getParent()).setExpanded(false, false);
+        ((AppBarLayout) toolbar.getParent()).setVisibility(View.GONE);
     }
 
     @Override

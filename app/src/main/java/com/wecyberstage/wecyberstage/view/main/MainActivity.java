@@ -3,9 +3,6 @@ package com.wecyberstage.wecyberstage.view.main;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -41,7 +38,7 @@ import com.wecyberstage.wecyberstage.view.composeY.ComposeYToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
-import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideHelper;
+import com.wecyberstage.wecyberstage.view.helper.FlingViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseBrowse;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeX;
@@ -88,8 +85,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private final String NAVIGATION_SEMICOLON = ";";
     private final String NAVIGATION_COLON = ":";
 
-    private Handler autoHideHandler = new Handler();
     /*
+    private Handler autoHideHandler = new Handler();
     private Runnable autoHideRunnable=new Runnable() {
         @Override
         public void run() {
@@ -176,19 +173,19 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         customViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
-        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
+        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
-        delegate = new ComposeXToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeXToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
-        delegate = new ComposeYToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeYToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y, delegate);
-        delegate = new ComposeZToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeZToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z, delegate);
-        delegate = new SignInToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new SignInToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN, delegate);
-        delegate = new SignUpToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new SignUpToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         signUp = new SignUp(this, appMain, ViewType.SIGN_UP, delegate);
-        delegate = new UserProfileToolViewsDelegate(header, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new UserProfileToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
@@ -562,24 +559,27 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         to.becomeVisible();
         View followView = to.getView();
         to.slideBegin();
+
         switch (direction) {
             case TO_UP:
+                followView.setTranslationX(0);
                 followView.setTranslationY(followView.getHeight());
-                CustomViewSlideHelper.SlideVertical(currentView, followView, -1, to);
+                FlingViewSlideHelper.SlideVertical(currentView, followView, -1, to);
                 break;
             case TO_RIGHT:
-                Log.i("Slide", "To right +++++");
                 followView.setTranslationX(-followView.getWidth());
-                CustomViewSlideHelper.SlideHorizontal(currentView, followView, 1, to);
+                followView.setTranslationY(0);
+                FlingViewSlideHelper.SlideHorizontal(currentView, followView, 1, to);
                 break;
             case TO_DOWN:
-                followView.setTranslationY(-followView.getHeight());
-                CustomViewSlideHelper.SlideVertical(currentView, followView, 1, to);
+                followView.setTranslationX(0);
+                followView.setTranslationY(-Math.max(followView.getHeight(),currentView.getHeight()));
+                FlingViewSlideHelper.SlideVertical(currentView, followView, 1, to);
                 break;
             case TO_LEFT:
-                Log.i("Slide", "To left +++++");
                 followView.setTranslationX(followView.getWidth());
-                CustomViewSlideHelper.SlideHorizontal(currentView, followView, -1, to);
+                followView.setTranslationY(0);
+                FlingViewSlideHelper.SlideHorizontal(currentView, followView, -1, to);
                 break;
         }
         this.currentView = to;
