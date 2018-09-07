@@ -2,7 +2,9 @@ package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 
@@ -21,6 +23,10 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
 
     @Override
     public void slideEnd() {
+        Log.d("ComposeYToolViews","slideEnd");
         ((FloatingActionButton)floatingActionButton).show();
+        toolbar.animate().translationY(toolbar.getHeight())
+                .setDuration(300)
+                .setInterpolator(new AccelerateInterpolator()).start();
     }
 }
