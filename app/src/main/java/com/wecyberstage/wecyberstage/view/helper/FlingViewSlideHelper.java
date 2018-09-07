@@ -7,9 +7,9 @@ import android.support.animation.SpringForce;
 import android.util.Log;
 import android.view.View;
 
-public class CustomViewSlideHelper {
+public class FlingViewSlideHelper {
 
-    private static SpringForce springForce = new SpringForce();
+     // private static SpringForce springForce = new SpringForce();
 
     /**
      *
@@ -18,7 +18,7 @@ public class CustomViewSlideHelper {
      * @param index index: -1 left; 1 right
      */
     public static void SlideHorizontal(final View currentView, final View followView, final int index, final SlideInterface callback) {
-        float pixelPerSecondX = calcInitVelocity( currentView.getWidth(), 700);
+        /*
         final SpringAnimation springAnimationX = new SpringAnimation(currentView, DynamicAnimation.ROTATION_X)
                 .setSpring(springForce)
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
@@ -32,7 +32,7 @@ public class CustomViewSlideHelper {
                         followView.setTranslationX(value + followView.getWidth() * (-index));
                     }
                 });
-
+        */
         FlingAnimation flingAnimationX = new FlingAnimation(currentView, DynamicAnimation.TRANSLATION_X)
                 .setFriction(1.1f)
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
@@ -60,11 +60,12 @@ public class CustomViewSlideHelper {
                     }
                 });
 
+        float pixelPerSecondX = calcInitVelocity( followView.getWidth(), 700);
         if(index == 1) {
             flingAnimationX.setMinValue(0)
-                    .setMaxValue(currentView.getWidth());
+                    .setMaxValue(followView.getWidth());
         } else if (index == -1) {
-            flingAnimationX.setMinValue(-currentView.getWidth())
+            flingAnimationX.setMinValue(-followView.getWidth())
                     .setMaxValue(0);
         }
         flingAnimationX.setStartVelocity(pixelPerSecondX * index);
@@ -77,7 +78,7 @@ public class CustomViewSlideHelper {
      * @param index index: -1 up; 1 down
      */
     public static void SlideVertical(final View currentView, final View followView, final int index, final SlideInterface callback) {
-        float pixelPerSecondY = calcInitVelocity( currentView.getHeight(), 700);
+        /*
         final SpringAnimation springAnimationY = new SpringAnimation(currentView, DynamicAnimation.ROTATION_Y)
                 .setSpring(springForce)
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
@@ -92,7 +93,7 @@ public class CustomViewSlideHelper {
                         followView.setTranslationY(value + followView.getHeight() * (-index));
                     }
                 });
-
+        */
         FlingAnimation flingAnimationY = new FlingAnimation(currentView, DynamicAnimation.TRANSLATION_Y)
                 .setFriction(1.1f)
                 .addEndListener(new DynamicAnimation.OnAnimationEndListener() {
@@ -118,11 +119,12 @@ public class CustomViewSlideHelper {
                     }
                 });
 
+        float pixelPerSecondY = calcInitVelocity( followView.getHeight(), 700);
         if(index == 1) {
             flingAnimationY.setMinValue(0)
-                    .setMaxValue(currentView.getHeight());
+                    .setMaxValue(followView.getHeight());
         } else if (index == -1) {
-            flingAnimationY.setMinValue(-currentView.getHeight())
+            flingAnimationY.setMinValue(-followView.getHeight())
                     .setMaxValue(0);
         }
         flingAnimationY.setStartVelocity(pixelPerSecondY * index);
