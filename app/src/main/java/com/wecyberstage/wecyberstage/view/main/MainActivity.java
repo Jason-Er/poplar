@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             }
         }
     };
-    */
     private final Lock queueLock=new ReentrantLock();
+    */
 
     private KeyboardHeightProvider keyboardHeightProvider;
 
@@ -173,19 +173,19 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         customViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
-        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
-        delegate = new ComposeXToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeXToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
-        delegate = new ComposeYToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeYToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y, delegate);
-        delegate = new ComposeZToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeZToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z, delegate);
-        delegate = new SignInToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new SignInToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN, delegate);
-        delegate = new SignUpToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new SignUpToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         signUp = new SignUp(this, appMain, ViewType.SIGN_UP, delegate);
-        delegate = new UserProfileToolViewsDelegate(toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new UserProfileToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
@@ -394,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseMessageEvent(MessageEvent messageEvent) {
         Log.i("Main onResponseEventBus", messageEvent.getMessage());
-        queueLock.lock();
+        // queueLock.lock();
         switch (messageEvent.getMessage()) {
             case "TO_LEFT":
                 currentFlingResponse.toLeft();
