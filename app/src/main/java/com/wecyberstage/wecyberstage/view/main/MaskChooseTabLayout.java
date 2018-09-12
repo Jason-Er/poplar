@@ -3,19 +3,19 @@ package com.wecyberstage.wecyberstage.view.main;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.model.StageRole;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,9 +28,7 @@ public class MaskChooseTabLayout extends LinearLayout {
     @BindView(R.id.maskChooseTabLayout_viewPager)
     ViewPager viewPager;
 
-    private List<String> tabIndicators;
-    private List<Fragment> tabFragments;
-    private ContentPagerAdapter contentAdapter;
+    private List<StageRole> stageRoles;
 
     public MaskChooseTabLayout(Context context) {
         super(context);
@@ -49,10 +47,24 @@ public class MaskChooseTabLayout extends LinearLayout {
         super.onFinishInflate();
         ButterKnife.bind(this);
 
-        initViewPager();
-        initTabLayout();
+        MaskPagerAdapter maskPagerAdapter = new MaskPagerAdapter();
+        viewPager.setAdapter(maskPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setSelectedTabIndicatorHeight(0);
+        ViewCompat.setElevation(tabLayout, 10);
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab itemTab = tabLayout.getTabAt(i);
+            if (itemTab!=null){
+                itemTab.setCustomView(R.layout.item_tab_layout_role);
+                TextView itemTv = itemTab.getCustomView().findViewById(R.id.tv_menu_item);
+                itemTv.setText(i+"");
+            }
+        }
+        tabLayout.getTabAt(0).getCustomView().setSelected(true);
     }
 
+    /*
     private void initTabLayout(){
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setSelectedTabIndicatorHeight(0);
@@ -81,27 +93,36 @@ public class MaskChooseTabLayout extends LinearLayout {
         contentAdapter = new ContentPagerAdapter(((AppCompatActivity)getContext()).getSupportFragmentManager());
         viewPager.setAdapter(contentAdapter);
     }
+    */
 
-    class ContentPagerAdapter extends FragmentPagerAdapter {
+    public void setStageRoles(List<StageRole> stageRoles) {
+        this.stageRoles = stageRoles;
+        // contentAdapter.notifyDataSetChanged();
 
-        public ContentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+    }
 
-        @Override
-        public Fragment getItem(int position) {
-            return tabFragments.get(position);
-        }
+    class MaskPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return tabIndicators.size();
+            return 4;
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
-            return tabIndicators.get(position);
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
         }
 
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            ImageView imageView = new ImageView(getContext());
+            imageView.setBackgroundResource(R.drawable.ic_account);
+            container.addView(imageView);
+            return imageView;
+        }
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
     }
 }

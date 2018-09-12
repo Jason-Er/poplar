@@ -13,7 +13,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +29,7 @@ public class FooterEditMain extends LinearLayout {
     }
 
     @BindView(R.id.mask_choose_sub)
-    ViewGroup maskChoose;
+    MaskChooseTabLayout maskChoose;
     @BindView(R.id.file_choose_sub)
     ViewGroup fileChoose;
     @BindView(R.id.line_edit_sub)
@@ -146,6 +149,10 @@ public class FooterEditMain extends LinearLayout {
                 editText.setText("");
                 break;
         }
+    }
+
+    public void setStageRoles(List<StageRole> stageRoles) {
+        maskChoose.setStageRoles(stageRoles);
     }
 
     public void show() {

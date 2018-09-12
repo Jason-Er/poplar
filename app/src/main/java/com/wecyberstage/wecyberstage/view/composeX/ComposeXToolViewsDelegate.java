@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.composeX;
 
 import android.app.Activity;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
@@ -13,7 +14,7 @@ public class ComposeXToolViewsDelegate extends ToolViewsDelegate {
 
     @Override
     public void slideBegin() {
-
+        ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override

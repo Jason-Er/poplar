@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 
@@ -29,6 +28,13 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
     public void slideEnd() {
         Log.d("ComposeYToolViews","slideEnd");
         ((FloatingActionButton)floatingActionButton).show();
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((FloatingActionButton)floatingActionButton).hide();
+                lineEditBar.setVisibility(View.VISIBLE);
+            }
+        });
         ((AppBarLayout) toolbar.getParent()).setExpanded(false, true);
         ((AppBarLayout) toolbar.getParent()).setVisibility(View.GONE);
         playerControlBar.animate().translationY(playerControlBar.getHeight()).alpha(0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
@@ -38,5 +44,7 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
                 playerControlBar.setVisibility(View.GONE);
             }
         }).start();
+
+
     }
 }

@@ -19,12 +19,5 @@ public abstract class ToolViewsDelegate implements SlideInterface {
         this.drawerLayout = drawerLayout;
         this.floatingActionButton = floatingActionButton;
     }
-
-    public View getFloatingActionButton() {
-        return floatingActionButton;
-    }
-
-    public void showLineEditBar() {
-        lineEditBar.setVisibility(View.VISIBLE);
-    }
+    
 }

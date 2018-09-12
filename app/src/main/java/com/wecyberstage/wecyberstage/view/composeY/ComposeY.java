@@ -5,14 +5,11 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
@@ -23,14 +20,17 @@ import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
-import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
+import com.wecyberstage.wecyberstage.view.main.FooterEditMain;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
 import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener,
         SlideInterface, UpdateStagePlayInterface {
@@ -40,6 +40,9 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     private ComposeViewModel viewModel;
     private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
+
+    @BindView(R.id.footer_edit_main)
+    FooterEditMain footerEditMain;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -52,6 +55,7 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.view_recycler, container,false);
+        ButterKnife.bind(this, activity);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
@@ -81,6 +85,7 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
             public void onChanged(@Nullable StageScene stageScene) {
                 if(stageScene != null) {
                     adapter.setStageScene(stageScene);
+                    footerEditMain.setStageRoles(stageScene.stageRoles);
                 }
             }
         });
@@ -111,13 +116,6 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     public void slideEnd() {
         super.slideEnd();
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        toolViewsDelegate.getFloatingActionButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((FloatingActionButton)toolViewsDelegate.getFloatingActionButton()).hide();
-                toolViewsDelegate.showLineEditBar();
-            }
-        });
     }
 
     @Override
