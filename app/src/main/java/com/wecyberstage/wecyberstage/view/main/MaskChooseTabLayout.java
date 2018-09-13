@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -9,13 +10,15 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageRole;
+import com.wecyberstage.wecyberstage.util.helper.UICommon;
 
 import java.util.List;
 
@@ -89,10 +92,19 @@ public class MaskChooseTabLayout extends LinearLayout {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ImageView imageView = new ImageView(getContext());
-            imageView.setBackgroundResource(R.drawable.ic_account);
-            container.addView(imageView);
-            return imageView;
+            GridLayout gridLayout = new GridLayout(getContext());
+            // gridLayout.setColumnCount(3);
+            // gridLayout.setRowCount(3);
+            for(MaskGraph maskGraph : stageRoles.get(position).mask.maskGraphList) {
+                ImageView imageView = new ImageView(getContext());
+                Glide.with(getContext()).load(maskGraph.graphURL).into(imageView);
+                gridLayout.addView(imageView);
+                GridLayout.LayoutParams layoutParams = (GridLayout.LayoutParams) imageView.getLayoutParams();
+                layoutParams.width = UICommon.dp2px((Activity) getContext(), 48);
+                layoutParams.height = UICommon.dp2px((Activity) getContext(), 48);
+            }
+            container.addView(gridLayout);
+            return gridLayout;
         }
 
         @Override
