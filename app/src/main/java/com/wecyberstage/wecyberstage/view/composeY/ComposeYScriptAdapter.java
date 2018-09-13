@@ -44,6 +44,13 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     public void setStageScene(@NonNull StageScene stageScene) {
         dataSet = new ArrayList<>();
         for(StageLine stageLine : stageScene.stageLines) {
+            handleStageLine(stageLine);
+        }
+        notifyDataSetChanged();
+    }
+
+    private void handleStageLine(StageLine stageLine) {
+        if(stageLine != null) {
             ComposeYCardViewType viewType;
             // TODO: 2018/5/22 need further refactoring: let user on the phone be end position
             if(listStart.contains(stageLine.roleId)) {
@@ -60,7 +67,6 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
             ComposeYItemDto dto = new ComposeYItemDto(viewType, stageLine);
             dataSet.add(dto);
         }
-        notifyDataSetChanged();
     }
 
     @Override
@@ -124,5 +130,17 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseFooterEditMainEvent(FooterEditMainEvent event) {
         Log.d("ComposeYScriptAdapter","receive footerEditMain");
+        if(event.getStageLine() instanceof StageLine) {
+            StageLine stageLine = null;
+            try {
+                stageLine = (StageLine) ((StageLine) event.getStageLine()).clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+            handleStageLine(stageLine);
+        } else if(event.getStageLine() instanceof ArrayList) {
+
+        }
+        notifyDataSetChanged();
     }
 }
