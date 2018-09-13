@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 
@@ -34,6 +37,8 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     ViewGroup fileChoose;
     @BindView(R.id.line_edit_sub)
     ViewGroup lineEdit;
+    @BindView(R.id.lineEditSub_selected)
+    ImageView selectedMask;
     @BindView(R.id.lineEditSub_mask)
     ImageButton imageButtonMask;
     @BindView(R.id.lineEditSub_ok)
@@ -187,6 +192,7 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
 
     @Override
     public void selectedMask(StageRole stageRole, int maskOrdinal) {
-        Log.d("FooterEditMain","selectedMask ordinal: " + maskOrdinal);
+        MaskGraph maskGraph = stageRole.mask.maskGraphList.get(maskOrdinal);
+        Glide.with(getContext()).load(maskGraph.graphURL).into(selectedMask);
     }
 }

@@ -48,7 +48,6 @@ public class MaskGridLayout extends AutoGridLayout {
                 @Override
                 public void onClick(View v) {
                     int ordinal = ((Mask)v).getOrdinal();
-                    Log.d("MaskGridLayout","onClick position: " + ordinal);
                     if(maskGridLayoutCallBack != null) {
                         maskGridLayoutCallBack.selectedMask(mStageRole, ordinal);
                     }
