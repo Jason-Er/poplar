@@ -45,6 +45,5 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
             }
         }).start();
 
-
     }
 }

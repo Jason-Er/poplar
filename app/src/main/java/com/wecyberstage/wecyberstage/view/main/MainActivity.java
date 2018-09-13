@@ -392,10 +392,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseMessageEvent(MessageEvent messageEvent) {
-        Log.i("Main onResponseEventBus", messageEvent.getMessage());
+    public void onResponseMessageEvent(MessageEvent event) {
+        Log.i("Main onResponseEventBus", event.getMessage());
         // queueLock.lock();
-        switch (messageEvent.getMessage()) {
+        switch (event.getMessage()) {
             case "TO_LEFT":
                 currentFlingResponse.toLeft();
                 break;
@@ -421,9 +421,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponsePlayerControlEvent(PlayerControlEvent messageEvent) {
-        Log.i("Main", "onResponsePlayerControlEvent: " + messageEvent.getMessage());
-        switch (messageEvent.getMessage()) {
+    public void onResponsePlayerControlEvent(PlayerControlEvent event) {
+        Log.i("Main", "onResponsePlayerControlEvent: " + event.getMessage());
+        switch (event.getMessage()) {
             case "STOP":
                 for(CustomView customView: customViewList) {
                     if(customView instanceof PlayControlInterface) {
@@ -469,7 +469,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             case "SEEK":
                 for(CustomView customView: customViewList) {
                     if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).seek(messageEvent.getSeekProcess());
+                        ((PlayControlInterface) customView).seek(event.getSeekProcess());
                     }
                 }
                 break;

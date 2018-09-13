@@ -16,9 +16,13 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
+import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,10 +62,14 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
         super(context, attrs, defStyleAttr);
     }
 
+    private List<StageLine> stageLines;
+    private StageLine stageLine;
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        stageLine = new StageLine();
         maskChoose.setMaskGridLayoutCallBack(this);
         setPanelVisible(PANEL_VISIBLE.BOTH_GONE);
         editText.addTextChangedListener(new TextWatcher(){
@@ -73,6 +81,7 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length() > 0){
+                    stageLine.dialogue = s.toString();
                     switchToCheckState(imageButtonOK);
                 } else {
                     switchToPlusState(imageButtonOK);
@@ -153,6 +162,8 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
                 Log.d("FooterEditMain","onLineEditOKClick " + editText.getText());
                 hide();
                 editText.setText("");
+                FooterEditMainEvent event = new FooterEditMainEvent(stageLine);
+                EventBus.getDefault().post(event);
                 break;
         }
     }
@@ -194,5 +205,7 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     public void selectedMask(StageRole stageRole, int maskOrdinal) {
         MaskGraph maskGraph = stageRole.mask.maskGraphList.get(maskOrdinal);
         Glide.with(getContext()).load(maskGraph.graphURL).into(selectedMask);
+        stageLine.maskGraph = maskGraph;
+        stageLine.roleId = stageRole.id;
     }
 }

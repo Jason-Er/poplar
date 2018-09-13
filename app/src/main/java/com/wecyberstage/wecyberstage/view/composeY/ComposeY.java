@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -20,12 +22,18 @@ import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.FooterEditMain;
+import com.wecyberstage.wecyberstage.view.main.FooterEditMainEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import javax.inject.Inject;
 
@@ -33,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener,
-        SlideInterface, UpdateStagePlayInterface {
+        SlideInterface, UpdateStagePlayInterface, RegisterBusEventInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -136,6 +144,23 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     @Override
     public void swapStageLines(int position1, int position2) {
         viewModel.swapStageLines(position1, position2);
+    }
+
+    @Override
+    public void register(Activity activity) {
+        adapter.register(activity);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void unRegister(Activity activity) {
+        adapter.unRegister(activity);
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseFooterEditMainEvent(FooterEditMainEvent event) {
+        Log.d("ComposeY","receive footerEditMain");
     }
 
 }
