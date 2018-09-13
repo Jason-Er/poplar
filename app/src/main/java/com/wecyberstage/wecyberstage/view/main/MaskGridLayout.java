@@ -10,10 +10,11 @@ import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 
-public class MaskGridLayout extends GridLayout {
+public class MaskGridLayout extends AutoGridLayout {
 
     public MaskGridLayout(Context context) {
         super(context);
+        setColumnWidth(UICommon.dp2px( getContext(), 48));
         // setColumnCount(3);
         // setRowCount(3);
     }

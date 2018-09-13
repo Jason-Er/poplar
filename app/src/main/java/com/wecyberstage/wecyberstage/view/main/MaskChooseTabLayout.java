@@ -91,7 +91,7 @@ public class MaskChooseTabLayout extends LinearLayout {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             if( maskGridLayoutList == null ) maskGridLayoutList = new ArrayList<>();
-            if(maskGridLayoutList.size() <= position ) {
+            if( maskGridLayoutList.size() <= position ) {
                 maskGridLayoutList.add(new MaskGridLayout(getContext()));
             }
             MaskGridLayout maskGridLayout = maskGridLayoutList.get(position);
