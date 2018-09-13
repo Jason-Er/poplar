@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FooterEditMain extends LinearLayout {
+public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBack {
 
     enum PANEL_VISIBLE {
         MASK_VISIBLE, FILE_VISIBLE, BOTH_VISIBLE, BOTH_GONE
@@ -57,6 +57,7 @@ public class FooterEditMain extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        maskChoose.setMaskGridLayoutCallBack(this);
         setPanelVisible(PANEL_VISIBLE.BOTH_GONE);
         editText.addTextChangedListener(new TextWatcher(){
             @Override
@@ -182,5 +183,10 @@ public class FooterEditMain extends LinearLayout {
         params.height = height;
         params = fileChoose.getLayoutParams();
         params.height = height;
+    }
+
+    @Override
+    public void selectedMask(StageRole stageRole, int maskOrdinal) {
+        Log.d("FooterEditMain","selectedMask ordinal: " + maskOrdinal);
     }
 }

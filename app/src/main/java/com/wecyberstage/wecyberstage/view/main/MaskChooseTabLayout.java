@@ -32,6 +32,7 @@ public class MaskChooseTabLayout extends LinearLayout {
     private List<StageRole> stageRoles;
     private MaskPagerAdapter maskPagerAdapter;
     private List<MaskGridLayout> maskGridLayoutList;
+    private MaskGridLayoutCallBack maskGridLayoutCallBack;
 
     public MaskChooseTabLayout(Context context) {
         super(context);
@@ -70,6 +71,10 @@ public class MaskChooseTabLayout extends LinearLayout {
         tabLayout.getTabAt(0).getCustomView().setSelected(true);
     }
 
+    public void setMaskGridLayoutCallBack(MaskGridLayoutCallBack maskGridLayoutCallBack) {
+        this.maskGridLayoutCallBack = maskGridLayoutCallBack;
+    }
+
     public void setStageRoles(List<StageRole> stageRoles) {
         this.stageRoles = stageRoles;
         maskPagerAdapter.notifyDataSetChanged();
@@ -92,7 +97,7 @@ public class MaskChooseTabLayout extends LinearLayout {
         public Object instantiateItem(ViewGroup container, int position) {
             if( maskGridLayoutList == null ) maskGridLayoutList = new ArrayList<>();
             if( maskGridLayoutList.size() <= position ) {
-                maskGridLayoutList.add(new MaskGridLayout(getContext()));
+                maskGridLayoutList.add(new MaskGridLayout(getContext(), maskGridLayoutCallBack));
             }
             MaskGridLayout maskGridLayout = maskGridLayoutList.get(position);
             maskGridLayout.setStageRole(stageRoles.get(position));
