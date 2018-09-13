@@ -161,6 +161,7 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseFooterEditMainEvent(FooterEditMainEvent event) {
         Log.d("ComposeY","receive footerEditMain");
+        ((ComposeYToolViewsDelegate)toolViewsDelegate).hideLineEditBar();
     }
 
 }

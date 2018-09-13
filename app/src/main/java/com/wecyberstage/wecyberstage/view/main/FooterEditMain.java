@@ -162,6 +162,7 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
                 Log.d("FooterEditMain","onLineEditOKClick " + editText.getText());
                 hide();
                 editText.setText("");
+                selectedMask.setVisibility(GONE);
                 FooterEditMainEvent event = new FooterEditMainEvent(stageLine);
                 EventBus.getDefault().post(event);
                 break;
@@ -205,6 +206,7 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     public void selectedMask(StageRole stageRole, int maskOrdinal) {
         MaskGraph maskGraph = stageRole.mask.maskGraphList.get(maskOrdinal);
         Glide.with(getContext()).load(maskGraph.graphURL).into(selectedMask);
+        selectedMask.setVisibility(VISIBLE);
         stageLine.maskGraph = maskGraph;
         stageLine.roleId = stageRole.id;
     }

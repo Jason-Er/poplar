@@ -46,4 +46,9 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
         }).start();
 
     }
+
+    public void hideLineEditBar() {
+        lineEditBar.setVisibility(View.GONE);
+        ((FloatingActionButton)floatingActionButton).show();
+    }
 }
