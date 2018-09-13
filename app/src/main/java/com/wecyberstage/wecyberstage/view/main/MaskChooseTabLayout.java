@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.model.StageRole;
 
@@ -29,6 +30,7 @@ public class MaskChooseTabLayout extends LinearLayout {
     ViewPager viewPager;
 
     private List<StageRole> stageRoles;
+    private MaskPagerAdapter maskPagerAdapter;
 
     public MaskChooseTabLayout(Context context) {
         super(context);
@@ -47,65 +49,37 @@ public class MaskChooseTabLayout extends LinearLayout {
         super.onFinishInflate();
         ButterKnife.bind(this);
 
-        MaskPagerAdapter maskPagerAdapter = new MaskPagerAdapter();
+        maskPagerAdapter = new MaskPagerAdapter();
         viewPager.setAdapter(maskPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setSelectedTabIndicatorHeight(0);
         ViewCompat.setElevation(tabLayout, 10);
+    }
+
+    private void updateTabLayout() {
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab itemTab = tabLayout.getTabAt(i);
             if (itemTab!=null){
-                itemTab.setCustomView(R.layout.item_tab_layout_role);
-                TextView itemTv = itemTab.getCustomView().findViewById(R.id.tv_menu_item);
-                itemTv.setText(i+"");
+                ImageView imageView = new ImageView(getContext());
+                Glide.with(getContext()).load(stageRoles.get(i).mask.maskGraphList.get(0).graphURL).into(imageView);
+                itemTab.setCustomView(imageView);
             }
         }
         tabLayout.getTabAt(0).getCustomView().setSelected(true);
     }
-
-    /*
-    private void initTabLayout(){
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setSelectedTabIndicatorHeight(0);
-        ViewCompat.setElevation(tabLayout, 10);
-        tabLayout.setupWithViewPager(viewPager);
-        for (int i = 0; i < tabIndicators.size(); i++) {
-            TabLayout.Tab itemTab = tabLayout.getTabAt(i);
-            if (itemTab!=null){
-                itemTab.setCustomView(R.layout.item_tab_layout_role);
-                TextView itemTv = itemTab.getCustomView().findViewById(R.id.tv_menu_item);
-                itemTv.setText(tabIndicators.get(i));
-            }
-        }
-        tabLayout.getTabAt(0).getCustomView().setSelected(true);
-    }
-
-    private void initViewPager(){
-        tabIndicators = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            tabIndicators.add("Tab " + i);
-        }
-        tabFragments = new ArrayList<>();
-        for (String s : tabIndicators) {
-            tabFragments.add(TabContentFragment.newInstance(s));
-        }
-        contentAdapter = new ContentPagerAdapter(((AppCompatActivity)getContext()).getSupportFragmentManager());
-        viewPager.setAdapter(contentAdapter);
-    }
-    */
 
     public void setStageRoles(List<StageRole> stageRoles) {
         this.stageRoles = stageRoles;
-        // contentAdapter.notifyDataSetChanged();
-
+        maskPagerAdapter.notifyDataSetChanged();
+        updateTabLayout();
     }
 
     class MaskPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return 4;
+            return stageRoles==null? 0 : stageRoles.size();
         }
 
         @Override
@@ -120,6 +94,7 @@ public class MaskChooseTabLayout extends LinearLayout {
             container.addView(imageView);
             return imageView;
         }
+
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
