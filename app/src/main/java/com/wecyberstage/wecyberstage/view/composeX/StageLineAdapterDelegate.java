@@ -31,7 +31,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class StageLineAdapterDelegate extends ViewTypeDelegateClass implements AdapterDelegateInterface<List<Object>>, RegisterBusEventInterface {
+class StageLineAdapterDelegate extends ViewTypeDelegateClass
+        implements AdapterDelegateInterface<List<Object>>, RegisterBusEventInterface {
 
     final private OnStartDragListener startDragListener;
     final private RecyclerView.Adapter adapter;

@@ -48,8 +48,8 @@ public class PopupChooseMask extends PopupWindow implements MaskImageChoose {
         // add mask to content view
         for(MaskGraph mg: mask.maskGraphList) {
             Log.i("PopupChooseMask","maskGraph ID: " + mg.id);
-            int height = UICommon.dp2px((AppCompatActivity) view.getContext(), 48); // (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, view.getContext().getResources().getDisplayMetrics());
-            int width =  UICommon.dp2px((AppCompatActivity) view.getContext(), 48); // (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, view.getContext().getResources().getDisplayMetrics());
+            int height = UICommon.dp2px( view.getContext(), 48); // (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, view.getContext().getResources().getDisplayMetrics());
+            int width =  UICommon.dp2px( view.getContext(), 48); // (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, view.getContext().getResources().getDisplayMetrics());
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(height, width);
             MaskImageButton imageButton = new MaskImageButton(view.getContext(), this, this);
             imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);

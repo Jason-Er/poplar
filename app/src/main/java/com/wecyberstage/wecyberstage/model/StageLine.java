@@ -6,7 +6,7 @@ import com.wecyberstage.wecyberstage.data.cache.StageLineEntity;
  * Created by mike on 2018/3/15.
  */
 
-public class StageLine extends StageLineEntity {
+public class StageLine extends StageLineEntity implements Cloneable {
     public MaskGraph maskGraph;
     public Voice voice;
     public StageLine() {}
@@ -18,5 +18,10 @@ public class StageLine extends StageLineEntity {
         this.voice = new Voice();
         this.voice.duration = duration;
         this.maskGraph = maskGraph;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

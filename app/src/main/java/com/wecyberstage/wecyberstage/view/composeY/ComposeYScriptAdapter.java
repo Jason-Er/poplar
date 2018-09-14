@@ -7,9 +7,15 @@ import android.util.Log;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SaveStatesInterface;
+import com.wecyberstage.wecyberstage.view.main.FooterEditMainEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +25,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class ComposeYScriptAdapter extends ListDelegationAdapter
-        implements ItemTouchHelperAdapter, SaveStatesInterface {
+        implements ItemTouchHelperAdapter, SaveStatesInterface, RegisterBusEventInterface {
 
     final String START_TAG = "ComposeYArrayStart";
     final String END_TAG = "ComposeYArrayEnd";
@@ -38,6 +44,13 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     public void setStageScene(@NonNull StageScene stageScene) {
         dataSet = new ArrayList<>();
         for(StageLine stageLine : stageScene.stageLines) {
+            handleStageLine(stageLine);
+        }
+        notifyDataSetChanged();
+    }
+
+    private void handleStageLine(StageLine stageLine) {
+        if(stageLine != null) {
             ComposeYCardViewType viewType;
             // TODO: 2018/5/22 need further refactoring: let user on the phone be end position
             if(listStart.contains(stageLine.roleId)) {
@@ -54,7 +67,6 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
             ComposeYItemDto dto = new ComposeYItemDto(viewType, stageLine);
             dataSet.add(dto);
         }
-        notifyDataSetChanged();
     }
 
     @Override
@@ -103,5 +115,32 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
         if( sourceArray != null ) {
             listEnd = Arrays.asList(sourceArray);
         }
+    }
+
+    @Override
+    public void register(Activity activity) {
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void unRegister(Activity activity) {
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseFooterEditMainEvent(FooterEditMainEvent event) {
+        Log.d("ComposeYScriptAdapter","receive footerEditMain");
+        if(event.getStageLine() instanceof StageLine) {
+            StageLine stageLine = null;
+            try {
+                stageLine = (StageLine) ((StageLine) event.getStageLine()).clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+            handleStageLine(stageLine);
+        } else if(event.getStageLine() instanceof ArrayList) {
+
+        }
+        notifyDataSetChanged();
     }
 }

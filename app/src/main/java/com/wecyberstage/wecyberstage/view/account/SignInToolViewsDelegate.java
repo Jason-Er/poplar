@@ -1,16 +1,18 @@
 package com.wecyberstage.wecyberstage.view.account;
 
+import android.app.Activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 
 public class SignInToolViewsDelegate extends ToolViewsDelegate {
 
-    public SignInToolViewsDelegate(View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, View floatingActionButton) {
-        super(toolBar, playerControlBar, lineEditBar, drawerLayout, floatingActionButton);
+    public SignInToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, View floatingActionButton) {
+        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, floatingActionButton);
     }
 
     @Override
@@ -30,6 +32,6 @@ public class SignInToolViewsDelegate extends ToolViewsDelegate {
 
     @Override
     public void slideEnd() {
-
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); // Show status bar
     }
 }

@@ -78,8 +78,8 @@ public class MaskChoose extends RelativeLayout {
 
         // add mask to content view
         for(MaskGraph mg: mask.maskGraphList) {
-            int height = UICommon.dp2px((Activity)getContext(), 48);
-            int width =  UICommon.dp2px((Activity)getContext(), 48);
+            int height = UICommon.dp2px(getContext(), 48);
+            int width =  UICommon.dp2px(getContext(), 48);
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(height, width);
             MaskIcon imageButton = new MaskIcon(getContext());
             imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);

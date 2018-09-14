@@ -1,7 +1,9 @@
 package com.wecyberstage.wecyberstage.view.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -10,27 +12,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.model.MaskGraph;
+import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FooterEditMain extends LinearLayout {
+public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBack {
 
     enum PANEL_VISIBLE {
         MASK_VISIBLE, FILE_VISIBLE, BOTH_VISIBLE, BOTH_GONE
     }
 
     @BindView(R.id.mask_choose_sub)
-    ViewGroup maskChoose;
+    MaskChooseTabLayout maskChoose;
     @BindView(R.id.file_choose_sub)
     ViewGroup fileChoose;
     @BindView(R.id.line_edit_sub)
     ViewGroup lineEdit;
+    @BindView(R.id.lineEditSub_selected)
+    ImageView selectedMask;
     @BindView(R.id.lineEditSub_mask)
     ImageButton imageButtonMask;
     @BindView(R.id.lineEditSub_ok)
@@ -50,10 +65,15 @@ public class FooterEditMain extends LinearLayout {
         super(context, attrs, defStyleAttr);
     }
 
+    private List<StageLine> stageLines;
+    private StageLine stageLine;
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        stageLine = new StageLine();
+        maskChoose.setMaskGridLayoutCallBack(this);
         setPanelVisible(PANEL_VISIBLE.BOTH_GONE);
         editText.addTextChangedListener(new TextWatcher(){
             @Override
@@ -64,6 +84,7 @@ public class FooterEditMain extends LinearLayout {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length() > 0){
+                    stageLine.dialogue = s.toString();
                     switchToCheckState(imageButtonOK);
                 } else {
                     switchToPlusState(imageButtonOK);
@@ -144,8 +165,32 @@ public class FooterEditMain extends LinearLayout {
                 Log.d("FooterEditMain","onLineEditOKClick " + editText.getText());
                 hide();
                 editText.setText("");
+                selectedMask.setVisibility(GONE);
+                FooterEditMainEvent event = new FooterEditMainEvent(stageLine);
+                EventBus.getDefault().post(event);
                 break;
         }
+    }
+
+    @OnClick(R.id.fileChooseSub_word)
+    public void setImageButtonWord(View view) {
+        Log.d("FooterEditMain","setImageButtonWord click");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            ((AppCompatActivity)getContext()).startActivityForResult(Intent.createChooser(intent, "请选择一个要上传的文件"),
+                    0);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(getContext(), "请安装文件管理器", Toast.LENGTH_SHORT)
+                    .show();
+        }
+
+    }
+
+    public void setStageRoles(List<StageRole> stageRoles) {
+        maskChoose.setStageRoles(stageRoles);
     }
 
     public void show() {
@@ -175,5 +220,14 @@ public class FooterEditMain extends LinearLayout {
         params.height = height;
         params = fileChoose.getLayoutParams();
         params.height = height;
+    }
+
+    @Override
+    public void selectedMask(StageRole stageRole, int maskOrdinal) {
+        MaskGraph maskGraph = stageRole.mask.maskGraphList.get(maskOrdinal);
+        Glide.with(getContext()).load(maskGraph.graphURL).into(selectedMask);
+        selectedMask.setVisibility(VISIBLE);
+        stageLine.maskGraph = maskGraph;
+        stageLine.roleId = stageRole.id;
     }
 }

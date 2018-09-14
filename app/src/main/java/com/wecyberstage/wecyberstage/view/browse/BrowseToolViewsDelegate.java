@@ -1,16 +1,18 @@
 package com.wecyberstage.wecyberstage.view.browse;
 
+import android.app.Activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 
 public class BrowseToolViewsDelegate extends ToolViewsDelegate {
 
-    public BrowseToolViewsDelegate(View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, View floatingActionButton) {
-        super(toolBar, playerControlBar, lineEditBar, drawerLayout, floatingActionButton);
+    public BrowseToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, View floatingActionButton) {
+        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, floatingActionButton);
     }
 
     @Override
@@ -23,6 +25,7 @@ public class BrowseToolViewsDelegate extends ToolViewsDelegate {
 
     @Override
     public void slideEnd() {
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); // Show status bar
         ((AppBarLayout) toolbar.getParent()).setVisibility(View.VISIBLE);
         ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
     }
