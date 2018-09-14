@@ -1,7 +1,9 @@
 package com.wecyberstage.wecyberstage.view.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
@@ -167,6 +170,23 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
                 EventBus.getDefault().post(event);
                 break;
         }
+    }
+
+    @OnClick(R.id.fileChooseSub_word)
+    public void setImageButtonWord(View view) {
+        Log.d("FooterEditMain","setImageButtonWord click");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            ((AppCompatActivity)getContext()).startActivityForResult(Intent.createChooser(intent, "请选择一个要上传的文件"),
+                    0);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+            Toast.makeText(getContext(), "请安装文件管理器", Toast.LENGTH_SHORT)
+                    .show();
+        }
+
     }
 
     public void setStageRoles(List<StageRole> stageRoles) {

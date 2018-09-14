@@ -16,7 +16,6 @@ public class MaskGridLayout extends AutoGridLayout {
 
     public MaskGridLayout(Context context, MaskGridLayoutCallBack callBack) {
         super(context);
-        setColumnWidth(UICommon.dp2px( getContext(), 48));
         this.maskGridLayoutCallBack = callBack;
         // setColumnCount(3);
         // setRowCount(3);
