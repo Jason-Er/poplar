@@ -25,7 +25,6 @@ import com.wecyberstage.wecyberstage.util.helper.UICommon;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -176,11 +175,12 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     public void setImageButtonWord(View view) {
         Log.d("FooterEditMain","setImageButtonWord click");
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
+        //intent.setType(“application/msword;application/vnd.openxmlformats-officedocument.wordprocessingml.document”);//同时选择doc docx
+        intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"); // docx
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
             ((AppCompatActivity)getContext()).startActivityForResult(Intent.createChooser(intent, "请选择一个要上传的文件"),
-                    0);
+                    ACTIVITY_REQUEST_CODE.FILE_SELECT_CODE.ordinal());
         } catch (android.content.ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
             Toast.makeText(getContext(), "请安装文件管理器", Toast.LENGTH_SHORT)

@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -10,6 +11,7 @@ import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SaveStatesInterface;
 import com.wecyberstage.wecyberstage.view.main.FooterEditMainEvent;
+import com.wecyberstage.wecyberstage.view.main.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -119,11 +121,13 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
 
     @Override
     public void register(Activity activity) {
+        Log.d("ComposeYScriptAdapter","register");
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void unRegister(Activity activity) {
+        Log.d("ComposeYScriptAdapter","unRegister");
         EventBus.getDefault().unregister(this);
     }
 
@@ -142,5 +146,15 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
 
         }
         notifyDataSetChanged();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onResponseMainActivityEvent(MainActivityEvent event) {
+        switch (event.getMessage()) {
+            case "File Selected":
+                Uri uri = (Uri) event.getData();
+                Log.d("ComposeYScriptAdapter","uri path: " + uri.getPath());
+                break;
+        }
     }
 }
