@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -19,6 +20,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -152,8 +157,22 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     public void onResponseMainActivityEvent(MainActivityEvent event) {
         switch (event.getMessage()) {
             case "File Selected":
-                Uri uri = (Uri) event.getData();
-                Log.d("ComposeYScriptAdapter","uri path: " + uri.getPath());
+                MainActivityEvent.FileEvent fileEvent = (MainActivityEvent.FileEvent) event.getData();
+                InputStream inputStream = null;
+                try {
+                    inputStream = fileEvent.resolver.openInputStream(fileEvent.uri);
+                    Log.d("ComposeYScriptAdapter","Available bytes of file: " + inputStream.available());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
         }
     }

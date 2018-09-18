@@ -2,10 +2,13 @@ package com.wecyberstage.wecyberstage.view.main;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -67,6 +70,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -471,9 +477,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         }
         if ( requestCode == 0 ) {
             Uri uri = data.getData();
-            Log.d("MainActivity","------->" + uri.getPath());
-            MainActivityEvent event = new MainActivityEvent(uri, "File Selected");
-            // EventBus.getDefault().post(event);
+            MainActivityEvent.FileEvent fileEvent = new MainActivityEvent.FileEvent(uri, getContentResolver());
+            MainActivityEvent event = new MainActivityEvent(fileEvent, "File Selected");
             EventBus.getDefault().postSticky(event);
         }
         super.onActivityResult(requestCode, resultCode, data);
