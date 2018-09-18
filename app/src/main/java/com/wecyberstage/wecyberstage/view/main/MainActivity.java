@@ -86,20 +86,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private final String NAVIGATION_SEMICOLON = ";";
     private final String NAVIGATION_COLON = ":";
 
-    /*
-    private Handler autoHideHandler = new Handler();
-    private Runnable autoHideRunnable=new Runnable() {
-        @Override
-        public void run() {
-            queueLock.lock();
-            if(findViewById(R.id.header_main).getVisibility() == View.VISIBLE) {
-                moveOutHeaderAndFooter(findViewById(R.id.header_main), findViewById(R.id.footer_main));
-            }
-        }
-    };
-    private final Lock queueLock=new ReentrantLock();
-    */
-
     private KeyboardHeightProvider keyboardHeightProvider;
 
     @Inject
@@ -334,21 +320,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-        for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
-            lifeCycle.register(this);
-        }
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
-        for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
-            lifeCycle.unRegister(this);
-        }
         for(CustomView customView: customViewList) {
             customView.onStop(this, appMain);
         }
@@ -357,12 +330,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     protected void onResume() {
         super.onResume();
+        EventBus.getDefault().register(this);
+        for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
+            lifeCycle.register(this);
+        }
         keyboardHeightProvider.setKeyboardHeightObserver(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        EventBus.getDefault().unregister(this);
+        for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
+            lifeCycle.unRegister(this);
+        }
         keyboardHeightProvider.setKeyboardHeightObserver(null);
     }
 
