@@ -1,8 +1,7 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.net.Uri;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -20,7 +19,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -137,7 +135,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseFooterEditMainEvent(FooterEditMainEvent event) {
+    public void onResponseEvent(FooterEditMainEvent event) {
         Log.d("ComposeYScriptAdapter","receive footerEditMain");
         if(event.getStageLine() instanceof StageLine) {
             StageLine stageLine = null;
@@ -154,25 +152,41 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onResponseMainActivityEvent(MainActivityEvent event) {
+    public void onResponseEvent(MainActivityEvent event) {
         switch (event.getMessage()) {
             case "File Selected":
-                MainActivityEvent.FileEvent fileEvent = (MainActivityEvent.FileEvent) event.getData();
-                InputStream inputStream = null;
-                try {
-                    inputStream = fileEvent.resolver.openInputStream(fileEvent.uri);
-                    Log.d("ComposeYScriptAdapter","Available bytes of file: " + inputStream.available());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                final MainActivityEvent.FileEvent fileEvent = (MainActivityEvent.FileEvent) event.getData();
+                new Thread() {
+                    @Override
+                    public void run() {
+                        InputStream inputStream = null;
+                        try {
+                            inputStream = fileEvent.resolver.openInputStream(fileEvent.uri);
+                            Log.d("ComposeYScriptAdapter","Available bytes of file: " + inputStream.available());
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                inputStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        Message msg = Message.obtain(fileEvent.handler, new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO: 9/19/2018 update dataSet
+                                // notifyDataSetChanged();
+                            }
+                        });
+                        msg.sendToTarget();
                     }
-                }
+                }.start();
+
+
                 break;
         }
     }

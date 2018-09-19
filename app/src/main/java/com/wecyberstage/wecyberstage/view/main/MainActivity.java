@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private final String NAVIGATION_COLON = ":";
 
     private KeyboardHeightProvider keyboardHeightProvider;
+    private Handler mainHideHandler = new Handler();
 
     @Inject
     CharacterFactory characterFactory;
@@ -477,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         }
         if ( requestCode == 0 ) {
             Uri uri = data.getData();
-            MainActivityEvent.FileEvent fileEvent = new MainActivityEvent.FileEvent(uri, getContentResolver());
+            MainActivityEvent.FileEvent fileEvent = new MainActivityEvent.FileEvent(uri, getContentResolver(), mainHideHandler);
             MainActivityEvent event = new MainActivityEvent(fileEvent, "File Selected");
             EventBus.getDefault().postSticky(event);
         }

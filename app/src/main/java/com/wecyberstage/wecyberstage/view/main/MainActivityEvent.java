@@ -2,6 +2,7 @@ package com.wecyberstage.wecyberstage.view.main;
 
 import android.content.ContentResolver;
 import android.net.Uri;
+import android.os.Handler;
 
 public class MainActivityEvent {
     private Object data;
@@ -22,11 +23,13 @@ public class MainActivityEvent {
 
     static public class FileEvent {
         public Uri uri;
+        public Handler handler;
         public ContentResolver resolver;
 
-        public FileEvent(Uri uri, ContentResolver resolver) {
+        public FileEvent(Uri uri, ContentResolver resolver, Handler handler) {
             this.uri = uri;
             this.resolver = resolver;
+            this.handler = handler;
         }
     }
 }
