@@ -15,6 +15,9 @@ import com.wecyberstage.wecyberstage.view.main.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
+import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -163,6 +166,13 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
                         try {
                             inputStream = fileEvent.resolver.openInputStream(fileEvent.uri);
                             Log.d("ComposeYScriptAdapter","Available bytes of file: " + inputStream.available());
+                            XWPFDocument doc = new XWPFDocument(inputStream);
+                            XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+                            String text = extractor.getText();
+                            extractor.close();
+                            Log.d("ComposeYScriptAdapter","read from word:" + text);
+                        } catch (OfficeXmlFileException e) {
+                            e.printStackTrace();
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
