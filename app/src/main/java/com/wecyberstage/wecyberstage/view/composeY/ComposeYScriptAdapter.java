@@ -1,6 +1,7 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.app.Activity;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -10,13 +11,20 @@ import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SaveStatesInterface;
 import com.wecyberstage.wecyberstage.view.main.FooterEditMainEvent;
+import com.wecyberstage.wecyberstage.view.main.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
+import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -119,16 +127,18 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
 
     @Override
     public void register(Activity activity) {
+        Log.d("ComposeYScriptAdapter","register");
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void unRegister(Activity activity) {
+        Log.d("ComposeYScriptAdapter","unRegister");
         EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseFooterEditMainEvent(FooterEditMainEvent event) {
+    public void onResponseEvent(FooterEditMainEvent event) {
         Log.d("ComposeYScriptAdapter","receive footerEditMain");
         if(event.getStageLine() instanceof StageLine) {
             StageLine stageLine = null;
@@ -142,5 +152,53 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
 
         }
         notifyDataSetChanged();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onResponseEvent(MainActivityEvent event) {
+        switch (event.getMessage()) {
+            case "File Selected":
+                final MainActivityEvent.FileEvent fileEvent = (MainActivityEvent.FileEvent) event.getData();
+                new Thread() {
+                    @Override
+                    public void run() {
+                        InputStream inputStream = null;
+                        try {
+                            inputStream = fileEvent.resolver.openInputStream(fileEvent.uri);
+                            Log.d("ComposeYScriptAdapter","Available bytes of file: " + inputStream.available());
+                            XWPFDocument doc = new XWPFDocument(inputStream);
+                            XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+                            String text = extractor.getText();
+                            extractor.close();
+                            doc.close();
+                            Log.d("ComposeYScriptAdapter","read from word:" + text);
+                        } catch (OfficeXmlFileException e) {
+                            e.printStackTrace();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                inputStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        Message msg = Message.obtain(fileEvent.handler, new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO: 9/19/2018 update dataSet
+                                // notifyDataSetChanged();
+                            }
+                        });
+                        msg.sendToTarget();
+                    }
+                }.start();
+
+
+                break;
+        }
     }
 }

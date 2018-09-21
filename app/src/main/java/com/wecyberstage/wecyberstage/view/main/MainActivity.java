@@ -1,8 +1,15 @@
 package com.wecyberstage.wecyberstage.view.main;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
+import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -64,12 +71,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.inject.Inject;
 
@@ -85,21 +93,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private final String NAVIGATION_SEMICOLON = ";";
     private final String NAVIGATION_COLON = ":";
 
-    /*
-    private Handler autoHideHandler = new Handler();
-    private Runnable autoHideRunnable=new Runnable() {
-        @Override
-        public void run() {
-            queueLock.lock();
-            if(findViewById(R.id.header_main).getVisibility() == View.VISIBLE) {
-                moveOutHeaderAndFooter(findViewById(R.id.header_main), findViewById(R.id.footer_main));
-            }
-        }
-    };
-    private final Lock queueLock=new ReentrantLock();
-    */
-
     private KeyboardHeightProvider keyboardHeightProvider;
+    private Handler mainHideHandler = new Handler();
 
     @Inject
     CharacterFactory characterFactory;
@@ -248,14 +243,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        for(CustomView customView: customViewList) {
-            customView.onStop(this, appMain);
-        }
-    }
-
     public void setCharacter(Character4Play character) {
         this.character = character;
     }
@@ -341,9 +328,16 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        for(CustomView customView: customViewList) {
+            customView.onStop(this, appMain);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        // autoHideHandler.postDelayed(autoHideRunnable, 3000);
         EventBus.getDefault().register(this);
         for(RegisterBusEventInterface lifeCycle: lifeCycleComponents) {
             lifeCycle.register(this);
@@ -476,49 +470,21 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         }
     }
 
-    /*
-    public void moveOutHeaderAndFooter(final View header, final View playerControl) {
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(
-                ObjectAnimator.ofFloat(header, "alpha", 0.0f),
-                ObjectAnimator.ofFloat(header, "translationY", -header.getHeight()),
-                ObjectAnimator.ofFloat(playerControl, "alpha", 0.0f),
-                ObjectAnimator.ofFloat(playerControl, "translationY", playerControl.getHeight())
-        );
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                header.setVisibility(View.INVISIBLE);
-                playerControl.setVisibility(View.INVISIBLE);
-                queueLock.unlock();
-            }
-        });
-        set.setDuration(300).start();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ( resultCode != Activity.RESULT_OK ) {
+            Log.d("MainActivity", "onActivityResult() error, resultCode: " + resultCode);
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }
+        if ( requestCode == 0 ) {
+            Uri uri = data.getData();
+            MainActivityEvent.FileEvent fileEvent = new MainActivityEvent.FileEvent(uri, getContentResolver(), mainHideHandler);
+            MainActivityEvent event = new MainActivityEvent(fileEvent, "File Selected");
+            EventBus.getDefault().postSticky(event);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
-
-    public void moveInHeaderAndFooter(final View header, final View playerControl) {
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(
-                ObjectAnimator.ofFloat(header, "alpha", 1.0f),
-                ObjectAnimator.ofFloat(header, "translationY", 0),
-                ObjectAnimator.ofFloat(playerControl, "alpha", 1.0f),
-                ObjectAnimator.ofFloat(playerControl, "translationY", 0)
-        );
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                header.setVisibility(View.VISIBLE);
-                playerControl.setVisibility(View.VISIBLE);
-                queueLock.unlock();
-                autoHideHandler.postDelayed(autoHideRunnable, 3000);
-            }
-        });
-        set.setDuration(300).start();
-    }
-    */
-
 
     /*
     public void enlargeContentView(boolean isEnlarge) {
