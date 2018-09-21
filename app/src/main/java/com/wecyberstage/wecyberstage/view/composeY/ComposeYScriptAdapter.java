@@ -170,6 +170,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
                             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
                             String text = extractor.getText();
                             extractor.close();
+                            doc.close();
                             Log.d("ComposeYScriptAdapter","read from word:" + text);
                         } catch (OfficeXmlFileException e) {
                             e.printStackTrace();
