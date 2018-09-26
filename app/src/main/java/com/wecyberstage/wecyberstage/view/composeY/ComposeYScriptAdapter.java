@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -40,6 +42,13 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     final UpdateStagePlayInterface updateStagePlayInterface;
     List<Long> listStart = new ArrayList<>();
     List<Long> listEnd = new ArrayList<>();
+
+    // for apache poi read and replace
+    String parenthesesREGEX = "([（\\(][^\\)）]+[）\\)])|([\\[【][^\\]】]+[\\]】])";
+    String splitREGEX = "(：|:)";
+    Pattern pattern = Pattern.compile(parenthesesREGEX);
+
+
     @Inject
     public ComposeYScriptAdapter(AdapterDelegatesManager<Object> delegates, UpdateStagePlayInterface updateStagePlayInterface) {
         super(delegates);
@@ -169,9 +178,20 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
                             XWPFDocument doc = new XWPFDocument(inputStream);
                             XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
                             String text = extractor.getText();
+                            Matcher matcher = pattern.matcher(text);
+                            String tmp = matcher.replaceAll("");
+                            String[] lines = tmp.split("\n");
+                            for(String line: lines) {
+                                String[] strArr = line.split(splitREGEX);
+                                if (strArr.length > 1) {
+                                    for (String retval : strArr) {
+                                        Log.d("ComposeYScriptAdapter","read from word:" + retval.trim());
+                                    }
+                                }
+                            }
                             extractor.close();
                             doc.close();
-                            Log.d("ComposeYScriptAdapter","read from word:" + text);
+
                         } catch (OfficeXmlFileException e) {
                             e.printStackTrace();
                         } catch (FileNotFoundException e) {
