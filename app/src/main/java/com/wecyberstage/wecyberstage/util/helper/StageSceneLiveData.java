@@ -42,7 +42,7 @@ public class StageSceneLiveData extends LiveData<StageScene> implements PlayStat
                     MaskGraph maskGraph = new MaskGraph(i, arrIcon[j]);
                     mask.maskGraphList.add(maskGraph);
                 }
-                StageRole stageRole = new StageRole(i, mask);
+                StageRole stageRole = new StageRole(i, ""+i, mask);
                 stageScene.stageRoles.add(stageRole);
             }
             for(int i = 0; i< 12; i++) {

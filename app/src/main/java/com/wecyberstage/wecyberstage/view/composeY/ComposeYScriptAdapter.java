@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -83,6 +84,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
                 listStart.add(stageLine.getRoleName());
                 viewType = ComposeYCardViewType.START;
             }
+
             ComposeYItemDto dto = new ComposeYItemDto(viewType, stageLine);
             dataSet.add(dto);
         }
@@ -128,11 +130,15 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
         Log.d("ComposeYScriptAdapter","register");
         String[] sourceArray = (String[]) activity.getIntent().getSerializableExtra(START_TAG);
         if( sourceArray != null ) {
-            listStart = Arrays.asList(sourceArray);
+            for(String str : sourceArray) {
+                listStart.add(str);
+            }
         }
         sourceArray = (String[]) activity.getIntent().getSerializableExtra(END_TAG);
         if( sourceArray != null ) {
-            listEnd = Arrays.asList(sourceArray);
+            for(String str : sourceArray) {
+                listEnd.add(str);
+            }
         }
     }
 
@@ -185,14 +191,13 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
                             String[] lines = tmp.split("\n");
                             for(String line: lines) {
                                 String[] strArr = line.split(splitREGEX);
-                                strArr[0] = strArr[0].trim();
-                                strArr[1] = strArr[1].trim();
                                 if (strArr.length > 1) {
+                                    strArr[0] = strArr[0].trim();
+                                    strArr[1] = strArr[1].trim();
                                     long roleId = getStageRoleIdByName(strArr[0]);
                                     if( roleId == 0 ) {
                                         // add new stageRole
-                                        StageRole stageRole = new StageRole(0, null);
-                                        stageRole.name = strArr[0];
+                                        StageRole stageRole = new StageRole(0, strArr[0], null);
                                         stageScene.stageRoles.add(stageRole);
                                         StageLine stageLine = new StageLine();
                                         stageLine.setStageRole(stageRole);
@@ -230,8 +235,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
                         Message msg = Message.obtain(fileEvent.handler, new Runnable() {
                             @Override
                             public void run() {
-                                // TODO: 9/19/2018 update dataSet
-                                // notifyDataSetChanged();
+                                notifyDataSetChanged();
                             }
                         });
                         msg.sendToTarget();

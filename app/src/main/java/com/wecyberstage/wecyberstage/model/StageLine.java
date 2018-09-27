@@ -38,6 +38,6 @@ public class StageLine extends StageLineEntity implements Cloneable {
     }
 
     public MaskGraph getMaskGraph() {
-        return stageRole.getMaskGraph(maskOrdinal);
+        return stageRole == null? null : stageRole.getMaskGraph(maskOrdinal);
     }
 }

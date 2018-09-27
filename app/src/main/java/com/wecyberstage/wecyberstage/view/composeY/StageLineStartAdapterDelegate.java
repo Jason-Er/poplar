@@ -54,6 +54,7 @@ class StageLineStartAdapterDelegate extends ViewTypeDelegateClass implements Ada
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull RecyclerView.ViewHolder holder) {
         Log.d("LineStartAdapter", "onBindViewHolder position: "+position+" dialogue: "+ ((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
         ((StageLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
-        Glide.with(holder.itemView.getContext()).load(((ComposeYItemDto) items.get(position)).getStageLine().getMaskGraph().graphURL).into(((StageLineViewHolder) holder).mask);
+        if(((ComposeYItemDto) items.get(position)).getStageLine().getMaskGraph() != null)
+            Glide.with(holder.itemView.getContext()).load(((ComposeYItemDto) items.get(position)).getStageLine().getMaskGraph().graphURL).into(((StageLineViewHolder) holder).mask);
     }
 }
