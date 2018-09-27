@@ -36,21 +36,21 @@ public class StageSceneLiveData extends LiveData<StageScene> implements PlayStat
             String[] arrIcon = {"http://demo.sc.chinaz.com/Files/pic/icons/6124/10dvs.png",
                     "http://demo.sc.chinaz.com/Files/pic/icons/6124/3dvs.png",
                     "http://demo.sc.chinaz.com/Files/pic/icons/6124/8dvs.png"};
-            for(int i = 0; i< 12; i++) {
-                MaskGraph maskGraph = new MaskGraph(i%3, 0, arrIcon[i%3]);
-                StageLine line = new StageLine(i%3, "Hello " + i, 3 * i * 1000, 1000, maskGraph);
-                line.ordinal = i + 1;
-                stageScene.stageLines.add(line);
-            }
             for(int i=0; i<3; i++) {
                 Mask mask = new Mask(i);
                 for(int j=0; j<3; j++) {
-                    MaskGraph maskGraph = new MaskGraph(i, j, arrIcon[j]);
+                    MaskGraph maskGraph = new MaskGraph(i, arrIcon[j]);
                     mask.maskGraphList.add(maskGraph);
                 }
                 StageRole stageRole = new StageRole(i, mask);
                 stageScene.stageRoles.add(stageRole);
             }
+            for(int i = 0; i< 12; i++) {
+                StageLine line = new StageLine(stageScene.stageRoles.get(i%3), "Hello " + i, 3 * i * 1000, 1000, i%3);
+                line.ordinal = i + 1;
+                stageScene.stageLines.add(line);
+            }
+
         }
         setValue(stageScene);
     }

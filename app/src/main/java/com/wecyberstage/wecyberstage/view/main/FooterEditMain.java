@@ -227,7 +227,7 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
         MaskGraph maskGraph = stageRole.mask.maskGraphList.get(maskOrdinal);
         Glide.with(getContext()).load(maskGraph.graphURL).into(selectedMask);
         selectedMask.setVisibility(VISIBLE);
-        stageLine.maskGraph = maskGraph;
-        stageLine.roleId = stageRole.id;
+        stageLine.setStageRole(stageRole);
+        stageLine.maskOrdinal = maskOrdinal;
     }
 }

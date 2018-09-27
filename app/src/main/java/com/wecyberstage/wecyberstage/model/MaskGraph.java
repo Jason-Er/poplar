@@ -7,9 +7,8 @@ import com.wecyberstage.wecyberstage.data.cache.MaskGraphEntity;
  */
 
 public class MaskGraph extends MaskGraphEntity {
-    public MaskGraph(long maskId, long ordinal, String graphURL) {
+    public MaskGraph(long maskId, String graphURL) {
         this.maskId = maskId;
-        this.ordinal = ordinal;
         this.graphURL = graphURL;
     }
 }

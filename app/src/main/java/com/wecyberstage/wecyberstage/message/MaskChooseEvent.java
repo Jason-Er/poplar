@@ -1,17 +1,14 @@
 package com.wecyberstage.wecyberstage.message;
 
-import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageLine;
 
 public class MaskChooseEvent {
     private String message;
     private StageLine stageLine;
-    private MaskGraph maskGraph;
 
-    public MaskChooseEvent(String message, StageLine stageLine, MaskGraph maskGraph) {
+    public MaskChooseEvent(String message, StageLine stageLine) {
         this.message = message;
         this.stageLine = stageLine;
-        this.maskGraph = maskGraph;
     }
 
     public String getMessage() {
@@ -30,11 +27,4 @@ public class MaskChooseEvent {
         this.stageLine = stageLine;
     }
 
-    public MaskGraph getMaskGraph() {
-        return maskGraph;
-    }
-
-    public void setMaskGraph(MaskGraph maskGraph) {
-        this.maskGraph = maskGraph;
-    }
 }

@@ -24,7 +24,7 @@ public class MaskGraphEntity {
     @ColumnInfo(name = "mask_id")
     public long maskId;
 
-    public long ordinal;
+    public String description;
 
     @ColumnInfo(name = "graph_url")
     public String graphURL;

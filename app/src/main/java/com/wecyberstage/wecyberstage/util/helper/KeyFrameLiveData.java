@@ -50,8 +50,7 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> implements PlayStateInt
         keyFrame.stageInfo = new KeyFrame.StageInfo();
 
         StageRole stageRole = new StageRole(1, null);
-        stageRole.firstName = "jason";
-        stageRole.lastName = "E";
+        stageRole.name = "jason";
         StageLine line = new StageLine();
         line.dialogue = "Hello world!";
         PointF point = new PointF(200,200);

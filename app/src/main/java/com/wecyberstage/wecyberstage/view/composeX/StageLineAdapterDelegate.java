@@ -122,7 +122,6 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass
                         headPosition ++;
                     }
                 }
-                event.getStageLine().maskGraph = event.getMaskGraph();
                 adapter.notifyItemChanged(headPosition + (int)event.getStageLine().ordinal -1);
                 break;
         }

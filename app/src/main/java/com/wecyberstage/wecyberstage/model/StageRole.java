@@ -12,4 +12,8 @@ public class StageRole extends StageRoleEntity {
         this.id = id;
         this.mask = mask;
     }
+
+    public MaskGraph getMaskGraph(int ordinal) {
+        return mask.getMaskGraph(ordinal);
+    }
 }

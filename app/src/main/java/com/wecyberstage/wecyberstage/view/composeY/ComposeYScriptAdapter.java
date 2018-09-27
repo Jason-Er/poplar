@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
@@ -40,14 +41,14 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     final String START_TAG = "ComposeYArrayStart";
     final String END_TAG = "ComposeYArrayEnd";
     final UpdateStagePlayInterface updateStagePlayInterface;
-    List<Long> listStart = new ArrayList<>();
-    List<Long> listEnd = new ArrayList<>();
+    List<String> listStart = new ArrayList<>();
+    List<String> listEnd = new ArrayList<>();
+    StageScene stageScene;
 
     // for apache poi read and replace
     String parenthesesREGEX = "([（\\(][^\\)）]+[）\\)])|([\\[【][^\\]】]+[\\]】])";
     String splitREGEX = "(：|:)";
     Pattern pattern = Pattern.compile(parenthesesREGEX);
-
 
     @Inject
     public ComposeYScriptAdapter(AdapterDelegatesManager<Object> delegates, UpdateStagePlayInterface updateStagePlayInterface) {
@@ -59,6 +60,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     }
 
     public void setStageScene(@NonNull StageScene stageScene) {
+        this.stageScene = stageScene;
         dataSet = new ArrayList<>();
         for(StageLine stageLine : stageScene.stageLines) {
             handleStageLine(stageLine);
@@ -70,15 +72,15 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
         if(stageLine != null) {
             ComposeYCardViewType viewType;
             // TODO: 2018/5/22 need further refactoring: let user on the phone be end position
-            if(listStart.contains(stageLine.roleId)) {
+            if(listStart.contains(stageLine.getRoleName())) {
                 viewType = ComposeYCardViewType.START;
-            } else if(listEnd.contains(stageLine.roleId)) {
+            } else if(listEnd.contains(stageLine.getRoleName())) {
                 viewType = ComposeYCardViewType.END;
             } else if(listStart.size() > listEnd.size()) {
-                listEnd.add(stageLine.roleId);
+                listEnd.add(stageLine.getRoleName());
                 viewType = ComposeYCardViewType.END;
             } else {
-                listStart.add(stageLine.roleId);
+                listStart.add(stageLine.getRoleName());
                 viewType = ComposeYCardViewType.START;
             }
             ComposeYItemDto dto = new ComposeYItemDto(viewType, stageLine);
@@ -112,11 +114,11 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     public void saveStates(Activity activity) {
         Log.d("ComposeYScriptAdapter","unRegister");
         if(listStart.size() > 0) {
-            Long[] arrayStart = listStart.toArray(new Long[listStart.size()]);
+            String[] arrayStart = listStart.toArray(new String[listStart.size()]);
             activity.getIntent().putExtra(START_TAG, arrayStart);
         }
         if(listEnd.size() > 0) {
-            Long[] arrayEnd = listEnd.toArray((new Long[listEnd.size()]));
+            String[] arrayEnd = listEnd.toArray((new String[listEnd.size()]));
             activity.getIntent().putExtra(END_TAG, arrayEnd);
         }
     }
@@ -124,11 +126,11 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     @Override
     public void restoreStates(Activity activity) {
         Log.d("ComposeYScriptAdapter","register");
-        Long[] sourceArray = (Long[]) activity.getIntent().getSerializableExtra(START_TAG);
+        String[] sourceArray = (String[]) activity.getIntent().getSerializableExtra(START_TAG);
         if( sourceArray != null ) {
             listStart = Arrays.asList(sourceArray);
         }
-        sourceArray = (Long[]) activity.getIntent().getSerializableExtra(END_TAG);
+        sourceArray = (String[]) activity.getIntent().getSerializableExtra(END_TAG);
         if( sourceArray != null ) {
             listEnd = Arrays.asList(sourceArray);
         }
@@ -183,9 +185,28 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
                             String[] lines = tmp.split("\n");
                             for(String line: lines) {
                                 String[] strArr = line.split(splitREGEX);
+                                strArr[0] = strArr[0].trim();
+                                strArr[1] = strArr[1].trim();
                                 if (strArr.length > 1) {
-                                    for (String retval : strArr) {
-                                        Log.d("ComposeYScriptAdapter","read from word:" + retval.trim());
+                                    long roleId = getStageRoleIdByName(strArr[0]);
+                                    if( roleId == 0 ) {
+                                        // add new stageRole
+                                        StageRole stageRole = new StageRole(0, null);
+                                        stageRole.name = strArr[0];
+                                        stageScene.stageRoles.add(stageRole);
+                                        StageLine stageLine = new StageLine();
+                                        stageLine.setStageRole(stageRole);
+                                        stageLine.dialogue = strArr[1];
+                                        stageScene.stageLines.add(stageLine);
+                                        handleStageLine(stageLine);
+                                    } else {
+                                        // the stageRole is already exists
+                                        StageRole stageRole = getStageRoleById(roleId);
+                                        StageLine stageLine = new StageLine();
+                                        stageLine.setStageRole(stageRole);
+                                        stageLine.dialogue = strArr[1];
+                                        stageScene.stageLines.add(stageLine);
+                                        handleStageLine(stageLine);
                                     }
                                 }
                             }
@@ -220,5 +241,48 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
 
                 break;
         }
+    }
+
+    private StageRole getStageRoleById(Long id) {
+        StageRole stageRole = null;
+        if(stageScene != null) {
+            if(stageScene.stageRoles != null) {
+                for(StageRole role:stageScene.stageRoles) {
+                    if(role.id == id) {
+                        stageRole = role;
+                        break;
+                    }
+                }
+            }
+        }
+        return stageRole;
+    }
+
+    private long getStageRoleIdByName(String name) {
+        long id = 0;
+        if(isNameInCast(name)) {
+            for(StageRole stageRole:stageScene.stageRoles) {
+                if(stageRole.name.equals(name)) {
+                    id = stageRole.id;
+                    break;
+                }
+            }
+        }
+        return id;
+    }
+
+    private boolean isNameInCast(String name) {
+        boolean status = false;
+        if(stageScene != null) {
+            if(stageScene.stageRoles != null) {
+                for(StageRole stageRole:stageScene.stageRoles) {
+                    if(stageRole.name.equals(name)) {
+                        status = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return status;
     }
 }
