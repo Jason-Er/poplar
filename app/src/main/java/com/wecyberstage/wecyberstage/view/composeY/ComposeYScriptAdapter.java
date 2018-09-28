@@ -52,11 +52,15 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     Pattern pattern = Pattern.compile(parenthesesREGEX);
 
     @Inject
-    public ComposeYScriptAdapter(AdapterDelegatesManager<Object> delegates, UpdateStagePlayInterface updateStagePlayInterface) {
+    public ComposeYScriptAdapter(AdapterDelegatesManager<Object> delegates, UpdateStagePlayInterface updateStagePlayInterface, OnStartDragListener startDragListener) {
         super(delegates);
+        StageLineStartAdapterDelegate stageLineStartAdapterDelegate = new StageLineStartAdapterDelegate(ComposeYCardViewType.START.ordinal());
+        StageLineEndAdapterDelegate stageLineEndAdapterDelegate = new StageLineEndAdapterDelegate(ComposeYCardViewType.END.ordinal());
         delegatesManager
-                .addDelegate(new StageLineStartAdapterDelegate(ComposeYCardViewType.START.ordinal()))
-                .addDelegate(new StageLineEndAdapterDelegate(ComposeYCardViewType.END.ordinal()));
+                .addDelegate(stageLineStartAdapterDelegate)
+                .addDelegate(stageLineEndAdapterDelegate);
+        stageLineStartAdapterDelegate.setOnStartDragListener(startDragListener);
+        stageLineEndAdapterDelegate.setOnStartDragListener(startDragListener);
         this.updateStagePlayInterface = updateStagePlayInterface;
     }
 

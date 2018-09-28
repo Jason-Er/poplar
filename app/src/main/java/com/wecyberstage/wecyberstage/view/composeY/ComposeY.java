@@ -67,7 +67,7 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
-        adapter = new ComposeYScriptAdapter(new AdapterDelegatesManager<>(), this);
+        adapter = new ComposeYScriptAdapter(new AdapterDelegatesManager<>(), this, this);
         adapter.restoreStates(activity);
 
         ((RecyclerView)view).setHasFixedSize(true);
