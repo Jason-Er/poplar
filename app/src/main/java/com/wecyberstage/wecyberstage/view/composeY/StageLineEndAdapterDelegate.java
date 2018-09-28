@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.view.composeX.StageLineCardView;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -31,9 +31,9 @@ class StageLineEndAdapterDelegate extends ViewTypeDelegateClass implements Adapt
     class StageLineViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.composeLine_dragHandle)
         View handleView;
-        @BindView(R.id.composeY_stageLine_end_image)
+        @BindView(R.id.stageLine_mask)
         ImageView mask;
-        @BindView(R.id.composeY_stageLine_end_text)
+        @BindView(R.id.stageLine_dialogue)
         TextView dialogue;
 
         public StageLineViewHolder(View v) {
@@ -58,20 +58,13 @@ class StageLineEndAdapterDelegate extends ViewTypeDelegateClass implements Adapt
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull final RecyclerView.ViewHolder holder) {
         Log.d("LineEndAdapter", "onBindViewHolder position: "+position + " dialogue: "+ ((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
-        ((StageLineEnd)(holder.itemView)).setStageLine(((ComposeYItemDto) items.get(position)).getStageLine());
+        ((StageLineCardView)(holder.itemView)).setStageLine(((ComposeYItemDto) items.get(position)).getStageLine());
         ((StageLineViewHolder) holder).handleView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     onStartDragListener.onStartDrag(holder);
                 }
-                return false;
-            }
-        });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Log.d("StageLineEnd","Item long click");
                 return false;
             }
         });

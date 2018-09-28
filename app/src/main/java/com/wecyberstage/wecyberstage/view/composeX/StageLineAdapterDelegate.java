@@ -46,9 +46,9 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass
     class ComposeLineViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.composeXCardLine_dragHandle)
         ImageView dragHandle;
-        @BindView(R.id.composeXCardLine_lineMask)
+        @BindView(R.id.stageLine_mask)
         ImageView mask;
-        @BindView(R.id.composeXCardLine_lineDialogue)
+        @BindView(R.id.stageLine_dialogue)
         TextView dialogue;
         ComposeLineViewHolder(View v) {
             super(v);

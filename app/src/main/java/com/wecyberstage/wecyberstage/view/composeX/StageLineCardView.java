@@ -3,8 +3,10 @@ package com.wecyberstage.wecyberstage.view.composeX;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,19 +27,27 @@ public class StageLineCardView extends RelativeLayout {
     private int position;
     private StageLine stageLine;
 
-    @BindView(R.id.composeXCardLine_dragHandle)
-    ImageView dragHandle;
-    @BindView(R.id.composeXCardLine_lineMask)
+    @BindView(R.id.stageLine_mask)
     ImageView mask;
-    @BindView(R.id.composeXCardLine_lineDialogue)
+    @BindView(R.id.stageLine_dialogue)
     TextView dialogue;
+
+    private GestureDetectorCompat detectorCompat;
+    final GestureDetector.SimpleOnGestureListener gestureDetector = new GestureDetector.SimpleOnGestureListener(){
+        @Override
+        public void onLongPress(MotionEvent e) {
+            Log.d("StageLineCardView","Long pressed");
+        }
+    };
 
     public StageLineCardView(@NonNull Context context) {
         super(context);
+        detectorCompat = new GestureDetectorCompat(context, gestureDetector);
     }
 
     public StageLineCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        detectorCompat = new GestureDetectorCompat(context, gestureDetector);
     }
 
     public StageLineCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -50,19 +60,14 @@ public class StageLineCardView extends RelativeLayout {
         ButterKnife.bind(this);
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     private long lastTouchDown;
     private static int CLICK_ACTION_THRESHHOLD = 200;
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        if (detectorCompat.onTouchEvent(ev)) {
+            return true;
+        }
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 lastTouchDown = System.currentTimeMillis();
@@ -76,6 +81,14 @@ public class StageLineCardView extends RelativeLayout {
                 break;
         }
         return true;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public StageLine getStageLine() {
