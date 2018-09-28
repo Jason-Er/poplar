@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
+import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
@@ -63,6 +64,7 @@ import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
+import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -250,11 +252,14 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     private void constructLifeCycleComponents() {
-        if( playerControl != null && playerControl instanceof RegisterBusEventInterface) {
+        if( playerControl != null && playerControl instanceof RegisterBusEventInterface ) {
             lifeCycleComponents.add((RegisterBusEventInterface) playerControl);
         }
-        if( header != null && header instanceof RegisterBusEventInterface) {
+        if( header != null && header instanceof RegisterBusEventInterface ) {
             lifeCycleComponents.add((RegisterBusEventInterface) header);
+        }
+        if( footerEditMain!= null && footerEditMain instanceof RegisterBusEventInterface ) {
+            lifeCycleComponents.add(footerEditMain);
         }
         for(CustomView customView: customViewList) {
             if(customView instanceof RegisterBusEventInterface) {
@@ -377,6 +382,15 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+        switch ( event.getMessage() ) {
+            case "onLongPress":
+                Log.d("MainActivity",event.getMessage());
+                break;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -22,8 +23,13 @@ import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
+import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -31,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBack {
+public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBack, RegisterBusEventInterface {
 
     enum PANEL_VISIBLE {
         MASK_VISIBLE, FILE_VISIBLE, BOTH_VISIBLE, BOTH_GONE
@@ -230,4 +236,24 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
         stageLine.setStageRole(stageRole);
         stageLine.maskOrdinal = maskOrdinal;
     }
+
+    @Override
+    public void register(Activity activity) {
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void unRegister(Activity activity) {
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+        switch (event.getMessage()) {
+            case "onLongPress":
+                Log.d("FooterEditMain","onLongPress");
+                break;
+        }
+    }
+
 }

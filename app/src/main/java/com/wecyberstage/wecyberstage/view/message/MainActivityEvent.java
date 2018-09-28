@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.main;
+package com.wecyberstage.wecyberstage.view.message;
 
 import android.content.ContentResolver;
 import android.net.Uri;

@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.main;
+package com.wecyberstage.wecyberstage.view.message;
 
 public class FooterEditMainEvent {
     private Object stageLine; // one line or lines

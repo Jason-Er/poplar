@@ -1,6 +1,6 @@
 package com.wecyberstage.wecyberstage.view.message;
 
-public class StageLineCardViewEvent extends MessageEvent {
+public class StageLineCardViewEvent extends BaseEvent {
 
     public StageLineCardViewEvent(Object data, String message) {
         super(data, message);
