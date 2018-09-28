@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.view.composeX.StageLineCardView;
+import com.wecyberstage.wecyberstage.view.common.StageLineCardView;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 

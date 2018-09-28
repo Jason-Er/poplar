@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
-import com.wecyberstage.wecyberstage.message.ComposeEvent;
+import com.wecyberstage.wecyberstage.view.message.ComposeEvent;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlSub1Interface;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 

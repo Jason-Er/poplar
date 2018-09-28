@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.message.MaskChooseEvent;
+import com.wecyberstage.wecyberstage.view.message.MaskChooseEvent;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageLine;

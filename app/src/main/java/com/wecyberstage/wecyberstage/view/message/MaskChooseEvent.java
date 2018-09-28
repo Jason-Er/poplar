@@ -1,19 +1,14 @@
-package com.wecyberstage.wecyberstage.message;
-
-import android.graphics.Rect;
+package com.wecyberstage.wecyberstage.view.message;
 
 import com.wecyberstage.wecyberstage.model.StageLine;
 
-public class MaskClickEvent {
-
+public class MaskChooseEvent {
     private String message;
     private StageLine stageLine;
-    private Rect rect;
 
-    public MaskClickEvent(String message, StageLine stageLine, Rect rect) {
+    public MaskChooseEvent(String message, StageLine stageLine) {
         this.message = message;
         this.stageLine = stageLine;
-        this.rect = rect;
     }
 
     public String getMessage() {
@@ -32,11 +27,4 @@ public class MaskClickEvent {
         this.stageLine = stageLine;
     }
 
-    public Rect getRect() {
-        return rect;
-    }
-
-    public void setRect(Rect rect) {
-        this.rect = rect;
-    }
 }

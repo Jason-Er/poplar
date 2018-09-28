@@ -3,7 +3,7 @@ package com.wecyberstage.wecyberstage.view.main;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import com.wecyberstage.wecyberstage.message.MessageEvent;
+import com.wecyberstage.wecyberstage.view.message.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
 

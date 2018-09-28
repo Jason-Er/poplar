@@ -13,10 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.message.MaskChooseEvent;
+import com.wecyberstage.wecyberstage.view.message.MaskChooseEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.view.common.StageLineCardView;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
-import com.wecyberstage.wecyberstage.message.MaskClickEvent;
+import com.wecyberstage.wecyberstage.view.message.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;

@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.composeX;
+package com.wecyberstage.wecyberstage.view.common;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,6 +37,16 @@ public class StageLineCardView extends RelativeLayout {
         @Override
         public void onLongPress(MotionEvent e) {
             Log.d("StageLineCardView","Long pressed");
+            StageLineCardViewEvent event = new StageLineCardViewEvent(stageLine, "onLongPress");
+            EventBus.getDefault().post(event);
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            Log.d("StageLineCardView", "single click");
+            StageLineCardViewEvent event = new StageLineCardViewEvent("onSingleTapUp");
+            EventBus.getDefault().post(event);
+            return true;
         }
     };
 
@@ -60,25 +70,10 @@ public class StageLineCardView extends RelativeLayout {
         ButterKnife.bind(this);
     }
 
-    private long lastTouchDown;
-    private static int CLICK_ACTION_THRESHHOLD = 200;
-
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (detectorCompat.onTouchEvent(ev)) {
             return true;
-        }
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                lastTouchDown = System.currentTimeMillis();
-                break;
-            case MotionEvent.ACTION_UP:
-                if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHHOLD) {
-                    Log.w("App", "You clicked!");
-                    OutsideClickEvent event = new OutsideClickEvent("OUTSIDE_CLICK");
-                    EventBus.getDefault().post(event);
-                }
-                break;
         }
         return true;
     }

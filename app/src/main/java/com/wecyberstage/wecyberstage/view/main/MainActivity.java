@@ -2,14 +2,11 @@ package com.wecyberstage.wecyberstage.view.main;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -27,7 +24,7 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
-import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
+import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
@@ -55,7 +52,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
-import com.wecyberstage.wecyberstage.message.MessageEvent;
+import com.wecyberstage.wecyberstage.view.message.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightObserver;
 import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightProvider;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
@@ -71,9 +68,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -415,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponsePlayerControlEvent(PlayerControlEvent event) {
+    public void onResponseMessageEvent(PlayerControlEvent event) {
         Log.i("Main", "onResponsePlayerControlEvent: " + event.getMessage());
         switch (event.getMessage()) {
             case "STOP":

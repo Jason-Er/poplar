@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.message;
+package com.wecyberstage.wecyberstage.view.message;
 
 public class PlayerControlEvent {
     private String message;
