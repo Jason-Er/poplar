@@ -58,7 +58,7 @@ class StageLineEndAdapterDelegate extends ViewTypeDelegateClass implements Adapt
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull final RecyclerView.ViewHolder holder) {
         Log.d("LineEndAdapter", "onBindViewHolder position: "+position + " dialogue: "+ ((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
-        ((StageLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
+        ((StageLineEnd)(holder.itemView)).setStageLine(((ComposeYItemDto) items.get(position)).getStageLine());
         ((StageLineViewHolder) holder).handleView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -68,8 +68,13 @@ class StageLineEndAdapterDelegate extends ViewTypeDelegateClass implements Adapt
                 return false;
             }
         });
-        if(((ComposeYItemDto) items.get(position)).getStageLine().getMaskGraph() != null)
-            Glide.with(holder.itemView.getContext()).load(((ComposeYItemDto) items.get(position)).getStageLine().getMaskGraph().graphURL).into(((StageLineViewHolder) holder).mask);
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d("StageLineEnd","Item long click");
+                return false;
+            }
+        });
     }
 
     public void setOnStartDragListener(OnStartDragListener onStartDragListener) {

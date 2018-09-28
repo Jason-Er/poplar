@@ -58,7 +58,7 @@ class StageLineStartAdapterDelegate extends ViewTypeDelegateClass implements Ada
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull final RecyclerView.ViewHolder holder) {
         Log.d("LineStartAdapter", "onBindViewHolder position: "+position+" dialogue: "+ ((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
-        ((StageLineViewHolder) holder).dialogue.setText(((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
+        ((StageLineStart)(holder.itemView)).setStageLine(((ComposeYItemDto) items.get(position)).getStageLine());
         ((StageLineViewHolder) holder).handleView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -68,8 +68,13 @@ class StageLineStartAdapterDelegate extends ViewTypeDelegateClass implements Ada
                 return false;
             }
         });
-        if(((ComposeYItemDto) items.get(position)).getStageLine().getMaskGraph() != null)
-            Glide.with(holder.itemView.getContext()).load(((ComposeYItemDto) items.get(position)).getStageLine().getMaskGraph().graphURL).into(((StageLineViewHolder) holder).mask);
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d("StageLineStart","Item long click");
+                return false;
+            }
+        });
     }
 
     public void setOnStartDragListener(OnStartDragListener onStartDragListener) {
