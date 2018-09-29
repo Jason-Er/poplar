@@ -93,6 +93,7 @@ public class StageLineCardView extends RelativeLayout {
     public void setStageLine(StageLine stageLine) {
         this.stageLine = stageLine;
         dialogue.setText(stageLine.dialogue);
-        Glide.with(getContext()).load(stageLine.getMaskGraph().graphURL).into(mask);
+        if(stageLine.getMaskGraph() != null)
+            Glide.with(getContext()).load(stageLine.getMaskGraph().graphURL).into(mask);
     }
 }

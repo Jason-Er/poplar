@@ -16,9 +16,11 @@ import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
+
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -233,7 +235,6 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
                                 e.printStackTrace();
                             }
                         }
-
                         Message msg = Message.obtain(fileEvent.handler, new Runnable() {
                             @Override
                             public void run() {
