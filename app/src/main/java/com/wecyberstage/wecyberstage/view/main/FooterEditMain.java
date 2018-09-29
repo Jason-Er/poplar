@@ -252,6 +252,11 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
         switch (event.getMessage()) {
             case "onLongPress":
                 Log.d("FooterEditMain","onLongPress");
+                if(event.getData() != null) {
+                    StageLine stageLine = (StageLine) event.getData();
+                    selectedMask(stageLine.stageRole, stageLine.maskOrdinal);
+                    editText.setText(stageLine.dialogue);
+                }
                 break;
         }
     }
