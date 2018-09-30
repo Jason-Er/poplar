@@ -161,16 +161,12 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseEvent(FooterEditMainEvent event) {
         Log.d("ComposeYScriptAdapter","receive footerEditMain");
-        if(event.getStageLine() instanceof StageLine) {
-            StageLine stageLine = null;
-            try {
-                stageLine = (StageLine) ((StageLine) event.getStageLine()).clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-            handleStageLine(stageLine);
-        } else if(event.getStageLine() instanceof ArrayList) {
 
+        if(event.getStageLine() instanceof StageLine) {
+            StageLine stageLine = (StageLine) event.getStageLine();
+            if( !stageScene.stageLines.contains( stageLine ) ) {
+                handleStageLine(stageLine);
+            }
         }
         notifyDataSetChanged();
     }

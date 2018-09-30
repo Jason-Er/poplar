@@ -24,6 +24,7 @@ import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
+import com.wecyberstage.wecyberstage.view.message.FABEvent;
 import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
 import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
 
@@ -70,7 +71,6 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
         super(context, attrs, defStyleAttr);
     }
 
-    private List<StageLine> stageLines;
     private StageLine stageLine;
 
     @Override
@@ -173,6 +173,7 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
                 selectedMask.setVisibility(GONE);
                 FooterEditMainEvent event = new FooterEditMainEvent(stageLine);
                 EventBus.getDefault().post(event);
+                stageLine = null;
                 break;
         }
     }
@@ -237,6 +238,17 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
         stageLine.maskOrdinal = maskOrdinal;
     }
 
+    public void setStageLine(StageLine stageLine) {
+        this.stageLine = stageLine;
+        if(stageLine.getMaskGraph() != null) {
+            Glide.with(getContext()).load(stageLine.getMaskGraph().graphURL).into(selectedMask);
+            selectedMask.setVisibility(VISIBLE);
+        }
+        else
+            selectedMask.setVisibility(GONE);
+        editText.setText(stageLine.dialogue);
+    }
+
     @Override
     public void register(Activity activity) {
         EventBus.getDefault().register(this);
@@ -253,18 +265,21 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
             case "onLongPress":
                 Log.d("FooterEditMain","onLongPress");
                 if(event.getData() != null) {
-                    StageLine stageLine = (StageLine) event.getData();
-                    selectedMask(stageLine.stageRole, stageLine.maskOrdinal);
-                    editText.setText(stageLine.dialogue);
+                    setStageLine((StageLine) event.getData());
                 }
                 break;
             case "onSingleTapUp":
                 Log.d("FooterEditMain","onSingleTapUp");
-                editText.setText("");
-                selectedMask.setVisibility(GONE);
+                setStageLine(new StageLine());
                 hide();
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(FABEvent event) {
+        lineEdit.setVisibility(View.VISIBLE);
+        setStageLine(new StageLine());
     }
 
 }
