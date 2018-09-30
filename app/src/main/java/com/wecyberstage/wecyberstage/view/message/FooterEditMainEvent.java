@@ -1,17 +1,16 @@
 package com.wecyberstage.wecyberstage.view.message;
 
-public class FooterEditMainEvent {
-    private Object stageLine; // one line or lines
+public class FooterEditMainEvent extends BaseEvent {
 
-    public FooterEditMainEvent(Object stageLine) {
-        this.stageLine = stageLine;
+    public FooterEditMainEvent(String message) {
+        super(message);
     }
 
-    public Object getStageLine() {
-        return stageLine;
+    public FooterEditMainEvent(Object data) {
+        super(data);
     }
 
-    public void setStageLine(Object stageLine) {
-        this.stageLine = stageLine;
+    public FooterEditMainEvent(Object data, String message) {
+        super(data, message);
     }
 }

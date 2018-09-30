@@ -171,7 +171,7 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
                 hide();
                 editText.setText("");
                 selectedMask.setVisibility(GONE);
-                FooterEditMainEvent event = new FooterEditMainEvent(stageLine);
+                FooterEditMainEvent event = new FooterEditMainEvent(stageLine, "stageLine checked");
                 EventBus.getDefault().post(event);
                 stageLine = null;
                 break;
@@ -195,6 +195,14 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
         }
 
     }
+
+    @OnClick(R.id.fileChooseSub_delete)
+    public void deleteStageLines(View view) {
+        Log.d("FooterEditMain","deleteStageLines click");
+        FooterEditMainEvent event = new FooterEditMainEvent("deleteStageLines");
+        EventBus.getDefault().post(event);
+    }
+
 
     public void setStageRoles(List<StageRole> stageRoles) {
         maskChoose.setStageRoles(stageRoles);
