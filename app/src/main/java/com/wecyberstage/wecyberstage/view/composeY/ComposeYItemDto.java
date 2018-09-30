@@ -15,6 +15,10 @@ public class ComposeYItemDto {
         return viewType;
     }
 
+    public void setViewType(ComposeYCardViewType viewType) {
+        this.viewType = viewType;
+    }
+
     public StageLine getStageLine() {
         return stageLine;
     }

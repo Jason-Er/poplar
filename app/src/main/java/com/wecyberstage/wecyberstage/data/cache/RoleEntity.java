@@ -21,11 +21,8 @@ public class RoleEntity {
     @PrimaryKey
     public long id;
 
-    @ColumnInfo(name = "first_name")
-    public String firstName;
-
-    @ColumnInfo(name = "last_name")
-    public String lastName;
+    @ColumnInfo(name = "name")
+    public String name;
 
     public String description;
 

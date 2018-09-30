@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.helper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,7 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.message.MaskChooseEvent;
+import com.wecyberstage.wecyberstage.view.message.MaskChooseEvent;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageLine;
@@ -30,20 +29,19 @@ public class MaskChoose extends RelativeLayout {
 
     private class MaskIcon extends android.support.v7.widget.AppCompatImageButton {
 
-        private MaskGraph maskGraph;
+        private int maskOrdinal;
 
         public MaskIcon(Context context) {
             super(context);
         }
 
-        public MaskGraph getMaskGraph() {
-            return maskGraph;
+        public int getMaskOrdinal() {
+            return maskOrdinal;
         }
 
-        public void setMaskGraph(MaskGraph maskGraph) {
-            this.maskGraph = maskGraph;
+        public void setMaskOrdinal(int maskOrdinal) {
+            this.maskOrdinal = maskOrdinal;
         }
-
     }
 
     public MaskChoose(Context context) {
@@ -83,14 +81,16 @@ public class MaskChoose extends RelativeLayout {
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(height, width);
             MaskIcon imageButton = new MaskIcon(getContext());
             imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageButton.setMaskGraph(mg);
+            imageButton.setMaskOrdinal(mask.maskGraphList.indexOf(mg));
+
             masksFrame.addView(imageButton, layoutParams);
             Glide.with(getContext()).load(mg.graphURL).into(imageButton);
             imageButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.i("MaskChoose","click");
-                    MaskChooseEvent event = new MaskChooseEvent("Click", stageLine, ((MaskIcon)v).getMaskGraph());
+                    stageLine.maskOrdinal = ((MaskIcon)v).getMaskOrdinal();
+                    MaskChooseEvent event = new MaskChooseEvent("Click", stageLine);
                     EventBus.getDefault().post(event);
                 }
             });

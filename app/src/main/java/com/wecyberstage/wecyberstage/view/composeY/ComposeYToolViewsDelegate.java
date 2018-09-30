@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
+import com.wecyberstage.wecyberstage.view.message.FABEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
 
@@ -32,7 +35,8 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
             @Override
             public void onClick(View v) {
                 ((FloatingActionButton)floatingActionButton).hide();
-                lineEditBar.setVisibility(View.VISIBLE);
+                FABEvent event = new FABEvent("click");
+                EventBus.getDefault().post(event);
             }
         });
         ((AppBarLayout) toolbar.getParent()).setExpanded(false, true);

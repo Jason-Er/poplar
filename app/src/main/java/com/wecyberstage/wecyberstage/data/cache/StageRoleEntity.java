@@ -35,11 +35,9 @@ public class StageRoleEntity extends RoleEntity {
     @ColumnInfo(name = "adapted_from")
     public long adaptedFrom;
 
-    @ColumnInfo(name = "first_name")
-    public String firstName;
-
-    @ColumnInfo(name = "last_name")
-    public String lastName;
+    // TODO: 9/26/2018 need test if real need this field for it has extends RoleEntity
+    @ColumnInfo(name = "name")
+    public String name;
 
     public String description;
 }

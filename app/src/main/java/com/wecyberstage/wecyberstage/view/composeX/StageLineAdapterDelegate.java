@@ -13,10 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.message.MaskChooseEvent;
+import com.wecyberstage.wecyberstage.view.message.MaskChooseEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.view.common.StageLineCardView;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
-import com.wecyberstage.wecyberstage.message.MaskClickEvent;
+import com.wecyberstage.wecyberstage.view.message.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
@@ -46,9 +47,9 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass
     class ComposeLineViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.composeXCardLine_dragHandle)
         ImageView dragHandle;
-        @BindView(R.id.composeXCardLine_lineMask)
+        @BindView(R.id.stageLine_mask)
         ImageView mask;
-        @BindView(R.id.composeXCardLine_lineDialogue)
+        @BindView(R.id.stageLine_dialogue)
         TextView dialogue;
         ComposeLineViewHolder(View v) {
             super(v);
@@ -122,7 +123,6 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass
                         headPosition ++;
                     }
                 }
-                event.getStageLine().maskGraph = event.getMaskGraph();
                 adapter.notifyItemChanged(headPosition + (int)event.getStageLine().ordinal -1);
                 break;
         }

@@ -10,8 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.message.ComposeEvent;
-import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
+import com.wecyberstage.wecyberstage.view.message.ComposeEvent;
+import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 
 import org.greenrobot.eventbus.EventBus;

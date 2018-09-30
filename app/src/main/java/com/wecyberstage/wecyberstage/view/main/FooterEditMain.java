@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -22,8 +23,14 @@ import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
+import com.wecyberstage.wecyberstage.view.message.FABEvent;
+import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -31,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBack {
+public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBack, RegisterBusEventInterface {
 
     enum PANEL_VISIBLE {
         MASK_VISIBLE, FILE_VISIBLE, BOTH_VISIBLE, BOTH_GONE
@@ -64,7 +71,6 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
         super(context, attrs, defStyleAttr);
     }
 
-    private List<StageLine> stageLines;
     private StageLine stageLine;
 
     @Override
@@ -167,6 +173,7 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
                 selectedMask.setVisibility(GONE);
                 FooterEditMainEvent event = new FooterEditMainEvent(stageLine);
                 EventBus.getDefault().post(event);
+                stageLine = null;
                 break;
         }
     }
@@ -227,7 +234,52 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
         MaskGraph maskGraph = stageRole.mask.maskGraphList.get(maskOrdinal);
         Glide.with(getContext()).load(maskGraph.graphURL).into(selectedMask);
         selectedMask.setVisibility(VISIBLE);
-        stageLine.maskGraph = maskGraph;
-        stageLine.roleId = stageRole.id;
+        stageLine.setStageRole(stageRole);
+        stageLine.maskOrdinal = maskOrdinal;
     }
+
+    public void setStageLine(StageLine stageLine) {
+        this.stageLine = stageLine;
+        if(stageLine.getMaskGraph() != null) {
+            Glide.with(getContext()).load(stageLine.getMaskGraph().graphURL).into(selectedMask);
+            selectedMask.setVisibility(VISIBLE);
+        }
+        else
+            selectedMask.setVisibility(GONE);
+        editText.setText(stageLine.dialogue);
+    }
+
+    @Override
+    public void register(Activity activity) {
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void unRegister(Activity activity) {
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+        switch (event.getMessage()) {
+            case "onLongPress":
+                Log.d("FooterEditMain","onLongPress");
+                if(event.getData() != null) {
+                    setStageLine((StageLine) event.getData());
+                }
+                break;
+            case "onSingleTapUp":
+                Log.d("FooterEditMain","onSingleTapUp");
+                setStageLine(new StageLine());
+                hide();
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(FABEvent event) {
+        lineEdit.setVisibility(View.VISIBLE);
+        setStageLine(new StageLine());
+    }
+
 }

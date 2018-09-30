@@ -37,8 +37,8 @@ public class StageLineEntity {
     @ColumnInfo(name = "role_id")
     public long roleId;
 
-    @ColumnInfo(name = "maskGraph_id")
-    public long maskGraphId;
+    @ColumnInfo(name = "mask_ordinal")
+    public int maskOrdinal;
 
     @ColumnInfo(name = "voice_id")
     public long voiceId;

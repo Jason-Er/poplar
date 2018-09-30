@@ -6,8 +6,9 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 
-import com.wecyberstage.wecyberstage.message.ComposeEvent;
+import com.wecyberstage.wecyberstage.view.message.ComposeEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.view.common.StageLineCardView;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;

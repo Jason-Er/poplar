@@ -12,4 +12,8 @@ public class Mask extends MaskEntity {
         this.id = id;
         this.maskGraphList = new ArrayList<>();
     }
+
+    public MaskGraph getMaskGraph(int ordinal) {
+        return maskGraphList.get(ordinal);
+    }
 }

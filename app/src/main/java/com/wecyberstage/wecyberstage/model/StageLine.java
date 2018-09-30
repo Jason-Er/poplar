@@ -7,21 +7,37 @@ import com.wecyberstage.wecyberstage.data.cache.StageLineEntity;
  */
 
 public class StageLine extends StageLineEntity implements Cloneable {
-    public MaskGraph maskGraph;
     public Voice voice;
+    public StageRole stageRole;
     public StageLine() {}
     // TODO: 7/23/2018 below constructor used for test temporarily
-    public StageLine(long roleId, String dialogue, long beginTime, long duration, MaskGraph maskGraph) {
-        this.roleId = roleId;
+    public StageLine(StageRole stageRole, String dialogue, long beginTime, long duration, int maskOrdinal) {
+        this.stageRole = stageRole;
         this.dialogue = dialogue;
         this.beginTime = beginTime;
         this.voice = new Voice();
         this.voice.duration = duration;
-        this.maskGraph = maskGraph;
+        this.maskOrdinal = maskOrdinal;
     }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public String getRoleName() {
+        return stageRole.name;
+    }
+
+    public void setStageRole(StageRole stageRole) {
+        this.stageRole = stageRole;
+    }
+
+    public String getDialogue() {
+        return dialogue;
+    }
+
+    public MaskGraph getMaskGraph() {
+        return stageRole == null? null : stageRole.getMaskGraph(maskOrdinal);
     }
 }

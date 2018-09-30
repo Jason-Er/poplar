@@ -6,12 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
-import com.wecyberstage.wecyberstage.message.MessageEvent;
-import com.wecyberstage.wecyberstage.message.OutsideClickEvent;
+import com.wecyberstage.wecyberstage.view.message.MessageEvent;
+import com.wecyberstage.wecyberstage.view.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
+import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
-import com.wecyberstage.wecyberstage.message.MaskClickEvent;
+import com.wecyberstage.wecyberstage.view.message.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.helper.MaskChoose;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
@@ -70,7 +71,7 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMaskClickEventBus(MaskClickEvent event) {
+    public void onResponseMessageEvent(MaskClickEvent event) {
         switch (event.getMessage()) {
             case "MASK_CLICK":
                 Log.i("RoleLayoutDelegate","receive MASK_CLICK stageRole ID:" + event.getStageLine().roleId);
@@ -80,8 +81,9 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
         }
     }
 
+    // TODO: 9/28/2018 below two methods will be replaced by popup window
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onOutsideClickEventBus(OutsideClickEvent event) {
+    public void onResponseMessageEvent(OutsideClickEvent event) {
         if(isAnyViewVisible()) {
             Iterator iterator = roleMap.entrySet().iterator();
             while (iterator.hasNext()) {
@@ -91,6 +93,24 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
         } else {
             MessageEvent messageEvent = new MessageEvent("CLICK");
             EventBus.getDefault().post(messageEvent);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+        switch (event.getMessage()) {
+            case "onSingleTapUp":
+                if(isAnyViewVisible()) {
+                    Iterator iterator = roleMap.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry entry = (Map.Entry) iterator.next();
+                        ((View)entry.getValue()).setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    MessageEvent messageEvent = new MessageEvent("CLICK");
+                    EventBus.getDefault().post(messageEvent);
+                }
+                break;
         }
     }
 

@@ -2,14 +2,11 @@ package com.wecyberstage.wecyberstage.view.main;
 
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -27,7 +24,8 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
-import com.wecyberstage.wecyberstage.message.PlayerControlEvent;
+import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
+import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
@@ -55,7 +53,7 @@ import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
 import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
-import com.wecyberstage.wecyberstage.message.MessageEvent;
+import com.wecyberstage.wecyberstage.view.message.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightObserver;
 import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightProvider;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
@@ -66,14 +64,12 @@ import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
+import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -107,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @BindView(R.id.player_control)
     View playerControl;
     @BindView(R.id.line_edit_sub)
-    View lineEdit;
+    View lineEditBar;
     @BindView(R.id.app_main)
     ViewGroup appMain;
     @BindView(R.id.drawer_layout)
@@ -168,19 +164,19 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         customViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
-        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
         browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
-        delegate = new ComposeXToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeXToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
-        delegate = new ComposeYToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeYToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y, delegate);
-        delegate = new ComposeZToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new ComposeZToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z, delegate);
-        delegate = new SignInToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new SignInToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN, delegate);
-        delegate = new SignUpToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new SignUpToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
         signUp = new SignUp(this, appMain, ViewType.SIGN_UP, delegate);
-        delegate = new UserProfileToolViewsDelegate(this, toolbar, playerControl, lineEdit, this.drawerLayout, fab);
+        delegate = new UserProfileToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
         addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
@@ -256,11 +252,14 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     private void constructLifeCycleComponents() {
-        if( playerControl != null && playerControl instanceof RegisterBusEventInterface) {
+        if( playerControl != null && playerControl instanceof RegisterBusEventInterface ) {
             lifeCycleComponents.add((RegisterBusEventInterface) playerControl);
         }
-        if( header != null && header instanceof RegisterBusEventInterface) {
+        if( header != null && header instanceof RegisterBusEventInterface ) {
             lifeCycleComponents.add((RegisterBusEventInterface) header);
+        }
+        if( footerEditMain!= null && footerEditMain instanceof RegisterBusEventInterface ) {
+            lifeCycleComponents.add(footerEditMain);
         }
         for(CustomView customView: customViewList) {
             if(customView instanceof RegisterBusEventInterface) {
@@ -386,6 +385,25 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+        switch ( event.getMessage() ) {
+            case "onLongPress":
+                Log.d("MainActivity",event.getMessage());
+                if(event.getData() != null) {
+                    fab.hide();
+                    lineEditBar.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "onSingleTapUp":
+                if(lineEditBar.getVisibility() == View.VISIBLE) {
+                    fab.show();
+                    lineEditBar.setVisibility(View.INVISIBLE);
+                }
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseMessageEvent(MessageEvent event) {
         Log.i("Main onResponseEventBus", event.getMessage());
         // queueLock.lock();
@@ -415,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponsePlayerControlEvent(PlayerControlEvent event) {
+    public void onResponseMessageEvent(PlayerControlEvent event) {
         Log.i("Main", "onResponsePlayerControlEvent: " + event.getMessage());
         switch (event.getMessage()) {
             case "STOP":

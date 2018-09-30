@@ -27,7 +27,7 @@ import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.FooterEditMain;
-import com.wecyberstage.wecyberstage.view.main.FooterEditMainEvent;
+import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
@@ -67,7 +67,7 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
-        adapter = new ComposeYScriptAdapter(new AdapterDelegatesManager<>(), this);
+        adapter = new ComposeYScriptAdapter(new AdapterDelegatesManager<>(), this, this);
         adapter.restoreStates(activity);
 
         ((RecyclerView)view).setHasFixedSize(true);
