@@ -258,6 +258,12 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
                     editText.setText(stageLine.dialogue);
                 }
                 break;
+            case "onSingleTapUp":
+                Log.d("FooterEditMain","onSingleTapUp");
+                editText.setText("");
+                selectedMask.setVisibility(GONE);
+                hide();
+                break;
         }
     }
 

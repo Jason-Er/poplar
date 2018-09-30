@@ -394,6 +394,12 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                     lineEditBar.setVisibility(View.VISIBLE);
                 }
                 break;
+            case "onSingleTapUp":
+                if(lineEditBar.getVisibility() == View.VISIBLE) {
+                    fab.show();
+                    lineEditBar.setVisibility(View.INVISIBLE);
+                }
+                break;
         }
     }
 
