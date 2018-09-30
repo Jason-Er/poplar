@@ -161,14 +161,32 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseEvent(FooterEditMainEvent event) {
         Log.d("ComposeYScriptAdapter","receive footerEditMain");
-
         if(event.getStageLine() instanceof StageLine) {
             StageLine stageLine = (StageLine) event.getStageLine();
+            boolean isNeedNotifyDataSetChanged = false;
+            int position = stageScene.stageLines.indexOf(stageLine);
             if( !stageScene.stageLines.contains( stageLine ) ) {
                 handleStageLine(stageLine);
+                isNeedNotifyDataSetChanged = true;
+            } else {
+                if ( listStart.contains( stageLine.getRoleName() ) ) {
+                    if ( ((ComposeYItemDto) dataSet.get(position)).getViewType() != ComposeYCardViewType.START ) {
+                        ((ComposeYItemDto) dataSet.get(position)).setViewType(ComposeYCardViewType.START);
+                        isNeedNotifyDataSetChanged = true;
+                    }
+                } else {
+                    if ( ((ComposeYItemDto) dataSet.get(position)).getViewType() != ComposeYCardViewType.END ) {
+                        ((ComposeYItemDto) dataSet.get(position)).setViewType(ComposeYCardViewType.END);
+                        isNeedNotifyDataSetChanged = true;
+                    }
+                }
+            }
+            if(isNeedNotifyDataSetChanged) {
+                notifyDataSetChanged();
+            } else {
+                notifyItemChanged(position);
             }
         }
-        notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
