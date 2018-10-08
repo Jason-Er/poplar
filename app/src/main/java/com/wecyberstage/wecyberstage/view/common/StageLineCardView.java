@@ -48,6 +48,7 @@ public class StageLineCardView extends RelativeLayout {
             EventBus.getDefault().post(event);
             return true;
         }
+
     };
 
     public StageLineCardView(@NonNull Context context) {

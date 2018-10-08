@@ -34,8 +34,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 /**
  * Created by mike on 2018/3/5.
  */
@@ -73,7 +71,6 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
         ((PlayProfileAdapter) adapter).onItemClickCallBack = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Timber.d("navigate to somewhere");
                 playState = new PlayState(((PlayProfileCardView)v).stagePlayInfo.id, 1L, 0L);
                 ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
             }
@@ -86,7 +83,6 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
             public void onChanged(@Nullable Resource<List<StagePlayInfo>> resource) {
                 switch (resource.status) {
                     case SUCCESS:
-                        Timber.d("SUCCESS");
                         ((PlayProfileAdapter)adapter).setDataset(resource.data);
                         break;
                     case ERROR:

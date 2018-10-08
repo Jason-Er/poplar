@@ -2,10 +2,10 @@ package com.wecyberstage.wecyberstage.view.helper;
 
 import android.util.Log;
 
-public class FlingResponseComposeX implements FlingResponseInterface {
+public class BehaviorResponseComposeX implements BehaviorResponseInterface {
 
     CustomViewSlideInterface slideViewInterface;
-    public FlingResponseComposeX(CustomViewSlideInterface slideViewInterface) {
+    public BehaviorResponseComposeX(CustomViewSlideInterface slideViewInterface) {
         this.slideViewInterface = slideViewInterface;
     }
     @Override
@@ -27,6 +27,11 @@ public class FlingResponseComposeX implements FlingResponseInterface {
 
     @Override
     public void toDown() {
+
+    }
+
+    @Override
+    public void click() {
 
     }
 }

@@ -45,14 +45,14 @@ import com.wecyberstage.wecyberstage.view.composeZ.ComposeZToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.FlingViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseBrowse;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeX;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeY;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeZ;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseBrowse;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeX;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeY;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeZ;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseInterface;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseSignIn;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseSignUp;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseUserProfile;
 import com.wecyberstage.wecyberstage.view.message.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightObserver;
 import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightProvider;
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         NavigationView.OnNavigationItemSelectedListener,
         CustomViewSlideInterface, KeyboardHeightObserver {
 
+    private final String TAG = "MainActivity";
     private final String NAVIGATION_SEMICOLON = ";";
     private final String NAVIGATION_COLON = ":";
 
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private Stack<String> navigationStack;
     private static final String NAVIGATION_INFO_KEY = "navigation_info";
     private CustomView currentView;
-    private FlingResponseInterface currentFlingResponse;
+    private BehaviorResponseInterface currentBehaviorResponse;
 
     private SparseArray viewArray;
     private SparseArray flingResponseArray;
@@ -179,13 +180,13 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         delegate = new UserProfileToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
-        addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
-        addCustomView(composeX, new FlingResponseComposeX(this), appMain, viewArray, flingResponseArray);
-        addCustomView(composeY, new FlingResponseComposeY(this), appMain, viewArray, flingResponseArray);
-        addCustomView(composeZ, new FlingResponseComposeZ(this), appMain, viewArray, flingResponseArray);
-        addCustomView(signIn, new FlingResponseSignIn(this), appMain, viewArray, flingResponseArray);
-        addCustomView(signUp, new FlingResponseSignUp(this), appMain, viewArray, flingResponseArray);
-        addCustomView(userProfile, new FlingResponseUserProfile(this), appMain, viewArray, flingResponseArray);
+        addCustomView(browse, new BehaviorResponseBrowse(this), appMain, viewArray, flingResponseArray);
+        addCustomView(composeX, new BehaviorResponseComposeX(this), appMain, viewArray, flingResponseArray);
+        addCustomView(composeY, new BehaviorResponseComposeY(this), appMain, viewArray, flingResponseArray);
+        addCustomView(composeZ, new BehaviorResponseComposeZ(this), appMain, viewArray, flingResponseArray);
+        addCustomView(signIn, new BehaviorResponseSignIn(this), appMain, viewArray, flingResponseArray);
+        addCustomView(signUp, new BehaviorResponseSignUp(this), appMain, viewArray, flingResponseArray);
+        addCustomView(userProfile, new BehaviorResponseUserProfile(this), appMain, viewArray, flingResponseArray);
 
         constructLifeCycleComponents();
         navigationStack = new Stack<>();
@@ -243,10 +244,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         this.character = character;
     }
 
-    private void addCustomView(CustomView customView, FlingResponseInterface flingResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
+    private void addCustomView(CustomView customView, BehaviorResponseInterface behaviorResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
         customViewList.add(customView);
         viewArray.put(customView.getViewType().ordinal(), customView);
-        flingResponseArray.put(customView.getViewType().ordinal(), flingResponseInterface);
+        flingResponseArray.put(customView.getViewType().ordinal(), behaviorResponseInterface);
         viewGroup.addView(customView.getView(), 1);
         customView.getView().setVisibility(View.INVISIBLE);
     }
@@ -405,29 +406,23 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseMessageEvent(MessageEvent event) {
-        Log.i("Main onResponseEventBus", event.getMessage());
+        Log.i(TAG, event.getMessage());
         // queueLock.lock();
         switch (event.getMessage()) {
             case "TO_LEFT":
-                currentFlingResponse.toLeft();
+                currentBehaviorResponse.toLeft();
                 break;
             case "TO_RIGHT":
-                currentFlingResponse.toRight();
+                currentBehaviorResponse.toRight();
                 break;
             case "TO_UP":
-                currentFlingResponse.toUp();
+                currentBehaviorResponse.toUp();
                 break;
             case "TO_DOWN":
-                currentFlingResponse.toDown();
+                currentBehaviorResponse.toDown();
                 break;
             case "CLICK":
-                /*
-                if(header.getVisibility() == View.VISIBLE) {
-                    moveOutHeaderAndFooter(header, playerControl);
-                } else {
-                    moveInHeaderAndFooter(header, playerControl);
-                }
-                */
+                currentBehaviorResponse.click();
                 break;
         }
     }
@@ -533,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         CustomView customView = getCustomView(viewType);
         customView.becomeVisible();
         customView.slideBegin();
-        currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(viewType.ordinal());
+        currentBehaviorResponse = (BehaviorResponseInterface) flingResponseArray.get(viewType.ordinal());
         this.currentView = customView;
         customView.slideEnd();
     }
@@ -625,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             ((PlayStateInterface) toCustomView).setPlayState(((PlayStateInterface) fromCustomView).getPlayState());
         }
         slideTo(fromCustomView, toCustomView, direction);
-        currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(to.ordinal());
+        currentBehaviorResponse = (BehaviorResponseInterface) flingResponseArray.get(to.ordinal());
         if(saveTrack) {
             navigationStack.push(from.name() + NAVIGATION_COLON + to.name() + NAVIGATION_COLON + direction.name());
         }

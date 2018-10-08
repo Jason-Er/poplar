@@ -28,6 +28,7 @@ import java.util.Map;
 
 public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>>, RegisterBusEventInterface {
 
+    private final String TAG = "RoleLayoutDelegate";
     private Map<Long, View> roleMap;
     public RoleLayoutDelegate(int viewType) {
         super(viewType);
@@ -129,11 +130,13 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
 
     @Override
     public void register(Activity activity) {
+        Log.d(TAG, "register");
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void unRegister(Activity activity) {
+        Log.d(TAG,"unRegister");
         EventBus.getDefault().unregister(this);
     }
 }

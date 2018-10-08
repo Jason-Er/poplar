@@ -1,11 +1,12 @@
 package com.wecyberstage.wecyberstage.view.helper;
 
-public class FlingResponseBrowse implements FlingResponseInterface {
+public class BehaviorResponseSignUp implements BehaviorResponseInterface {
 
     CustomViewSlideInterface slideViewInterface;
-    public FlingResponseBrowse(CustomViewSlideInterface slideViewInterface) {
+    public BehaviorResponseSignUp(CustomViewSlideInterface slideViewInterface) {
         this.slideViewInterface = slideViewInterface;
     }
+
     @Override
     public void toLeft() {
 
@@ -23,6 +24,11 @@ public class FlingResponseBrowse implements FlingResponseInterface {
 
     @Override
     public void toDown() {
+
+    }
+
+    @Override
+    public void click() {
 
     }
 }
