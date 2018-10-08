@@ -11,14 +11,14 @@ import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 
 public class BrowseToolViewsDelegate extends ToolViewsDelegate {
 
-    public BrowseToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, View floatingActionButton) {
-        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, floatingActionButton);
+    public BrowseToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, FloatingActionButton fab) {
+        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, fab);
     }
 
     @Override
     public void slideBegin() {
         ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        ((FloatingActionButton)floatingActionButton).hide();
+        fab.hide();
         lineEditBar.setVisibility(View.INVISIBLE);
         playerControlBar.setVisibility(View.INVISIBLE);
     }

@@ -9,32 +9,34 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
 
+import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.message.FABEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
+public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements ClickActionInterface {
 
-    public ComposeYToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, View floatingActionButton) {
-        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, floatingActionButton);
+    private final String TAG = "ComposeYToolViews";
+    public ComposeYToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, FloatingActionButton fab) {
+        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, fab);
     }
 
     @Override
     public void slideBegin() {
         ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        ((FloatingActionButton)floatingActionButton).hide();
+        fab.hide();
         lineEditBar.setVisibility(View.GONE);
     }
 
     @Override
     public void slideEnd() {
-        Log.d("ComposeYToolViews","slideEnd");
-        ((FloatingActionButton)floatingActionButton).show();
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        Log.d(TAG,"slideEnd");
+        fab.show();
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((FloatingActionButton)floatingActionButton).hide();
+                fab.hide();
                 FABEvent event = new FABEvent("click");
                 EventBus.getDefault().post(event);
             }
@@ -53,6 +55,21 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate {
 
     public void hideLineEditBar() {
         lineEditBar.setVisibility(View.GONE);
-        ((FloatingActionButton)floatingActionButton).show();
+        fab.show();
+    }
+
+    @Override
+    public void itemClick() {
+        Log.d(TAG, "itemClick");
+        if(lineEditBar.getVisibility() == View.VISIBLE) {
+            fab.show();
+            lineEditBar.setVisibility(View.INVISIBLE);
+
+        }
+    }
+
+    @Override
+    public void containerClick() {
+
     }
 }

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
+import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageScene;
@@ -45,10 +46,11 @@ import javax.inject.Inject;
 
 public class ComposeX extends CustomView implements PlayStateInterface,
         SlideInterface, UpdateStagePlayInterface, OnStartDragListener,
-        PlayControlInterface, RegisterBusEventInterface {
+        PlayControlInterface, RegisterBusEventInterface, ClickActionInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
+    private final String TAG = "ComposeX";
     private ComposeViewModel viewModel;
     private ComposeXScriptLayoutManager layoutManager;
     private ComposeXScriptAdapter adapter;
@@ -193,6 +195,22 @@ public class ComposeX extends CustomView implements PlayStateInterface,
         if ( isVisible() ) {
             layoutManager.unRegister(activity);
             adapter.unRegister(activity);
+        }
+    }
+
+    @Override
+    public void itemClick() {
+        Log.d(TAG, "itemClick");
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).itemClick();
+        }
+    }
+
+    @Override
+    public void containerClick() {
+        Log.d(TAG, "containerClick");
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).containerClick();
         }
     }
 

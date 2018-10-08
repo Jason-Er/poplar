@@ -52,4 +52,6 @@ public abstract class CustomView implements SlideInterface {
     public boolean isVisible() {
         return view.getVisibility() == View.VISIBLE;
     }
+
+
 }

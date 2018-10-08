@@ -7,12 +7,14 @@ import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
+import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
@@ -30,9 +32,10 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeZ extends CustomView implements PlayStateInterface, SlideInterface {
+public class ComposeZ extends CustomView implements PlayStateInterface, SlideInterface, ClickActionInterface {
 
     private static final String PARTICIPATE_INFO_KEY = "participate_info";
+    private final String TAG = "ComposeZ";
 
     private ParticipateViewModel viewModel;
     private KeyFrameAdapter adapter;
@@ -94,5 +97,21 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
     public void slideEnd() {
         super.slideEnd();
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    @Override
+    public void itemClick() {
+        Log.d(TAG, "itemClick");
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).itemClick();
+        }
+    }
+
+    @Override
+    public void containerClick() {
+        Log.d(TAG, "containerClick");
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).containerClick();
+        }
     }
 }

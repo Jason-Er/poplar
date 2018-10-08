@@ -19,6 +19,7 @@ import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
+import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
@@ -41,8 +42,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener,
-        SlideInterface, UpdateStagePlayInterface, RegisterBusEventInterface {
+        SlideInterface, UpdateStagePlayInterface, RegisterBusEventInterface, ClickActionInterface {
 
+    private final String TAG = "ComposeY";
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
     private ComposeViewModel viewModel;
@@ -164,8 +166,23 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseFooterEditMainEvent(FooterEditMainEvent event) {
-        Log.d("ComposeY","receive footerEditMain");
+        Log.d(TAG,"receive footerEditMain");
         ((ComposeYToolViewsDelegate)toolViewsDelegate).hideLineEditBar();
     }
 
+    @Override
+    public void itemClick() {
+        Log.d(TAG, "itemClick");
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).itemClick();
+        }
+    }
+
+    @Override
+    public void containerClick() {
+        Log.d(TAG, "containerClick");
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).containerClick();
+        }
+    }
 }

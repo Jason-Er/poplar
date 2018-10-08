@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
+import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
@@ -396,9 +397,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 }
                 break;
             case "onSingleTapUp":
-                if(lineEditBar.getVisibility() == View.VISIBLE) {
-                    fab.show();
-                    lineEditBar.setVisibility(View.INVISIBLE);
+                if( currentView instanceof ClickActionInterface ) {
+                    ((ClickActionInterface) currentView).itemClick();
                 }
                 break;
         }
