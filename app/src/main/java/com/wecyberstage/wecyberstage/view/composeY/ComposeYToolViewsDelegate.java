@@ -2,6 +2,8 @@ package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -64,7 +66,9 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
         if(lineEditBar.getVisibility() == View.VISIBLE) {
             fab.show();
             lineEditBar.setVisibility(View.INVISIBLE);
-
+        } else {
+            fab.hide();
+            moveInHeaderAndFooter();
         }
     }
 

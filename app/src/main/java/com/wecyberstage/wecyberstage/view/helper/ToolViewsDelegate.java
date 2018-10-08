@@ -1,8 +1,18 @@
 package com.wecyberstage.wecyberstage.view.helper;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
+
+import com.wecyberstage.wecyberstage.R;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class ToolViewsDelegate implements SlideInterface {
     protected Activity activity;
@@ -20,5 +30,65 @@ public abstract class ToolViewsDelegate implements SlideInterface {
         this.drawerLayout = drawerLayout;
         this.fab = fab;
     }
-    
+
+    private final Lock queueLock=new ReentrantLock();
+    private Handler autoHideHandler = new Handler();
+    private Runnable autoHideRunnable=new Runnable() {
+        @Override
+        public void run() {
+            // queueLock.lock();
+            if(toolbar.getVisibility() == View.VISIBLE) {
+                moveOutHeaderAndFooter(toolbar, playerControlBar);
+            }
+        }
+    };
+
+    public void moveOutHeaderAndFooter() {
+        moveOutHeaderAndFooter(toolbar, playerControlBar);
+    }
+
+    public void moveInHeaderAndFooter() {
+        moveInHeaderAndFooter(toolbar, playerControlBar);
+    }
+
+    public void moveOutHeaderAndFooter(final View header, final View footer) {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+                ObjectAnimator.ofFloat(header, "alpha", 0.0f),
+                ObjectAnimator.ofFloat(header, "translationY", -header.getHeight()),
+                ObjectAnimator.ofFloat(footer, "alpha", 0.0f),
+                ObjectAnimator.ofFloat(footer, "translationY", footer.getHeight())
+        );
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                header.setVisibility(View.INVISIBLE);
+                footer.setVisibility(View.INVISIBLE);
+                // queueLock.unlock();
+            }
+        });
+        set.setDuration(300).start();
+    }
+
+    public void moveInHeaderAndFooter(final View header, final View footer) {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+                ObjectAnimator.ofFloat(header, "alpha", 1.0f),
+                ObjectAnimator.ofFloat(header, "translationY", 0),
+                ObjectAnimator.ofFloat(footer, "alpha", 1.0f),
+                ObjectAnimator.ofFloat(footer, "translationY", 0)
+        );
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                header.setVisibility(View.VISIBLE);
+                footer.setVisibility(View.VISIBLE);
+                // queueLock.unlock();
+                autoHideHandler.postDelayed(autoHideRunnable, 3000);
+            }
+        });
+        set.setDuration(300).start();
+    }
 }
