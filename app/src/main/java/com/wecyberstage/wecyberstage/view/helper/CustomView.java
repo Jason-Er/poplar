@@ -49,4 +49,7 @@ public abstract class CustomView implements SlideInterface {
         view.setTranslationX(0);
     }
 
+    public boolean isVisible() {
+        return view.getVisibility() == View.VISIBLE;
+    }
 }

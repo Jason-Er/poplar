@@ -148,14 +148,18 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
 
     @Override
     public void register(Activity activity) {
-        adapter.register(activity);
-        EventBus.getDefault().register(this);
+        if( isVisible() ) {
+            adapter.register(activity);
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Override
     public void unRegister(Activity activity) {
-        adapter.unRegister(activity);
-        EventBus.getDefault().unregister(this);
+        if( isVisible() ) {
+            adapter.unRegister(activity);
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

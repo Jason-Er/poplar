@@ -182,20 +182,24 @@ public class ComposeX extends CustomView implements PlayStateInterface,
 
     @Override
     public void register(Activity activity) {
-        layoutManager.register(activity);
-        adapter.register(activity);
+        if ( isVisible() ) {
+            layoutManager.register(activity);
+            adapter.register(activity);
+        }
     }
 
     @Override
     public void unRegister(Activity activity) {
-        layoutManager.unRegister(activity);
-        adapter.unRegister(activity);
+        if ( isVisible() ) {
+            layoutManager.unRegister(activity);
+            adapter.unRegister(activity);
+        }
     }
 
     // region implementation of PlayControlInterface
     @Override
     public void play() {
-        if( view.getVisibility() == View.VISIBLE ) {
+        if( isVisible() ) {
             if(view instanceof PlayControlSub1Interface) {
                 ((PlayControlSub1Interface) view).play();
             }
@@ -204,7 +208,7 @@ public class ComposeX extends CustomView implements PlayStateInterface,
 
     @Override
     public void pause() {
-        if( view.getVisibility() == View.VISIBLE ) {
+        if( isVisible() ) {
             if(view instanceof PlayControlSub1Interface) {
                 ((PlayControlSub1Interface) view).pause();
             }
@@ -213,21 +217,21 @@ public class ComposeX extends CustomView implements PlayStateInterface,
 
     @Override
     public void pre() {
-        if( view.getVisibility() == View.VISIBLE ) {
+        if( isVisible() ) {
             // TODO: 7/26/2018 to pre stage scene
         }
     }
 
     @Override
     public void next() {
-        if( view.getVisibility() == View.VISIBLE ) {
+        if( isVisible() ) {
             // TODO: 7/26/2018 to next stage scene
         }
     }
 
     @Override
     public void stop() {
-        if( view.getVisibility() == View.VISIBLE ) {
+        if( isVisible() ) {
             if(view instanceof PlayControlSub1Interface) {
                 ((PlayControlSub1Interface) view).stop();
             }
@@ -236,7 +240,7 @@ public class ComposeX extends CustomView implements PlayStateInterface,
 
     @Override
     public void seek(float percent) {
-        if( view.getVisibility() == View.VISIBLE ) {
+        if( isVisible() ) {
             if(view instanceof PlayControlSub1Interface) {
                 ((PlayControlSub1Interface) view).seek(percent);
             }
@@ -245,7 +249,7 @@ public class ComposeX extends CustomView implements PlayStateInterface,
 
     @Override
     public void volume(boolean open) {
-        if( view.getVisibility() == View.VISIBLE ) {
+        if( isVisible() ) {
             // TODO: 7/27/2018 open or shut down volume
         }
     }
