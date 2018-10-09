@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 
@@ -43,12 +44,57 @@ public abstract class ToolViewsDelegate implements SlideInterface {
         }
     };
 
+    private Runnable autoHidePlayerControlRunnable=new Runnable() {
+        @Override
+        public void run() {
+            // queueLock.lock();
+            if(toolbar.getVisibility() == View.VISIBLE) {
+                moveOutPlayerControl();
+            }
+        }
+    };
+
+    public void moveOutPlayerControl() {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+                ObjectAnimator.ofFloat(playerControlBar, "alpha", 0.0f),
+                ObjectAnimator.ofFloat(playerControlBar, "translationY", playerControlBar.getHeight())
+        );
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                playerControlBar.setVisibility(View.INVISIBLE);
+                // queueLock.unlock();
+            }
+        });
+        set.setDuration(300).start();
+    }
+
+    public void moveInPlayerControl() {
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(
+                ObjectAnimator.ofFloat(playerControlBar, "alpha", 1.0f),
+                ObjectAnimator.ofFloat(playerControlBar, "translationY", 0)
+        );
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                playerControlBar.setVisibility(View.VISIBLE);
+                // queueLock.unlock();
+                autoHideHandler.postDelayed(autoHidePlayerControlRunnable, 6000);
+            }
+        });
+        set.setDuration(300).start();
+    }
+
     public void moveOutHeaderAndFooter() {
-        moveOutHeaderAndFooter(toolbar, playerControlBar);
+        moveOutHeaderAndFooter((View) toolbar.getParent(), playerControlBar);
     }
 
     public void moveInHeaderAndFooter() {
-        moveInHeaderAndFooter(toolbar, playerControlBar);
+        moveInHeaderAndFooter((View) toolbar.getParent(), playerControlBar);
     }
 
     public void moveOutHeaderAndFooter(final View header, final View footer) {
@@ -86,7 +132,7 @@ public abstract class ToolViewsDelegate implements SlideInterface {
                 header.setVisibility(View.VISIBLE);
                 footer.setVisibility(View.VISIBLE);
                 // queueLock.unlock();
-                autoHideHandler.postDelayed(autoHideRunnable, 3000);
+                autoHideHandler.postDelayed(autoHideRunnable, 6000);
             }
         });
         set.setDuration(300).start();
