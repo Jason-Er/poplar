@@ -438,13 +438,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                     }
                 }
                 break;
-            case "PRE":
-                for(BaseView baseView : baseViewList) {
-                    if(baseView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) baseView).pre();
-                    }
-                }
-                break;
             case "PLAY":
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
@@ -459,6 +452,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                     }
                 }
                 break;
+            case "SEEK":
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).seek(event.getSeekProcess());
+                    }
+                }
+                break;
+            case "PRE":
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).pre();
+                    }
+                }
+                break;
             case "NEXT":
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
@@ -470,13 +477,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).volume(true);
-                    }
-                }
-                break;
-            case "SEEK":
-                for(BaseView baseView : baseViewList) {
-                    if(baseView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) baseView).seek(event.getSeekProcess());
                     }
                 }
                 break;

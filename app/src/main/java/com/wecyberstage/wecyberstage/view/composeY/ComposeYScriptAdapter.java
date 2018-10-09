@@ -9,6 +9,7 @@ import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
+import com.wecyberstage.wecyberstage.view.helper.PlayControlSub2Interface;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SaveStatesInterface;
 import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
@@ -37,11 +38,13 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 public class ComposeYScriptAdapter extends ListDelegationAdapter
-        implements ItemTouchHelperAdapter, SaveStatesInterface, RegisterBusEventInterface {
+        implements ItemTouchHelperAdapter, SaveStatesInterface, RegisterBusEventInterface,
+        PlayControlSub2Interface {
 
     final String START_TAG = "ComposeYArrayStart";
     final String END_TAG = "ComposeYArrayEnd";
     final UpdateStagePlayInterface updateStagePlayInterface;
+    private final String TAG = "ComposeYScriptAdapter";
     List<String> listStart = new ArrayList<>();
     List<String> listEnd = new ArrayList<>();
     StageScene stageScene;
@@ -315,4 +318,21 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
         }
         return status;
     }
+
+    // region implementation of PlayControlSub2Interface
+    @Override
+    public void pre() {
+        Log.d(TAG,"pre()");
+    }
+
+    @Override
+    public void next() {
+        Log.d(TAG,"next()");
+    }
+
+    @Override
+    public void volume(boolean open) {
+        Log.d(TAG,"volume()");
+    }
+    // endregion
 }

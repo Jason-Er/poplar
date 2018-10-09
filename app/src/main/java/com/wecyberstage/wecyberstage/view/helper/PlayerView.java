@@ -2,6 +2,7 @@ package com.wecyberstage.wecyberstage.view.helper;
 
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 public abstract class PlayerView extends BaseView
@@ -51,8 +52,8 @@ public abstract class PlayerView extends BaseView
     @Override
     public void pre() {
         if( isVisible() ) {
-            if(view instanceof PlayControlSub2Interface) {
-                ((PlayControlSub2Interface) view).pre();
+            if(((RecyclerView)view).getAdapter() instanceof PlayControlSub2Interface) {
+                ((PlayControlSub2Interface) ((RecyclerView)view).getAdapter()).pre();
             }
         }
     }
@@ -60,8 +61,8 @@ public abstract class PlayerView extends BaseView
     @Override
     public void next() {
         if( isVisible() ) {
-            if(view instanceof PlayControlSub2Interface) {
-                ((PlayControlSub2Interface) view).next();
+            if(((RecyclerView)view).getAdapter() instanceof PlayControlSub2Interface) {
+                ((PlayControlSub2Interface) ((RecyclerView)view).getAdapter()).next();
             }
         }
     }
@@ -69,8 +70,8 @@ public abstract class PlayerView extends BaseView
     @Override
     public void volume(boolean open) {
         if( isVisible() ) {
-            if(view instanceof PlayControlSub2Interface) {
-                ((PlayControlSub2Interface) view).volume(open);
+            if(((RecyclerView)view).getAdapter() instanceof PlayControlSub2Interface) {
+                ((PlayControlSub2Interface) ((RecyclerView)view).getAdapter()).volume(open);
             }
         }
     }
