@@ -6,6 +6,8 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,6 +77,10 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
         ((RecyclerView)view).setHasFixedSize(true);
         ((RecyclerView)view).setLayoutManager(new LinearLayoutManager(activity));
         ((RecyclerView)view).setAdapter(adapter);
+
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
+        AppBarLayout.ScrollingViewBehavior behavior = new AppBarLayout.ScrollingViewBehavior();
+        params.setBehavior(behavior);
 
         /*
         DividerItemDecoration decoration = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);

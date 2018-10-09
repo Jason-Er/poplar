@@ -27,8 +27,9 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
     @Override
     public void slideBegin() {
         ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        fab.hide();
         lineEditBar.setVisibility(View.GONE);
+        ((AppBarLayout) toolbar.getParent()).setVisibility(View.VISIBLE);
+        ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
     }
 
     @Override
@@ -43,8 +44,6 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
                 EventBus.getDefault().post(event);
             }
         });
-        ((AppBarLayout) toolbar.getParent()).setExpanded(false, true);
-        ((AppBarLayout) toolbar.getParent()).setVisibility(View.GONE);
         playerControlBar.animate().translationY(playerControlBar.getHeight()).alpha(0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -68,7 +67,7 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
             lineEditBar.setVisibility(View.INVISIBLE);
         } else {
             fab.hide();
-            moveInHeaderAndFooter();
+            moveInPlayerControl();
         }
     }
 
