@@ -67,7 +67,7 @@ public class ComposeX extends PlayerView implements PlayStateInterface,
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.composex, container,false);
+        view = inflater.inflate(R.layout.frag_composex, container,false);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 

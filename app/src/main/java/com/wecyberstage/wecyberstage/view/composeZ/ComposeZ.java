@@ -52,7 +52,7 @@ public class ComposeZ extends PlayerView implements PlayStateInterface,
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
 
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.view_compose_z, container,false);
+        view = inflater.inflate(R.layout.frag_composez, container,false);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 

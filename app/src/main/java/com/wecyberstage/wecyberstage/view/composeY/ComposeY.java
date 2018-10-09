@@ -66,7 +66,7 @@ public class ComposeY extends PlayerView implements PlayStateInterface, OnStartD
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.view_recycler, container,false);
+        view = inflater.inflate(R.layout.frag_composey, container,false);
         ButterKnife.bind(this, activity);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
