@@ -19,7 +19,7 @@ import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StagePlayInfo;
 import com.wecyberstage.wecyberstage.data.dto.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
@@ -38,7 +38,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class Browse extends CustomView implements PlayStateInterface, SlideInterface {
+public class Browse extends BaseView implements PlayStateInterface, SlideInterface {
 
     private BrowseViewModel viewModel;
     private RecyclerView.Adapter adapter;

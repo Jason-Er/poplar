@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
+import com.wecyberstage.wecyberstage.view.helper.PlayerView;
 import com.wecyberstage.wecyberstage.view.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageScene;
@@ -24,9 +25,6 @@ import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
-import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
-import com.wecyberstage.wecyberstage.view.helper.PlayControlSub1Interface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
@@ -44,9 +42,9 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeX extends CustomView implements PlayStateInterface,
+public class ComposeX extends PlayerView implements PlayStateInterface,
         SlideInterface, UpdateStagePlayInterface, OnStartDragListener,
-        PlayControlInterface, RegisterBusEventInterface, ClickActionInterface {
+        RegisterBusEventInterface, ClickActionInterface {
 
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
@@ -214,62 +212,4 @@ public class ComposeX extends CustomView implements PlayStateInterface,
         }
     }
 
-    // region implementation of PlayControlInterface
-    @Override
-    public void play() {
-        if( isVisible() ) {
-            if(view instanceof PlayControlSub1Interface) {
-                ((PlayControlSub1Interface) view).play();
-            }
-        }
-    }
-
-    @Override
-    public void pause() {
-        if( isVisible() ) {
-            if(view instanceof PlayControlSub1Interface) {
-                ((PlayControlSub1Interface) view).pause();
-            }
-        }
-    }
-
-    @Override
-    public void pre() {
-        if( isVisible() ) {
-            // TODO: 7/26/2018 to pre stage scene
-        }
-    }
-
-    @Override
-    public void next() {
-        if( isVisible() ) {
-            // TODO: 7/26/2018 to next stage scene
-        }
-    }
-
-    @Override
-    public void stop() {
-        if( isVisible() ) {
-            if(view instanceof PlayControlSub1Interface) {
-                ((PlayControlSub1Interface) view).stop();
-            }
-        }
-    }
-
-    @Override
-    public void seek(float percent) {
-        if( isVisible() ) {
-            if(view instanceof PlayControlSub1Interface) {
-                ((PlayControlSub1Interface) view).seek(percent);
-            }
-        }
-    }
-
-    @Override
-    public void volume(boolean open) {
-        if( isVisible() ) {
-            // TODO: 7/27/2018 open or shut down volume
-        }
-    }
-    // endregion
 }

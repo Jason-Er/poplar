@@ -3,7 +3,6 @@ package com.wecyberstage.wecyberstage.view.account;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +15,7 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.User;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
@@ -34,7 +33,7 @@ import timber.log.Timber;
  * Created by mike on 2018/3/5.
  */
 
-public class UserProfile extends CustomView implements SlideInterface {
+public class UserProfile extends BaseView implements SlideInterface {
 
     private AccountViewModel viewModel;
 

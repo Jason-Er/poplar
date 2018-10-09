@@ -15,9 +15,9 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
+import com.wecyberstage.wecyberstage.view.helper.PlayerView;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
@@ -32,7 +32,8 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeZ extends CustomView implements PlayStateInterface, SlideInterface, ClickActionInterface {
+public class ComposeZ extends PlayerView implements PlayStateInterface,
+        SlideInterface, ClickActionInterface {
 
     private static final String PARTICIPATE_INFO_KEY = "participate_info";
     private final String TAG = "ComposeZ";
@@ -114,4 +115,5 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
             ((ClickActionInterface) toolViewsDelegate).containerClick();
         }
     }
+
 }

@@ -22,7 +22,7 @@ import com.wecyberstage.wecyberstage.data.dto.UserRequest;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
@@ -41,7 +41,7 @@ import timber.log.Timber;
  * Created by mike on 2018/3/5.
  */
 
-public class SignIn extends CustomView implements SlideInterface {
+public class SignIn extends BaseView implements SlideInterface {
 
     private AccountViewModel viewModel;
     @BindView(R.id.signIn_component)

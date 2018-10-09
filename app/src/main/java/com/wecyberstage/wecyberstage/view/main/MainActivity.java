@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
+import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
@@ -43,7 +44,6 @@ import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeYToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZToolViewsDelegate;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.FlingViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
 import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseBrowse;
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     // region navigation
     private Stack<String> navigationStack;
     private static final String NAVIGATION_INFO_KEY = "navigation_info";
-    private CustomView currentView;
+    private BaseView currentView;
     private BehaviorResponseInterface currentBehaviorResponse;
 
     private SparseArray viewArray;
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     SignIn signIn;
     SignUp signUp;
     UserProfile userProfile;
-    List<CustomView> customViewList;
+    List<BaseView> baseViewList;
     List<RegisterBusEventInterface> lifeCycleComponents;
 
     // endregion
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         // region all views
         viewArray = new SparseArray();
         flingResponseArray = new SparseArray();
-        customViewList = new ArrayList<>();
+        baseViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
         ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
@@ -245,12 +245,12 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         this.character = character;
     }
 
-    private void addCustomView(CustomView customView, BehaviorResponseInterface behaviorResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
-        customViewList.add(customView);
-        viewArray.put(customView.getViewType().ordinal(), customView);
-        flingResponseArray.put(customView.getViewType().ordinal(), behaviorResponseInterface);
-        viewGroup.addView(customView.getView(), 1);
-        customView.getView().setVisibility(View.INVISIBLE);
+    private void addCustomView(BaseView baseView, BehaviorResponseInterface behaviorResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
+        baseViewList.add(baseView);
+        viewArray.put(baseView.getViewType().ordinal(), baseView);
+        flingResponseArray.put(baseView.getViewType().ordinal(), behaviorResponseInterface);
+        viewGroup.addView(baseView.getView(), 1);
+        baseView.getView().setVisibility(View.INVISIBLE);
     }
 
     private void constructLifeCycleComponents() {
@@ -263,9 +263,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         if( footerEditMain!= null && footerEditMain instanceof RegisterBusEventInterface ) {
             lifeCycleComponents.add(footerEditMain);
         }
-        for(CustomView customView: customViewList) {
-            if(customView instanceof RegisterBusEventInterface) {
-                lifeCycleComponents.add((RegisterBusEventInterface) customView);
+        for(BaseView baseView : baseViewList) {
+            if(baseView instanceof RegisterBusEventInterface) {
+                lifeCycleComponents.add((RegisterBusEventInterface) baseView);
             }
         }
     }
@@ -331,8 +331,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     protected void onStop() {
         super.onStop();
-        for(CustomView customView: customViewList) {
-            customView.onStop(this, appMain);
+        for(BaseView baseView : baseViewList) {
+            baseView.onStop(this, appMain);
         }
     }
 
@@ -432,51 +432,51 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         Log.i("Main", "onResponsePlayerControlEvent: " + event.getMessage());
         switch (event.getMessage()) {
             case "STOP":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).stop();
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).stop();
                     }
                 }
                 break;
             case "PRE":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).pre();
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).pre();
                     }
                 }
                 break;
             case "PLAY":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).play();
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).play();
                     }
                 }
                 break;
             case "PAUSE":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).pause();
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).pause();
                     }
                 }
                 break;
             case "NEXT":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).next();
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).next();
                     }
                 }
                 break;
             case "VOLUME":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).volume(true);
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).volume(true);
                     }
                 }
                 break;
             case "SEEK":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).seek(event.getSeekProcess());
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).seek(event.getSeekProcess());
                     }
                 }
                 break;
@@ -520,20 +520,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Override
-    public CustomView getCustomView(ViewType viewType) {
-        return (CustomView) viewArray.get(viewType.ordinal());
+    public BaseView getCustomView(ViewType viewType) {
+        return (BaseView) viewArray.get(viewType.ordinal());
     }
 
     private void restoreToView(ViewType viewType) {
-        CustomView customView = getCustomView(viewType);
-        customView.becomeVisible();
-        customView.slideBegin();
+        BaseView baseView = getCustomView(viewType);
+        baseView.becomeVisible();
+        baseView.slideBegin();
         currentBehaviorResponse = (BehaviorResponseInterface) flingResponseArray.get(viewType.ordinal());
-        this.currentView = customView;
-        customView.slideEnd();
+        this.currentView = baseView;
+        baseView.slideEnd();
     }
 
-    private void slideTo(CustomView from, CustomView to, Direction direction) {
+    private void slideTo(BaseView from, BaseView to, Direction direction) {
         View currentView = from.getView();
         to.becomeVisible();
         View followView = to.getView();
@@ -614,12 +614,12 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Override
     public void slideTo(ViewType from, ViewType to, Direction direction, boolean saveTrack) {
-        CustomView fromCustomView = getCustomView(from);
-        CustomView toCustomView = getCustomView(to);
-        if(fromCustomView instanceof PlayStateInterface && toCustomView instanceof PlayStateInterface) {
-            ((PlayStateInterface) toCustomView).setPlayState(((PlayStateInterface) fromCustomView).getPlayState());
+        BaseView fromBaseView = getCustomView(from);
+        BaseView toBaseView = getCustomView(to);
+        if(fromBaseView instanceof PlayStateInterface && toBaseView instanceof PlayStateInterface) {
+            ((PlayStateInterface) toBaseView).setPlayState(((PlayStateInterface) fromBaseView).getPlayState());
         }
-        slideTo(fromCustomView, toCustomView, direction);
+        slideTo(fromBaseView, toBaseView, direction);
         currentBehaviorResponse = (BehaviorResponseInterface) flingResponseArray.get(to.ordinal());
         if(saveTrack) {
             navigationStack.push(from.name() + NAVIGATION_COLON + to.name() + NAVIGATION_COLON + direction.name());

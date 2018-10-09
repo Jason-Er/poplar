@@ -22,9 +22,9 @@ import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.helper.PlayerView;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
@@ -43,7 +43,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener,
+public class ComposeY extends PlayerView implements PlayStateInterface, OnStartDragListener,
         SlideInterface, UpdateStagePlayInterface, RegisterBusEventInterface, ClickActionInterface {
 
     private final String TAG = "ComposeY";
@@ -191,4 +191,5 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
             ((ClickActionInterface) toolViewsDelegate).containerClick();
         }
     }
+
 }
