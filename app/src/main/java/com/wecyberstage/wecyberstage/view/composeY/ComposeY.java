@@ -176,20 +176,4 @@ public class ComposeY extends PlayerView implements PlayStateInterface, OnStartD
         ((ComposeYToolViewsDelegate)toolViewsDelegate).hideLineEditBar();
     }
 
-    @Override
-    public void itemClick() {
-        Log.d(TAG, "itemClick");
-        if( toolViewsDelegate instanceof ClickActionInterface ) {
-            ((ClickActionInterface) toolViewsDelegate).itemClick();
-        }
-    }
-
-    @Override
-    public void containerClick() {
-        Log.d(TAG, "containerClick");
-        if( toolViewsDelegate instanceof ClickActionInterface ) {
-            ((ClickActionInterface) toolViewsDelegate).containerClick();
-        }
-    }
-
 }

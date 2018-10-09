@@ -196,20 +196,4 @@ public class ComposeX extends PlayerView implements PlayStateInterface,
         }
     }
 
-    @Override
-    public void itemClick() {
-        Log.d(TAG, "itemClick");
-        if( toolViewsDelegate instanceof ClickActionInterface ) {
-            ((ClickActionInterface) toolViewsDelegate).itemClick();
-        }
-    }
-
-    @Override
-    public void containerClick() {
-        Log.d(TAG, "containerClick");
-        if( toolViewsDelegate instanceof ClickActionInterface ) {
-            ((ClickActionInterface) toolViewsDelegate).containerClick();
-        }
-    }
-
 }

@@ -4,7 +4,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 
-public abstract class PlayerView extends BaseView implements PlayControlInterface {
+public abstract class PlayerView extends BaseView
+        implements PlayControlInterface, ClickActionInterface {
 
     public PlayerView(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
         super(activity, container, viewType, toolViewsDelegate);
@@ -71,6 +72,22 @@ public abstract class PlayerView extends BaseView implements PlayControlInterfac
             if(view instanceof PlayControlSub2Interface) {
                 ((PlayControlSub2Interface) view).volume(open);
             }
+        }
+    }
+    // endregion
+
+    // region implementation of ClickActionInterface
+    @Override
+    public void itemClick() {
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).itemClick();
+        }
+    }
+
+    @Override
+    public void containerClick() {
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).containerClick();
         }
     }
     // endregion
