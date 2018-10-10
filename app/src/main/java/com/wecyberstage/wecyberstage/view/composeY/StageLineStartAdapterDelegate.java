@@ -57,7 +57,6 @@ class StageLineStartAdapterDelegate extends ViewTypeDelegateClass implements Ada
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull final RecyclerView.ViewHolder holder) {
-        Log.d("LineStartAdapter", "onBindViewHolder position: "+position+" dialogue: "+ ((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
         ((StageLineCardView)(holder.itemView)).setStageLine(((ComposeYItemDto) items.get(position)).getStageLine());
         ((StageLineViewHolder) holder).handleView.setOnTouchListener(new View.OnTouchListener() {
             @Override

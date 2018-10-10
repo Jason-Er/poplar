@@ -40,6 +40,8 @@ import butterknife.OnClick;
 
 public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBack, RegisterBusEventInterface {
 
+    private final String TAG = "FooterEditMain";
+
     enum PANEL_VISIBLE {
         MASK_VISIBLE, FILE_VISIBLE, BOTH_VISIBLE, BOTH_GONE
     }
@@ -142,6 +144,22 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     }
     // endregion
 
+    /**
+     * send FooterEditMainEvent event and hide footEditMain
+     * @param message
+     */
+    private void sendMessage(String message) {
+        FooterEditMainEvent event = new FooterEditMainEvent(message);
+        EventBus.getDefault().post(event);
+        hide();
+    }
+
+    private void sendMessage(String message, Object object) {
+        FooterEditMainEvent event = new FooterEditMainEvent(object, message);
+        EventBus.getDefault().post(event);
+        hide();
+    }
+
     @OnClick(R.id.lineEditSub_mask)
     public void onLineEditMaskClick(View view) {
         switch ((String)view.getTag()) {
@@ -166,21 +184,16 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
                 UICommon.hideSoftKeyboard(view);
                 break;
             case "check":
-                // TODO: 9/3/2018 add text to line
-                Log.d("FooterEditMain","onLineEditOKClick " + editText.getText());
-                hide();
-                editText.setText("");
-                selectedMask.setVisibility(GONE);
-                FooterEditMainEvent event = new FooterEditMainEvent(stageLine, "stageLine checked");
-                EventBus.getDefault().post(event);
-                stageLine = null;
+                Log.d(TAG,"onLineEditOKClick " + editText.getText());
+                sendMessage("addStageLine", stageLine);
+                setStageLine(new StageLine());
                 break;
         }
     }
 
-    @OnClick(R.id.fileChooseSub_word)
-    public void setImageButtonWord(View view) {
-        Log.d("FooterEditMain","setImageButtonWord click");
+    @OnClick(R.id.sceneEditSub_word)
+    public void addSceneFromWord(View view) {
+        Log.d(TAG,"addSceneFromWord click");
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         //intent.setType(“application/msword;application/vnd.openxmlformats-officedocument.wordprocessingml.document”);//同时选择doc docx
         intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"); // docx
@@ -193,16 +206,26 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
             Toast.makeText(getContext(), "请安装文件管理器", Toast.LENGTH_SHORT)
                     .show();
         }
-
+        sendMessage("addSceneFromWord");
     }
 
-    @OnClick(R.id.fileChooseSub_delete)
-    public void deleteStageLines(View view) {
-        Log.d("FooterEditMain","deleteStageLines click");
-        FooterEditMainEvent event = new FooterEditMainEvent("deleteStageLines");
-        EventBus.getDefault().post(event);
+    @OnClick(R.id.sceneEditSub_delete)
+    public void deleteSceneContent(View view) {
+        Log.d(TAG,"deleteSceneContent click");
+        sendMessage("deleteSceneContent");
     }
 
+    @OnClick(R.id.sceneEditSub_remove)
+    public void deleteScene(View view) {
+        Log.d(TAG,"deleteScene click");
+        sendMessage("deleteScene");
+    }
+
+    @OnClick(R.id.sceneEditSub_add)
+    public void addScene(View view) {
+        Log.d(TAG,"addScene click");
+        sendMessage("addScene");
+    }
 
     public void setStageRoles(List<StageRole> stageRoles) {
         maskChoose.setStageRoles(stageRoles);
@@ -271,13 +294,13 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     public void onResponseMessageEvent(StageLineCardViewEvent event) {
         switch (event.getMessage()) {
             case "onLongPress":
-                Log.d("FooterEditMain","onLongPress");
+                Log.d(TAG,"onLongPress");
                 if(event.getData() != null) {
                     setStageLine((StageLine) event.getData());
                 }
                 break;
             case "onSingleTapUp":
-                Log.d("FooterEditMain","onSingleTapUp");
+                Log.d(TAG,"onSingleTapUp");
                 setStageLine(new StageLine());
                 hide();
                 break;

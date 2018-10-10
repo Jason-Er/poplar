@@ -7,5 +7,5 @@
     android:id="@+id/footer_edit_main">
     <include layout="@layout/line_edit_sub" />
     <include layout="@layout/mask_choose_sub" />
-    <include layout="@layout/file_choose_sub" />
+    <include layout="@layout/scene_edit_sub" />
 </com.wecyberstage.wecyberstage.view.main.FooterEditMain>

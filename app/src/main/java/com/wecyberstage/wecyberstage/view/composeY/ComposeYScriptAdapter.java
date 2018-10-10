@@ -164,7 +164,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseEvent(FooterEditMainEvent event) {
         switch (event.getMessage()){
-            case "stageLine checked":
+            case "addStageLine":
                 if(event.getData() instanceof StageLine) {
                     StageLine stageLine = (StageLine) event.getData();
                     boolean isNeedNotifyDataSetChanged = false;
@@ -192,7 +192,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
                     }
                 }
                 break;
-            case "deleteStageLines":
+            case "deleteSceneContent":
                 dataSet = new ArrayList<>();
                 stageScene.stageLines = new ArrayList<>();
                 notifyDataSetChanged();
