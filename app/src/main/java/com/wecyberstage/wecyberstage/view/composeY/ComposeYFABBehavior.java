@@ -7,7 +7,7 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.wecyberstage.wecyberstage.view.main.FooterEditMain;
+import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
 
 public class ComposeYFABBehavior extends FloatingActionButton.Behavior {
     public ComposeYFABBehavior() {
@@ -37,7 +37,7 @@ public class ComposeYFABBehavior extends FloatingActionButton.Behavior {
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
-        return dependency instanceof FooterEditMain;
+        return dependency instanceof FooterEditBar;
     }
 
     @Override

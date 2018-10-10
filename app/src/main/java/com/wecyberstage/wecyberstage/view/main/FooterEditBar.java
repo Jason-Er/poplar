@@ -38,7 +38,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBack, RegisterBusEventInterface {
+/**
+ * FooterEditBar edit stageLine and stageScene at footer of main UI
+ */
+public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBack, RegisterBusEventInterface {
 
     private final String TAG = "FooterEditMain";
 
@@ -61,15 +64,15 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     @BindView(R.id.lineEditSub_line)
     EditText editText;
 
-    public FooterEditMain(Context context) {
+    public FooterEditBar(Context context) {
         super(context);
     }
 
-    public FooterEditMain(Context context, @Nullable AttributeSet attrs) {
+    public FooterEditBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FooterEditMain(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public FooterEditBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

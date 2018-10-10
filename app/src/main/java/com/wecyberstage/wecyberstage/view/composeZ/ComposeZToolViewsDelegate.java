@@ -11,27 +11,34 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
+import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
+import com.wecyberstage.wecyberstage.view.main.PlayerControlBar;
 
 public class ComposeZToolViewsDelegate extends ToolViewsDelegate {
 
-    public ComposeZToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, FloatingActionButton fab) {
-        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, fab);
+    public ComposeZToolViewsDelegate(Activity activity,
+                                     AppBarLayout appBarLayout,
+                                     PlayerControlBar playerControlBar,
+                                     FooterEditBar footerEditBar,
+                                     DrawerLayout drawerLayout,
+                                     FloatingActionButton fab) {
+        super(activity, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
     }
 
     @Override
     public void slideBegin() {
         Log.d("ComposeZTool","slideEnd");
-        ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         fab.hide();
-        lineEditBar.setVisibility(View.INVISIBLE);
+        footerEditBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void slideEnd() {
         Log.d("ComposeZTool","slideEnd");
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); // Hide status bar
-        ((AppBarLayout) toolbar.getParent()).setExpanded(false, true);
-        ((AppBarLayout) toolbar.getParent()).setVisibility(View.GONE);
+        appBarLayout.setExpanded(false, true);
+        appBarLayout.setVisibility(View.GONE);
         playerControlBar.animate().translationY(playerControlBar.getHeight()).alpha(0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {

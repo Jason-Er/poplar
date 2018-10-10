@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -100,20 +101,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.header_main)
-    View header;
-    @BindView(R.id.player_control)
-    View playerControl;
-    @BindView(R.id.line_edit_sub)
-    View lineEditBar;
     @BindView(R.id.app_main)
     ViewGroup appMain;
+    // region tool components views
+    @BindView(R.id.appBar_layout)
+    AppBarLayout appBarLayout;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @BindView(R.id.footer_edit_main)
-    FooterEditMain footerEditMain;
+    @BindView(R.id.player_control_bar)
+    PlayerControlBar playerControlBar;
+    @BindView(R.id.footer_edit_bar)
+    FooterEditBar footerEditBar;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    // endregion
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -166,19 +167,19 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         baseViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
-        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
-        delegate = new ComposeXToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new ComposeXToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
-        delegate = new ComposeYToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new ComposeYToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y, delegate);
-        delegate = new ComposeZToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new ComposeZToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z, delegate);
-        delegate = new SignInToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new SignInToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN, delegate);
-        delegate = new SignUpToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new SignUpToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         signUp = new SignUp(this, appMain, ViewType.SIGN_UP, delegate);
-        delegate = new UserProfileToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new UserProfileToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
         addCustomView(browse, new BehaviorResponseBrowse(this), appMain, viewArray, flingResponseArray);
@@ -192,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         constructLifeCycleComponents();
         navigationStack = new Stack<>();
         // endregion
-        Toolbar toolbar = findViewById(R.id.toolbar);
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         // change maskChoose height
         if( localSettings.getSoftKeyboardHeight() > 0 ) {
-            footerEditMain.setSoftKeyBoardHeight(localSettings.getSoftKeyboardHeight());
+            footerEditBar.setSoftKeyBoardHeight(localSettings.getSoftKeyboardHeight());
         }
 
         appMain.post(new Runnable() {
@@ -254,14 +254,14 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     private void constructLifeCycleComponents() {
-        if( playerControl != null && playerControl instanceof RegisterBusEventInterface ) {
-            lifeCycleComponents.add((RegisterBusEventInterface) playerControl);
+        if( playerControlBar != null && playerControlBar instanceof RegisterBusEventInterface ) {
+            lifeCycleComponents.add((RegisterBusEventInterface) playerControlBar);
         }
-        if( header != null && header instanceof RegisterBusEventInterface ) {
-            lifeCycleComponents.add((RegisterBusEventInterface) header);
+        if( appBarLayout != null && appBarLayout instanceof RegisterBusEventInterface ) {
+            lifeCycleComponents.add((RegisterBusEventInterface) appBarLayout);
         }
-        if( footerEditMain!= null && footerEditMain instanceof RegisterBusEventInterface ) {
-            lifeCycleComponents.add(footerEditMain);
+        if( footerEditBar != null && footerEditBar instanceof RegisterBusEventInterface ) {
+            lifeCycleComponents.add(footerEditBar);
         }
         for(BaseView baseView : baseViewList) {
             if(baseView instanceof RegisterBusEventInterface) {
@@ -393,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 Log.d("MainActivity",event.getMessage());
                 if(event.getData() != null) {
                     fab.hide();
-                    lineEditBar.setVisibility(View.VISIBLE);
+                    playerControlBar.setVisibility(View.VISIBLE);
                 }
                 break;
             case "onSingleTapUp":
@@ -634,11 +634,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         if( height > 0 ) {
             if ( localSettings.getSoftKeyboardHeight() == 0 ) {
                 localSettings.saveSoftKeyboardHeight(height);
-                footerEditMain.setSoftKeyBoardHeight(height);
+                footerEditBar.setSoftKeyBoardHeight(height);
             }
-            footerEditMain.showSoftKeyBoard();
+            footerEditBar.showSoftKeyBoard();
         } else {
-            footerEditMain.hideSoftKeyBoard();
+            footerEditBar.hideSoftKeyBoard();
         }
     }
     // endregion

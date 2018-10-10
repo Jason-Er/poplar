@@ -2,8 +2,6 @@ package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +11,8 @@ import android.view.View;
 
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
+import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
+import com.wecyberstage.wecyberstage.view.main.PlayerControlBar;
 import com.wecyberstage.wecyberstage.view.message.FABEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,16 +20,22 @@ import org.greenrobot.eventbus.EventBus;
 public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements ClickActionInterface {
 
     private final String TAG = "ComposeYToolViews";
-    public ComposeYToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, FloatingActionButton fab) {
-        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, fab);
+
+    public ComposeYToolViewsDelegate(Activity activity,
+                                     AppBarLayout appBarLayout,
+                                     PlayerControlBar playerControlBar,
+                                     FooterEditBar footerEditBar,
+                                     DrawerLayout drawerLayout,
+                                     FloatingActionButton fab) {
+        super(activity, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
     }
 
     @Override
     public void slideBegin() {
-        ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        lineEditBar.setVisibility(View.GONE);
-        ((AppBarLayout) toolbar.getParent()).setVisibility(View.VISIBLE);
-        ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        footerEditBar.setVisibility(View.GONE);
+        appBarLayout.setVisibility(View.VISIBLE);
+        appBarLayout.setExpanded(true, true);
     }
 
     @Override
@@ -55,16 +61,16 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
     }
 
     public void hideLineEditBar() {
-        lineEditBar.setVisibility(View.GONE);
+        footerEditBar.setVisibility(View.GONE);
         fab.show();
     }
 
     @Override
     public void itemClick() {
         Log.d(TAG, "itemClick");
-        if(lineEditBar.getVisibility() == View.VISIBLE) {
+        if(footerEditBar.getVisibility() == View.VISIBLE) {
             fab.show();
-            lineEditBar.setVisibility(View.INVISIBLE);
+            footerEditBar.setVisibility(View.INVISIBLE);
         } else {
             fab.hide();
             moveInPlayerControl();

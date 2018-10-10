@@ -8,26 +8,34 @@ import android.app.Activity;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 
-import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
+import com.wecyberstage.wecyberstage.view.main.PlayerControlBar;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class ToolViewsDelegate implements SlideInterface {
+
     protected Activity activity;
-    protected View toolbar;
-    protected View playerControlBar;
-    protected View lineEditBar;
-    protected View drawerLayout;
+    protected AppBarLayout appBarLayout;
+    protected PlayerControlBar playerControlBar;
+    protected FooterEditBar footerEditBar; // edit stageLine and stageScene
+    protected DrawerLayout drawerLayout;
     protected FloatingActionButton fab;
 
-    public ToolViewsDelegate(Activity activity, View toolbar, View playerControlBar, View lineEditBar, View drawerLayout, FloatingActionButton fab) {
+    public ToolViewsDelegate( Activity activity,
+                             AppBarLayout appBarLayout,
+                             PlayerControlBar playerControlBar,
+                             FooterEditBar footerEditBar,
+                             DrawerLayout drawerLayout,
+                             FloatingActionButton fab ) {
         this.activity = activity;
-        this.toolbar = toolbar;
+        this.appBarLayout = appBarLayout;
         this.playerControlBar = playerControlBar;
-        this.lineEditBar = lineEditBar;
+        this.footerEditBar = footerEditBar;
         this.drawerLayout = drawerLayout;
         this.fab = fab;
     }
@@ -38,8 +46,8 @@ public abstract class ToolViewsDelegate implements SlideInterface {
         @Override
         public void run() {
             // queueLock.lock();
-            if(toolbar.getVisibility() == View.VISIBLE) {
-                moveOutHeaderAndFooter(toolbar, playerControlBar);
+            if(appBarLayout.getVisibility() == View.VISIBLE) {
+                moveOutHeaderAndFooter(appBarLayout, playerControlBar);
             }
         }
     };
@@ -48,7 +56,7 @@ public abstract class ToolViewsDelegate implements SlideInterface {
         @Override
         public void run() {
             // queueLock.lock();
-            if(toolbar.getVisibility() == View.VISIBLE) {
+            if(appBarLayout.getVisibility() == View.VISIBLE) {
                 moveOutPlayerControl();
             }
         }
@@ -90,11 +98,11 @@ public abstract class ToolViewsDelegate implements SlideInterface {
     }
 
     public void moveOutHeaderAndFooter() {
-        moveOutHeaderAndFooter((View) toolbar.getParent(), playerControlBar);
+        moveOutHeaderAndFooter(appBarLayout, playerControlBar);
     }
 
     public void moveInHeaderAndFooter() {
-        moveInHeaderAndFooter((View) toolbar.getParent(), playerControlBar);
+        moveInHeaderAndFooter(appBarLayout, playerControlBar);
     }
 
     public void moveOutHeaderAndFooter(final View header, final View footer) {

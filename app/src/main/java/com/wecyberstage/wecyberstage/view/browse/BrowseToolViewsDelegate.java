@@ -8,25 +8,27 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
+import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
+import com.wecyberstage.wecyberstage.view.main.PlayerControlBar;
 
 public class BrowseToolViewsDelegate extends ToolViewsDelegate {
 
-    public BrowseToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, FloatingActionButton fab) {
-        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, fab);
+    public BrowseToolViewsDelegate(Activity activity, AppBarLayout appBarLayout, PlayerControlBar playerControlBar, FooterEditBar footerEditBar, DrawerLayout drawerLayout, FloatingActionButton fab) {
+        super(activity, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
     }
 
     @Override
     public void slideBegin() {
-        ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         fab.hide();
-        lineEditBar.setVisibility(View.INVISIBLE);
+        footerEditBar.setVisibility(View.INVISIBLE);
         playerControlBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void slideEnd() {
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); // Show status bar
-        ((AppBarLayout) toolbar.getParent()).setVisibility(View.VISIBLE);
-        ((AppBarLayout) toolbar.getParent()).setExpanded(true, true);
+        appBarLayout.setVisibility(View.VISIBLE);
+        appBarLayout.setExpanded(true, true);
     }
 }

@@ -29,7 +29,7 @@ import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
-import com.wecyberstage.wecyberstage.view.main.FooterEditMain;
+import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
 import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
@@ -53,8 +53,8 @@ public class ComposeY extends PlayerView implements PlayStateInterface, OnStartD
     private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
 
-    @BindView(R.id.footer_edit_main)
-    FooterEditMain footerEditMain;
+    @BindView(R.id.footer_edit_bar)
+    FooterEditBar footerEditBar;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -101,7 +101,7 @@ public class ComposeY extends PlayerView implements PlayStateInterface, OnStartD
             public void onChanged(@Nullable StageScene stageScene) {
                 if(stageScene != null) {
                     adapter.setStageScene(stageScene);
-                    footerEditMain.setStageRoles(stageScene.stageRoles);
+                    footerEditBar.setStageRoles(stageScene.stageRoles);
                 }
             }
         });
