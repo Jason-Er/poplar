@@ -5,13 +5,15 @@ import android.support.annotation.NonNull;
 
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StageLineHandle;
+import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.TimeLine;
-import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -20,24 +22,28 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ComposeXScriptAdapter extends ListDelegationAdapter implements UpdateStagePlayInterface, ComposeScriptHelper, RegisterBusEventInterface {
+public class ComposeXScriptAdapter extends ListDelegationAdapter implements StageLineHandle, ComposeScriptHelper, RegisterBusEventInterface {
 
-    final private UpdateStagePlayInterface updateStagePlayInterface;
+    final private StageLineHandle stageLineHandle;
     private List<StageRole> stageRoleList;
+    StagePlay stagePlay;
+
     @Inject
     public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates,
-                                 UpdateStagePlayInterface updateStagePlayInterface,
+                                 StageLineHandle stageLineHandle,
                                  OnStartDragListener startDragListener) {
         super(delegates);
         delegatesManager
                 .addDelegate(new StageLineAdapterDelegate(ComposeXCardViewType.STAGE_LINE.ordinal(), this, startDragListener))
                 .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()))
                 .addDelegate(new RoleAdapterDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
-        this.updateStagePlayInterface = updateStagePlayInterface;
+        this.stageLineHandle = stageLineHandle;
 
     }
 
-    public void setStageScene(@NonNull StageScene stageScene) {
+    public void setStagePlay(@NonNull StagePlay stagePlay, StagePlayCursor stagePlayCursor) {
+        this.stagePlay = stagePlay;
+        StageScene stageScene = stagePlay.scenes.get(stagePlayCursor.getOrdinal());
         // for recyclerView show
         dataSet = new ArrayList<>();
         dataSet.add(new TimeLine());
@@ -50,22 +56,22 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Upda
 
     @Override
     public void updateStageLine(StageLine stageLine) {
-        updateStagePlayInterface.updateStageLine(stageLine);
+        stageLineHandle.updateStageLine(stageLine);
     }
 
     @Override
     public void addStageLine(StageLine stageLine) {
-        updateStagePlayInterface.addStageLine(stageLine);
+        stageLineHandle.addStageLine(stageLine);
     }
 
     @Override
     public void deleteStageLine(StageLine stageLine) {
-        updateStagePlayInterface.deleteStageLine(stageLine);
+        stageLineHandle.deleteStageLine(stageLine);
     }
 
     @Override
     public void swapStageLines(int position1, int position2) {
-        updateStagePlayInterface.swapStageLines(position1, position2);
+        stageLineHandle.swapStageLines(position1, position2);
     }
 
     @Override

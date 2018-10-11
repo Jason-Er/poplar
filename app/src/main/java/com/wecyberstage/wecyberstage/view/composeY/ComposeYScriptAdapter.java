@@ -6,14 +6,15 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
-import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
-import com.wecyberstage.wecyberstage.view.common.StageLineHandle;
-import com.wecyberstage.wecyberstage.view.common.StageSceneHandle;
+import com.wecyberstage.wecyberstage.model.StageLineHandle;
+import com.wecyberstage.wecyberstage.model.StageSceneHandle;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlSub2Interface;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SaveStatesInterface;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
@@ -44,11 +45,12 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
 
     final String START_TAG = "ComposeYArrayStart";
     final String END_TAG = "ComposeYArrayEnd";
-    final UpdateStagePlayInterface updateStagePlayInterface;
+    final StageLineHandle updateStagePlayInterface;
     private final String TAG = "ComposeYScriptAdapter";
     List<String> listStart = new ArrayList<>();
     List<String> listEnd = new ArrayList<>();
-    StageScene stageScene;
+    private StageScene stageScene;
+    private StagePlay stagePlay;
 
     // for apache poi read and replace
     String parenthesesREGEX = "([（\\(][^\\)）]+[）\\)])|([\\[【][^\\]】]+[\\]】])";
@@ -56,7 +58,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     Pattern pattern = Pattern.compile(parenthesesREGEX);
 
     @Inject
-    public ComposeYScriptAdapter(AdapterDelegatesManager<Object> delegates, UpdateStagePlayInterface updateStagePlayInterface, OnStartDragListener startDragListener) {
+    public ComposeYScriptAdapter(AdapterDelegatesManager<Object> delegates, StageLineHandle updateStagePlayInterface, OnStartDragListener startDragListener) {
         super(delegates);
         StageLineStartAdapterDelegate stageLineStartAdapterDelegate = new StageLineStartAdapterDelegate(ComposeYCardViewType.START.ordinal());
         StageLineEndAdapterDelegate stageLineEndAdapterDelegate = new StageLineEndAdapterDelegate(ComposeYCardViewType.END.ordinal());
@@ -68,8 +70,9 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
         this.updateStagePlayInterface = updateStagePlayInterface;
     }
 
-    public void setStageScene(@NonNull StageScene stageScene) {
-        this.stageScene = stageScene;
+    public void setStagePlay(@NonNull StagePlay stagePlay, StagePlayCursor stagePlayCursor) {
+        this.stagePlay = stagePlay;
+        stageScene = stagePlay.scenes.get(stagePlayCursor.getOrdinal());
         dataSet = new ArrayList<>();
         for(StageLine stageLine : stageScene.stageLines) {
             handleStageLine(stageLine);
@@ -323,6 +326,21 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
         } else {
             notifyItemChanged(position);
         }
+    }
+
+    @Override
+    public void updateStageLine(StageLine stageLine) {
+
+    }
+
+    @Override
+    public void deleteStageLine(StageLine stageLine) {
+
+    }
+
+    @Override
+    public void swapStageLines(int position1, int position2) {
+
     }
 
     @Override

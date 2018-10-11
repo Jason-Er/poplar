@@ -24,5 +24,8 @@ public class UserEntity {
     @ColumnInfo(name = "e_mail")
     public String email;
 
+    @ColumnInfo(name = "phone_number")
+    public String phoneNumber;
+
     public String password;
 }

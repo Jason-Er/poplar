@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -62,7 +63,6 @@ import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
@@ -85,13 +85,16 @@ import butterknife.ButterKnife;
 import dagger.android.AndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector,
+public class MainActivity extends AppCompatActivity
+        implements HasSupportFragmentInjector,
         NavigationView.OnNavigationItemSelectedListener,
-        CustomViewSlideInterface, KeyboardHeightObserver {
+        CustomViewSlideInterface, KeyboardHeightObserver,
+        StagePlayCursorHandle {
 
     private final String TAG = "MainActivity";
     private final String NAVIGATION_SEMICOLON = ";";
     private final String NAVIGATION_COLON = ":";
+    private final String STAGEPLAY_CURSOR = "stage_play_cursor";
 
     private KeyboardHeightProvider keyboardHeightProvider;
     private Handler mainHideHandler = new Handler();
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     private SparseArray viewArray;
     private SparseArray flingResponseArray;
-    // private int softKeyBroadHeight;
+    private StagePlayCursor stagePlayCursor; // for tracing stage play
     Browse browse;
     ComposeX composeX;
     ComposeY composeY;
@@ -161,6 +164,13 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
+
+        stagePlayCursor = getIntent().getParcelableExtra(STAGEPLAY_CURSOR);
+        if( stagePlayCursor == null ) {
+            stagePlayCursor = localSettings.getStagePlayCursor(character.getId());
+        }
 
         // region all views
         viewArray = new SparseArray();
@@ -202,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 switch (menuItemId) {
                     case R.id.menu_item_account:
                         Log.i("onMenuItemClick","menu_item_account");
-                        // slideTo(currentView, signIn, Direction.TO_DOWN);
                         if( character instanceof Navigate2Account) {
                             ((Navigate2Account) character).navigate2Account(MainActivity.this);
                         }
@@ -225,8 +234,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             String item = navigationStack.peek();
             restoreToView(ViewType.valueOf(item.split(NAVIGATION_COLON)[1]));
         }
-
-        character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
 
         // change maskChoose height
         if( localSettings.getSoftKeyboardHeight() > 0 ) {
@@ -355,6 +362,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             lifeCycle.unRegister(this);
         }
         keyboardHeightProvider.setKeyboardHeightObserver(null);
+
+        getIntent().putExtra(STAGEPLAY_CURSOR, stagePlayCursor);
+        localSettings.saveStagePlayCursor(character.getId(), stagePlayCursor);
     }
 
     @Override
@@ -632,9 +642,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     public void slideTo(ViewType from, ViewType to, Direction direction, boolean saveTrack) {
         BaseView fromBaseView = getCustomView(from);
         BaseView toBaseView = getCustomView(to);
-        if(fromBaseView instanceof PlayStateInterface && toBaseView instanceof PlayStateInterface) {
-            ((PlayStateInterface) toBaseView).setPlayState(((PlayStateInterface) fromBaseView).getPlayState());
-        }
         slideTo(fromBaseView, toBaseView, direction);
         currentBehaviorResponse = (BehaviorResponseInterface) flingResponseArray.get(to.ordinal());
         if(saveTrack) {
@@ -659,4 +666,15 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
     // endregion
 
+    // region implement of StagePlayCursorHandle
+    @Override
+    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
+        this.stagePlayCursor = stagePlayCursor;
+    }
+
+    @Override
+    public StagePlayCursor getStagePlayCursor() {
+        return stagePlayCursor;
+    }
+    // endregion
 }

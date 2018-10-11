@@ -2,6 +2,8 @@ package com.wecyberstage.wecyberstage.data.file;
 
 import android.content.SharedPreferences;
 
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -11,7 +13,6 @@ public class LocalSettings {
     private final String TOKEN_NAME = "token";
     private final String USER_NAME = "username";
     private final String SOFTKEYBOARD_HEIGHT = "softkeyboardheight";
-
 
     @Inject
     public LocalSettings(SharedPreferences sharedPreferences) {
@@ -46,5 +47,13 @@ public class LocalSettings {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SOFTKEYBOARD_HEIGHT, height);
         editor.commit();
+    }
+
+    public StagePlayCursor getStagePlayCursor(long userId) {
+        return new StagePlayCursor(0,0,0);
+    }
+
+    public void saveStagePlayCursor(long userId, StagePlayCursor stagePlayCursor) {
+
     }
 }

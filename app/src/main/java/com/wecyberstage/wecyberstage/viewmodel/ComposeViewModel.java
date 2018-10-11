@@ -1,53 +1,44 @@
 package com.wecyberstage.wecyberstage.viewmodel;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.wecyberstage.wecyberstage.model.StageLine;
-import com.wecyberstage.wecyberstage.model.StageScene;
-import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
-import com.wecyberstage.wecyberstage.util.helper.StageSceneLiveData;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.model.StageLineHandle;
+import com.wecyberstage.wecyberstage.util.helper.StagePlayLiveData;
 
 import javax.inject.Inject;
 
-public class ComposeViewModel extends ViewModel implements PlayStateInterface, UpdateStagePlayInterface {
+public class ComposeViewModel extends ViewModel implements StageLineHandle {
 
-    public final LiveData<StageScene> stageSceneLiveData;
+    public final StagePlayLiveData stagePlayLiveData;
 
     @Inject
-    public ComposeViewModel(StageSceneLiveData stageSceneLiveData) {
-        this.stageSceneLiveData = stageSceneLiveData;
+    public ComposeViewModel(StagePlayLiveData stagePlayLiveData) {
+        this.stagePlayLiveData = stagePlayLiveData;
     }
 
-    @Override
-    public void setPlayState(PlayState playState) {
-        ((StageSceneLiveData) stageSceneLiveData).setPlayState(playState);
-    }
-
-    @Override
-    public PlayState getPlayState() {
-        return ((StageSceneLiveData) stageSceneLiveData).getPlayState();
+    public void getStagePlay(long stagePlayId) {
+        stagePlayLiveData.getStagePlay(stagePlayId);
     }
 
     @Override
     public void updateStageLine(StageLine maskLine) {
-        ((UpdateStagePlayInterface) stageSceneLiveData).updateStageLine(maskLine);
+
     }
 
     @Override
     public void addStageLine(StageLine stageLine) {
-        ((UpdateStagePlayInterface) stageSceneLiveData).addStageLine(stageLine);
+
     }
 
     @Override
     public void deleteStageLine(StageLine stageLine) {
-        ((UpdateStagePlayInterface) stageSceneLiveData).deleteStageLine(stageLine);
+
     }
 
     @Override
     public void swapStageLines(int position1, int position2) {
-        ((UpdateStagePlayInterface) stageSceneLiveData).swapStageLines(position1,position2);
+
     }
+
 }

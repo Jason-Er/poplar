@@ -15,8 +15,8 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.helper.PlayerView;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
@@ -32,7 +32,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeZ extends PlayerView implements PlayStateInterface,
+public class ComposeZ extends PlayerView implements StagePlayCursorHandle,
         SlideInterface, ClickActionInterface {
 
     private static final String PARTICIPATE_INFO_KEY = "participate_info";
@@ -64,9 +64,9 @@ public class ComposeZ extends PlayerView implements PlayStateInterface,
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ParticipateViewModel.class);
-        PlayState playState = activity.getIntent().getParcelableExtra(PARTICIPATE_INFO_KEY);
-        if(playState != null) {
-            viewModel.setPlayState(playState);
+        StagePlayCursor stagePlayCursor = activity.getIntent().getParcelableExtra(PARTICIPATE_INFO_KEY);
+        if(stagePlayCursor != null) {
+            viewModel.setStagePlayCursor(stagePlayCursor);
         }
         viewModel.keyFrameLiveData.observe(activity, new Observer<KeyFrame>() {
             @Override
@@ -84,14 +84,14 @@ public class ComposeZ extends PlayerView implements PlayStateInterface,
     }
 
     @Override
-    public void setPlayState(PlayState playState) {
-        activity.getIntent().putExtra(PARTICIPATE_INFO_KEY, playState);
-        viewModel.setPlayState(playState);
+    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
+        activity.getIntent().putExtra(PARTICIPATE_INFO_KEY, stagePlayCursor);
+        viewModel.setStagePlayCursor(stagePlayCursor);
     }
 
     @Override
-    public PlayState getPlayState() {
-        return viewModel.getPlayState();
+    public StagePlayCursor getStagePlayCursor() {
+        return viewModel.getStagePlayCursor();
     }
 
     @Override

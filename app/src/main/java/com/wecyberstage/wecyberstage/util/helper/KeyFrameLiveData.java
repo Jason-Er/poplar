@@ -9,8 +9,8 @@ import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.Prop;
 import com.wecyberstage.wecyberstage.model.StageRole;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
 
 import java.util.ArrayList;
 
@@ -22,8 +22,8 @@ import javax.inject.Singleton;
  */
 
 @Singleton
-public class KeyFrameLiveData extends LiveData<KeyFrame> implements PlayStateInterface {
-    PlayState playState;
+public class KeyFrameLiveData extends LiveData<KeyFrame> implements StagePlayCursorHandle {
+    StagePlayCursor stagePlayCursor;
     @Inject
     public KeyFrameLiveData(PlayRepository repository) {
 
@@ -40,8 +40,8 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> implements PlayStateInt
     }
 
     @Override
-    public void setPlayState(PlayState playState) {
-        this.playState = playState;
+    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
+        this.stagePlayCursor = stagePlayCursor;
         KeyFrame keyFrame = new KeyFrame();
 
         keyFrame.roleInfoList = new ArrayList<>();
@@ -72,7 +72,7 @@ public class KeyFrameLiveData extends LiveData<KeyFrame> implements PlayStateInt
     }
 
     @Override
-    public PlayState getPlayState() {
-        return playState;
+    public StagePlayCursor getStagePlayCursor() {
+        return stagePlayCursor;
     }
 }

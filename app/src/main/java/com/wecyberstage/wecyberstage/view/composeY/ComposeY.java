@@ -19,13 +19,11 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StageLine;
-import com.wecyberstage.wecyberstage.model.StageScene;
-import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
-import com.wecyberstage.wecyberstage.view.common.StageLineHandle;
-import com.wecyberstage.wecyberstage.view.common.StageSceneHandle;
+import com.wecyberstage.wecyberstage.model.StageLineHandle;
+import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.main.MainActivity;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.helper.PlayerView;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
@@ -45,12 +43,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ComposeY extends PlayerView implements PlayStateInterface, OnStartDragListener,
-        SlideInterface, UpdateStagePlayInterface, RegisterBusEventInterface, ClickActionInterface {
+public class ComposeY extends PlayerView implements OnStartDragListener,
+        SlideInterface, StageLineHandle, RegisterBusEventInterface, ClickActionInterface {
 
     private final String TAG = "ComposeY";
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
+    private StagePlayCursor stagePlayCursor;
     private ComposeViewModel viewModel;
     private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
@@ -94,16 +93,15 @@ public class ComposeY extends PlayerView implements PlayStateInterface, OnStartD
         itemTouchHelper.attachToRecyclerView( (RecyclerView) view);
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
-        PlayState playState = activity.getIntent().getParcelableExtra(COMPOSE_INFO_KEY);
-        if(playState != null) {
-            viewModel.setPlayState(playState);
-        }
-        viewModel.stageSceneLiveData.observe(activity, new Observer<StageScene>() {
+        stagePlayCursor = ((MainActivity) activity).getStagePlayCursor();
+        viewModel.getStagePlay(stagePlayCursor.getPlayId());
+
+        viewModel.stagePlayLiveData.observe(activity, new Observer<StagePlay>() {
             @Override
-            public void onChanged(@Nullable StageScene stageScene) {
-                if(stageScene != null) {
-                    adapter.setStageScene(stageScene);
-                    footerEditBar.setStageRoles(stageScene.stageRoles);
+            public void onChanged(@Nullable StagePlay stagePlay) {
+                if(stagePlay != null) {
+                    adapter.setStagePlay(stagePlay, stagePlayCursor);
+                    footerEditBar.setStageRoles(stagePlay.cast);
                 }
             }
         });
@@ -112,17 +110,6 @@ public class ComposeY extends PlayerView implements PlayStateInterface, OnStartD
     @Override
     public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
         adapter.saveStates(activity);
-    }
-
-    @Override
-    public void setPlayState(PlayState playState) {
-        activity.getIntent().putExtra(COMPOSE_INFO_KEY, playState);
-        viewModel.setPlayState(playState);
-    }
-
-    @Override
-    public PlayState getPlayState() {
-        return viewModel.getPlayState();
     }
 
     @Override

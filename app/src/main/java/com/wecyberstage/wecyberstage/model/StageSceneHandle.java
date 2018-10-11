@@ -1,4 +1,4 @@
-package com.wecyberstage.wecyberstage.view.common;
+package com.wecyberstage.wecyberstage.model;
 
 public interface StageSceneHandle {
     void deleteStageSceneContent();

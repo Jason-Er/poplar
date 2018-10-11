@@ -2,12 +2,11 @@ package com.wecyberstage.wecyberstage.viewmodel;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.util.ArrayMap;
 
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.util.helper.KeyFrameLiveData;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
 
 import javax.inject.Inject;
 
@@ -15,7 +14,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/15.
  */
 
-public class ParticipateViewModel extends ViewModel implements PlayStateInterface {
+public class ParticipateViewModel extends ViewModel implements StagePlayCursorHandle {
 
     public final LiveData<KeyFrame> keyFrameLiveData;
 
@@ -25,13 +24,13 @@ public class ParticipateViewModel extends ViewModel implements PlayStateInterfac
     }
 
     @Override
-    public void setPlayState(PlayState playState) {
-        ((KeyFrameLiveData) keyFrameLiveData).setPlayState(playState);
+    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
+        ((KeyFrameLiveData) keyFrameLiveData).setStagePlayCursor(stagePlayCursor);
     }
 
     @Override
-    public PlayState getPlayState() {
-        return ((KeyFrameLiveData) keyFrameLiveData).getPlayState();
+    public StagePlayCursor getStagePlayCursor() {
+        return ((KeyFrameLiveData) keyFrameLiveData).getStagePlayCursor();
     }
 
 }
