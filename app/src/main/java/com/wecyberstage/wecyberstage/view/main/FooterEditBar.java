@@ -24,7 +24,7 @@ import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
-import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
+import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
 import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -147,17 +147,17 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
     // endregion
 
     /**
-     * send FooterEditMainEvent event and hide footEditMain
+     * send FooterEditBarEvent event and hide footEditMain
      * @param message
      */
     private void sendMessage(String message) {
-        FooterEditMainEvent event = new FooterEditMainEvent(message);
+        FooterEditBarEvent event = new FooterEditBarEvent(message);
         EventBus.getDefault().post(event);
         hide();
     }
 
     private void sendMessage(String message, Object object) {
-        FooterEditMainEvent event = new FooterEditMainEvent(object, message);
+        FooterEditBarEvent event = new FooterEditBarEvent(object, message);
         EventBus.getDefault().post(event);
         hide();
     }
@@ -208,25 +208,25 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
             Toast.makeText(getContext(), "请安装文件管理器", Toast.LENGTH_SHORT)
                     .show();
         }
-        sendMessage("addSceneFromWord");
+        sendMessage("addStageSceneFromWord");
     }
 
     @OnClick(R.id.sceneEditSub_delete)
     public void deleteSceneContent(View view) {
-        Log.d(TAG,"deleteSceneContent click");
-        sendMessage("deleteSceneContent");
+        Log.d(TAG,"deleteStageSceneContent click");
+        sendMessage("deleteStageSceneContent");
     }
 
     @OnClick(R.id.sceneEditSub_remove)
     public void deleteScene(View view) {
-        Log.d(TAG,"deleteScene click");
-        sendMessage("deleteScene");
+        Log.d(TAG,"deleteStageScene click");
+        sendMessage("deleteStageScene");
     }
 
     @OnClick(R.id.sceneEditSub_add)
     public void addScene(View view) {
-        Log.d(TAG,"addScene click");
-        sendMessage("addScene");
+        Log.d(TAG,"addStageScene click");
+        sendMessage("addStageScene");
     }
 
     public void setStageRoles(List<StageRole> stageRoles) {

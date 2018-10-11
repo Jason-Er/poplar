@@ -21,6 +21,8 @@ import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
+import com.wecyberstage.wecyberstage.view.common.StageLineHandle;
+import com.wecyberstage.wecyberstage.view.common.StageSceneHandle;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayState;
 import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
@@ -30,7 +32,7 @@ import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
-import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
+import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
@@ -171,9 +173,22 @@ public class ComposeY extends PlayerView implements PlayStateInterface, OnStartD
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseFooterEditMainEvent(FooterEditMainEvent event) {
+    public void onResponseFooterEditMainEvent(FooterEditBarEvent event) {
         Log.d(TAG,"receive footerEditMain");
-        ((ComposeYToolViewsDelegate)toolViewsDelegate).hideLineEditBar();
+        switch (event.getMessage()){
+            case "addStageLine":
+                adapter.addStageLine((StageLine) event.getData());
+                break;
+            case "deleteStageSceneContent":
+                adapter.deleteStageSceneContent();
+                break;
+            case "deleteStageScene":
+                adapter.deleteStageScene();
+                break;
+            case "addStageScene":
+                adapter.addStageScene();
+                break;
+        }
     }
 
 }

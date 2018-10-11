@@ -58,11 +58,6 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
 
     }
 
-    public void hideLineEditBar() {
-        footerEditBar.setVisibility(View.GONE);
-        fab.show();
-    }
-
     private void showFabOrPlayerControl() {
         if(footerEditBar.getVisibility() == View.VISIBLE) {
             fab.show();

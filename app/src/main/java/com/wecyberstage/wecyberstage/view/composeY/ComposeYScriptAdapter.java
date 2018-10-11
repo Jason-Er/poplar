@@ -9,10 +9,11 @@ import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
+import com.wecyberstage.wecyberstage.view.common.StageLineHandle;
+import com.wecyberstage.wecyberstage.view.common.StageSceneHandle;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlSub2Interface;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SaveStatesInterface;
-import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
 import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
@@ -39,7 +40,7 @@ import javax.inject.Inject;
 
 public class ComposeYScriptAdapter extends ListDelegationAdapter
         implements ItemTouchHelperAdapter, SaveStatesInterface, RegisterBusEventInterface,
-        PlayControlSub2Interface {
+        PlayControlSub2Interface, StageLineHandle, StageSceneHandle {
 
     final String START_TAG = "ComposeYArrayStart";
     final String END_TAG = "ComposeYArrayEnd";
@@ -159,46 +160,6 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     public void unRegister(Activity activity) {
         Log.d("ComposeYScriptAdapter","unRegister");
         EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseEvent(FooterEditMainEvent event) {
-        switch (event.getMessage()){
-            case "addStageLine":
-                if(event.getData() instanceof StageLine) {
-                    StageLine stageLine = (StageLine) event.getData();
-                    boolean isNeedNotifyDataSetChanged = false;
-                    int position = stageScene.stageLines.indexOf(stageLine);
-                    if( !stageScene.stageLines.contains( stageLine ) ) {
-                        handleStageLine(stageLine);
-                        isNeedNotifyDataSetChanged = true;
-                    } else {
-                        if ( listStart.contains( stageLine.getRoleName() ) ) {
-                            if ( ((ComposeYItemDto) dataSet.get(position)).getViewType() != ComposeYCardViewType.START ) {
-                                ((ComposeYItemDto) dataSet.get(position)).setViewType(ComposeYCardViewType.START);
-                                isNeedNotifyDataSetChanged = true;
-                            }
-                        } else {
-                            if ( ((ComposeYItemDto) dataSet.get(position)).getViewType() != ComposeYCardViewType.END ) {
-                                ((ComposeYItemDto) dataSet.get(position)).setViewType(ComposeYCardViewType.END);
-                                isNeedNotifyDataSetChanged = true;
-                            }
-                        }
-                    }
-                    if(isNeedNotifyDataSetChanged) {
-                        notifyDataSetChanged();
-                    } else {
-                        notifyItemChanged(position);
-                    }
-                }
-                break;
-            case "deleteSceneContent":
-                dataSet = new ArrayList<>();
-                stageScene.stageLines = new ArrayList<>();
-                notifyDataSetChanged();
-                break;
-        }
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -333,6 +294,52 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
     @Override
     public void volume(boolean open) {
         Log.d(TAG,"volume()");
+    }
+    // endregion
+
+    // region implementation of StageLineHandle, StageSceneHandle
+    @Override
+    public void addStageLine(StageLine stageLine) {
+        boolean isNeedNotifyDataSetChanged = false;
+        int position = stageScene.stageLines.indexOf(stageLine);
+        if( !stageScene.stageLines.contains( stageLine ) ) {
+            handleStageLine(stageLine);
+            isNeedNotifyDataSetChanged = true;
+        } else {
+            if ( listStart.contains( stageLine.getRoleName() ) ) {
+                if ( ((ComposeYItemDto) dataSet.get(position)).getViewType() != ComposeYCardViewType.START ) {
+                    ((ComposeYItemDto) dataSet.get(position)).setViewType(ComposeYCardViewType.START);
+                    isNeedNotifyDataSetChanged = true;
+                }
+            } else {
+                if ( ((ComposeYItemDto) dataSet.get(position)).getViewType() != ComposeYCardViewType.END ) {
+                    ((ComposeYItemDto) dataSet.get(position)).setViewType(ComposeYCardViewType.END);
+                    isNeedNotifyDataSetChanged = true;
+                }
+            }
+        }
+        if(isNeedNotifyDataSetChanged) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemChanged(position);
+        }
+    }
+
+    @Override
+    public void deleteStageSceneContent() {
+        dataSet = new ArrayList<>();
+        stageScene.stageLines = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void deleteStageScene() {
+
+    }
+
+    @Override
+    public void addStageScene() {
+
     }
     // endregion
 }
