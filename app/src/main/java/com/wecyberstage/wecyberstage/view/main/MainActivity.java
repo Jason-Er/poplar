@@ -66,7 +66,8 @@ import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
-import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineContainerViewEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -387,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+    public void onResponseMessageEvent(StageLineViewEvent event) {
         switch ( event.getMessage() ) {
             case "onLongPress":
                 Log.d("MainActivity",event.getMessage());
@@ -399,6 +400,21 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             case "onSingleTapUp":
                 if( currentView instanceof ClickActionInterface ) {
                     ((ClickActionInterface) currentView).itemClick();
+                }
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StageLineContainerViewEvent event) {
+        switch ( event.getMessage() ) {
+            case "onLongPress":
+                Log.d(TAG, event.getMessage());
+
+                break;
+            case "onSingleTapUp":
+                if( currentView instanceof ClickActionInterface ) {
+                    ((ClickActionInterface) currentView).containerClick();
                 }
                 break;
         }

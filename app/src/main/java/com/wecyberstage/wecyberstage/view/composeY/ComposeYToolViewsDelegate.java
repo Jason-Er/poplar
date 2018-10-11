@@ -9,13 +9,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
 
+import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
 import com.wecyberstage.wecyberstage.view.main.PlayerControlBar;
-import com.wecyberstage.wecyberstage.view.message.FABEvent;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements ClickActionInterface {
 
@@ -46,8 +44,8 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
             @Override
             public void onClick(View v) {
                 fab.hide();
-                FABEvent event = new FABEvent("click");
-                EventBus.getDefault().post(event);
+                footerEditBar.setStageLine(new StageLine());
+                footerEditBar.showLine();
             }
         });
         playerControlBar.animate().translationY(playerControlBar.getHeight()).alpha(0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
@@ -65,9 +63,7 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
         fab.show();
     }
 
-    @Override
-    public void itemClick() {
-        Log.d(TAG, "itemClick");
+    private void showFabOrPlayerControl() {
         if(footerEditBar.getVisibility() == View.VISIBLE) {
             fab.show();
             footerEditBar.setVisibility(View.INVISIBLE);
@@ -78,7 +74,15 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
     }
 
     @Override
-    public void containerClick() {
-
+    public void itemClick() {
+        Log.d(TAG, "itemClick");
+        showFabOrPlayerControl();
     }
+
+    @Override
+    public void containerClick() {
+        Log.d(TAG, "containerClick");
+        showFabOrPlayerControl();
+    }
+
 }

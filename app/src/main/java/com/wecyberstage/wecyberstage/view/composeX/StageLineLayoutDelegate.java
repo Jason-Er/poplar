@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.wecyberstage.wecyberstage.view.message.ComposeEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
-import com.wecyberstage.wecyberstage.view.common.StageLineCardView;
+import com.wecyberstage.wecyberstage.view.common.StageLineView;
 import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 import com.wecyberstage.wecyberstage.view.recycler.LayoutDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
@@ -94,8 +94,8 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
         SparseArray viewCache = new SparseArray();
         for (int i=0; i < layoutManager.getChildCount(); i++) {
             final View child = layoutManager.getChildAt(i);
-            if( child instanceof StageLineCardView) {
-                int position = ((StageLineCardView) child).getPosition();
+            if( child instanceof StageLineView) {
+                int position = ((StageLineView) child).getPosition();
                 Log.d("stageLineLayout","detachView position: "+position);
                 viewCache.put(position, child);
             }
@@ -135,11 +135,11 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
         // clac viewsMaxHeight
         for (int i=0; i < layoutManager.getChildCount(); i++) {
             final View view = layoutManager.getChildAt(i);
-            if( view instanceof StageLineCardView) {
+            if( view instanceof StageLineView) {
                 layoutManager.measureChildWithMargins(view, 0, 0);
                 // int mDecoratedChildWidth = layoutManager.getDecoratedMeasuredWidth(view);
                 int mDecoratedChildHeight = layoutManager.getDecoratedMeasuredHeight(view);
-                int position = ((StageLineCardView) view).getPosition();
+                int position = ((StageLineView) view).getPosition();
                 StageLine stageLine = (StageLine) items.get(position);
                 if (viewsMaxHeight.get((int) stageLine.roleId) != null) {
                     int height = (int) viewsMaxHeight.get((int) stageLine.roleId);
@@ -161,8 +161,8 @@ public class StageLineLayoutDelegate extends ViewTypeDelegateClass implements La
         topOffset = (totalHeight - getVerticalSpace(layoutManager))/2;
         for(int i = 0; i < layoutManager.getChildCount(); i++) {
             View view = layoutManager.getChildAt(i);
-            if(view instanceof StageLineCardView) {
-                int position = ((StageLineCardView) view).getPosition();
+            if(view instanceof StageLineView) {
+                int position = ((StageLineView) view).getPosition();
                 StageLine stageLine = (StageLine) items.get(position);
 
                 int mDecoratedChildWidth = layoutManager.getDecoratedMeasuredWidth(view);

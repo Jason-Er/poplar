@@ -24,9 +24,8 @@ import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
-import com.wecyberstage.wecyberstage.view.message.FABEvent;
 import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
-import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -234,8 +233,10 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
         maskChoose.setStageRoles(stageRoles);
     }
 
-    public void show() {
-
+    public void showLine() {
+        hide();
+        lineEdit.setVisibility(VISIBLE);
+        setVisibility(VISIBLE);
     }
 
     public void hide() {
@@ -294,7 +295,7 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+    public void onResponseMessageEvent(StageLineViewEvent event) {
         switch (event.getMessage()) {
             case "onLongPress":
                 Log.d(TAG,"onLongPress");
@@ -308,12 +309,6 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
                 hide();
                 break;
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseMessageEvent(FABEvent event) {
-        lineEdit.setVisibility(View.VISIBLE);
-        setStageLine(new StageLine());
     }
 
 }

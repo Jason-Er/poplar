@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.view.message.MaskChooseEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
-import com.wecyberstage.wecyberstage.view.common.StageLineCardView;
+import com.wecyberstage.wecyberstage.view.common.StageLineView;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.message.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
@@ -73,8 +73,8 @@ class StageLineAdapterDelegate extends ViewTypeDelegateClass
 
     @Override
     public void onBindViewHolder(@NonNull final List<Object> items, final int position, @NonNull final RecyclerView.ViewHolder holder) {
-        ((StageLineCardView)holder.itemView).setPosition(position);
-        ((StageLineCardView)holder.itemView).setStageLine((StageLine)items.get(position));
+        ((StageLineView)holder.itemView).setPosition(position);
+        ((StageLineView)holder.itemView).setStageLine((StageLine)items.get(position));
 
         ((ComposeLineViewHolder) holder).dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
