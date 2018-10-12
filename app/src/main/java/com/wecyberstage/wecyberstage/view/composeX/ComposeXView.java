@@ -14,20 +14,20 @@ import com.wecyberstage.wecyberstage.view.helper.PlayTimeInterface;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class ComposeXPlayControl extends RecyclerView implements PlayControlSub1Interface {
+public class ComposeXView extends RecyclerView implements PlayControlSub1Interface {
 
     private Scroller scroller;
 
-    public ComposeXPlayControl(Context context) {
+    public ComposeXView(Context context) {
         super(context);
     }
 
-    public ComposeXPlayControl(Context context, @Nullable AttributeSet attrs) {
+    public ComposeXView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         scroller = new Scroller(context, new LinearInterpolator());
     }
 
-    public ComposeXPlayControl(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public ComposeXView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

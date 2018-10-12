@@ -10,7 +10,7 @@ import com.wecyberstage.wecyberstage.view.message.MessageEvent;
 import com.wecyberstage.wecyberstage.view.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
-import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.message.MaskClickEvent;
 import com.wecyberstage.wecyberstage.view.helper.MaskChoose;
@@ -28,6 +28,7 @@ import java.util.Map;
 
 public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutDelegateInterface<List<Object>>, RegisterBusEventInterface {
 
+    private final String TAG = "RoleLayoutDelegate";
     private Map<Long, View> roleMap;
     public RoleLayoutDelegate(int viewType) {
         super(viewType);
@@ -97,7 +98,7 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+    public void onResponseMessageEvent(StageLineViewEvent event) {
         switch (event.getMessage()) {
             case "onSingleTapUp":
                 if(isAnyViewVisible()) {
@@ -129,11 +130,13 @@ public class RoleLayoutDelegate extends ViewTypeDelegateClass implements LayoutD
 
     @Override
     public void register(Activity activity) {
+        Log.d(TAG, "register");
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void unRegister(Activity activity) {
+        Log.d(TAG,"unRegister");
         EventBus.getDefault().unregister(this);
     }
 }

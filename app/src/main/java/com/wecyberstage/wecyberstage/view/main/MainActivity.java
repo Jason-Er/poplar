@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -24,6 +26,8 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
+import com.wecyberstage.wecyberstage.view.helper.BaseView;
+import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
@@ -42,17 +46,16 @@ import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeYToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZToolViewsDelegate;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
 import com.wecyberstage.wecyberstage.view.helper.FlingViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseBrowse;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeX;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeY;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseComposeZ;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseInterface;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignIn;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseSignUp;
-import com.wecyberstage.wecyberstage.view.helper.FlingResponseUserProfile;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseBrowse;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeX;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeY;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeZ;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseInterface;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseSignIn;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseSignUp;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseUserProfile;
 import com.wecyberstage.wecyberstage.view.message.MessageEvent;
 import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightObserver;
 import com.wecyberstage.wecyberstage.view.helper.KeyboardHeightProvider;
@@ -60,11 +63,11 @@ import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.Navigate2Account;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewSlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
-import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineContainerViewEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -82,12 +85,16 @@ import butterknife.ButterKnife;
 import dagger.android.AndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector,
+public class MainActivity extends AppCompatActivity
+        implements HasSupportFragmentInjector,
         NavigationView.OnNavigationItemSelectedListener,
-        CustomViewSlideInterface, KeyboardHeightObserver {
+        CustomViewSlideInterface, KeyboardHeightObserver,
+        StagePlayCursorHandle {
 
+    private final String TAG = "MainActivity";
     private final String NAVIGATION_SEMICOLON = ";";
     private final String NAVIGATION_COLON = ":";
+    private final String STAGEPLAY_CURSOR = "stage_play_cursor";
 
     private KeyboardHeightProvider keyboardHeightProvider;
     private Handler mainHideHandler = new Handler();
@@ -98,20 +105,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.header_main)
-    View header;
-    @BindView(R.id.player_control)
-    View playerControl;
-    @BindView(R.id.line_edit_sub)
-    View lineEditBar;
     @BindView(R.id.app_main)
     ViewGroup appMain;
+    // region tool components views
+    @BindView(R.id.appBar_layout)
+    AppBarLayout appBarLayout;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @BindView(R.id.footer_edit_main)
-    FooterEditMain footerEditMain;
+    @BindView(R.id.player_control_bar)
+    PlayerControlBar playerControlBar;
+    @BindView(R.id.footer_edit_bar)
+    FooterEditBar footerEditBar;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    // endregion
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -121,12 +128,12 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     // region navigation
     private Stack<String> navigationStack;
     private static final String NAVIGATION_INFO_KEY = "navigation_info";
-    private CustomView currentView;
-    private FlingResponseInterface currentFlingResponse;
+    private BaseView currentView;
+    private BehaviorResponseInterface currentBehaviorResponse;
 
     private SparseArray viewArray;
     private SparseArray flingResponseArray;
-    // private int softKeyBroadHeight;
+    private StagePlayCursor stagePlayCursor; // for tracing stage play
     Browse browse;
     ComposeX composeX;
     ComposeY composeY;
@@ -134,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     SignIn signIn;
     SignUp signUp;
     UserProfile userProfile;
-    List<CustomView> customViewList;
+    List<BaseView> baseViewList;
     List<RegisterBusEventInterface> lifeCycleComponents;
 
     // endregion
@@ -158,39 +165,45 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
+
+        stagePlayCursor = getIntent().getParcelableExtra(STAGEPLAY_CURSOR);
+        if( stagePlayCursor == null ) {
+            stagePlayCursor = localSettings.getStagePlayCursor(character.getId());
+        }
+
         // region all views
         viewArray = new SparseArray();
         flingResponseArray = new SparseArray();
-        customViewList = new ArrayList<>();
+        baseViewList = new ArrayList<>();
         lifeCycleComponents = new ArrayList<>();
 
-        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
-        delegate = new ComposeXToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new ComposeXToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
-        delegate = new ComposeYToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new ComposeYToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         composeY = new ComposeY(this, appMain, ViewType.COMPOSE_Y, delegate);
-        delegate = new ComposeZToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new ComposeZToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         composeZ = new ComposeZ(this, appMain, ViewType.COMPOSE_Z, delegate);
-        delegate = new SignInToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new SignInToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         signIn = new SignIn(this, appMain, ViewType.SIGN_IN, delegate);
-        delegate = new SignUpToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new SignUpToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         signUp = new SignUp(this, appMain, ViewType.SIGN_UP, delegate);
-        delegate = new UserProfileToolViewsDelegate(this, toolbar, playerControl, lineEditBar, this.drawerLayout, fab);
+        delegate = new UserProfileToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
-        addCustomView(browse, new FlingResponseBrowse(this), appMain, viewArray, flingResponseArray);
-        addCustomView(composeX, new FlingResponseComposeX(this), appMain, viewArray, flingResponseArray);
-        addCustomView(composeY, new FlingResponseComposeY(this), appMain, viewArray, flingResponseArray);
-        addCustomView(composeZ, new FlingResponseComposeZ(this), appMain, viewArray, flingResponseArray);
-        addCustomView(signIn, new FlingResponseSignIn(this), appMain, viewArray, flingResponseArray);
-        addCustomView(signUp, new FlingResponseSignUp(this), appMain, viewArray, flingResponseArray);
-        addCustomView(userProfile, new FlingResponseUserProfile(this), appMain, viewArray, flingResponseArray);
+        addCustomView(browse, new BehaviorResponseBrowse(this), appMain, viewArray, flingResponseArray);
+        addCustomView(composeX, new BehaviorResponseComposeX(this), appMain, viewArray, flingResponseArray);
+        addCustomView(composeY, new BehaviorResponseComposeY(this), appMain, viewArray, flingResponseArray);
+        addCustomView(composeZ, new BehaviorResponseComposeZ(this), appMain, viewArray, flingResponseArray);
+        addCustomView(signIn, new BehaviorResponseSignIn(this), appMain, viewArray, flingResponseArray);
+        addCustomView(signUp, new BehaviorResponseSignUp(this), appMain, viewArray, flingResponseArray);
+        addCustomView(userProfile, new BehaviorResponseUserProfile(this), appMain, viewArray, flingResponseArray);
 
         constructLifeCycleComponents();
         navigationStack = new Stack<>();
         // endregion
-        Toolbar toolbar = findViewById(R.id.toolbar);
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -199,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 switch (menuItemId) {
                     case R.id.menu_item_account:
                         Log.i("onMenuItemClick","menu_item_account");
-                        // slideTo(currentView, signIn, Direction.TO_DOWN);
                         if( character instanceof Navigate2Account) {
                             ((Navigate2Account) character).navigate2Account(MainActivity.this);
                         }
@@ -223,11 +235,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             restoreToView(ViewType.valueOf(item.split(NAVIGATION_COLON)[1]));
         }
 
-        character = characterFactory.getCharacter(CharacterFactory.USER_TYPE.UN_REGISTERED);
-
         // change maskChoose height
         if( localSettings.getSoftKeyboardHeight() > 0 ) {
-            footerEditMain.setSoftKeyBoardHeight(localSettings.getSoftKeyboardHeight());
+            footerEditBar.setSoftKeyBoardHeight(localSettings.getSoftKeyboardHeight());
         }
 
         appMain.post(new Runnable() {
@@ -243,27 +253,27 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         this.character = character;
     }
 
-    private void addCustomView(CustomView customView, FlingResponseInterface flingResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
-        customViewList.add(customView);
-        viewArray.put(customView.getViewType().ordinal(), customView);
-        flingResponseArray.put(customView.getViewType().ordinal(), flingResponseInterface);
-        viewGroup.addView(customView.getView(), 1);
-        customView.getView().setVisibility(View.INVISIBLE);
+    private void addCustomView(BaseView baseView, BehaviorResponseInterface behaviorResponseInterface, ViewGroup viewGroup, SparseArray viewArray, SparseArray flingResponseArray) {
+        baseViewList.add(baseView);
+        viewArray.put(baseView.getViewType().ordinal(), baseView);
+        flingResponseArray.put(baseView.getViewType().ordinal(), behaviorResponseInterface);
+        viewGroup.addView(baseView.getView(), 1);
+        baseView.getView().setVisibility(View.INVISIBLE);
     }
 
     private void constructLifeCycleComponents() {
-        if( playerControl != null && playerControl instanceof RegisterBusEventInterface ) {
-            lifeCycleComponents.add((RegisterBusEventInterface) playerControl);
+        if( playerControlBar != null && playerControlBar instanceof RegisterBusEventInterface ) {
+            lifeCycleComponents.add((RegisterBusEventInterface) playerControlBar);
         }
-        if( header != null && header instanceof RegisterBusEventInterface ) {
-            lifeCycleComponents.add((RegisterBusEventInterface) header);
+        if( appBarLayout != null && appBarLayout instanceof RegisterBusEventInterface ) {
+            lifeCycleComponents.add((RegisterBusEventInterface) appBarLayout);
         }
-        if( footerEditMain!= null && footerEditMain instanceof RegisterBusEventInterface ) {
-            lifeCycleComponents.add(footerEditMain);
+        if( footerEditBar != null && footerEditBar instanceof RegisterBusEventInterface ) {
+            lifeCycleComponents.add(footerEditBar);
         }
-        for(CustomView customView: customViewList) {
-            if(customView instanceof RegisterBusEventInterface) {
-                lifeCycleComponents.add((RegisterBusEventInterface) customView);
+        for(BaseView baseView : baseViewList) {
+            if(baseView instanceof RegisterBusEventInterface) {
+                lifeCycleComponents.add((RegisterBusEventInterface) baseView);
             }
         }
     }
@@ -329,8 +339,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     protected void onStop() {
         super.onStop();
-        for(CustomView customView: customViewList) {
-            customView.onStop(this, appMain);
+        for(BaseView baseView : baseViewList) {
+            baseView.onStop(this, appMain);
         }
     }
 
@@ -352,6 +362,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             lifeCycle.unRegister(this);
         }
         keyboardHeightProvider.setKeyboardHeightObserver(null);
+
+        getIntent().putExtra(STAGEPLAY_CURSOR, stagePlayCursor);
+        localSettings.saveStagePlayCursor(character.getId(), stagePlayCursor);
     }
 
     @Override
@@ -385,19 +398,33 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+    public void onResponseMessageEvent(StageLineViewEvent event) {
         switch ( event.getMessage() ) {
             case "onLongPress":
                 Log.d("MainActivity",event.getMessage());
                 if(event.getData() != null) {
                     fab.hide();
-                    lineEditBar.setVisibility(View.VISIBLE);
+                    playerControlBar.setVisibility(View.VISIBLE);
                 }
                 break;
             case "onSingleTapUp":
-                if(lineEditBar.getVisibility() == View.VISIBLE) {
-                    fab.show();
-                    lineEditBar.setVisibility(View.INVISIBLE);
+                if( currentView instanceof ClickActionInterface ) {
+                    ((ClickActionInterface) currentView).itemClick();
+                }
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StageLineContainerViewEvent event) {
+        switch ( event.getMessage() ) {
+            case "onLongPress":
+                Log.d(TAG, event.getMessage());
+
+                break;
+            case "onSingleTapUp":
+                if( currentView instanceof ClickActionInterface ) {
+                    ((ClickActionInterface) currentView).containerClick();
                 }
                 break;
         }
@@ -405,29 +432,23 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseMessageEvent(MessageEvent event) {
-        Log.i("Main onResponseEventBus", event.getMessage());
+        Log.i(TAG, event.getMessage());
         // queueLock.lock();
         switch (event.getMessage()) {
             case "TO_LEFT":
-                currentFlingResponse.toLeft();
+                currentBehaviorResponse.toLeft();
                 break;
             case "TO_RIGHT":
-                currentFlingResponse.toRight();
+                currentBehaviorResponse.toRight();
                 break;
             case "TO_UP":
-                currentFlingResponse.toUp();
+                currentBehaviorResponse.toUp();
                 break;
             case "TO_DOWN":
-                currentFlingResponse.toDown();
+                currentBehaviorResponse.toDown();
                 break;
             case "CLICK":
-                /*
-                if(header.getVisibility() == View.VISIBLE) {
-                    moveOutHeaderAndFooter(header, playerControl);
-                } else {
-                    moveInHeaderAndFooter(header, playerControl);
-                }
-                */
+                currentBehaviorResponse.click();
                 break;
         }
     }
@@ -437,51 +458,51 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         Log.i("Main", "onResponsePlayerControlEvent: " + event.getMessage());
         switch (event.getMessage()) {
             case "STOP":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).stop();
-                    }
-                }
-                break;
-            case "PRE":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).pre();
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).stop();
                     }
                 }
                 break;
             case "PLAY":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).play();
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).play();
                     }
                 }
                 break;
             case "PAUSE":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).pause();
-                    }
-                }
-                break;
-            case "NEXT":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).next();
-                    }
-                }
-                break;
-            case "VOLUME":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).volume(true);
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).pause();
                     }
                 }
                 break;
             case "SEEK":
-                for(CustomView customView: customViewList) {
-                    if(customView instanceof PlayControlInterface) {
-                        ((PlayControlInterface) customView).seek(event.getSeekProcess());
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).seek(event.getSeekProcess());
+                    }
+                }
+                break;
+            case "PRE":
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).pre();
+                    }
+                }
+                break;
+            case "NEXT":
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).next();
+                    }
+                }
+                break;
+            case "VOLUME":
+                for(BaseView baseView : baseViewList) {
+                    if(baseView instanceof PlayControlInterface) {
+                        ((PlayControlInterface) baseView).volume(true);
                     }
                 }
                 break;
@@ -525,20 +546,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Override
-    public CustomView getCustomView(ViewType viewType) {
-        return (CustomView) viewArray.get(viewType.ordinal());
+    public BaseView getCustomView(ViewType viewType) {
+        return (BaseView) viewArray.get(viewType.ordinal());
     }
 
     private void restoreToView(ViewType viewType) {
-        CustomView customView = getCustomView(viewType);
-        customView.becomeVisible();
-        customView.slideBegin();
-        currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(viewType.ordinal());
-        this.currentView = customView;
-        customView.slideEnd();
+        BaseView baseView = getCustomView(viewType);
+        baseView.becomeVisible();
+        baseView.slideBegin();
+        currentBehaviorResponse = (BehaviorResponseInterface) flingResponseArray.get(viewType.ordinal());
+        this.currentView = baseView;
+        baseView.slideEnd();
     }
 
-    private void slideTo(CustomView from, CustomView to, Direction direction) {
+    private void slideTo(BaseView from, BaseView to, Direction direction) {
         View currentView = from.getView();
         to.becomeVisible();
         View followView = to.getView();
@@ -619,13 +640,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Override
     public void slideTo(ViewType from, ViewType to, Direction direction, boolean saveTrack) {
-        CustomView fromCustomView = getCustomView(from);
-        CustomView toCustomView = getCustomView(to);
-        if(fromCustomView instanceof PlayStateInterface && toCustomView instanceof PlayStateInterface) {
-            ((PlayStateInterface) toCustomView).setPlayState(((PlayStateInterface) fromCustomView).getPlayState());
-        }
-        slideTo(fromCustomView, toCustomView, direction);
-        currentFlingResponse = (FlingResponseInterface) flingResponseArray.get(to.ordinal());
+        BaseView fromBaseView = getCustomView(from);
+        BaseView toBaseView = getCustomView(to);
+        slideTo(fromBaseView, toBaseView, direction);
+        currentBehaviorResponse = (BehaviorResponseInterface) flingResponseArray.get(to.ordinal());
         if(saveTrack) {
             navigationStack.push(from.name() + NAVIGATION_COLON + to.name() + NAVIGATION_COLON + direction.name());
         }
@@ -639,13 +657,24 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         if( height > 0 ) {
             if ( localSettings.getSoftKeyboardHeight() == 0 ) {
                 localSettings.saveSoftKeyboardHeight(height);
-                footerEditMain.setSoftKeyBoardHeight(height);
+                footerEditBar.setSoftKeyBoardHeight(height);
             }
-            footerEditMain.showSoftKeyBoard();
+            footerEditBar.showSoftKeyBoard();
         } else {
-            footerEditMain.hideSoftKeyBoard();
+            footerEditBar.hideSoftKeyBoard();
         }
     }
     // endregion
 
+    // region implement of StagePlayCursorHandle
+    @Override
+    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
+        this.stagePlayCursor = stagePlayCursor;
+    }
+
+    @Override
+    public StagePlayCursor getStagePlayCursor() {
+        return stagePlayCursor;
+    }
+    // endregion
 }

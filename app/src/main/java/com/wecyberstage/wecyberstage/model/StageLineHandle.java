@@ -1,6 +1,6 @@
 package com.wecyberstage.wecyberstage.model;
 
-public interface UpdateStagePlayInterface {
+public interface StageLineHandle {
     void updateStageLine(StageLine stageLine);
     void addStageLine(StageLine stageLine);
     void deleteStageLine(StageLine stageLine);

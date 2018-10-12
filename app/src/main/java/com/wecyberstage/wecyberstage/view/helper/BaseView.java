@@ -5,14 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class CustomView implements SlideInterface {
+public abstract class BaseView implements SlideInterface {
 
     protected View view;
     protected ViewType viewType;
     protected ToolViewsDelegate toolViewsDelegate;
     protected AppCompatActivity activity;
-    public CustomView(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType,
-                      ToolViewsDelegate toolViewsDelegate) {
+    public BaseView(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType,
+                    ToolViewsDelegate toolViewsDelegate) {
         this.activity = activity;
         this.viewType = viewType;
         this.toolViewsDelegate = toolViewsDelegate;
@@ -48,5 +48,10 @@ public abstract class CustomView implements SlideInterface {
         view.setTranslationY(0);
         view.setTranslationX(0);
     }
+
+    public boolean isVisible() {
+        return view.getVisibility() == View.VISIBLE;
+    }
+
 
 }

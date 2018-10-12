@@ -7,11 +7,11 @@ import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
+import com.wecyberstage.wecyberstage.model.StageLineHandle;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
-import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
 
 import java.util.Collections;
 
@@ -19,18 +19,18 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class StageSceneLiveData extends LiveData<StageScene> implements PlayStateInterface, UpdateStagePlayInterface {
-    private PlayState playState;
+public class StageSceneLiveData extends LiveData<StageScene> implements StagePlayCursorHandle, StageLineHandle {
+    private StagePlayCursor stagePlayCursor;
     private StageScene stageScene;
     @Inject
     public StageSceneLiveData(PlayRepository repository) {
-        playState = new PlayState(-1,-1,-1);
+        stagePlayCursor = new StagePlayCursor(-1,-1,-1);
     }
 
     @Override
-    public void setPlayState(PlayState playState) {
-        if( !this.playState.equals(playState) ) {
-            this.playState = playState;
+    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
+        if( !this.stagePlayCursor.equals(stagePlayCursor) ) {
+            this.stagePlayCursor = stagePlayCursor;
             // TODO: 6/29/2018 dummy data below
             stageScene = new StageScene();
             String[] arrIcon = {"http://demo.sc.chinaz.com/Files/pic/icons/6124/10dvs.png",
@@ -56,8 +56,8 @@ public class StageSceneLiveData extends LiveData<StageScene> implements PlayStat
     }
 
     @Override
-    public PlayState getPlayState() {
-        return playState;
+    public StagePlayCursor getStagePlayCursor() {
+        return stagePlayCursor;
     }
 
     @Override

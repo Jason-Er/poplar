@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,7 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StageLineCardView extends RelativeLayout {
+public class StageLineView extends RelativeLayout {
 
     private int position;
     private StageLine stageLine;
@@ -37,30 +37,31 @@ public class StageLineCardView extends RelativeLayout {
         @Override
         public void onLongPress(MotionEvent e) {
             Log.d("StageLineCardView","Long pressed");
-            StageLineCardViewEvent event = new StageLineCardViewEvent(stageLine, "onLongPress");
+            StageLineViewEvent event = new StageLineViewEvent(stageLine, "onLongPress");
             EventBus.getDefault().post(event);
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             Log.d("StageLineCardView", "single click");
-            StageLineCardViewEvent event = new StageLineCardViewEvent("onSingleTapUp");
+            StageLineViewEvent event = new StageLineViewEvent("onSingleTapUp");
             EventBus.getDefault().post(event);
             return true;
         }
+
     };
 
-    public StageLineCardView(@NonNull Context context) {
+    public StageLineView(@NonNull Context context) {
         super(context);
         detectorCompat = new GestureDetectorCompat(context, gestureDetector);
     }
 
-    public StageLineCardView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public StageLineView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         detectorCompat = new GestureDetectorCompat(context, gestureDetector);
     }
 
-    public StageLineCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public StageLineView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wecyberstage.wecyberstage.view.main.AutoGridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:columnWidth="48dp"
+    android:id="@+id/file_choose_sub">
+
+    <ImageButton
+        android:id="@+id/sceneEditSub_word"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_file_word"/>
+    <ImageButton
+        android:id="@+id/sceneEditSub_delete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/trash_can_outline"/>
+    <ImageButton
+        android:id="@+id/sceneEditSub_add"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_file_plus"/>
+    <ImageButton
+        android:id="@+id/sceneEditSub_remove"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_file_remove"/>
+
+</com.wecyberstage.wecyberstage.view.main.AutoGridLayout>

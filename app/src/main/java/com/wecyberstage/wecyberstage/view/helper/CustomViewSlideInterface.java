@@ -1,8 +1,8 @@
 package com.wecyberstage.wecyberstage.view.helper;
 
 public interface CustomViewSlideInterface {
-    CustomView getCustomView(ViewType viewType);
-    // void slideTo(final CustomView from, final CustomView to, Direction direction);
+    BaseView getCustomView(ViewType viewType);
+    // void slideTo(final BaseView from, final BaseView to, Direction direction);
     void slideUp();
     void slideTo(ViewType to, Direction direction);
     void slideTo(ViewType to, Direction direction, boolean saveTrack);

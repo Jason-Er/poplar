@@ -2,7 +2,6 @@ package com.wecyberstage.wecyberstage.view.composeY;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wecyberstage.wecyberstage.R;
-import com.wecyberstage.wecyberstage.view.common.StageLineCardView;
+import com.wecyberstage.wecyberstage.view.common.StageLineView;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegateInterface;
 import com.wecyberstage.wecyberstage.view.recycler.ViewTypeDelegateClass;
 
@@ -57,8 +56,7 @@ class StageLineEndAdapterDelegate extends ViewTypeDelegateClass implements Adapt
 
     @Override
     public void onBindViewHolder(@NonNull List<Object> items, int position, @NonNull final RecyclerView.ViewHolder holder) {
-        Log.d("LineEndAdapter", "onBindViewHolder position: "+position + " dialogue: "+ ((ComposeYItemDto) items.get(position)).getStageLine().dialogue);
-        ((StageLineCardView)(holder.itemView)).setStageLine(((ComposeYItemDto) items.get(position)).getStageLine());
+        ((StageLineView)(holder.itemView)).setStageLine(((ComposeYItemDto) items.get(position)).getStageLine());
         ((StageLineViewHolder) holder).handleView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

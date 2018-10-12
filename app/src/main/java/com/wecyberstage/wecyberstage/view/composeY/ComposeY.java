@@ -6,6 +6,8 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,17 +19,18 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StageLine;
-import com.wecyberstage.wecyberstage.model.StageScene;
-import com.wecyberstage.wecyberstage.model.UpdateStagePlayInterface;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.model.StageLineHandle;
+import com.wecyberstage.wecyberstage.model.StagePlay;
+import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
+import com.wecyberstage.wecyberstage.view.main.MainActivity;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
+import com.wecyberstage.wecyberstage.view.helper.PlayerView;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
-import com.wecyberstage.wecyberstage.view.main.FooterEditMain;
-import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
+import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
+import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
@@ -40,17 +43,19 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ComposeY extends CustomView implements PlayStateInterface, OnStartDragListener,
-        SlideInterface, UpdateStagePlayInterface, RegisterBusEventInterface {
+public class ComposeY extends PlayerView implements OnStartDragListener,
+        SlideInterface, StageLineHandle, RegisterBusEventInterface, ClickActionInterface {
 
+    private final String TAG = "ComposeY";
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
+    private StagePlayCursor stagePlayCursor;
     private ComposeViewModel viewModel;
     private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
 
-    @BindView(R.id.footer_edit_main)
-    FooterEditMain footerEditMain;
+    @BindView(R.id.footer_edit_bar)
+    FooterEditBar footerEditBar;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -62,7 +67,7 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     @Override
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.view_recycler, container,false);
+        view = inflater.inflate(R.layout.frag_composey, container,false);
         ButterKnife.bind(this, activity);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
@@ -74,6 +79,10 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
         ((RecyclerView)view).setLayoutManager(new LinearLayoutManager(activity));
         ((RecyclerView)view).setAdapter(adapter);
 
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) view.getLayoutParams();
+        AppBarLayout.ScrollingViewBehavior behavior = new AppBarLayout.ScrollingViewBehavior();
+        params.setBehavior(behavior);
+
         /*
         DividerItemDecoration decoration = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
         ((RecyclerView)view).addItemDecoration(decoration);
@@ -84,16 +93,15 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
         itemTouchHelper.attachToRecyclerView( (RecyclerView) view);
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
-        PlayState playState = activity.getIntent().getParcelableExtra(COMPOSE_INFO_KEY);
-        if(playState != null) {
-            viewModel.setPlayState(playState);
-        }
-        viewModel.stageSceneLiveData.observe(activity, new Observer<StageScene>() {
+        stagePlayCursor = ((MainActivity) activity).getStagePlayCursor();
+        viewModel.getStagePlay(stagePlayCursor.getPlayId());
+
+        viewModel.stagePlayLiveData.observe(activity, new Observer<StagePlay>() {
             @Override
-            public void onChanged(@Nullable StageScene stageScene) {
-                if(stageScene != null) {
-                    adapter.setStageScene(stageScene);
-                    footerEditMain.setStageRoles(stageScene.stageRoles);
+            public void onChanged(@Nullable StagePlay stagePlay) {
+                if(stagePlay != null) {
+                    adapter.setStagePlay(stagePlay, stagePlayCursor);
+                    footerEditBar.setStageRoles(stagePlay.cast);
                 }
             }
         });
@@ -102,17 +110,6 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
     @Override
     public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
         adapter.saveStates(activity);
-    }
-
-    @Override
-    public void setPlayState(PlayState playState) {
-        activity.getIntent().putExtra(COMPOSE_INFO_KEY, playState);
-        viewModel.setPlayState(playState);
-    }
-
-    @Override
-    public PlayState getPlayState() {
-        return viewModel.getPlayState();
     }
 
     @Override
@@ -148,20 +145,37 @@ public class ComposeY extends CustomView implements PlayStateInterface, OnStartD
 
     @Override
     public void register(Activity activity) {
-        adapter.register(activity);
-        EventBus.getDefault().register(this);
+        if( isVisible() ) {
+            adapter.register(activity);
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Override
     public void unRegister(Activity activity) {
-        adapter.unRegister(activity);
-        EventBus.getDefault().unregister(this);
+        if( isVisible() ) {
+            adapter.unRegister(activity);
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseFooterEditMainEvent(FooterEditMainEvent event) {
-        Log.d("ComposeY","receive footerEditMain");
-        ((ComposeYToolViewsDelegate)toolViewsDelegate).hideLineEditBar();
+    public void onResponseFooterEditMainEvent(FooterEditBarEvent event) {
+        Log.d(TAG,"receive footerEditMain");
+        switch (event.getMessage()){
+            case "addStageLine":
+                adapter.addStageLine((StageLine) event.getData());
+                break;
+            case "deleteStageSceneContent":
+                adapter.deleteStageSceneContent();
+                break;
+            case "deleteStageScene":
+                adapter.deleteStageScene();
+                break;
+            case "addStageScene":
+                adapter.addStageScene();
+                break;
+        }
     }
 
 }

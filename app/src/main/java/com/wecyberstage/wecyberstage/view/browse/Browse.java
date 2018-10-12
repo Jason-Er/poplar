@@ -19,11 +19,11 @@ import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StagePlayInfo;
 import com.wecyberstage.wecyberstage.data.dto.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
+import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
@@ -34,17 +34,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 /**
  * Created by mike on 2018/3/5.
  */
 
-public class Browse extends CustomView implements PlayStateInterface, SlideInterface {
+public class Browse extends BaseView implements StagePlayCursorHandle, SlideInterface {
 
     private BrowseViewModel viewModel;
     private RecyclerView.Adapter adapter;
-    private PlayState playState; // which contains the play is clicked
+    private StagePlayCursor stagePlayCursor; // which contains the play is clicked
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -73,8 +71,6 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
         ((PlayProfileAdapter) adapter).onItemClickCallBack = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Timber.d("navigate to somewhere");
-                playState = new PlayState(((PlayProfileCardView)v).stagePlayInfo.id, 1L, 0L);
                 ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
             }
         };
@@ -86,7 +82,6 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
             public void onChanged(@Nullable Resource<List<StagePlayInfo>> resource) {
                 switch (resource.status) {
                     case SUCCESS:
-                        Timber.d("SUCCESS");
                         ((PlayProfileAdapter)adapter).setDataset(resource.data);
                         break;
                     case ERROR:
@@ -107,13 +102,13 @@ public class Browse extends CustomView implements PlayStateInterface, SlideInter
     }
 
     @Override
-    public void setPlayState(PlayState playState) {
-        this.playState = playState;
+    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
+        this.stagePlayCursor = stagePlayCursor;
     }
 
     @Override
-    public PlayState getPlayState() {
-        return playState;
+    public StagePlayCursor getStagePlayCursor() {
+        return stagePlayCursor;
     }
 
     @Override

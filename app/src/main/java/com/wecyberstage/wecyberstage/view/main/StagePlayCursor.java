@@ -1,34 +1,34 @@
-package com.wecyberstage.wecyberstage.view.helper;
+package com.wecyberstage.wecyberstage.view.main;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PlayState implements Parcelable {
+public class StagePlayCursor implements Parcelable {
     private long playId;
-    private long sceneId;
+    private int ordinal; // scene ordinal
     private long startTime; // Millisecond
 
-    public PlayState(long playId, long sceneId, long startTime) {
+    public StagePlayCursor(long playId, int ordinal, long startTime) {
         this.playId = playId;
-        this.sceneId = sceneId;
+        this.ordinal = ordinal;
         this.startTime = startTime;
     }
 
-    protected PlayState(Parcel in) {
+    protected StagePlayCursor(Parcel in) {
         playId = in.readLong();
-        sceneId = in.readLong();
+        ordinal = in.readInt();
         startTime = in.readLong();
     }
 
-    public static final Creator<PlayState> CREATOR = new Creator<PlayState>() {
+    public static final Creator<StagePlayCursor> CREATOR = new Creator<StagePlayCursor>() {
         @Override
-        public PlayState createFromParcel(Parcel in) {
-            return new PlayState(in);
+        public StagePlayCursor createFromParcel(Parcel in) {
+            return new StagePlayCursor(in);
         }
 
         @Override
-        public PlayState[] newArray(int size) {
-            return new PlayState[size];
+        public StagePlayCursor[] newArray(int size) {
+            return new StagePlayCursor[size];
         }
     };
 
@@ -40,7 +40,7 @@ public class PlayState implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(playId);
-        dest.writeLong(sceneId);
+        dest.writeInt(ordinal);
         dest.writeLong(startTime);
     }
 
@@ -52,12 +52,12 @@ public class PlayState implements Parcelable {
         this.playId = playId;
     }
 
-    public long getSceneId() {
-        return sceneId;
+    public int getOrdinal() {
+        return ordinal;
     }
 
-    public void setSceneId(long sceneId) {
-        this.sceneId = sceneId;
+    public void setOrdinal(int ordinal) {
+        this.ordinal = ordinal;
     }
 
     public float getStartTime() {
@@ -73,9 +73,9 @@ public class PlayState implements Parcelable {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        PlayState playState = (PlayState) obj;
+        StagePlayCursor stagePlayCursor = (StagePlayCursor) obj;
 
-        if ( playId != playState.playId || sceneId != playState.sceneId || startTime != playState.startTime ) {
+        if ( playId != stagePlayCursor.playId || ordinal != stagePlayCursor.ordinal || startTime != stagePlayCursor.startTime ) {
             return false;
         } else {
             return true;
@@ -84,7 +84,7 @@ public class PlayState implements Parcelable {
 
     @Override
     public int hashCode() {
-        int result = (int) (31 * playId + 15 * sceneId + startTime);
+        int result = (int) (31 * playId + 15 * ordinal + startTime);
         return result;
     }
 }

@@ -24,9 +24,8 @@ import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
-import com.wecyberstage.wecyberstage.view.message.FABEvent;
-import com.wecyberstage.wecyberstage.view.message.FooterEditMainEvent;
-import com.wecyberstage.wecyberstage.view.message.StageLineCardViewEvent;
+import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
+import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,7 +37,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBack, RegisterBusEventInterface {
+/**
+ * FooterEditBar edit stageLine and stageScene at footer of main UI
+ */
+public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBack, RegisterBusEventInterface {
+
+    private final String TAG = "FooterEditMain";
 
     enum PANEL_VISIBLE {
         MASK_VISIBLE, FILE_VISIBLE, BOTH_VISIBLE, BOTH_GONE
@@ -59,15 +63,15 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     @BindView(R.id.lineEditSub_line)
     EditText editText;
 
-    public FooterEditMain(Context context) {
+    public FooterEditBar(Context context) {
         super(context);
     }
 
-    public FooterEditMain(Context context, @Nullable AttributeSet attrs) {
+    public FooterEditBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FooterEditMain(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public FooterEditBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -142,6 +146,22 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     }
     // endregion
 
+    /**
+     * send FooterEditBarEvent event and hide footEditMain
+     * @param message
+     */
+    private void sendMessage(String message) {
+        FooterEditBarEvent event = new FooterEditBarEvent(message);
+        EventBus.getDefault().post(event);
+        hide();
+    }
+
+    private void sendMessage(String message, Object object) {
+        FooterEditBarEvent event = new FooterEditBarEvent(object, message);
+        EventBus.getDefault().post(event);
+        hide();
+    }
+
     @OnClick(R.id.lineEditSub_mask)
     public void onLineEditMaskClick(View view) {
         switch ((String)view.getTag()) {
@@ -166,21 +186,16 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
                 UICommon.hideSoftKeyboard(view);
                 break;
             case "check":
-                // TODO: 9/3/2018 add text to line
-                Log.d("FooterEditMain","onLineEditOKClick " + editText.getText());
-                hide();
-                editText.setText("");
-                selectedMask.setVisibility(GONE);
-                FooterEditMainEvent event = new FooterEditMainEvent(stageLine);
-                EventBus.getDefault().post(event);
-                stageLine = null;
+                Log.d(TAG,"onLineEditOKClick " + editText.getText());
+                sendMessage("addStageLine", stageLine);
+                setStageLine(new StageLine());
                 break;
         }
     }
 
-    @OnClick(R.id.fileChooseSub_word)
-    public void setImageButtonWord(View view) {
-        Log.d("FooterEditMain","setImageButtonWord click");
+    @OnClick(R.id.sceneEditSub_word)
+    public void addSceneFromWord(View view) {
+        Log.d(TAG,"addSceneFromWord click");
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         //intent.setType(“application/msword;application/vnd.openxmlformats-officedocument.wordprocessingml.document”);//同时选择doc docx
         intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"); // docx
@@ -193,15 +208,35 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
             Toast.makeText(getContext(), "请安装文件管理器", Toast.LENGTH_SHORT)
                     .show();
         }
+        sendMessage("addStageSceneFromWord");
+    }
 
+    @OnClick(R.id.sceneEditSub_delete)
+    public void deleteSceneContent(View view) {
+        Log.d(TAG,"deleteStageSceneContent click");
+        sendMessage("deleteStageSceneContent");
+    }
+
+    @OnClick(R.id.sceneEditSub_remove)
+    public void deleteScene(View view) {
+        Log.d(TAG,"deleteStageScene click");
+        sendMessage("deleteStageScene");
+    }
+
+    @OnClick(R.id.sceneEditSub_add)
+    public void addScene(View view) {
+        Log.d(TAG,"addStageScene click");
+        sendMessage("addStageScene");
     }
 
     public void setStageRoles(List<StageRole> stageRoles) {
         maskChoose.setStageRoles(stageRoles);
     }
 
-    public void show() {
-
+    public void showLine() {
+        hide();
+        lineEdit.setVisibility(VISIBLE);
+        setVisibility(VISIBLE);
     }
 
     public void hide() {
@@ -260,26 +295,20 @@ public class FooterEditMain extends LinearLayout implements MaskGridLayoutCallBa
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseMessageEvent(StageLineCardViewEvent event) {
+    public void onResponseMessageEvent(StageLineViewEvent event) {
         switch (event.getMessage()) {
             case "onLongPress":
-                Log.d("FooterEditMain","onLongPress");
+                Log.d(TAG,"onLongPress");
                 if(event.getData() != null) {
                     setStageLine((StageLine) event.getData());
                 }
                 break;
             case "onSingleTapUp":
-                Log.d("FooterEditMain","onSingleTapUp");
+                Log.d(TAG,"onSingleTapUp");
                 setStageLine(new StageLine());
                 hide();
                 break;
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseMessageEvent(FABEvent event) {
-        lineEdit.setVisibility(View.VISIBLE);
-        setStageLine(new StageLine());
     }
 
 }

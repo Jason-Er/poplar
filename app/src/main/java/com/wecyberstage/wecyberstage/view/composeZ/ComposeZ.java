@@ -7,15 +7,17 @@ import android.content.pm.ActivityInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
-import com.wecyberstage.wecyberstage.view.helper.CustomView;
-import com.wecyberstage.wecyberstage.view.helper.PlayStateInterface;
-import com.wecyberstage.wecyberstage.view.helper.PlayState;
+import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
+import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
+import com.wecyberstage.wecyberstage.view.helper.PlayerView;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
@@ -30,9 +32,11 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeZ extends CustomView implements PlayStateInterface, SlideInterface {
+public class ComposeZ extends PlayerView implements StagePlayCursorHandle,
+        SlideInterface, ClickActionInterface {
 
     private static final String PARTICIPATE_INFO_KEY = "participate_info";
+    private final String TAG = "ComposeZ";
 
     private ParticipateViewModel viewModel;
     private KeyFrameAdapter adapter;
@@ -48,7 +52,7 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
 
         LayoutInflater inflater = activity.getLayoutInflater();
-        view = inflater.inflate(R.layout.view_compose_z, container,false);
+        view = inflater.inflate(R.layout.frag_composez, container,false);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
@@ -60,9 +64,9 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
         recyclerView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ParticipateViewModel.class);
-        PlayState playState = activity.getIntent().getParcelableExtra(PARTICIPATE_INFO_KEY);
-        if(playState != null) {
-            viewModel.setPlayState(playState);
+        StagePlayCursor stagePlayCursor = activity.getIntent().getParcelableExtra(PARTICIPATE_INFO_KEY);
+        if(stagePlayCursor != null) {
+            viewModel.setStagePlayCursor(stagePlayCursor);
         }
         viewModel.keyFrameLiveData.observe(activity, new Observer<KeyFrame>() {
             @Override
@@ -80,14 +84,14 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
     }
 
     @Override
-    public void setPlayState(PlayState playState) {
-        activity.getIntent().putExtra(PARTICIPATE_INFO_KEY, playState);
-        viewModel.setPlayState(playState);
+    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
+        activity.getIntent().putExtra(PARTICIPATE_INFO_KEY, stagePlayCursor);
+        viewModel.setStagePlayCursor(stagePlayCursor);
     }
 
     @Override
-    public PlayState getPlayState() {
-        return viewModel.getPlayState();
+    public StagePlayCursor getStagePlayCursor() {
+        return viewModel.getStagePlayCursor();
     }
 
     @Override
@@ -95,4 +99,21 @@ public class ComposeZ extends CustomView implements PlayStateInterface, SlideInt
         super.slideEnd();
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
+
+    @Override
+    public void itemClick() {
+        Log.d(TAG, "itemClick");
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).itemClick();
+        }
+    }
+
+    @Override
+    public void containerClick() {
+        Log.d(TAG, "containerClick");
+        if( toolViewsDelegate instanceof ClickActionInterface ) {
+            ((ClickActionInterface) toolViewsDelegate).containerClick();
+        }
+    }
+
 }

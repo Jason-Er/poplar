@@ -2,21 +2,22 @@ package com.wecyberstage.wecyberstage.view.helper;
 
 import android.util.Log;
 
-public class FlingResponseComposeY implements FlingResponseInterface {
+public class BehaviorResponseComposeY implements BehaviorResponseInterface {
 
+    private final String TAG = "BehaviorComposeY";
     CustomViewSlideInterface slideViewInterface;
-    public FlingResponseComposeY(CustomViewSlideInterface slideViewInterface) {
+    public BehaviorResponseComposeY(CustomViewSlideInterface slideViewInterface) {
         this.slideViewInterface = slideViewInterface;
     }
     @Override
     public void toLeft() {
-        Log.i("flingComposeY", "toLeft");
+        Log.i(TAG, "toLeft");
         slideViewInterface.slideTo(ViewType.COMPOSE_Y, ViewType.COMPOSE_Z, Direction.TO_LEFT);
     }
 
     @Override
     public void toRight() {
-        Log.i("flingComposeY", "toRight");
+        Log.i(TAG, "toRight");
         slideViewInterface.slideTo(ViewType.COMPOSE_Y, ViewType.COMPOSE_X, Direction.TO_RIGHT);
     }
 
@@ -27,6 +28,12 @@ public class FlingResponseComposeY implements FlingResponseInterface {
 
     @Override
     public void toDown() {
+
+    }
+
+    @Override
+    public void click() {
+        Log.d(TAG, "click");
 
     }
 }

@@ -8,26 +8,28 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
+import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
+import com.wecyberstage.wecyberstage.view.main.PlayerControlBar;
 
 public class SignInToolViewsDelegate extends ToolViewsDelegate {
 
-    public SignInToolViewsDelegate(Activity activity, View toolBar, View playerControlBar, View lineEditBar, View drawerLayout, View floatingActionButton) {
-        super(activity, toolBar, playerControlBar, lineEditBar, drawerLayout, floatingActionButton);
+    public SignInToolViewsDelegate(Activity activity, AppBarLayout appBarLayout, PlayerControlBar playerControlBar, FooterEditBar footerEditBar, DrawerLayout drawerLayout, FloatingActionButton fab) {
+        super(activity, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
     }
 
     @Override
     public void slideBegin() {
-        ((DrawerLayout)drawerLayout).setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((FloatingActionButton)floatingActionButton).hide();
-        lineEditBar.setVisibility(View.INVISIBLE);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        fab.hide();
+        footerEditBar.setVisibility(View.INVISIBLE);
         playerControlBar.setVisibility(View.GONE);
-        // AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+        // AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) appBarLayout.getLayoutParams();
         // params.setScrollFlags(0);
-        // toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-        // toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-        // toolbar.setVisibility(View.INVISIBLE);
-        ((AppBarLayout) toolbar.getParent()).setExpanded(false, false);
-        ((AppBarLayout) toolbar.getParent()).setVisibility(View.GONE);
+        // appBarLayout.animate().translationY(-appBarLayout.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+        // appBarLayout.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+        // appBarLayout.setVisibility(View.INVISIBLE);
+        appBarLayout.setExpanded(false, false);
+        appBarLayout.setVisibility(View.GONE);
     }
 
     @Override
