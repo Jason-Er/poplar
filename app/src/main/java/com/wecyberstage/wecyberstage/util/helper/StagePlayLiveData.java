@@ -47,6 +47,7 @@ public class StagePlayLiveData extends LiveData<StagePlay> {
             stageScene.stageLines.add(line);
         }
         stagePlay.scenes.add(stageScene);
+        stagePlay.cast = stageScene.stageRoles;
         setValue(stagePlay);
     }
 }
