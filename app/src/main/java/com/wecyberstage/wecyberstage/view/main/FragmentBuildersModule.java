@@ -11,7 +11,7 @@ public abstract class FragmentBuildersModule {
 
     /*
     @ContributesAndroidInjector
-    abstract Browse contributeBrowseFragment();
+    abstract BrowsePrivate contributeBrowseFragment();
     @ContributesAndroidInjector
     abstract ComposeZ contributeParticipateFragment();
     @ContributesAndroidInjector

@@ -38,7 +38,7 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class Browse extends BaseView implements StagePlayCursorHandle, SlideInterface {
+public class BrowsePrivate extends BaseView implements StagePlayCursorHandle, SlideInterface {
 
     private BrowseViewModel viewModel;
     private RecyclerView.Adapter adapter;
@@ -47,7 +47,7 @@ public class Browse extends BaseView implements StagePlayCursorHandle, SlideInte
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    public Browse(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
+    public BrowsePrivate(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
         super(activity, container, viewType, toolViewsDelegate);
     }
 

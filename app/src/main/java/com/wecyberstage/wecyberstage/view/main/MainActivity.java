@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -38,7 +37,7 @@ import com.wecyberstage.wecyberstage.view.account.SignUp;
 import com.wecyberstage.wecyberstage.view.account.SignUpToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.account.UserProfile;
 import com.wecyberstage.wecyberstage.view.account.UserProfileToolViewsDelegate;
-import com.wecyberstage.wecyberstage.view.browse.Browse;
+import com.wecyberstage.wecyberstage.view.browse.BrowsePrivate;
 import com.wecyberstage.wecyberstage.view.browse.BrowseToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeXToolViewsDelegate;
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity
     private SparseArray viewArray;
     private SparseArray flingResponseArray;
     private StagePlayCursor stagePlayCursor; // for tracing stage play
-    Browse browse;
+    BrowsePrivate browsePrivate;
     ComposeX composeX;
     ComposeY composeY;
     ComposeZ composeZ;
@@ -179,7 +178,7 @@ public class MainActivity extends AppCompatActivity
         lifeCycleComponents = new ArrayList<>();
 
         ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
-        browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
+        browsePrivate = new BrowsePrivate(this, appMain, ViewType.BROWSE, delegate);
         delegate = new ComposeXToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
         delegate = new ComposeYToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity
         delegate = new UserProfileToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
-        addCustomView(browse, new BehaviorResponseBrowse(this), appMain, viewArray, flingResponseArray);
+        addCustomView(browsePrivate, new BehaviorResponseBrowse(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeX, new BehaviorResponseComposeX(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeY, new BehaviorResponseComposeY(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeZ, new BehaviorResponseComposeZ(this), appMain, viewArray, flingResponseArray);
