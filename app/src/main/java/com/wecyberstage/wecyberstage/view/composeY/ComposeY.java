@@ -43,8 +43,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ComposeY extends PlayerView implements OnStartDragListener,
-        SlideInterface, StageLineHandle, RegisterBusEventInterface, ClickActionInterface {
+public class ComposeY extends PlayerView
+        implements OnStartDragListener, SlideInterface,
+        StageLineHandle, RegisterBusEventInterface, ClickActionInterface {
 
     private final String TAG = "ComposeY";
     private static final String COMPOSE_INFO_KEY = "compose_info";
@@ -94,9 +95,9 @@ public class ComposeY extends PlayerView implements OnStartDragListener,
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
         stagePlayCursor = ((MainActivity) activity).getStagePlayCursor();
-        viewModel.getStagePlay(stagePlayCursor.getPlayId());
+        viewModel.setStagePlayCursor(stagePlayCursor);
 
-        viewModel.stagePlayLiveData.observe(activity, new Observer<StagePlay>() {
+        viewModel.stagePlay.observe(activity, new Observer<StagePlay>() {
             @Override
             public void onChanged(@Nullable StagePlay stagePlay) {
                 if(stagePlay != null) {
@@ -142,7 +143,7 @@ public class ComposeY extends PlayerView implements OnStartDragListener,
     public void swapStageLines(int position1, int position2) {
         viewModel.swapStageLines(position1, position2);
     }
-
+    // region implement of RegisterBusEventInterface
     @Override
     public void register(Activity activity) {
         if( isVisible() ) {
@@ -158,7 +159,7 @@ public class ComposeY extends PlayerView implements OnStartDragListener,
             EventBus.getDefault().unregister(this);
         }
     }
-
+    // endregion
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseFooterEditMainEvent(FooterEditBarEvent event) {
         Log.d(TAG,"receive footerEditMain");

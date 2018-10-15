@@ -3,7 +3,7 @@ package com.wecyberstage.wecyberstage.util.helper;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
 
-import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
+import com.wecyberstage.wecyberstage.data.repository.StagePlayRepository;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
@@ -23,7 +23,7 @@ public class StageSceneLiveData extends LiveData<StageScene> implements StagePla
     private StagePlayCursor stagePlayCursor;
     private StageScene stageScene;
     @Inject
-    public StageSceneLiveData(PlayRepository repository) {
+    public StageSceneLiveData(StagePlayRepository repository) {
         stagePlayCursor = new StagePlayCursor(-1,-1,-1);
     }
 

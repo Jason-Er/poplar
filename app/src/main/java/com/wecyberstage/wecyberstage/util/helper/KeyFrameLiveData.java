@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
+import com.wecyberstage.wecyberstage.data.repository.StagePlayRepository;
 import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.Prop;
@@ -25,7 +25,7 @@ import javax.inject.Singleton;
 public class KeyFrameLiveData extends LiveData<KeyFrame> implements StagePlayCursorHandle {
     StagePlayCursor stagePlayCursor;
     @Inject
-    public KeyFrameLiveData(PlayRepository repository) {
+    public KeyFrameLiveData(StagePlayRepository repository) {
 
     }
 

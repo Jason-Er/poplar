@@ -121,9 +121,9 @@ public class ComposeX extends PlayerView
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
         stagePlayCursor = ((MainActivity) activity).getStagePlayCursor();
-        viewModel.getStagePlay(stagePlayCursor.getPlayId());
+        viewModel.setStagePlayCursor(stagePlayCursor);
 
-        viewModel.stagePlayLiveData.observe(activity, new Observer<StagePlay>() {
+        viewModel.stagePlay.observe(activity, new Observer<StagePlay>() {
             @Override
             public void onChanged(@Nullable StagePlay stagePlay) {
                 if(stagePlay != null) {

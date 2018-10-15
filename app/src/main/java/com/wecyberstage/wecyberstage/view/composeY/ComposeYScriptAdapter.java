@@ -72,7 +72,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
 
     public void setStagePlay(@NonNull StagePlay stagePlay, StagePlayCursor stagePlayCursor) {
         this.stagePlay = stagePlay;
-        stageScene = stagePlay.scenes.get(stagePlayCursor.getOrdinal());
+        stageScene = stagePlay.scenes.get(stagePlayCursor.getSceneOrdinal());
         dataSet = new ArrayList<>();
         for(StageLine stageLine : stageScene.stageLines) {
             handleStageLine(stageLine);

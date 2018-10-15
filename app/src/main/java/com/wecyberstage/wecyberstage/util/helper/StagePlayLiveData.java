@@ -2,7 +2,7 @@ package com.wecyberstage.wecyberstage.util.helper;
 
 import android.arch.lifecycle.LiveData;
 
-import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
+import com.wecyberstage.wecyberstage.data.repository.StagePlayRepository;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageLine;
@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 public class StagePlayLiveData extends LiveData<StagePlay> {
 
     @Inject
-    public StagePlayLiveData(PlayRepository repository) {
+    public StagePlayLiveData(StagePlayRepository repository) {
     }
 
     public void getStagePlay(long playId) {

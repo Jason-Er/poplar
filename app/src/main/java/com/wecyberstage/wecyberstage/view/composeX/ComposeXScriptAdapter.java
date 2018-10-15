@@ -43,7 +43,7 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Stag
 
     public void setStagePlay(@NonNull StagePlay stagePlay, StagePlayCursor stagePlayCursor) {
         this.stagePlay = stagePlay;
-        StageScene stageScene = stagePlay.scenes.get(stagePlayCursor.getOrdinal());
+        StageScene stageScene = stagePlay.scenes.get(stagePlayCursor.getSceneOrdinal());
         // for recyclerView show
         dataSet = new ArrayList<>();
         dataSet.add(new TimeLine());
