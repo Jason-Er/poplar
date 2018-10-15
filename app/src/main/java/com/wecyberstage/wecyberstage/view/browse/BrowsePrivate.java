@@ -1,5 +1,6 @@
 package com.wecyberstage.wecyberstage.view.browse;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -22,13 +23,19 @@ import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
+import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.MainActivity;
+import com.wecyberstage.wecyberstage.view.message.StagePlayPosterEvent;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -38,7 +45,9 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class BrowsePrivate extends BaseView implements StagePlayCursorHandle, SlideInterface {
+public class BrowsePrivate extends BaseView
+        implements StagePlayCursorHandle, SlideInterface,
+        RegisterBusEventInterface {
 
     private BrowseViewModel viewModel;
     private RecyclerView.Adapter adapter;
@@ -65,15 +74,8 @@ public class BrowsePrivate extends BaseView implements StagePlayCursorHandle, Sl
         int spanCount = 2;
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
         ((RecyclerView)view).setLayoutManager(layoutManager);
-        adapter = new PlayProfileAdapter();
+        adapter = new BrowseAdapter();
         ((RecyclerView)view).setAdapter(adapter);
-
-        ((PlayProfileAdapter) adapter).onItemClickCallBack = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
-            }
-        };
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(BrowseViewModel.class);
         viewModel.setRequestPage(new PageRequest(0,15,""));
@@ -82,7 +84,7 @@ public class BrowsePrivate extends BaseView implements StagePlayCursorHandle, Sl
             public void onChanged(@Nullable Resource<List<StagePlayInfo>> resource) {
                 switch (resource.status) {
                     case SUCCESS:
-                        ((PlayProfileAdapter)adapter).setDataset(resource.data);
+                        ((BrowseAdapter)adapter).setStagePlayInfo(resource.data);
                         break;
                     case ERROR:
 
@@ -126,4 +128,28 @@ public class BrowsePrivate extends BaseView implements StagePlayCursorHandle, Sl
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
+    // region implement of RegisterBusEventInterface
+    @Override
+    public void register(Activity activity) {
+        if( isVisible() ) {
+            EventBus.getDefault().register(this);
+        }
+    }
+
+    @Override
+    public void unRegister(Activity activity) {
+        if( isVisible() ) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
+    // endregion
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StagePlayPosterEvent event) {
+        switch (event.getMessage()) {
+            case "onClick":
+                ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
+                break;
+        }
+    }
 }
