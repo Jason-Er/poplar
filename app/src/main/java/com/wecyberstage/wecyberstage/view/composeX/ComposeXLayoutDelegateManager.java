@@ -24,7 +24,7 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
     public void onLayoutChildren(RecyclerView.LayoutManager layoutManager, @NonNull T items, RecyclerView.Recycler recycler, RecyclerView.State state) {
         ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.STAGE_LINE.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
         ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.TIME_LINE.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
-        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
+        // ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).onLayoutChildren(layoutManager, items, recycler, state);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
         int minimum =
         ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.STAGE_LINE.ordinal())).scrollHorizontallyBy(layoutManager, items, dx, recycler, state);
         ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.TIME_LINE.ordinal())).scrollHorizontallyBy(layoutManager, items, dx, recycler, state);
-        ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).scrollHorizontallyBy(layoutManager, items, dx, recycler, state);
+        // ((LayoutDelegateInterface)getDelegate(ComposeXCardViewType.ROLE_MASK.ordinal())).scrollHorizontallyBy(layoutManager, items, dx, recycler, state);
         return minimum;
     }
 
