@@ -130,8 +130,11 @@ public class StagePlayViewModel extends ViewModel
             stagePlay.getValue().scenes.remove(position);
             stageSceneOrdinal.setValue(position - 1);
         } else { // is the first scene
-            stagePlay.getValue().scenes.remove(0);
-            stageSceneOrdinal.setValue(0);
+            if( stageScene.getValue().stageLines.size() != 0 ) {
+                stagePlay.getValue().scenes.remove(0);
+                stagePlay.getValue().scenes.add(new StageScene());
+                stageSceneOrdinal.setValue(0);
+            }
         }
     }
 
