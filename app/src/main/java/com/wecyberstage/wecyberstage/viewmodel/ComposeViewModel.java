@@ -41,10 +41,12 @@ public class ComposeViewModel extends ViewModel
             // TODO: 10/15/2018 use repository instead
             StagePlay stagePlay = produceDummy();
             stagePlayMutableLiveData.setValue(stagePlay);
+            /*
             StageScene stageScene = stagePlay.scenes.get(0);
             stageSceneMutableLiveData.setValue(stageScene);
             StageLine stageLine = stageScene.stageLines.get(0);
             stageLineMutableLiveData.setValue(stageLine);
+            */
             return stagePlayMutableLiveData;
         }
     });
@@ -53,7 +55,9 @@ public class ComposeViewModel extends ViewModel
         @Override
         public LiveData<StageScene> apply(Integer input) {
             Log.d(TAG, "LiveData<StageScene> apply");
-            stageSceneMutableLiveData.setValue(stagePlay.getValue().scenes.get(stageSceneOrdinal.getValue()));
+            if( stagePlay.getValue()!=null ) {
+                stageSceneMutableLiveData.setValue(stagePlay.getValue().scenes.get(stageSceneOrdinal.getValue()));
+            }
             return stageSceneMutableLiveData;
         }
     });
@@ -104,6 +108,8 @@ public class ComposeViewModel extends ViewModel
     @Override
     public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
         stagePlayId.setValue(stagePlayCursor.getPlayId());
+        stageSceneOrdinal.setValue(stagePlayCursor.getSceneOrdinal());
+        stageLineOrdinal.setValue(stagePlayCursor.getLineOrdinal());
     }
 
     @Override

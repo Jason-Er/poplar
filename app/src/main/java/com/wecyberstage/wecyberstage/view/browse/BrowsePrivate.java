@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.browse;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -12,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
@@ -22,20 +20,10 @@ import com.wecyberstage.wecyberstage.data.dto.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
-import com.wecyberstage.wecyberstage.view.helper.Direction;
-import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
-import com.wecyberstage.wecyberstage.view.main.MainActivity;
-import com.wecyberstage.wecyberstage.view.message.StagePlayPosterEvent;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -46,12 +34,10 @@ import javax.inject.Inject;
  */
 
 public class BrowsePrivate extends BaseView
-        implements StagePlayCursorHandle, SlideInterface,
-        RegisterBusEventInterface {
+        implements SlideInterface {
 
     private BrowseViewModel viewModel;
     private RecyclerView.Adapter adapter;
-    private StagePlayCursor stagePlayCursor; // which contains the play is clicked
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -104,16 +90,6 @@ public class BrowsePrivate extends BaseView
     }
 
     @Override
-    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
-        this.stagePlayCursor = stagePlayCursor;
-    }
-
-    @Override
-    public StagePlayCursor getStagePlayCursor() {
-        return stagePlayCursor;
-    }
-
-    @Override
     public void slideBegin() {
         super.slideBegin();
         CoordinatorLayout.LayoutParams params =
@@ -128,28 +104,4 @@ public class BrowsePrivate extends BaseView
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-    // region implement of RegisterBusEventInterface
-    @Override
-    public void register(Activity activity) {
-        if( isVisible() ) {
-            EventBus.getDefault().register(this);
-        }
-    }
-
-    @Override
-    public void unRegister(Activity activity) {
-        if( isVisible() ) {
-            EventBus.getDefault().unregister(this);
-        }
-    }
-    // endregion
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseMessageEvent(StagePlayPosterEvent event) {
-        switch (event.getMessage()) {
-            case "onClick":
-                ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
-                break;
-        }
-    }
 }

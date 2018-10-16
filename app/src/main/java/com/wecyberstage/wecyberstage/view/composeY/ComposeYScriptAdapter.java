@@ -43,14 +43,15 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
         implements ItemTouchHelperAdapter, SaveStatesInterface, RegisterBusEventInterface,
         PlayControlSub2Interface, StageLineHandle, StageSceneHandle {
 
+    private final String TAG = "ComposeYScriptAdapter";
+
     final String START_TAG = "ComposeYArrayStart";
     final String END_TAG = "ComposeYArrayEnd";
     final StageLineHandle updateStagePlayInterface;
-    private final String TAG = "ComposeYScriptAdapter";
+
     List<String> listStart = new ArrayList<>();
     List<String> listEnd = new ArrayList<>();
     private StageScene stageScene;
-    private StagePlay stagePlay;
 
     // for apache poi read and replace
     String parenthesesREGEX = "([（\\(][^\\)）]+[）\\)])|([\\[【][^\\]】]+[\\]】])";
@@ -70,9 +71,9 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
         this.updateStagePlayInterface = updateStagePlayInterface;
     }
 
-    public void setStagePlay(@NonNull StagePlay stagePlay, StagePlayCursor stagePlayCursor) {
-        this.stagePlay = stagePlay;
-        stageScene = stagePlay.scenes.get(stagePlayCursor.getSceneOrdinal());
+    public void setStageScene(StageScene stageScene) {
+        Log.d(TAG,"setStageScene");
+        this.stageScene = stageScene;
         dataSet = new ArrayList<>();
         for(StageLine stageLine : stageScene.stageLines) {
             handleStageLine(stageLine);
@@ -125,7 +126,7 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
 
     @Override
     public void saveStates(Activity activity) {
-        Log.d("ComposeYScriptAdapter","unRegister");
+        Log.d(TAG,"unRegister");
         if(listStart.size() > 0) {
             String[] arrayStart = listStart.toArray(new String[listStart.size()]);
             activity.getIntent().putExtra(START_TAG, arrayStart);

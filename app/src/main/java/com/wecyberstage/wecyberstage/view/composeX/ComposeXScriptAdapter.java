@@ -13,7 +13,6 @@ import com.wecyberstage.wecyberstage.model.TimeLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -26,7 +25,6 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Stag
 
     final private StageLineHandle stageLineHandle;
     private List<StageRole> stageRoleList;
-    StagePlay stagePlay;
 
     @Inject
     public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates,
@@ -41,9 +39,7 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Stag
 
     }
 
-    public void setStagePlay(@NonNull StagePlay stagePlay, StagePlayCursor stagePlayCursor) {
-        this.stagePlay = stagePlay;
-        StageScene stageScene = stagePlay.scenes.get(stagePlayCursor.getSceneOrdinal());
+    public void setStageScene(@NonNull StageScene stageScene) {
         // for recyclerView show
         dataSet = new ArrayList<>();
         dataSet.add(new TimeLine());

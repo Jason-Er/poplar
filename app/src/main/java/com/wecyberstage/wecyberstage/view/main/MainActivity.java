@@ -1,12 +1,15 @@
 package com.wecyberstage.wecyberstage.view.main;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -25,6 +28,7 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
+import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
@@ -67,6 +71,8 @@ import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 import com.wecyberstage.wecyberstage.view.message.StageLineContainerViewEvent;
 import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
+import com.wecyberstage.wecyberstage.view.message.StagePlayPosterEvent;
+import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -123,6 +129,7 @@ public class MainActivity extends AppCompatActivity
     ViewModelProvider.Factory viewModelFactory;
     @Inject
     LocalSettings localSettings;
+    private ComposeViewModel viewModel;
 
     // region navigation
     private Stack<String> navigationStack;
@@ -170,6 +177,14 @@ public class MainActivity extends AppCompatActivity
         if( stagePlayCursor == null ) {
             stagePlayCursor = localSettings.getStagePlayCursor(character.getId());
         }
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ComposeViewModel.class);
+        viewModel.stagePlay.observe(this, new Observer<StagePlay>() {
+            @Override
+            public void onChanged(@Nullable StagePlay stagePlay) {
+                Log.d(TAG, "current stagePlay");
+            }
+        });
+        viewModel.setStagePlayCursor(stagePlayCursor);
 
         // region all views
         viewArray = new SparseArray();
@@ -425,6 +440,15 @@ public class MainActivity extends AppCompatActivity
                 if( currentView instanceof ClickActionInterface ) {
                     ((ClickActionInterface) currentView).containerClick();
                 }
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StagePlayPosterEvent event) {
+        switch (event.getMessage()) {
+            case "onClick":
+                slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
                 break;
         }
     }

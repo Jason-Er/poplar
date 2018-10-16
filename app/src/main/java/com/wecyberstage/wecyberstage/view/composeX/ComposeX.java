@@ -17,16 +17,14 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StageLineHandle;
-import com.wecyberstage.wecyberstage.model.StagePlay;
+import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayerView;
-import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.view.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
@@ -49,7 +47,6 @@ public class ComposeX extends PlayerView
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
     private final String TAG = "ComposeX";
-    private StagePlayCursor stagePlayCursor;
     private ComposeViewModel viewModel;
     private ComposeXScriptLayoutManager layoutManager;
     private ComposeXScriptAdapter adapter;
@@ -120,17 +117,13 @@ public class ComposeX extends PlayerView
         itemTouchHelper.attachToRecyclerView(((RecyclerView)view));
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
-        stagePlayCursor = ((MainActivity) activity).getStagePlayCursor();
-        viewModel.setStagePlayCursor(stagePlayCursor);
-
-        viewModel.stagePlay.observe(activity, new Observer<StagePlay>() {
+        viewModel.stageScene.observe(activity, new Observer<StageScene>() {
             @Override
-            public void onChanged(@Nullable StagePlay stagePlay) {
-                if(stagePlay != null) {
-                    adapter.setStagePlay(stagePlay, stagePlayCursor);
-                }
+            public void onChanged(@Nullable StageScene stageScene) {
+                adapter.setStageScene(stageScene);
             }
         });
+
     }
 
     @Override

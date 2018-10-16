@@ -20,10 +20,8 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageLineHandle;
-import com.wecyberstage.wecyberstage.model.StagePlay;
+import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
-import com.wecyberstage.wecyberstage.view.main.MainActivity;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.helper.PlayerView;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
@@ -50,7 +48,7 @@ public class ComposeY extends PlayerView
     private final String TAG = "ComposeY";
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
-    private StagePlayCursor stagePlayCursor;
+    // private StagePlayCursor stagePlayCursor;
     private ComposeViewModel viewModel;
     private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
@@ -94,16 +92,10 @@ public class ComposeY extends PlayerView
         itemTouchHelper.attachToRecyclerView( (RecyclerView) view);
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
-        stagePlayCursor = ((MainActivity) activity).getStagePlayCursor();
-        viewModel.setStagePlayCursor(stagePlayCursor);
-
-        viewModel.stagePlay.observe(activity, new Observer<StagePlay>() {
+        viewModel.stageScene.observe(activity, new Observer<StageScene>() {
             @Override
-            public void onChanged(@Nullable StagePlay stagePlay) {
-                if(stagePlay != null) {
-                    adapter.setStagePlay(stagePlay, stagePlayCursor);
-                    footerEditBar.setStageRoles(stagePlay.cast);
-                }
+            public void onChanged(@Nullable StageScene stageScene) {
+                adapter.setStageScene(stageScene);
             }
         });
     }
