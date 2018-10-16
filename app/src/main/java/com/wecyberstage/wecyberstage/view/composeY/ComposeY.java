@@ -135,7 +135,7 @@ public class ComposeY extends PlayerView
     public void register(Activity activity) {
         if( isVisible() ) {
             adapter.register(activity);
-            EventBus.getDefault().register(this);
+            // EventBus.getDefault().register(this);
         }
     }
 
@@ -143,10 +143,11 @@ public class ComposeY extends PlayerView
     public void unRegister(Activity activity) {
         if( isVisible() ) {
             adapter.unRegister(activity);
-            EventBus.getDefault().unregister(this);
+            // EventBus.getDefault().unregister(this);
         }
     }
     // endregion
+    /*
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseFooterEditMainEvent(FooterEditBarEvent event) {
         Log.d(TAG,"receive footerEditMain");
@@ -165,5 +166,6 @@ public class ComposeY extends PlayerView
                 break;
         }
     }
+    */
 
 }

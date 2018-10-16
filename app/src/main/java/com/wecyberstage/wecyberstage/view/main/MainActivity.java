@@ -28,9 +28,11 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
+import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
+import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
 import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
@@ -408,6 +410,29 @@ public class MainActivity extends AppCompatActivity
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(FooterEditBarEvent event) {
+        Log.d(TAG,"receive footerEditMain");
+        switch (event.getMessage()) {
+            case "addStageLine":
+                // adapter.addStageLine((StageLine) event.getData());
+                viewModel.addStageLine((StageLine) event.getData());
+                break;
+            case "deleteStageSceneContent":
+                // adapter.deleteStageSceneContent();
+                viewModel.deleteStageLine((StageLine) event.getData());
+                break;
+            case "deleteStageScene":
+                // adapter.deleteStageScene();
+                viewModel.deleteStageScene();
+                break;
+            case "addStageScene":
+                // adapter.addStageScene();
+                viewModel.addStageScene();
+                break;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

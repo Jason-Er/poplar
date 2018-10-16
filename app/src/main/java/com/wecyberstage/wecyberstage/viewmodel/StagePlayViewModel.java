@@ -19,6 +19,7 @@ import com.wecyberstage.wecyberstage.model.StageLineHandle;
 import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
+import com.wecyberstage.wecyberstage.model.StageSceneHandle;
 import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
@@ -28,7 +29,8 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 public class StagePlayViewModel extends ViewModel
-        implements StageLineHandle, StagePlayCursorHandle, PlayControlInterface {
+        implements StageLineHandle, StageSceneHandle, StagePlayCursorHandle,
+        PlayControlInterface {
 
     private final String TAG = "StagePlayViewModel";
 
@@ -62,9 +64,7 @@ public class StagePlayViewModel extends ViewModel
         @Override
         public LiveData<StageScene> apply(Integer input) {
             Log.d(TAG, "LiveData<StageScene> apply");
-            if( stagePlay.getValue()!=null ) {
-                stageSceneMutableLiveData.setValue(stagePlay.getValue().scenes.get(stageSceneOrdinal.getValue()));
-            }
+            stageSceneMutableLiveData.setValue(stagePlay.getValue().scenes.get(stageSceneOrdinal.getValue()));
             return stageSceneMutableLiveData;
         }
     });
@@ -97,7 +97,7 @@ public class StagePlayViewModel extends ViewModel
 
     }
 
-    // region implement of StageLineHandle
+    // region implement of StageLineHandle and StageSceneHandle
     @Override
     public void updateStageLine(StageLine maskLine) {
 
@@ -116,6 +116,34 @@ public class StagePlayViewModel extends ViewModel
     @Override
     public void swapStageLines(int position1, int position2) {
 
+    }
+
+    @Override
+    public void deleteStageSceneContent() {
+
+    }
+
+    @Override
+    public void deleteStageScene() {
+        int position = stagePlay.getValue().scenes.indexOf(stageScene.getValue());
+        if(position > 0) {
+            stagePlay.getValue().scenes.remove(position);
+            stageSceneOrdinal.setValue(position - 1);
+        } else { // is the first scene
+            stagePlay.getValue().scenes.remove(0);
+            stageSceneOrdinal.setValue(0);
+        }
+    }
+
+    @Override
+    public void addStageScene() {
+        if( stageScene.getValue().stageLines.size() != 0 ) {
+            Log.d(TAG, "addStageScene");
+            int position = stagePlay.getValue().scenes.indexOf(stageScene.getValue());
+            StageScene stageScene = new StageScene();
+            stagePlay.getValue().scenes.add(position + 1, stageScene);
+            stageSceneOrdinal.setValue(position + 1);
+        }
     }
     // endregion
 

@@ -17,7 +17,7 @@ public class ComposeXLayoutDelegateManager<T> extends LayoutDelegatesManager<T> 
     public ComposeXLayoutDelegateManager() {
         addDelegate(new TimeLineLayoutDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
         addDelegate(new StageLineLayoutDelegate(ComposeXCardViewType.STAGE_LINE.ordinal()));
-        addDelegate(new RoleLayoutDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
+        // addDelegate(new RoleLayoutDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
     }
 
     @Override
