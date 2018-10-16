@@ -32,6 +32,7 @@ public class StagePlayViewModel extends ViewModel
 
     private final String TAG = "StagePlayViewModel";
 
+    private StagePlayCursor stagePlayCursor;
     private final StagePlayRepository repository;
 
     private final MutableLiveData<Long> stagePlayId = new MutableLiveData<>();
@@ -121,6 +122,7 @@ public class StagePlayViewModel extends ViewModel
     // region implement of StagePlayCursorHandle
     @Override
     public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
+        this.stagePlayCursor = stagePlayCursor;
         stagePlayId.setValue(stagePlayCursor.getPlayId());
         stageSceneOrdinal.setValue(stagePlayCursor.getSceneOrdinal());
         stageLineOrdinal.setValue(stagePlayCursor.getLineOrdinal());
@@ -129,7 +131,7 @@ public class StagePlayViewModel extends ViewModel
 
     @Override
     public StagePlayCursor getStagePlayCursor() {
-        return null;
+        return stagePlayCursor;
     }
     // endregion
 
@@ -225,6 +227,7 @@ public class StagePlayViewModel extends ViewModel
         Log.d(TAG,"PlayControlInterface pre()");
         if( stagePlay.getValue() != null && stagePlay.getValue().scenes.size() > 0 ) {
             if(stageSceneOrdinal.getValue() - 1 >= 0) {
+                stagePlayCursor.setSceneOrdinal(stageSceneOrdinal.getValue() - 1);
                 stageSceneOrdinal.setValue(stageSceneOrdinal.getValue() - 1);
             }
         }
@@ -235,6 +238,7 @@ public class StagePlayViewModel extends ViewModel
         Log.d(TAG,"PlayControlInterface next()");
         if( stagePlay.getValue() != null && stagePlay.getValue().scenes.size() > 0 ) {
             if(stagePlay.getValue().scenes.size() > stageSceneOrdinal.getValue() + 1) {
+                stagePlayCursor.setSceneOrdinal(stageSceneOrdinal.getValue() + 1);
                 stageSceneOrdinal.setValue(stageSceneOrdinal.getValue() + 1);
             }
         }
