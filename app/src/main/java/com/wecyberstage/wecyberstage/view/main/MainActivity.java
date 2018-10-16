@@ -93,8 +93,7 @@ import dagger.android.support.HasSupportFragmentInjector;
 public class MainActivity extends AppCompatActivity
         implements HasSupportFragmentInjector,
         NavigationView.OnNavigationItemSelectedListener,
-        CustomViewSlideInterface, KeyboardHeightObserver,
-        StagePlayCursorHandle {
+        CustomViewSlideInterface, KeyboardHeightObserver {
 
     private final String TAG = "MainActivity";
     private final String NAVIGATION_SEMICOLON = ";";
@@ -481,6 +480,7 @@ public class MainActivity extends AppCompatActivity
         Log.i("Main", "onResponsePlayerControlEvent: " + event.getMessage());
         switch (event.getMessage()) {
             case "STOP":
+                viewModel.stop();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).stop();
@@ -488,6 +488,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "PLAY":
+                viewModel.play();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).play();
@@ -495,6 +496,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "PAUSE":
+                viewModel.pause();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).pause();
@@ -502,6 +504,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "SEEK":
+                viewModel.seek(event.getSeekProcess());
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).seek(event.getSeekProcess());
@@ -509,6 +512,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "PRE":
+                viewModel.pre();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).pre();
@@ -516,6 +520,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "NEXT":
+                viewModel.next();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).next();
@@ -523,6 +528,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "VOLUME":
+                viewModel.volume(true);
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).volume(true);
@@ -689,15 +695,4 @@ public class MainActivity extends AppCompatActivity
     }
     // endregion
 
-    // region implement of StagePlayCursorHandle
-    @Override
-    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
-        this.stagePlayCursor = stagePlayCursor;
-    }
-
-    @Override
-    public StagePlayCursor getStagePlayCursor() {
-        return stagePlayCursor;
-    }
-    // endregion
 }

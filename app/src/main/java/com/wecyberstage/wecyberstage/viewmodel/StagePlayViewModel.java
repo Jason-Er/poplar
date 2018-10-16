@@ -19,6 +19,7 @@ import com.wecyberstage.wecyberstage.model.StageLineHandle;
 import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
+import com.wecyberstage.wecyberstage.view.helper.PlayControlInterface;
 import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
 
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 public class StagePlayViewModel extends ViewModel
-        implements StageLineHandle, StagePlayCursorHandle {
+        implements StageLineHandle, StagePlayCursorHandle, PlayControlInterface {
 
     private final String TAG = "StagePlayViewModel";
 
@@ -158,6 +159,14 @@ public class StagePlayViewModel extends ViewModel
         }
         stagePlay.scenes.add(stageScene);
         stagePlay.cast = stageScene.stageRoles;
+        // add another scene
+        stageScene = new StageScene();
+        for(int i = 0; i< 12; i++) {
+            StageLine line = new StageLine(stagePlay.cast.get((i+1)%3), "Hi " + i, 3 * i * 1000, 1000, i%3);
+            line.ordinal = i + 1;
+            stageScene.stageLines.add(line);
+        }
+        stagePlay.scenes.add(stageScene);
         return stagePlay;
     }
 
@@ -190,4 +199,50 @@ public class StagePlayViewModel extends ViewModel
         return keyFrame;
     }
 
+    // region implement of PlayControlInterface
+    @Override
+    public void play() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public void seek(float percent) {
+
+    }
+
+    @Override
+    public void pre() {
+        Log.d(TAG,"PlayControlInterface pre()");
+        if( stagePlay.getValue() != null && stagePlay.getValue().scenes.size() > 0 ) {
+            if(stageSceneOrdinal.getValue() - 1 >= 0) {
+                stageSceneOrdinal.setValue(stageSceneOrdinal.getValue() - 1);
+            }
+        }
+    }
+
+    @Override
+    public void next() {
+        Log.d(TAG,"PlayControlInterface next()");
+        if( stagePlay.getValue() != null && stagePlay.getValue().scenes.size() > 0 ) {
+            if(stagePlay.getValue().scenes.size() > stageSceneOrdinal.getValue() + 1) {
+                stageSceneOrdinal.setValue(stageSceneOrdinal.getValue() + 1);
+            }
+        }
+    }
+
+    @Override
+    public void volume(boolean open) {
+
+    }
+    // endregion
 }
