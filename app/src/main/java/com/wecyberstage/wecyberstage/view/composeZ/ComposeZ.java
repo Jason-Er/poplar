@@ -32,10 +32,9 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class ComposeZ extends PlayerView implements StagePlayCursorHandle,
-        SlideInterface, ClickActionInterface {
+public class ComposeZ extends PlayerView
+        implements SlideInterface, ClickActionInterface {
 
-    private static final String PARTICIPATE_INFO_KEY = "participate_info";
     private final String TAG = "ComposeZ";
 
     private StagePlayViewModel viewModel;
@@ -75,17 +74,6 @@ public class ComposeZ extends PlayerView implements StagePlayCursorHandle,
     @Override
     public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
 
-    }
-
-    @Override
-    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
-        activity.getIntent().putExtra(PARTICIPATE_INFO_KEY, stagePlayCursor);
-        viewModel.setStagePlayCursor(stagePlayCursor);
-    }
-
-    @Override
-    public StagePlayCursor getStagePlayCursor() {
-        return viewModel.getStagePlayCursor();
     }
 
     @Override

@@ -46,15 +46,10 @@ public class ComposeY extends PlayerView
         StageLineHandle, RegisterBusEventInterface, ClickActionInterface {
 
     private final String TAG = "ComposeY";
-    private static final String COMPOSE_INFO_KEY = "compose_info";
 
-    // private StagePlayCursor stagePlayCursor;
     private StagePlayViewModel viewModel;
     private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
-
-    @BindView(R.id.footer_edit_bar)
-    FooterEditBar footerEditBar;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -67,7 +62,7 @@ public class ComposeY extends PlayerView
     public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_composey, container,false);
-        ButterKnife.bind(this, activity);
+        // ButterKnife.bind(this, activity);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 

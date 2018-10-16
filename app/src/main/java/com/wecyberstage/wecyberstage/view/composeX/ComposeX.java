@@ -44,8 +44,6 @@ public class ComposeX extends PlayerView
         implements SlideInterface, StageLineHandle, OnStartDragListener,
         RegisterBusEventInterface, ClickActionInterface {
 
-    private static final String COMPOSE_INFO_KEY = "compose_info";
-
     private final String TAG = "ComposeX";
     private StagePlayViewModel viewModel;
     private ComposeXScriptLayoutManager layoutManager;
