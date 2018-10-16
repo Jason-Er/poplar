@@ -72,7 +72,7 @@ import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 import com.wecyberstage.wecyberstage.view.message.StageLineContainerViewEvent;
 import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
 import com.wecyberstage.wecyberstage.view.message.StagePlayPosterEvent;
-import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
+import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
     ViewModelProvider.Factory viewModelFactory;
     @Inject
     LocalSettings localSettings;
-    private ComposeViewModel viewModel;
+    private StagePlayViewModel viewModel;
 
     // region navigation
     private Stack<String> navigationStack;
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity
         if( stagePlayCursor == null ) {
             stagePlayCursor = localSettings.getStagePlayCursor(character.getId());
         }
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ComposeViewModel.class);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(StagePlayViewModel.class);
         viewModel.stagePlay.observe(this, new Observer<StagePlay>() {
             @Override
             public void onChanged(@Nullable StagePlay stagePlay) {

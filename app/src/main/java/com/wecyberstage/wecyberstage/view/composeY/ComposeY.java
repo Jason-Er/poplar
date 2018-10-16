@@ -30,7 +30,7 @@ import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
 import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
-import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
+import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -49,7 +49,7 @@ public class ComposeY extends PlayerView
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
     // private StagePlayCursor stagePlayCursor;
-    private ComposeViewModel viewModel;
+    private StagePlayViewModel viewModel;
     private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
 
@@ -91,7 +91,7 @@ public class ComposeY extends PlayerView
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView( (RecyclerView) view);
 
-        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
+        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(StagePlayViewModel.class);
         viewModel.stageScene.observe(activity, new Observer<StageScene>() {
             @Override
             public void onChanged(@Nullable StageScene stageScene) {

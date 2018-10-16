@@ -3,22 +3,26 @@ package com.wecyberstage.wecyberstage.view.main;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 public class StagePlayCursor implements Parcelable {
     private long playId;
     private int sceneOrdinal; // scene ordinal
     private int lineOrdinal; // start position of stageLine
     private long startTime; // Millisecond
 
-    public StagePlayCursor(long playId, int sceneOrdinal, int lineOrdinal) {
+    public StagePlayCursor(long playId, int sceneOrdinal, int lineOrdinal, long startTime) {
         this.playId = playId;
         this.sceneOrdinal = sceneOrdinal;
         this.lineOrdinal = lineOrdinal;
+        this.startTime = startTime;
     }
 
     protected StagePlayCursor(Parcel in) {
         playId = in.readLong();
         sceneOrdinal = in.readInt();
         lineOrdinal = in.readInt();
+        startTime = in.readLong();
     }
 
     public static final Creator<StagePlayCursor> CREATOR = new Creator<StagePlayCursor>() {
@@ -43,6 +47,7 @@ public class StagePlayCursor implements Parcelable {
         dest.writeLong(playId);
         dest.writeInt(sceneOrdinal);
         dest.writeInt(lineOrdinal);
+        dest.writeLong(startTime);
     }
 
     public long getPlayId() {
@@ -69,6 +74,14 @@ public class StagePlayCursor implements Parcelable {
         this.lineOrdinal = lineOrdinal;
     }
 
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -76,7 +89,7 @@ public class StagePlayCursor implements Parcelable {
 
         StagePlayCursor stagePlayCursor = (StagePlayCursor) obj;
 
-        if ( playId != stagePlayCursor.playId || sceneOrdinal != stagePlayCursor.sceneOrdinal || lineOrdinal != stagePlayCursor.lineOrdinal ) {
+        if ( playId != stagePlayCursor.playId || sceneOrdinal != stagePlayCursor.sceneOrdinal || lineOrdinal != stagePlayCursor.lineOrdinal || startTime != stagePlayCursor.startTime ) {
             return false;
         } else {
             return true;
@@ -85,7 +98,7 @@ public class StagePlayCursor implements Parcelable {
 
     @Override
     public int hashCode() {
-        int result = (int) (31 * playId + 15 * sceneOrdinal + startTime);
+        int result = (int) (31 * playId + 15 * sceneOrdinal + lineOrdinal);
         return result;
     }
 }

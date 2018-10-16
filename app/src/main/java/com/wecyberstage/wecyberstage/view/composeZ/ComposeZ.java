@@ -22,7 +22,7 @@ import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
-import com.wecyberstage.wecyberstage.viewmodel.ParticipateViewModel;
+import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class ComposeZ extends PlayerView implements StagePlayCursorHandle,
     private static final String PARTICIPATE_INFO_KEY = "participate_info";
     private final String TAG = "ComposeZ";
 
-    private ParticipateViewModel viewModel;
+    private StagePlayViewModel viewModel;
     private KeyFrameAdapter adapter;
 
     @Inject
@@ -63,17 +63,11 @@ public class ComposeZ extends PlayerView implements StagePlayCursorHandle,
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ParticipateViewModel.class);
-        StagePlayCursor stagePlayCursor = activity.getIntent().getParcelableExtra(PARTICIPATE_INFO_KEY);
-        if(stagePlayCursor != null) {
-            viewModel.setStagePlayCursor(stagePlayCursor);
-        }
-        viewModel.keyFrameLiveData.observe(activity, new Observer<KeyFrame>() {
+        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(StagePlayViewModel.class);
+        viewModel.keyFrame.observe(activity, new Observer<KeyFrame>() {
             @Override
             public void onChanged(@Nullable KeyFrame keyframe) {
-                if(keyframe != null) {
-                    adapter.setKeyframe(keyframe);
-                }
+                adapter.setKeyframe(keyframe);
             }
         });
     }

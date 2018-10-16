@@ -5,11 +5,15 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.util.Log;
 
 import com.wecyberstage.wecyberstage.data.repository.StagePlayRepository;
+import com.wecyberstage.wecyberstage.model.KeyFrame;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
+import com.wecyberstage.wecyberstage.model.Prop;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageLineHandle;
 import com.wecyberstage.wecyberstage.model.StagePlay;
@@ -22,16 +26,17 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class ComposeViewModel extends ViewModel
+public class StagePlayViewModel extends ViewModel
         implements StageLineHandle, StagePlayCursorHandle {
 
-    private final String TAG = "ComposeViewModel";
+    private final String TAG = "StagePlayViewModel";
 
     private final StagePlayRepository repository;
 
     private final MutableLiveData<Long> stagePlayId = new MutableLiveData<>();
     private final MutableLiveData<Integer> stageSceneOrdinal = new MutableLiveData<>();
     private final MutableLiveData<Integer> stageLineOrdinal = new MutableLiveData<>();
+    private final MutableLiveData<Long> startTime = new MutableLiveData<>();
 
     private final MutableLiveData<StagePlay> stagePlayMutableLiveData = new MutableLiveData<>();
     public final LiveData<StagePlay> stagePlay = Transformations.switchMap(stagePlayId, new Function<Long, LiveData<StagePlay>>() {
@@ -39,7 +44,7 @@ public class ComposeViewModel extends ViewModel
         public LiveData<StagePlay> apply(Long input) {
             Log.d(TAG, "LiveData<StagePlay> apply");
             // TODO: 10/15/2018 use repository instead
-            StagePlay stagePlay = produceDummy();
+            StagePlay stagePlay = produceStagePlayDummy();
             stagePlayMutableLiveData.setValue(stagePlay);
             /*
             StageScene stageScene = stagePlay.scenes.get(0);
@@ -75,9 +80,17 @@ public class ComposeViewModel extends ViewModel
             });
         }
     });
+    private final MutableLiveData<KeyFrame> keyFrameMutableLiveData = new MutableLiveData<>();
+    public final LiveData<KeyFrame> keyFrame = Transformations.switchMap(startTime, new Function<Long, LiveData<KeyFrame>>() {
+        @Override
+        public LiveData<KeyFrame> apply(Long input) {
+            keyFrameMutableLiveData.setValue(produceKeyFrameDummy());
+            return keyFrameMutableLiveData;
+        }
+    });
 
     @Inject
-    public ComposeViewModel(StagePlayRepository repository) {
+    public StagePlayViewModel(StagePlayRepository repository) {
         this.repository = repository;
 
     }
@@ -110,6 +123,7 @@ public class ComposeViewModel extends ViewModel
         stagePlayId.setValue(stagePlayCursor.getPlayId());
         stageSceneOrdinal.setValue(stagePlayCursor.getSceneOrdinal());
         stageLineOrdinal.setValue(stagePlayCursor.getLineOrdinal());
+        startTime.setValue(stagePlayCursor.getStartTime());
     }
 
     @Override
@@ -119,7 +133,7 @@ public class ComposeViewModel extends ViewModel
     // endregion
 
     // TODO: 10/15/2018 may remove such dummy function later
-    private StagePlay produceDummy() {
+    private StagePlay produceStagePlayDummy() {
         StagePlay stagePlay = new StagePlay();
         stagePlay.scenes = new ArrayList<>();
         StageScene stageScene = new StageScene();
@@ -145,6 +159,35 @@ public class ComposeViewModel extends ViewModel
         stagePlay.scenes.add(stageScene);
         stagePlay.cast = stageScene.stageRoles;
         return stagePlay;
+    }
+
+    private KeyFrame produceKeyFrameDummy() {
+        KeyFrame keyFrame = new KeyFrame();
+
+        keyFrame.roleInfoList = new ArrayList<>();
+        keyFrame.lineInfoList = new ArrayList<>();
+        keyFrame.propInfoList = new ArrayList<>();
+        keyFrame.stageInfo = new KeyFrame.StageInfo();
+
+        StageRole stageRole = new StageRole(1, "", null);
+        stageRole.name = "jason";
+        StageLine line = new StageLine();
+        line.dialogue = "Hello world!";
+        PointF point = new PointF(200,200);
+        RectF roleViewRect = new RectF(0.2f,0.2f,0.4f,0.6f);
+
+        Prop prop = new Prop();
+        RectF propViewRect = new RectF(0,0,40,40);
+
+        KeyFrame.RoleInfo roleInfo = new KeyFrame.RoleInfo(stageRole, roleViewRect,0);
+        KeyFrame.LineInfo lineInfo = new KeyFrame.LineInfo(point, line);
+        KeyFrame.PropInfo propInfo = new KeyFrame.PropInfo(prop, propViewRect);
+
+        keyFrame.roleInfoList.add(roleInfo);
+        keyFrame.lineInfoList.add(lineInfo);
+        keyFrame.propInfoList.add(propInfo);
+        keyFrame.stageInfo.settingURL = "http://pic28.photophoto.cn/20130727/0035035114302168_b.jpg";
+        return keyFrame;
     }
 
 }

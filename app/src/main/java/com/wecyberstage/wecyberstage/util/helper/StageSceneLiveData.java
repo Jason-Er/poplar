@@ -24,7 +24,7 @@ public class StageSceneLiveData extends LiveData<StageScene> implements StagePla
     private StageScene stageScene;
     @Inject
     public StageSceneLiveData(StagePlayRepository repository) {
-        stagePlayCursor = new StagePlayCursor(-1,-1,-1);
+        stagePlayCursor = new StagePlayCursor(-1,-1,-1, 0);
     }
 
     @Override

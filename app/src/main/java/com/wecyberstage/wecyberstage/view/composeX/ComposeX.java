@@ -30,7 +30,7 @@ import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
-import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
+import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -47,7 +47,7 @@ public class ComposeX extends PlayerView
     private static final String COMPOSE_INFO_KEY = "compose_info";
 
     private final String TAG = "ComposeX";
-    private ComposeViewModel viewModel;
+    private StagePlayViewModel viewModel;
     private ComposeXScriptLayoutManager layoutManager;
     private ComposeXScriptAdapter adapter;
     private CustomItemTouchHelper itemTouchHelper;
@@ -116,7 +116,7 @@ public class ComposeX extends PlayerView
         itemTouchHelper = new CustomItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(((RecyclerView)view));
 
-        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
+        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(StagePlayViewModel.class);
         viewModel.stageScene.observe(activity, new Observer<StageScene>() {
             @Override
             public void onChanged(@Nullable StageScene stageScene) {
