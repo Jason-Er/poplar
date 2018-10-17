@@ -17,8 +17,6 @@ public class MaskGridLayout extends AutoGridLayout {
     public MaskGridLayout(Context context, MaskGridLayoutCallBack callBack) {
         super(context);
         this.maskGridLayoutCallBack = callBack;
-        // setColumnCount(3);
-        // setRowCount(3);
     }
 
     public MaskGridLayout(Context context, AttributeSet attrs) {

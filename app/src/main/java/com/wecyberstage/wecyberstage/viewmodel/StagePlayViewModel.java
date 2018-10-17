@@ -109,8 +109,8 @@ public class StagePlayViewModel extends ViewModel
             stageLineOrdinal.setValue(stageScene.getValue().stageLines.indexOf(stageLine));
         } else {
             stageScene.getValue().stageLines.add(stageLineOrdinal.getValue()+1, stageLine);
-            stageLineOrdinal.setValue(stageLineOrdinal.getValue()+1);
             refreshStageScene();
+            stageLineOrdinal.setValue(stageLineOrdinal.getValue()+1);
         }
     }
 

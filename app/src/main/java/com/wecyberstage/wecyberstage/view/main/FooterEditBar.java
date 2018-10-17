@@ -28,7 +28,6 @@ import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.model.StageRole;
-import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
@@ -38,8 +37,6 @@ import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -88,7 +85,7 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
         viewModel.stagePlay.observe((FragmentActivity)context, new Observer<StagePlay>() {
             @Override
             public void onChanged(@Nullable StagePlay stagePlay) {
-                maskChoose.setStageRoles(stagePlay.cast);
+                maskChoose.setCast(stagePlay.cast);
             }
         });
     }

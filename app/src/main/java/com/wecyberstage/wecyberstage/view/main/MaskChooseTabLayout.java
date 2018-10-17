@@ -29,7 +29,7 @@ public class MaskChooseTabLayout extends LinearLayout {
     @BindView(R.id.maskChooseTabLayout_viewPager)
     ViewPager viewPager;
 
-    private List<StageRole> stageRoles;
+    private List<StageRole> cast;
     private MaskPagerAdapter maskPagerAdapter;
     private List<MaskGridLayout> maskGridLayoutList;
     private MaskGridLayoutCallBack maskGridLayoutCallBack;
@@ -64,7 +64,7 @@ public class MaskChooseTabLayout extends LinearLayout {
             TabLayout.Tab itemTab = tabLayout.getTabAt(i);
             if (itemTab!=null){
                 ImageView imageView = new ImageView(getContext());
-                Glide.with(getContext()).load(stageRoles.get(i).mask.maskGraphList.get(0).graphURL).into(imageView);
+                Glide.with(getContext()).load(cast.get(i).mask.maskGraphList.get(0).graphURL).into(imageView);
                 itemTab.setCustomView(imageView);
             }
         }
@@ -75,8 +75,8 @@ public class MaskChooseTabLayout extends LinearLayout {
         this.maskGridLayoutCallBack = maskGridLayoutCallBack;
     }
 
-    public void setStageRoles(List<StageRole> stageRoles) {
-        this.stageRoles = stageRoles;
+    public void setCast(List<StageRole> cast) {
+        this.cast = cast;
         maskPagerAdapter.notifyDataSetChanged();
         updateTabLayout();
     }
@@ -85,7 +85,7 @@ public class MaskChooseTabLayout extends LinearLayout {
 
         @Override
         public int getCount() {
-            return stageRoles==null? 0 : stageRoles.size();
+            return cast ==null? 0 : cast.size();
         }
 
         @Override
@@ -100,7 +100,7 @@ public class MaskChooseTabLayout extends LinearLayout {
                 maskGridLayoutList.add(new MaskGridLayout(getContext(), maskGridLayoutCallBack));
             }
             MaskGridLayout maskGridLayout = maskGridLayoutList.get(position);
-            maskGridLayout.setStageRole(stageRoles.get(position));
+            maskGridLayout.setStageRole(cast.get(position));
             container.addView(maskGridLayout);
             return maskGridLayout;
         }

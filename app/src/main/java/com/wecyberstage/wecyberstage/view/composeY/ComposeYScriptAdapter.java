@@ -6,8 +6,6 @@ import android.util.Log;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.StageLineHandle;
-import com.wecyberstage.wecyberstage.model.StageSceneHandle;
-import com.wecyberstage.wecyberstage.view.helper.PlayControlSub2Interface;
 import com.wecyberstage.wecyberstage.view.helper.SaveStatesInterface;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
@@ -19,8 +17,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class ComposeYScriptAdapter extends ListDelegationAdapter
-        implements ItemTouchHelperAdapter, SaveStatesInterface,
-        PlayControlSub2Interface, StageLineHandle, StageSceneHandle {
+        implements ItemTouchHelperAdapter, SaveStatesInterface {
 
     private final String TAG = "ComposeYScriptAdapter";
 
@@ -128,81 +125,4 @@ public class ComposeYScriptAdapter extends ListDelegationAdapter
         }
     }
 
-    // region implementation of PlayControlSub2Interface
-    @Override
-    public void pre() {
-        Log.d(TAG,"pre()");
-    }
-
-    @Override
-    public void next() {
-        Log.d(TAG,"next()");
-    }
-
-    @Override
-    public void volume(boolean open) {
-        Log.d(TAG,"volume()");
-    }
-    // endregion
-
-    // region implementation of StageLineHandle, StageSceneHandle
-    @Override
-    public void addStageLine(StageLine stageLine) {
-        boolean isNeedNotifyDataSetChanged = false;
-        int position = stageScene.stageLines.indexOf(stageLine);
-        if( !stageScene.stageLines.contains( stageLine ) ) {
-            handleStageLine(stageLine);
-            isNeedNotifyDataSetChanged = true;
-        } else {
-            if ( listStart.contains( stageLine.getRoleName() ) ) {
-                if ( ((ComposeYItemDto) dataSet.get(position)).getViewType() != ComposeYCardViewType.START ) {
-                    ((ComposeYItemDto) dataSet.get(position)).setViewType(ComposeYCardViewType.START);
-                    isNeedNotifyDataSetChanged = true;
-                }
-            } else {
-                if ( ((ComposeYItemDto) dataSet.get(position)).getViewType() != ComposeYCardViewType.END ) {
-                    ((ComposeYItemDto) dataSet.get(position)).setViewType(ComposeYCardViewType.END);
-                    isNeedNotifyDataSetChanged = true;
-                }
-            }
-        }
-        if(isNeedNotifyDataSetChanged) {
-            notifyDataSetChanged();
-        } else {
-            notifyItemChanged(position);
-        }
-    }
-
-    @Override
-    public void updateStageLine(StageLine stageLine) {
-
-    }
-
-    @Override
-    public void deleteStageLine(StageLine stageLine) {
-
-    }
-
-    @Override
-    public void swapStageLines(int position1, int position2) {
-
-    }
-
-    @Override
-    public void deleteStageSceneContent() {
-        dataSet = new ArrayList<>();
-        stageScene.stageLines = new ArrayList<>();
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void deleteStageScene() {
-
-    }
-
-    @Override
-    public void addStageScene() {
-
-    }
-    // endregion
 }

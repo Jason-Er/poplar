@@ -128,25 +128,4 @@ public class ComposeY extends PlayerView
         viewModel.swapStageLines(position1, position2);
     }
 
-    /*
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseFooterEditMainEvent(FooterEditBarEvent event) {
-        Log.d(TAG,"receive footerEditMain");
-        switch (event.getMessage()){
-            case "addStageLine":
-                adapter.addStageLine((StageLine) event.getData());
-                break;
-            case "deleteStageSceneContent":
-                adapter.deleteStageSceneContent();
-                break;
-            case "deleteStageScene":
-                adapter.deleteStageScene();
-                break;
-            case "addStageScene":
-                adapter.addStageScene();
-                break;
-        }
-    }
-    */
-
 }
