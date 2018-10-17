@@ -232,6 +232,9 @@ public class StagePlayViewModel extends ViewModel
         return keyFrame;
     }
 
+    public void refreshStageScene() {
+        stageSceneOrdinal.setValue(stageSceneOrdinal.getValue());
+    }
     // region implement of PlayControlInterface
     @Override
     public void play() {

@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +31,8 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StagePlay;
+import com.wecyberstage.wecyberstage.model.StageRole;
+import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
@@ -76,14 +79,22 @@ import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
 import com.wecyberstage.wecyberstage.view.message.StagePlayPosterEvent;
 import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
+import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -150,8 +161,12 @@ public class MainActivity extends AppCompatActivity
     UserProfile userProfile;
     List<BaseView> baseViewList;
     List<RegisterBusEventInterface> lifeCycleComponents;
-
     // endregion
+
+    // current stage components
+    private StagePlay stagePlay;
+    private StageScene stageScene;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,8 +196,15 @@ public class MainActivity extends AppCompatActivity
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(StagePlayViewModel.class);
         viewModel.stagePlay.observe(this, new Observer<StagePlay>() {
             @Override
-            public void onChanged(@Nullable StagePlay stagePlay) {
+            public void onChanged(@Nullable StagePlay input) {
                 Log.d(TAG, "current stagePlay");
+                stagePlay = input;
+            }
+        });
+        viewModel.stageScene.observe(this, new Observer<StageScene>() {
+            @Override
+            public void onChanged(@Nullable StageScene input) {
+                stageScene = input;
             }
         });
         viewModel.setStagePlayCursor(stagePlayCursor);
@@ -563,6 +585,54 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    // for apache poi read and replace
+    String parenthesesREGEX = "([（\\(][^\\)）]+[）\\)])|([\\[【][^\\]】]+[\\]】])";
+    String splitREGEX = "(：|:)";
+    Pattern pattern = Pattern.compile(parenthesesREGEX);
+
+    private StageRole getStageRoleById(Long id) {
+        StageRole stageRole = null;
+        if(stagePlay != null) {
+            if(stagePlay.cast != null) {
+                for(StageRole role:stagePlay.cast) {
+                    if(role.id == id) {
+                        stageRole = role;
+                        break;
+                    }
+                }
+            }
+        }
+        return stageRole;
+    }
+
+    private long getStageRoleIdByName(String name) {
+        long id = 0;
+        if(isNameInCast(name)) {
+            for(StageRole stageRole:stagePlay.cast) {
+                if(stageRole.name.equals(name)) {
+                    id = stageRole.id;
+                    break;
+                }
+            }
+        }
+        return id;
+    }
+
+    private boolean isNameInCast(String name) {
+        boolean status = false;
+        if(stagePlay != null) {
+            if(stagePlay.cast != null) {
+                for(StageRole stageRole:stagePlay.cast) {
+                    if(stageRole.name.equals(name)) {
+                        status = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return status;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ( resultCode != Activity.RESULT_OK ) {
@@ -571,10 +641,69 @@ public class MainActivity extends AppCompatActivity
             return;
         }
         if ( requestCode == 0 ) {
-            Uri uri = data.getData();
-            MainActivityEvent.FileEvent fileEvent = new MainActivityEvent.FileEvent(uri, getContentResolver(), mainHideHandler);
-            MainActivityEvent event = new MainActivityEvent(fileEvent, "File Selected");
-            EventBus.getDefault().postSticky(event);
+            final Uri uri = data.getData();
+            new Thread() {
+                @Override
+                public void run() {
+                    InputStream inputStream = null;
+                    try {
+                        inputStream = getContentResolver().openInputStream(uri);
+                        Log.d("ComposeYScriptAdapter","Available bytes of file: " + inputStream.available());
+                        XWPFDocument doc = new XWPFDocument(inputStream);
+                        XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+                        String text = extractor.getText();
+                        Matcher matcher = pattern.matcher(text);
+                        String tmp = matcher.replaceAll("");
+                        String[] lines = tmp.split("\n");
+                        for(String line: lines) {
+                            String[] strArr = line.split(splitREGEX);
+                            if (strArr.length > 1) {
+                                strArr[0] = strArr[0].trim();
+                                strArr[1] = strArr[1].trim();
+                                long roleId = getStageRoleIdByName(strArr[0]);
+                                if( roleId == 0 ) {
+                                    // add new stageRole
+                                    StageRole stageRole = new StageRole(0, strArr[0], null);
+                                    stagePlay.cast.add(stageRole);
+                                    StageLine stageLine = new StageLine();
+                                    stageLine.setStageRole(stageRole);
+                                    stageLine.dialogue = strArr[1];
+                                    stageScene.stageLines.add(stageLine);
+                                } else {
+                                    // the stageRole is already exists
+                                    StageRole stageRole = getStageRoleById(roleId);
+                                    StageLine stageLine = new StageLine();
+                                    stageLine.setStageRole(stageRole);
+                                    stageLine.dialogue = strArr[1];
+                                    stageScene.stageLines.add(stageLine);
+                                }
+                            }
+                        }
+                        extractor.close();
+                        doc.close();
+
+                    } catch (OfficeXmlFileException e) {
+                        e.printStackTrace();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Message msg = Message.obtain(mainHideHandler, new Runnable() {
+                        @Override
+                        public void run() {
+                            viewModel.refreshStageScene();
+                        }
+                    });
+                    msg.sendToTarget();
+                }
+            }.start();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

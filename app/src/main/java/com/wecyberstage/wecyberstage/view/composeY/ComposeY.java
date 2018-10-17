@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -23,27 +22,17 @@ import com.wecyberstage.wecyberstage.model.StageLineHandle;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayerView;
-import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
-import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
-import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ComposeY extends PlayerView
         implements OnStartDragListener, SlideInterface,
-        StageLineHandle, RegisterBusEventInterface, ClickActionInterface {
+        StageLineHandle, ClickActionInterface {
 
     private final String TAG = "ComposeY";
 
@@ -130,23 +119,7 @@ public class ComposeY extends PlayerView
     public void swapStageLines(int position1, int position2) {
         viewModel.swapStageLines(position1, position2);
     }
-    // region implement of RegisterBusEventInterface
-    @Override
-    public void register(Activity activity) {
-        if( isVisible() ) {
-            adapter.register(activity);
-            // EventBus.getDefault().register(this);
-        }
-    }
 
-    @Override
-    public void unRegister(Activity activity) {
-        if( isVisible() ) {
-            adapter.unRegister(activity);
-            // EventBus.getDefault().unregister(this);
-        }
-    }
-    // endregion
     /*
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseFooterEditMainEvent(FooterEditBarEvent event) {
