@@ -439,19 +439,15 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG,"receive footerEditMain");
         switch (event.getMessage()) {
             case "addStageLine":
-                // adapter.addStageLine((StageLine) event.getData());
                 viewModel.addStageLine((StageLine) event.getData());
                 break;
             case "deleteStageSceneContent":
-                // adapter.deleteStageSceneContent();
-                viewModel.deleteStageLine((StageLine) event.getData());
+                viewModel.deleteStageSceneContent();
                 break;
             case "deleteStageScene":
-                // adapter.deleteStageScene();
                 viewModel.deleteStageScene();
                 break;
             case "addStageScene":
-                // adapter.addStageScene();
                 viewModel.addStageScene();
                 break;
         }
@@ -464,7 +460,8 @@ public class MainActivity extends AppCompatActivity
                 Log.d("MainActivity",event.getMessage());
                 if(event.getData() != null) {
                     fab.hide();
-                    playerControlBar.setVisibility(View.VISIBLE);
+                    footerEditBar.showLine();
+                    playerControlBar.setVisibility(View.GONE);
                 }
                 break;
             case "onSingleTapUp":

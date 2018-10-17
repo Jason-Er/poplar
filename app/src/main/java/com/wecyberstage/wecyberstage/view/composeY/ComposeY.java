@@ -83,6 +83,13 @@ public class ComposeY extends PlayerView
                 activity.getSupportActionBar().setTitle(stageScene.name);
             }
         });
+        viewModel.stageLine.observe(activity, new Observer<StageLine>() {
+            @Override
+            public void onChanged(@Nullable StageLine stageLine) {
+                int position  = viewModel.stageScene.getValue().stageLines.indexOf(stageLine);
+                adapter.notifyItemChanged(position);
+            }
+        });
     }
 
     @Override

@@ -105,7 +105,13 @@ public class StagePlayViewModel extends ViewModel
 
     @Override
     public void addStageLine(StageLine stageLine) {
-
+        if( stageScene.getValue().stageLines.contains(stageLine) ) {
+            stageLineOrdinal.setValue(stageScene.getValue().stageLines.indexOf(stageLine));
+        } else {
+            stageScene.getValue().stageLines.add(stageLineOrdinal.getValue()+1, stageLine);
+            stageLineOrdinal.setValue(stageLineOrdinal.getValue()+1);
+            refreshStageScene();
+        }
     }
 
     @Override
@@ -120,7 +126,8 @@ public class StagePlayViewModel extends ViewModel
 
     @Override
     public void deleteStageSceneContent() {
-
+        stageScene.getValue().stageLines = new ArrayList<>();
+        refreshStageScene();
     }
 
     @Override
@@ -232,6 +239,10 @@ public class StagePlayViewModel extends ViewModel
         keyFrame.propInfoList.add(propInfo);
         keyFrame.stageInfo.settingURL = "http://pic28.photophoto.cn/20130727/0035035114302168_b.jpg";
         return keyFrame;
+    }
+
+    public void refreshStageLine() {
+        stageLineOrdinal.setValue(stageLineOrdinal.getValue());
     }
 
     public void refreshStageScene() {
