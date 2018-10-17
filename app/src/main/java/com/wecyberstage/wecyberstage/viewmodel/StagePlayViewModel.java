@@ -171,6 +171,7 @@ public class StagePlayViewModel extends ViewModel
         StagePlay stagePlay = new StagePlay();
         stagePlay.scenes = new ArrayList<>();
         StageScene stageScene = new StageScene();
+        stageScene.name = "Scene One";
         stageScene.ordinal = 1;
         stageScene.actionScriptId = 1;
         String[] arrIcon = {"http://demo.sc.chinaz.com/Files/pic/icons/6124/10dvs.png",
@@ -194,6 +195,7 @@ public class StagePlayViewModel extends ViewModel
         stagePlay.cast = stageScene.stageRoles;
         // add another scene
         stageScene = new StageScene();
+        stageScene.name = "Scene Two";
         for(int i = 0; i< 12; i++) {
             StageLine line = new StageLine(stagePlay.cast.get((i+1)%3), "Hi " + i, 3 * i * 1000, 1000, i%3);
             line.ordinal = i + 1;

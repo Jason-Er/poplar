@@ -48,7 +48,7 @@ public class ComposeY extends PlayerView
     }
 
     @Override
-    public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
+    public void onCreate(final AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_composey, container,false);
         // ButterKnife.bind(this, activity);
@@ -80,6 +80,7 @@ public class ComposeY extends PlayerView
             @Override
             public void onChanged(@Nullable StageScene stageScene) {
                 adapter.setStageScene(stageScene);
+                activity.getSupportActionBar().setTitle(stageScene.name);
             }
         });
     }
