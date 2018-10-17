@@ -16,7 +16,7 @@ public class ViewTypeHelper {
     };
     final static Set<ViewType> levelBrowse = new HashSet<ViewType>() {
         {
-            add(ViewType.BROWSE);
+            add(ViewType.BROWSE_PRIVATE);
         }
     };
     final static Set<ViewType> levelCompose = new HashSet<ViewType>() {

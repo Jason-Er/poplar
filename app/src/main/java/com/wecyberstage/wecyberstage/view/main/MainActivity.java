@@ -33,10 +33,11 @@ import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
+import com.wecyberstage.wecyberstage.view.browse.BrowsePublic;
 import com.wecyberstage.wecyberstage.view.helper.BaseView;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseBrowsePublic;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
-import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
 import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
@@ -56,7 +57,7 @@ import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.FlingViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
-import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseBrowse;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseBrowsePrivate;
 import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeX;
 import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeY;
 import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeZ;
@@ -153,6 +154,7 @@ public class MainActivity extends AppCompatActivity
     private SparseArray flingResponseArray;
     private StagePlayCursor stagePlayCursor; // for tracing stage play
     BrowsePrivate browsePrivate;
+    BrowsePublic browsePublic;
     ComposeX composeX;
     ComposeY composeY;
     ComposeZ composeZ;
@@ -216,7 +218,8 @@ public class MainActivity extends AppCompatActivity
         lifeCycleComponents = new ArrayList<>();
 
         ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
-        browsePrivate = new BrowsePrivate(this, appMain, ViewType.BROWSE, delegate);
+        browsePrivate = new BrowsePrivate(this, appMain, ViewType.BROWSE_PRIVATE, delegate);
+        browsePublic = new BrowsePublic(this, appMain, ViewType.BROWSE_PUBLIC, delegate);
         delegate = new ComposeXToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
         delegate = new ComposeYToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
@@ -230,7 +233,8 @@ public class MainActivity extends AppCompatActivity
         delegate = new UserProfileToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
-        addCustomView(browsePrivate, new BehaviorResponseBrowse(this), appMain, viewArray, flingResponseArray);
+        addCustomView(browsePrivate, new BehaviorResponseBrowsePrivate(this), appMain, viewArray, flingResponseArray);
+        addCustomView(browsePublic, new BehaviorResponseBrowsePublic(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeX, new BehaviorResponseComposeX(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeY, new BehaviorResponseComposeY(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeZ, new BehaviorResponseComposeZ(this), appMain, viewArray, flingResponseArray);
@@ -259,7 +263,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         if (savedInstanceState == null) {
-            restoreToView(ViewType.BROWSE);
+            restoreToView(ViewType.BROWSE_PRIVATE);
         } else {
             String navigationState = savedInstanceState.getString(NAVIGATION_INFO_KEY);
             List<String> stringList = Arrays.asList(navigationState.split(NAVIGATION_SEMICOLON));

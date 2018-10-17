@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageLineHandle;
-import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.TimeLine;
@@ -34,7 +33,6 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Stag
         delegatesManager
                 .addDelegate(new StageLineAdapterDelegate(ComposeXCardViewType.STAGE_LINE.ordinal(), this, startDragListener))
                 .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
-                //.addDelegate(new RoleAdapterDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
         this.stageLineHandle = stageLineHandle;
 
     }
