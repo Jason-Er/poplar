@@ -6,14 +6,12 @@ import android.support.annotation.NonNull;
 import com.wecyberstage.wecyberstage.model.Mask;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageLineHandle;
-import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.model.TimeLine;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.ComposeScriptHelper;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
 import com.wecyberstage.wecyberstage.view.recycler.ListDelegationAdapter;
 
@@ -26,7 +24,6 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Stag
 
     final private StageLineHandle stageLineHandle;
     private List<StageRole> stageRoleList;
-    StagePlay stagePlay;
 
     @Inject
     public ComposeXScriptAdapter(AdapterDelegatesManager<Object> delegates,
@@ -35,15 +32,12 @@ public class ComposeXScriptAdapter extends ListDelegationAdapter implements Stag
         super(delegates);
         delegatesManager
                 .addDelegate(new StageLineAdapterDelegate(ComposeXCardViewType.STAGE_LINE.ordinal(), this, startDragListener))
-                .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()))
-                .addDelegate(new RoleAdapterDelegate(ComposeXCardViewType.ROLE_MASK.ordinal()));
+                .addDelegate(new TimeLineAdapterDelegate(ComposeXCardViewType.TIME_LINE.ordinal()));
         this.stageLineHandle = stageLineHandle;
 
     }
 
-    public void setStagePlay(@NonNull StagePlay stagePlay, StagePlayCursor stagePlayCursor) {
-        this.stagePlay = stagePlay;
-        StageScene stageScene = stagePlay.scenes.get(stagePlayCursor.getOrdinal());
+    public void setStageScene(@NonNull StageScene stageScene) {
         // for recyclerView show
         dataSet = new ArrayList<>();
         dataSet.add(new TimeLine());

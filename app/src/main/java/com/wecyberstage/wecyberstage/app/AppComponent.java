@@ -5,9 +5,10 @@ import android.app.Application;
 import com.wecyberstage.wecyberstage.view.account.UserProfile;
 import com.wecyberstage.wecyberstage.view.account.SignIn;
 import com.wecyberstage.wecyberstage.view.account.SignUp;
-import com.wecyberstage.wecyberstage.view.browse.Browse;
+import com.wecyberstage.wecyberstage.view.browse.BrowsePrivate;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeY.ComposeY;
+import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
 import com.wecyberstage.wecyberstage.view.main.MainActivityModule;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 
@@ -39,9 +40,10 @@ public interface AppComponent {
     void inject(SignIn signIn);
     void inject(SignUp signUp);
     void inject(UserProfile profile);
-    void inject(Browse browse);
+    void inject(BrowsePrivate browsePrivate);
     void inject(ComposeX composeX);
     void inject(ComposeY composeY);
     void inject(ComposeZ composeZ);
+    void inject(FooterEditBar footerEditBar);
 
 }

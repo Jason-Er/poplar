@@ -2,6 +2,7 @@ package com.wecyberstage.wecyberstage.data.file;
 
 import android.content.SharedPreferences;
 
+import com.wecyberstage.wecyberstage.util.helper.SerializeUtils;
 import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 
 import javax.inject.Inject;
@@ -13,6 +14,7 @@ public class LocalSettings {
     private final String TOKEN_NAME = "token";
     private final String USER_NAME = "username";
     private final String SOFTKEYBOARD_HEIGHT = "softkeyboardheight";
+    private final String STAGEPLAY_CURSOR = "stageplay_cursor";
 
     @Inject
     public LocalSettings(SharedPreferences sharedPreferences) {
@@ -50,10 +52,15 @@ public class LocalSettings {
     }
 
     public StagePlayCursor getStagePlayCursor(long userId) {
-        return new StagePlayCursor(0,0,0);
+        String str = sharedPreferences.getString(STAGEPLAY_CURSOR,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+        StagePlayCursor playCursor = SerializeUtils.unmarshall(str, StagePlayCursor.CREATOR);
+        return playCursor;
     }
 
     public void saveStagePlayCursor(long userId, StagePlayCursor stagePlayCursor) {
-
+        String str = SerializeUtils.parcelObject2String(stagePlayCursor);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(STAGEPLAY_CURSOR, str);
+        editor.commit();
     }
 }

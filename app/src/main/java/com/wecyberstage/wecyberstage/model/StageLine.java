@@ -9,7 +9,11 @@ import com.wecyberstage.wecyberstage.data.cache.StageLineEntity;
 public class StageLine extends StageLineEntity implements Cloneable {
     public Voice voice;
     public StageRole stageRole;
-    public StageLine() {}
+    public StageLine() {
+        // TODO: 10/17/2018 need refactoring further
+        voice = new Voice();
+        this.voice.duration = 3;
+    }
     // TODO: 7/23/2018 below constructor used for test temporarily
     public StageLine(StageRole stageRole, String dialogue, long beginTime, long duration, int maskOrdinal) {
         this.stageRole = stageRole;

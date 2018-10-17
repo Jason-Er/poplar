@@ -3,7 +3,7 @@ package com.wecyberstage.wecyberstage.util.helper;
 import android.arch.lifecycle.LiveData;
 
 import com.wecyberstage.wecyberstage.data.dto.PageRequest;
-import com.wecyberstage.wecyberstage.data.repository.PlayRepository;
+import com.wecyberstage.wecyberstage.data.repository.StagePlayRepository;
 import com.wecyberstage.wecyberstage.model.StagePlayInfo;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import javax.inject.Singleton;
 public class PlayInfoLiveData extends LiveData<Resource<List<StagePlayInfo>>> {
 
     @Inject
-    public PlayInfoLiveData(PlayRepository repository) {
+    public PlayInfoLiveData(StagePlayRepository repository) {
 
     }
 

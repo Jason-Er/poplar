@@ -1,13 +1,16 @@
 package com.wecyberstage.wecyberstage.view.main;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
+import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -26,9 +29,15 @@ import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.data.file.LocalSettings;
+import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StagePlay;
+import com.wecyberstage.wecyberstage.model.StageRole;
+import com.wecyberstage.wecyberstage.model.StageScene;
+import com.wecyberstage.wecyberstage.view.browse.BrowsePublic;
 import com.wecyberstage.wecyberstage.view.helper.BaseView;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseBrowsePublic;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
-import com.wecyberstage.wecyberstage.view.message.MainActivityEvent;
+import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
 import com.wecyberstage.wecyberstage.view.message.PlayerControlEvent;
 import com.wecyberstage.wecyberstage.util.character.CharacterFactory;
 import com.wecyberstage.wecyberstage.util.character.Character4Play;
@@ -38,7 +47,7 @@ import com.wecyberstage.wecyberstage.view.account.SignUp;
 import com.wecyberstage.wecyberstage.view.account.SignUpToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.account.UserProfile;
 import com.wecyberstage.wecyberstage.view.account.UserProfileToolViewsDelegate;
-import com.wecyberstage.wecyberstage.view.browse.Browse;
+import com.wecyberstage.wecyberstage.view.browse.BrowsePrivate;
 import com.wecyberstage.wecyberstage.view.browse.BrowseToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeX;
 import com.wecyberstage.wecyberstage.view.composeX.ComposeXToolViewsDelegate;
@@ -48,7 +57,7 @@ import com.wecyberstage.wecyberstage.view.composeZ.ComposeZ;
 import com.wecyberstage.wecyberstage.view.composeZ.ComposeZToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.FlingViewSlideHelper;
 import com.wecyberstage.wecyberstage.view.helper.Direction;
-import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseBrowse;
+import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseBrowsePrivate;
 import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeX;
 import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeY;
 import com.wecyberstage.wecyberstage.view.helper.BehaviorResponseComposeZ;
@@ -68,15 +77,25 @@ import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.helper.ViewTypeHelper;
 import com.wecyberstage.wecyberstage.view.message.StageLineContainerViewEvent;
 import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
+import com.wecyberstage.wecyberstage.view.message.StagePlayPosterEvent;
+import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
+import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -88,8 +107,7 @@ import dagger.android.support.HasSupportFragmentInjector;
 public class MainActivity extends AppCompatActivity
         implements HasSupportFragmentInjector,
         NavigationView.OnNavigationItemSelectedListener,
-        CustomViewSlideInterface, KeyboardHeightObserver,
-        StagePlayCursorHandle {
+        CustomViewSlideInterface, KeyboardHeightObserver {
 
     private final String TAG = "MainActivity";
     private final String NAVIGATION_SEMICOLON = ";";
@@ -124,6 +142,7 @@ public class MainActivity extends AppCompatActivity
     ViewModelProvider.Factory viewModelFactory;
     @Inject
     LocalSettings localSettings;
+    private StagePlayViewModel viewModel;
 
     // region navigation
     private Stack<String> navigationStack;
@@ -134,7 +153,8 @@ public class MainActivity extends AppCompatActivity
     private SparseArray viewArray;
     private SparseArray flingResponseArray;
     private StagePlayCursor stagePlayCursor; // for tracing stage play
-    Browse browse;
+    BrowsePrivate browsePrivate;
+    BrowsePublic browsePublic;
     ComposeX composeX;
     ComposeY composeY;
     ComposeZ composeZ;
@@ -143,8 +163,12 @@ public class MainActivity extends AppCompatActivity
     UserProfile userProfile;
     List<BaseView> baseViewList;
     List<RegisterBusEventInterface> lifeCycleComponents;
-
     // endregion
+
+    // current stage components
+    private StagePlay stagePlay;
+    private StageScene stageScene;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +195,21 @@ public class MainActivity extends AppCompatActivity
         if( stagePlayCursor == null ) {
             stagePlayCursor = localSettings.getStagePlayCursor(character.getId());
         }
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(StagePlayViewModel.class);
+        viewModel.stagePlay.observe(this, new Observer<StagePlay>() {
+            @Override
+            public void onChanged(@Nullable StagePlay input) {
+                Log.d(TAG, "current stagePlay");
+                stagePlay = input;
+            }
+        });
+        viewModel.stageScene.observe(this, new Observer<StageScene>() {
+            @Override
+            public void onChanged(@Nullable StageScene input) {
+                stageScene = input;
+            }
+        });
+        viewModel.setStagePlayCursor(stagePlayCursor);
 
         // region all views
         viewArray = new SparseArray();
@@ -179,7 +218,8 @@ public class MainActivity extends AppCompatActivity
         lifeCycleComponents = new ArrayList<>();
 
         ToolViewsDelegate delegate = new BrowseToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
-        browse = new Browse(this, appMain, ViewType.BROWSE, delegate);
+        browsePrivate = new BrowsePrivate(this, appMain, ViewType.BROWSE_PRIVATE, delegate);
+        browsePublic = new BrowsePublic(this, appMain, ViewType.BROWSE_PUBLIC, delegate);
         delegate = new ComposeXToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         composeX = new ComposeX(this, appMain, ViewType.COMPOSE_X, delegate);
         delegate = new ComposeYToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
@@ -193,7 +233,8 @@ public class MainActivity extends AppCompatActivity
         delegate = new UserProfileToolViewsDelegate(this, appBarLayout, playerControlBar, footerEditBar, drawerLayout, fab);
         userProfile = new UserProfile(this, appMain, ViewType.USER_PROFILE, delegate);
 
-        addCustomView(browse, new BehaviorResponseBrowse(this), appMain, viewArray, flingResponseArray);
+        addCustomView(browsePrivate, new BehaviorResponseBrowsePrivate(this), appMain, viewArray, flingResponseArray);
+        addCustomView(browsePublic, new BehaviorResponseBrowsePublic(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeX, new BehaviorResponseComposeX(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeY, new BehaviorResponseComposeY(this), appMain, viewArray, flingResponseArray);
         addCustomView(composeZ, new BehaviorResponseComposeZ(this), appMain, viewArray, flingResponseArray);
@@ -222,7 +263,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         if (savedInstanceState == null) {
-            restoreToView(ViewType.BROWSE);
+            restoreToView(ViewType.BROWSE_PRIVATE);
         } else {
             String navigationState = savedInstanceState.getString(NAVIGATION_INFO_KEY);
             List<String> stringList = Arrays.asList(navigationState.split(NAVIGATION_SEMICOLON));
@@ -398,13 +439,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(FooterEditBarEvent event) {
+        Log.d(TAG,"receive footerEditMain");
+        switch (event.getMessage()) {
+            case "addStageLine":
+                viewModel.addStageLine((StageLine) event.getData());
+                break;
+            case "deleteStageSceneContent":
+                viewModel.deleteStageSceneContent();
+                break;
+            case "deleteStageScene":
+                viewModel.deleteStageScene();
+                break;
+            case "addStageScene":
+                viewModel.addStageScene();
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResponseMessageEvent(StageLineViewEvent event) {
         switch ( event.getMessage() ) {
             case "onLongPress":
                 Log.d("MainActivity",event.getMessage());
                 if(event.getData() != null) {
                     fab.hide();
-                    playerControlBar.setVisibility(View.VISIBLE);
+                    footerEditBar.showLine();
+                    playerControlBar.setVisibility(View.GONE);
                 }
                 break;
             case "onSingleTapUp":
@@ -426,6 +487,15 @@ public class MainActivity extends AppCompatActivity
                 if( currentView instanceof ClickActionInterface ) {
                     ((ClickActionInterface) currentView).containerClick();
                 }
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResponseMessageEvent(StagePlayPosterEvent event) {
+        switch (event.getMessage()) {
+            case "onClick":
+                slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
                 break;
         }
     }
@@ -458,6 +528,7 @@ public class MainActivity extends AppCompatActivity
         Log.i("Main", "onResponsePlayerControlEvent: " + event.getMessage());
         switch (event.getMessage()) {
             case "STOP":
+                viewModel.stop();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).stop();
@@ -465,6 +536,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "PLAY":
+                viewModel.play();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).play();
@@ -472,6 +544,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "PAUSE":
+                viewModel.pause();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).pause();
@@ -479,6 +552,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "SEEK":
+                viewModel.seek(event.getSeekProcess());
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).seek(event.getSeekProcess());
@@ -486,6 +560,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "PRE":
+                viewModel.pre();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).pre();
@@ -493,6 +568,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "NEXT":
+                viewModel.next();
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).next();
@@ -500,6 +576,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case "VOLUME":
+                viewModel.volume(true);
                 for(BaseView baseView : baseViewList) {
                     if(baseView instanceof PlayControlInterface) {
                         ((PlayControlInterface) baseView).volume(true);
@@ -507,6 +584,54 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
         }
+    }
+
+    // for apache poi read and replace
+    String parenthesesREGEX = "([（\\(][^\\)）]+[）\\)])|([\\[【][^\\]】]+[\\]】])";
+    String splitREGEX = "(：|:)";
+    Pattern pattern = Pattern.compile(parenthesesREGEX);
+
+    private StageRole getStageRoleById(Long id) {
+        StageRole stageRole = null;
+        if(stagePlay != null) {
+            if(stagePlay.cast != null) {
+                for(StageRole role:stagePlay.cast) {
+                    if(role.id == id) {
+                        stageRole = role;
+                        break;
+                    }
+                }
+            }
+        }
+        return stageRole;
+    }
+
+    private long getStageRoleIdByName(String name) {
+        long id = 0;
+        if(isNameInCast(name)) {
+            for(StageRole stageRole:stagePlay.cast) {
+                if(stageRole.name.equals(name)) {
+                    id = stageRole.id;
+                    break;
+                }
+            }
+        }
+        return id;
+    }
+
+    private boolean isNameInCast(String name) {
+        boolean status = false;
+        if(stagePlay != null) {
+            if(stagePlay.cast != null) {
+                for(StageRole stageRole:stagePlay.cast) {
+                    if(stageRole.name.equals(name)) {
+                        status = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return status;
     }
 
     @Override
@@ -517,10 +642,69 @@ public class MainActivity extends AppCompatActivity
             return;
         }
         if ( requestCode == 0 ) {
-            Uri uri = data.getData();
-            MainActivityEvent.FileEvent fileEvent = new MainActivityEvent.FileEvent(uri, getContentResolver(), mainHideHandler);
-            MainActivityEvent event = new MainActivityEvent(fileEvent, "File Selected");
-            EventBus.getDefault().postSticky(event);
+            final Uri uri = data.getData();
+            new Thread() {
+                @Override
+                public void run() {
+                    InputStream inputStream = null;
+                    try {
+                        inputStream = getContentResolver().openInputStream(uri);
+                        Log.d("ComposeYScriptAdapter","Available bytes of file: " + inputStream.available());
+                        XWPFDocument doc = new XWPFDocument(inputStream);
+                        XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
+                        String text = extractor.getText();
+                        Matcher matcher = pattern.matcher(text);
+                        String tmp = matcher.replaceAll("");
+                        String[] lines = tmp.split("\n");
+                        for(String line: lines) {
+                            String[] strArr = line.split(splitREGEX);
+                            if (strArr.length > 1) {
+                                strArr[0] = strArr[0].trim();
+                                strArr[1] = strArr[1].trim();
+                                long roleId = getStageRoleIdByName(strArr[0]);
+                                if( roleId == 0 ) {
+                                    // add new stageRole
+                                    StageRole stageRole = new StageRole(0, strArr[0], null);
+                                    stagePlay.cast.add(stageRole);
+                                    StageLine stageLine = new StageLine();
+                                    stageLine.setStageRole(stageRole);
+                                    stageLine.dialogue = strArr[1];
+                                    stageScene.stageLines.add(stageLine);
+                                } else {
+                                    // the stageRole is already exists
+                                    StageRole stageRole = getStageRoleById(roleId);
+                                    StageLine stageLine = new StageLine();
+                                    stageLine.setStageRole(stageRole);
+                                    stageLine.dialogue = strArr[1];
+                                    stageScene.stageLines.add(stageLine);
+                                }
+                            }
+                        }
+                        extractor.close();
+                        doc.close();
+
+                    } catch (OfficeXmlFileException e) {
+                        e.printStackTrace();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Message msg = Message.obtain(mainHideHandler, new Runnable() {
+                        @Override
+                        public void run() {
+                            viewModel.refreshStageScene();
+                        }
+                    });
+                    msg.sendToTarget();
+                }
+            }.start();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -666,15 +850,4 @@ public class MainActivity extends AppCompatActivity
     }
     // endregion
 
-    // region implement of StagePlayCursorHandle
-    @Override
-    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
-        this.stagePlayCursor = stagePlayCursor;
-    }
-
-    @Override
-    public StagePlayCursor getStagePlayCursor() {
-        return stagePlayCursor;
-    }
-    // endregion
 }

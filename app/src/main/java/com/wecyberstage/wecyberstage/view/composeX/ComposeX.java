@@ -17,22 +17,20 @@ import android.view.ViewGroup;
 import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StageLineHandle;
-import com.wecyberstage.wecyberstage.model.StagePlay;
+import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
 import com.wecyberstage.wecyberstage.view.helper.PlayerView;
-import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.view.message.OutsideClickEvent;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.composeY.OnStartDragListener;
 import com.wecyberstage.wecyberstage.view.helper.CustomItemTouchHelper;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
-import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
+import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -46,11 +44,8 @@ public class ComposeX extends PlayerView
         implements SlideInterface, StageLineHandle, OnStartDragListener,
         RegisterBusEventInterface, ClickActionInterface {
 
-    private static final String COMPOSE_INFO_KEY = "compose_info";
-
     private final String TAG = "ComposeX";
-    private StagePlayCursor stagePlayCursor;
-    private ComposeViewModel viewModel;
+    private StagePlayViewModel viewModel;
     private ComposeXScriptLayoutManager layoutManager;
     private ComposeXScriptAdapter adapter;
     private CustomItemTouchHelper itemTouchHelper;
@@ -119,18 +114,14 @@ public class ComposeX extends PlayerView
         itemTouchHelper = new CustomItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(((RecyclerView)view));
 
-        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
-        stagePlayCursor = ((MainActivity) activity).getStagePlayCursor();
-        viewModel.getStagePlay(stagePlayCursor.getPlayId());
-
-        viewModel.stagePlayLiveData.observe(activity, new Observer<StagePlay>() {
+        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(StagePlayViewModel.class);
+        viewModel.stageScene.observe(activity, new Observer<StageScene>() {
             @Override
-            public void onChanged(@Nullable StagePlay stagePlay) {
-                if(stagePlay != null) {
-                    adapter.setStagePlay(stagePlay, stagePlayCursor);
-                }
+            public void onChanged(@Nullable StageScene stageScene) {
+                adapter.setStageScene(stageScene);
             }
         });
+
     }
 
     @Override

@@ -23,12 +23,12 @@ public class ComposeYView extends RecyclerView implements PlayControlSub1Interfa
     final GestureDetector.SimpleOnGestureListener gestureDetector = new GestureDetector.SimpleOnGestureListener(){
         @Override
         public void onLongPress(MotionEvent e) {
-            Log.d("StageLineCardView","Long pressed");
+            Log.d(TAG,"Long pressed");
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            Log.d("StageLineCardView", "single click");
+            Log.d(TAG, "single click");
             StageLineContainerViewEvent event = new StageLineContainerViewEvent("onSingleTapUp");
             EventBus.getDefault().post(event);
             return true;
@@ -50,8 +50,10 @@ public class ComposeYView extends RecyclerView implements PlayControlSub1Interfa
         super(context, attrs, defStyle);
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        super.onTouchEvent(ev);
         if (detectorCompat.onTouchEvent(ev)) {
             return true;
         }

@@ -73,6 +73,7 @@ public abstract class ToolViewsDelegate implements SlideInterface {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 playerControlBar.setVisibility(View.INVISIBLE);
+                fab.show();
                 // queueLock.unlock();
             }
         });

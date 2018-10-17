@@ -1,6 +1,5 @@
 package com.wecyberstage.wecyberstage.view.composeY;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -20,42 +19,26 @@ import com.wecyberstage.wecyberstage.R;
 import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.StageLine;
 import com.wecyberstage.wecyberstage.model.StageLineHandle;
-import com.wecyberstage.wecyberstage.model.StagePlay;
+import com.wecyberstage.wecyberstage.model.StageScene;
 import com.wecyberstage.wecyberstage.view.helper.ClickActionInterface;
-import com.wecyberstage.wecyberstage.view.main.MainActivity;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
 import com.wecyberstage.wecyberstage.view.helper.PlayerView;
-import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
-import com.wecyberstage.wecyberstage.view.main.FooterEditBar;
-import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
 import com.wecyberstage.wecyberstage.view.recycler.AdapterDelegatesManager;
-import com.wecyberstage.wecyberstage.viewmodel.ComposeViewModel;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class ComposeY extends PlayerView implements OnStartDragListener,
-        SlideInterface, StageLineHandle, RegisterBusEventInterface, ClickActionInterface {
+public class ComposeY extends PlayerView
+        implements OnStartDragListener, SlideInterface,
+        StageLineHandle, ClickActionInterface {
 
     private final String TAG = "ComposeY";
-    private static final String COMPOSE_INFO_KEY = "compose_info";
 
-    private StagePlayCursor stagePlayCursor;
-    private ComposeViewModel viewModel;
+    private StagePlayViewModel viewModel;
     private ComposeYScriptAdapter adapter;
     ItemTouchHelper itemTouchHelper;
-
-    @BindView(R.id.footer_edit_bar)
-    FooterEditBar footerEditBar;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -65,10 +48,10 @@ public class ComposeY extends PlayerView implements OnStartDragListener,
     }
 
     @Override
-    public void onCreate(AppCompatActivity activity, @Nullable ViewGroup container) {
+    public void onCreate(final AppCompatActivity activity, @Nullable ViewGroup container) {
         LayoutInflater inflater = activity.getLayoutInflater();
         view = inflater.inflate(R.layout.frag_composey, container,false);
-        ButterKnife.bind(this, activity);
+        // ButterKnife.bind(this, activity);
 
         ((WeCyberStageApp)activity.getApplication()).getAppComponent().inject(this);
 
@@ -92,17 +75,19 @@ public class ComposeY extends PlayerView implements OnStartDragListener,
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView( (RecyclerView) view);
 
-        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(ComposeViewModel.class);
-        stagePlayCursor = ((MainActivity) activity).getStagePlayCursor();
-        viewModel.getStagePlay(stagePlayCursor.getPlayId());
-
-        viewModel.stagePlayLiveData.observe(activity, new Observer<StagePlay>() {
+        viewModel = ViewModelProviders.of(activity, viewModelFactory).get(StagePlayViewModel.class);
+        viewModel.stageScene.observe(activity, new Observer<StageScene>() {
             @Override
-            public void onChanged(@Nullable StagePlay stagePlay) {
-                if(stagePlay != null) {
-                    adapter.setStagePlay(stagePlay, stagePlayCursor);
-                    footerEditBar.setStageRoles(stagePlay.cast);
-                }
+            public void onChanged(@Nullable StageScene stageScene) {
+                adapter.setStageScene(stageScene);
+                activity.getSupportActionBar().setTitle(stageScene.name);
+            }
+        });
+        viewModel.stageLine.observe(activity, new Observer<StageLine>() {
+            @Override
+            public void onChanged(@Nullable StageLine stageLine) {
+                int position  = viewModel.stageScene.getValue().stageLines.indexOf(stageLine);
+                adapter.notifyItemChanged(position);
             }
         });
     }
@@ -141,41 +126,6 @@ public class ComposeY extends PlayerView implements OnStartDragListener,
     @Override
     public void swapStageLines(int position1, int position2) {
         viewModel.swapStageLines(position1, position2);
-    }
-
-    @Override
-    public void register(Activity activity) {
-        if( isVisible() ) {
-            adapter.register(activity);
-            EventBus.getDefault().register(this);
-        }
-    }
-
-    @Override
-    public void unRegister(Activity activity) {
-        if( isVisible() ) {
-            adapter.unRegister(activity);
-            EventBus.getDefault().unregister(this);
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResponseFooterEditMainEvent(FooterEditBarEvent event) {
-        Log.d(TAG,"receive footerEditMain");
-        switch (event.getMessage()){
-            case "addStageLine":
-                adapter.addStageLine((StageLine) event.getData());
-                break;
-            case "deleteStageSceneContent":
-                adapter.deleteStageSceneContent();
-                break;
-            case "deleteStageScene":
-                adapter.deleteStageScene();
-                break;
-            case "addStageScene":
-                adapter.addStageScene();
-                break;
-        }
     }
 
 }

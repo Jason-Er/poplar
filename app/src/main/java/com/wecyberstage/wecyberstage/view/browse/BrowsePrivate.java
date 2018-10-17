@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.wecyberstage.wecyberstage.R;
@@ -21,13 +20,9 @@ import com.wecyberstage.wecyberstage.data.dto.PageRequest;
 import com.wecyberstage.wecyberstage.util.helper.Resource;
 import com.wecyberstage.wecyberstage.view.helper.BaseView;
 import com.wecyberstage.wecyberstage.view.helper.CustomViewBehavior;
-import com.wecyberstage.wecyberstage.view.helper.Direction;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursor;
-import com.wecyberstage.wecyberstage.view.main.StagePlayCursorHandle;
 import com.wecyberstage.wecyberstage.view.helper.SlideInterface;
 import com.wecyberstage.wecyberstage.view.helper.ToolViewsDelegate;
 import com.wecyberstage.wecyberstage.view.helper.ViewType;
-import com.wecyberstage.wecyberstage.view.main.MainActivity;
 import com.wecyberstage.wecyberstage.viewmodel.BrowseViewModel;
 
 import java.util.List;
@@ -38,16 +33,16 @@ import javax.inject.Inject;
  * Created by mike on 2018/3/5.
  */
 
-public class Browse extends BaseView implements StagePlayCursorHandle, SlideInterface {
+public class BrowsePrivate extends BaseView
+        implements SlideInterface {
 
     private BrowseViewModel viewModel;
     private RecyclerView.Adapter adapter;
-    private StagePlayCursor stagePlayCursor; // which contains the play is clicked
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    public Browse(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
+    public BrowsePrivate(AppCompatActivity activity, @Nullable ViewGroup container, ViewType viewType, ToolViewsDelegate toolViewsDelegate) {
         super(activity, container, viewType, toolViewsDelegate);
     }
 
@@ -65,15 +60,8 @@ public class Browse extends BaseView implements StagePlayCursorHandle, SlideInte
         int spanCount = 2;
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
         ((RecyclerView)view).setLayoutManager(layoutManager);
-        adapter = new PlayProfileAdapter();
+        adapter = new BrowseAdapter();
         ((RecyclerView)view).setAdapter(adapter);
-
-        ((PlayProfileAdapter) adapter).onItemClickCallBack = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)activity).slideTo(ViewType.COMPOSE_Z, Direction.TO_UP);
-            }
-        };
 
         viewModel = ViewModelProviders.of(activity, viewModelFactory).get(BrowseViewModel.class);
         viewModel.setRequestPage(new PageRequest(0,15,""));
@@ -82,7 +70,7 @@ public class Browse extends BaseView implements StagePlayCursorHandle, SlideInte
             public void onChanged(@Nullable Resource<List<StagePlayInfo>> resource) {
                 switch (resource.status) {
                     case SUCCESS:
-                        ((PlayProfileAdapter)adapter).setDataset(resource.data);
+                        ((BrowseAdapter)adapter).setStagePlayInfo(resource.data);
                         break;
                     case ERROR:
 
@@ -99,16 +87,6 @@ public class Browse extends BaseView implements StagePlayCursorHandle, SlideInte
     @Override
     public void onStop(AppCompatActivity activity, @Nullable ViewGroup container) {
 
-    }
-
-    @Override
-    public void setStagePlayCursor(StagePlayCursor stagePlayCursor) {
-        this.stagePlayCursor = stagePlayCursor;
-    }
-
-    @Override
-    public StagePlayCursor getStagePlayCursor() {
-        return stagePlayCursor;
     }
 
     @Override

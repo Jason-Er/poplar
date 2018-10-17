@@ -3,20 +3,25 @@ package com.wecyberstage.wecyberstage.view.main;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 public class StagePlayCursor implements Parcelable {
     private long playId;
-    private int ordinal; // scene ordinal
+    private int sceneOrdinal; // scene ordinal
+    private int lineOrdinal; // start position of stageLine
     private long startTime; // Millisecond
 
-    public StagePlayCursor(long playId, int ordinal, long startTime) {
+    public StagePlayCursor(long playId, int sceneOrdinal, int lineOrdinal, long startTime) {
         this.playId = playId;
-        this.ordinal = ordinal;
+        this.sceneOrdinal = sceneOrdinal;
+        this.lineOrdinal = lineOrdinal;
         this.startTime = startTime;
     }
 
     protected StagePlayCursor(Parcel in) {
         playId = in.readLong();
-        ordinal = in.readInt();
+        sceneOrdinal = in.readInt();
+        lineOrdinal = in.readInt();
         startTime = in.readLong();
     }
 
@@ -40,7 +45,8 @@ public class StagePlayCursor implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(playId);
-        dest.writeInt(ordinal);
+        dest.writeInt(sceneOrdinal);
+        dest.writeInt(lineOrdinal);
         dest.writeLong(startTime);
     }
 
@@ -52,15 +58,23 @@ public class StagePlayCursor implements Parcelable {
         this.playId = playId;
     }
 
-    public int getOrdinal() {
-        return ordinal;
+    public int getSceneOrdinal() {
+        return sceneOrdinal;
     }
 
-    public void setOrdinal(int ordinal) {
-        this.ordinal = ordinal;
+    public void setSceneOrdinal(int sceneOrdinal) {
+        this.sceneOrdinal = sceneOrdinal;
     }
 
-    public float getStartTime() {
+    public int getLineOrdinal() {
+        return lineOrdinal;
+    }
+
+    public void setLineOrdinal(int lineOrdinal) {
+        this.lineOrdinal = lineOrdinal;
+    }
+
+    public long getStartTime() {
         return startTime;
     }
 
@@ -75,7 +89,7 @@ public class StagePlayCursor implements Parcelable {
 
         StagePlayCursor stagePlayCursor = (StagePlayCursor) obj;
 
-        if ( playId != stagePlayCursor.playId || ordinal != stagePlayCursor.ordinal || startTime != stagePlayCursor.startTime ) {
+        if ( playId != stagePlayCursor.playId || sceneOrdinal != stagePlayCursor.sceneOrdinal || lineOrdinal != stagePlayCursor.lineOrdinal || startTime != stagePlayCursor.startTime ) {
             return false;
         } else {
             return true;
@@ -84,7 +98,7 @@ public class StagePlayCursor implements Parcelable {
 
     @Override
     public int hashCode() {
-        int result = (int) (31 * playId + 15 * ordinal + startTime);
+        int result = (int) (31 * playId + 15 * sceneOrdinal + lineOrdinal);
         return result;
     }
 }

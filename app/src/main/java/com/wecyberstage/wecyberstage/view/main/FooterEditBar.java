@@ -1,9 +1,13 @@
 package com.wecyberstage.wecyberstage.view.main;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,19 +23,22 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.wecyberstage.wecyberstage.R;
+import com.wecyberstage.wecyberstage.app.WeCyberStageApp;
 import com.wecyberstage.wecyberstage.model.MaskGraph;
 import com.wecyberstage.wecyberstage.model.StageLine;
+import com.wecyberstage.wecyberstage.model.StagePlay;
 import com.wecyberstage.wecyberstage.model.StageRole;
 import com.wecyberstage.wecyberstage.util.helper.UICommon;
 import com.wecyberstage.wecyberstage.view.helper.RegisterBusEventInterface;
 import com.wecyberstage.wecyberstage.view.message.FooterEditBarEvent;
 import com.wecyberstage.wecyberstage.view.message.StageLineViewEvent;
+import com.wecyberstage.wecyberstage.viewmodel.StagePlayViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +54,10 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
     enum PANEL_VISIBLE {
         MASK_VISIBLE, FILE_VISIBLE, BOTH_VISIBLE, BOTH_GONE
     }
+
+    private StagePlayViewModel viewModel;
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     @BindView(R.id.mask_choose_sub)
     MaskChooseTabLayout maskChoose;
@@ -69,6 +80,14 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
 
     public FooterEditBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        ((WeCyberStageApp)((Activity)context).getApplication()).getAppComponent().inject(this);
+        viewModel = ViewModelProviders.of((FragmentActivity)context, viewModelFactory).get(StagePlayViewModel.class);
+        viewModel.stagePlay.observe((FragmentActivity)context, new Observer<StagePlay>() {
+            @Override
+            public void onChanged(@Nullable StagePlay stagePlay) {
+                maskChoose.setCast(stagePlay.cast);
+            }
+        });
     }
 
     public FooterEditBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -105,6 +124,8 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
 
             }
         });
+
+
     }
 
     // region for mask image button switch state
@@ -227,10 +248,6 @@ public class FooterEditBar extends LinearLayout implements MaskGridLayoutCallBac
     public void addScene(View view) {
         Log.d(TAG,"addStageScene click");
         sendMessage("addStageScene");
-    }
-
-    public void setStageRoles(List<StageRole> stageRoles) {
-        maskChoose.setStageRoles(stageRoles);
     }
 
     public void showLine() {

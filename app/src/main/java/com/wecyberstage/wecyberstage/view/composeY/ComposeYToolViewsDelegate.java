@@ -48,6 +48,8 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
                 footerEditBar.showLine();
             }
         });
+        playerControlBar.setVisibility(View.GONE);
+        /*
         playerControlBar.animate().translationY(playerControlBar.getHeight()).alpha(0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -55,7 +57,7 @@ public class ComposeYToolViewsDelegate extends ToolViewsDelegate implements Clic
                 playerControlBar.setVisibility(View.GONE);
             }
         }).start();
-
+        */
     }
 
     private void showFabOrPlayerControl() {
